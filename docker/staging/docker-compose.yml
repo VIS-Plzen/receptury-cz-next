@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  receptury-cz-next-staging:
+    build:
+      context: ../../
+      dockerfile: docker/staging/Dockerfile
+    image: renepacholik/receptury-cz-next-staging
+    ports:
+      - "3003:3000"

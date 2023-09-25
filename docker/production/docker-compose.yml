@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  receptury-cz-next-production:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: renepacholik/receptury-cz-next-production
+    ports:
+      - "3004:3000"

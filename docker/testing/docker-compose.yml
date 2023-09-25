@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  receptury-cz-next-testing:
+    build:
+      context: ../../
+      dockerfile: docker/testing/Dockerfile
+    image: renepacholik/receptury-cz-next-testing
+    ports:
+      - "3002:3000"

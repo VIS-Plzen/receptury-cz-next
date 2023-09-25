@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  receptury-cz-next-development:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    image: receptury-cz-next-development
+    ports:
+      - "3001:3000"
