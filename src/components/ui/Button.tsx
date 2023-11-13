@@ -1,6 +1,6 @@
+import SmartLink from "@/components/primitives/SmartLink";
 import { cn } from "@/lib/cn";
 import { forwardRef } from "react";
-import SmartLink from "./SmartLink";
 
 type Props = {
   as?: React.ElementType;
@@ -18,7 +18,7 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, Props>(
         href={href}
         ref={ref}
         className={cn(
-          "bg-primary-500 text-primary-50 hover:bg-primary-600 inline-flex rounded-xl px-4 py-2 font-semibold",
+          "inline-flex rounded-xl bg-primary-500 px-4 py-2 font-semibold text-primary-50 hover:bg-primary-600",
           className
         )}
         {...props}
