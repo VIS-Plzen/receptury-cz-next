@@ -1,7 +1,11 @@
 import { cn } from "@/lib/cn";
+import { Slot } from "@radix-ui/react-slot";
+
+// Slot docs: https://www.radix-ui.com/primitives/docs/utilities/slot
 
 type Props = {
   children: React.ReactNode;
+  asChild?: boolean;
   className?: string;
   [key: string]: any;
 };
@@ -16,14 +20,16 @@ type Props = {
 //   },
 // }
 
-export default function TemplateBase({
-  className = "",
+export default function TemplateBaseSlot({
   children,
+  asChild,
+  className = "",
   ...props
 }: Props) {
+  const Component = asChild ? Slot : "div";
   return (
-    <div className={cn("", className)} {...props}>
+    <Component className={cn("", className)} {...props}>
       {children}
-    </div>
+    </Component>
   );
 }

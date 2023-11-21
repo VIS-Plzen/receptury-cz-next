@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 
 type Props = {
   children: React.ReactNode;
+  as?: React.ElementType;
   className?: string;
   [key: string]: any;
 };
@@ -17,15 +18,15 @@ type Props = {
 //   },
 // }
 
-const TemplateRef = forwardRef<HTMLDivElement, Props>(
-  ({ children, className = "", ...rest }, ref) => {
+const TemplateRefAsElement = forwardRef<HTMLElement, Props>(
+  ({ children, as: AsElement = "div", className = "", ...rest }, ref) => {
     return (
-      <div ref={ref} className={cn("", className)} {...rest}>
+      <AsElement ref={ref} className={cn("", className)} {...rest}>
         {children}
-      </div>
+      </AsElement>
     );
   }
 );
 
-TemplateRef.displayName = "TemplateRef";
-export default TemplateRef;
+TemplateRefAsElement.displayName = "TemplateRefAsElement";
+export default TemplateRefAsElement;

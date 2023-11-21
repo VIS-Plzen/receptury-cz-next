@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, Ref } from "react";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 // Popis komponentu:
 // - Generický (primitivní) komponent pro vytvoření odkazu na web i mimo něj
@@ -9,12 +9,19 @@ import React, { forwardRef } from "react";
 //   a podle toho vrátí správný HTML element nebo komponent
 // - Pokud je použit atribut `as`, komponent vrátí zadaný element a ignoruje veškerou další logiku
 
+// EN:
+// - Generic (primitive) component for creating links to web and outside
+// - The component intelligently based on the used attributes and the content of the `href` prop recognizes,
+//   whether it is a link to another page of the website, an external link, or a button
+//   and returns the correct HTML element or component accordingly
+// - If the `as` attribute is used, the component returns the specified element and ignores all other logic
+
 // <SmartLink as="span" />                      ---->  <span />
 // <SmartLink as="button" onClick={...} />      ---->  <button onClick={...} />
 // <SmartLink href="/..." />                    ---->  <NextLink href="/..." />
 // <SmartLink href="http://..." />              ---->  <a href="http://..." target="_blank" rel="noopener noreferrer" />
 // <SmartLink href="#..." />                    ---->  <a href="#..." />
-// ... a další kombinace
+// ... and so on
 
 type Props = {
   as?: React.ElementType;

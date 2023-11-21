@@ -2,6 +2,7 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   children: React.ReactNode;
+  as?: React.ElementType;
   className?: string;
   [key: string]: any;
 };
@@ -16,14 +17,15 @@ type Props = {
 //   },
 // }
 
-export default function TemplateBase({
-  className = "",
+export default function TemplateBaseAsElement({
   children,
+  as: AsElement = "div",
+  className = "",
   ...props
 }: Props) {
   return (
-    <div className={cn("", className)} {...props}>
+    <AsElement className={cn("", className)} {...props}>
       {children}
-    </div>
+    </AsElement>
   );
 }

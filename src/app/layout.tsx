@@ -1,6 +1,6 @@
+import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "./globals.css";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`bg-primary-50 selection:bg-primary-600/80 selection:text-primary-50 font-sans text-gray-600 ${nunito.variable}`}
+        className={`bg-primary-50 font-sans text-gray-600 selection:bg-primary-600/80 selection:text-primary-50 ${nunito.variable}`}
       >
         <main>{children}</main>
       </body>

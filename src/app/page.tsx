@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-10 p-24 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-10 p-24 text-center">
       <h1 className="text-2xl font-bold text-gray-900 sm:text-4xl lg:text-6xl">
         Receptury - základ projektu
       </h1>
@@ -12,6 +12,6 @@ export default function Home() {
         voluptatum!
       </p>
       <Button>Testovací button</Button>
-    </main>
+    </div>
   );
 }
