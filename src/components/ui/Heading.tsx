@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 type Props = {
   children: React.ReactNode;
@@ -22,10 +22,7 @@ const componentVariants = {
     "2xl": "text-3xl md:text-7xl 2xl:text-8xl",
     inherit: "",
   },
-  hasMarginBottom: {
-    true: "mb-[0.65em]",
-    false: "",
-  },
+  hasMarginBottom: "mb-[0.65em]",
 };
 
 export default function Heading({

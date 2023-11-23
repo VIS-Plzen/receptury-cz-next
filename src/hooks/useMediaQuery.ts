@@ -1,9 +1,11 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 // Vrací `true` nebo `false` když se změní velikost viewportu
 // !!!! Používat pouze tam, kde není žádná možnost použít CSS media queries !!!!
 
-// How to use:
+// Usage:
 // import { useMediaQuery } from "@/hooks/useMediaQuery";
 // ...
 // const isDesktop = useMediaQuery("(min-width: 864px)");

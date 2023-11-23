@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 type Props = {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ type Props = {
 //   },
 // }
 
-export default function TemplateBaseAsElement({
+export default function TemplateRefPolymorphic({
   children,
   as: AsElement = "div",
   className = "",

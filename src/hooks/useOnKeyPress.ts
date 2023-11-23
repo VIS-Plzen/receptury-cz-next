@@ -1,8 +1,10 @@
+"use client";
+
 import { useEffect } from "react";
 
 // Spustí callback funkci, když se stiskne klávesa
 
-// How to use:
+// Usage:
 // import { useOnKeyPress } from "@/hooks/useOnKeyPress";
 // ...
 // useOnKeyPress("Enter", () => handleEnterPress());

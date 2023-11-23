@@ -1,9 +1,5 @@
 import clsx from "clsx";
 
-// Popis komponentu:
-// - Slouží k zobrazení animovaného loaderu
-// - Je k dispozici několik velikostí a tlouštěk
-
 type Props = {
   className?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
@@ -35,14 +31,14 @@ const componentVariants = {
     inherit: "border-current",
     primary: "border-primary-500",
     white: "border-white",
-    black: "border-gray-900",
+    black: "border-gray-950",
   },
 };
 
-export default function Loader({
+export default function LoadingSpinner({
   className = "",
   size = "inherit",
-  color = "primary",
+  color = "inherit",
   loadingText,
 }: Props) {
   return (

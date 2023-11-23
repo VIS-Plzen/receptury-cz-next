@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { forwardRef } from "react";
 
 type Props = {
@@ -18,15 +18,15 @@ type Props = {
 //   },
 // }
 
-const TemplateRefAsElement = forwardRef<HTMLElement, Props>(
-  ({ children, as: AsElement = "div", className = "", ...rest }, ref) => {
+const TemplateRefPolymorphic = forwardRef<HTMLElement, Props>(
+  ({ children, as: AsElement = "div", className = "", ...props }, ref) => {
     return (
-      <AsElement ref={ref} className={cn("", className)} {...rest}>
+      <AsElement ref={ref} className={cn("", className)} {...props}>
         {children}
       </AsElement>
     );
   }
 );
 
-TemplateRefAsElement.displayName = "TemplateRefAsElement";
-export default TemplateRefAsElement;
+TemplateRefPolymorphic.displayName = "TemplateRefPolymorphic";
+export default TemplateRefPolymorphic;

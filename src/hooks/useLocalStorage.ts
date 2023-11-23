@@ -1,6 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
-// How to use:
+// Usage:
 //
 // import useLocalStorage from "@/hooks/useLocalStorage";
 // ...

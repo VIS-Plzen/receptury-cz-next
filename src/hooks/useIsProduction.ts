@@ -1,10 +1,12 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 // Hook vrátí true pokud je aplikace spuštěna v produkčním prostředí
 // (pokud je nastavena proměnná NEXT_PUBLIC_ENVIRONMENT na hodnotu "production")
 //
 
-// How to use:
+// Usage:
 // import { useIsProduction } from "@/hooks/useIsProduction";
 // const isProduction = useIsProduction();
 // ...

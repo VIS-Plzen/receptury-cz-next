@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Slot } from "@radix-ui/react-slot";
 
 // Slot docs: https://www.radix-ui.com/primitives/docs/utilities/slot

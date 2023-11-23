@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Slot } from "@radix-ui/react-slot";
 import { forwardRef } from "react";
 
@@ -22,10 +22,10 @@ type Props = {
 // }
 
 const TemplateRefSlot = forwardRef<HTMLDivElement, Props>(
-  ({ children, asChild, className = "", ...rest }, ref) => {
+  ({ children, asChild, className = "", ...props }, ref) => {
     const Component = asChild ? Slot : "div";
     return (
-      <Component ref={ref} className={cn("", className)} {...rest}>
+      <Component ref={ref} className={cn("", className)} {...props}>
         {children}
       </Component>
     );

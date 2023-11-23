@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { forwardRef } from "react";
 
 type Props = {
@@ -18,9 +18,9 @@ type Props = {
 // }
 
 const TemplateRef = forwardRef<HTMLDivElement, Props>(
-  ({ children, className = "", ...rest }, ref) => {
+  ({ children, className = "", ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("", className)} {...rest}>
+      <div ref={ref} className={cn("", className)} {...props}>
         {children}
       </div>
     );

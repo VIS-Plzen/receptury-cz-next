@@ -1,20 +1,22 @@
+import TemplateBase from "@/components/templates/TemplateBase";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import Loader from "@/components/ui/Loader";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen">
       <Container className="rounded-2xl bg-white py-24">
+        <TemplateBase>This is template</TemplateBase>
         <div className="flex flex-wrap gap-8">
-          <Loader color="black" size="xs" />
-          <Loader color="black" size="sm" />
-          <Loader color="black" size="md" />
-          <Loader color="black" size="lg" />
-          <Loader color="black" size="xl" />
-          <Loader color="black" size="2xl" />
+          <LoadingSpinner color="black" size="xs" />
+          <LoadingSpinner color="black" size="sm" />
+          <LoadingSpinner color="black" size="md" />
+          <LoadingSpinner color="black" size="lg" />
+          <LoadingSpinner color="black" size="xl" />
+          <LoadingSpinner color="black" size="2xl" />
           <div className="text-base">
-            <Loader color="black" size="inherit" />
+            <LoadingSpinner color="black" size="inherit" />
           </div>
         </div>
         <div>

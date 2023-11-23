@@ -1,20 +1,10 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 type Props = {
   children: React.ReactNode;
   className?: string;
   [key: string]: any;
 };
-
-// Component Variants
-// const componentVariants = {
-//   base: "",
-//   prop: {
-//     value: "",
-//     value: "",
-//     value: "",
-//   },
-// }
 
 export default function TemplateBase({
   className = "",

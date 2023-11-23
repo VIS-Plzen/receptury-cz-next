@@ -1,6 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
-// How to use
+// Usage
 // import { useClipboard } from "@/hooks/useClipboard";
 // ...
 // const { copyToClipboard, isCopied } = useClipboard("Hello World", {

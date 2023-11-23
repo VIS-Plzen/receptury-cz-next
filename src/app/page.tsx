@@ -1,3 +1,5 @@
+import ActiveLink from "@/components/primitives/ActiveLink";
+import SmartLink from "@/components/primitives/SmartLink";
 import Button from "@/components/ui/Button";
 
 export default function Home() {
@@ -11,6 +13,15 @@ export default function Home() {
         dolores praesentium a minus fuga sequi porro tempora dolor perferendis
         voluptatum!
       </p>
+      <ActiveLink href={"/"} activeClassName="text-primary-500">
+        Recepty
+      </ActiveLink>
+      <ActiveLink href={"/testovani"} activeClassName="text-primary-500">
+        Recepty
+      </ActiveLink>
+      <SmartLink href={"/testing"} className="">
+        Testování
+      </SmartLink>
       <Button>Testovací button</Button>
     </div>
   );
