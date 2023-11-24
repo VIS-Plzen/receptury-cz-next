@@ -17,11 +17,9 @@ const viewport = { once: true, margin: "0px 0px -200px" };
 
 export function FadeIn({
   duration = 0.9,
-  children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof motion.div> & {
   duration?: number;
-  children?: React.ReactNode;
 }) {
   const prefersReducedMotion = useReducedMotion();
   const isInStaggerGroup = useContext(FadeInStaggerContext);
@@ -44,19 +42,15 @@ export function FadeIn({
             viewport,
           })}
       {...props}
-    >
-      {children}
-    </motion.div>
+    />
   );
 }
 
 export function FadeInStagger({
   delay = 0.2,
-  children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof motion.div> & {
   delay?: number;
-  children: React.ReactNode;
 }) {
   return (
     <FadeInStaggerContext.Provider value={true}>
@@ -66,9 +60,7 @@ export function FadeInStagger({
         viewport={viewport}
         transition={{ staggerChildren: delay }}
         {...props}
-      >
-        {children}
-      </motion.div>
+      />
     </FadeInStaggerContext.Provider>
   );
 }

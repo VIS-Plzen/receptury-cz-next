@@ -1,10 +1,8 @@
 import clsx from "clsx";
 
-type Props = {
-  className?: string;
+type Props = React.ComponentPropsWithoutRef<"div"> & {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
   color?: "inherit" | "primary" | "white" | "black";
-  loadingText?: string;
 };
 
 // Component Variants
@@ -36,20 +34,15 @@ const componentVariants = {
 };
 
 export default function LoadingSpinner({
-  className = "",
   size = "inherit",
   color = "inherit",
-  loadingText,
+  ...props
 }: Props) {
   return (
-    <div className={className}>
+    <div {...props}>
       <div
         aria-label="načítání..."
-        className={clsx(
-          "relative",
-          componentVariants.size[size],
-          loadingText && "mx-auto"
-        )}
+        className={clsx("relative", componentVariants.size[size])}
       >
         <div
           className={clsx(

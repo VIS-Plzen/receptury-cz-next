@@ -1,21 +1,15 @@
-type Props = React.SVGProps<SVGSVGElement> & {
+type Props = React.ComponentPropsWithoutRef<"svg"> & {
   width?: number;
   height?: number;
   className?: string;
 };
 
-export default function Logo({
-  width = 157,
-  height = 40,
-  className = "",
-  ...props
-}: Props) {
+export default function Logo({ width = 157, height = 40, ...props }: Props) {
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
