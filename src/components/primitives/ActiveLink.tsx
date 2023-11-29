@@ -11,6 +11,7 @@ import { forwardRef } from "react";
 type Props = React.ComponentPropsWithRef<typeof Link> & {
   activeClassName: string;
   className?: string;
+  [key: string]: any;
 };
 
 const ActiveLink = forwardRef<HTMLAnchorElement, Props>(

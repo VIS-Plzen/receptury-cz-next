@@ -1,7 +1,4 @@
-import InputField from "@/components/forms/InputField";
-import ActiveLink from "@/components/primitives/ActiveLink";
-import SmartLink from "@/components/primitives/SmartLink";
-import Button from "@/components/ui/Button";
+import FormComponent from "@/components/templates/FormComponent";
 import Container from "@/components/ui/Container";
 
 export default function Home() {
@@ -16,45 +13,8 @@ export default function Home() {
         voluptatum!
       </p>
       <Container>
-        <InputField
-          name="test"
-          label="Custom label"
-          required
-          placeholder="placeholdre"
-          helperText="Lorem ipsum dolor sit amet"
-        />
-        <InputField
-          name="test"
-          label="Custom label"
-          required
-          placeholder="placeholdre"
-          errorText="Lorem ipsum dolor sit amet"
-        />
-        <InputField
-          name="test"
-          label="Custom label"
-          required
-          placeholder="placeholdre"
-        />
-        <InputField
-          name="test"
-          label="Custom label"
-          required
-          disabled
-          placeholder="placeholdre"
-          helperText="Lorem ipsum dolor sit amet"
-        />
+        <FormComponent />
       </Container>
-      <ActiveLink href={"/"} activeClassName="text-primary">
-        Recepty
-      </ActiveLink>
-      <ActiveLink href={"/testovani"} activeClassName="text-primary">
-        Testování
-      </ActiveLink>
-      <SmartLink href={"/testing"} className="">
-        Testování
-      </SmartLink>
-      <Button>Testovací button</Button>
     </div>
   );
 }

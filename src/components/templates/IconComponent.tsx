@@ -1,5 +1,6 @@
 type Props = React.ComponentPropsWithRef<"svg"> & {
   ariaHidden?: boolean;
+  [key: string]: any;
 };
 
 export default function IconComponent({ ariaHidden = true, ...props }: Props) {

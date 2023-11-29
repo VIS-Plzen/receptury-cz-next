@@ -11,9 +11,8 @@ import Label from "./Label";
 // - [x] Disabled state
 // - [x] Error state and error text
 
-type Props = React.ComponentPropsWithoutRef<"input"> & {
+type Props = React.ComponentPropsWithoutRef<"textarea"> & {
   name: string;
-  type?: "text" | "email" | "tel" | "url" | "number";
   label?: string;
   helperText?: string | boolean | undefined | null;
   errorText?: string | boolean | undefined | null;
@@ -21,20 +20,9 @@ type Props = React.ComponentPropsWithoutRef<"input"> & {
   [key: string]: any;
 };
 
-const InputField = forwardRef<HTMLInputElement, Props>(
+const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   (
-    {
-      name,
-      type = "text",
-      label,
-      helperText,
-      errorText,
-      className = "",
-      onChange,
-      onBlur,
-      value,
-      ...props
-    },
+    { name, label, helperText, errorText, className = "", ...props },
     forwardedRef
   ) => {
     const generatedId = useId();
@@ -59,13 +47,12 @@ const InputField = forwardRef<HTMLInputElement, Props>(
         {/* Helper text */}
         {helperText && <HelperText>{helperText}</HelperText>}
         {/* Input */}
-        <input
+        <textarea
           ref={forwardedRef}
           id={generatedId}
-          type={type}
           name={name}
           className={cn(
-            "block w-full appearance-none px-3 py-2",
+            "block min-h-[80px] w-full resize-y appearance-none px-3 py-2",
             "rounded-lg border-2 border-primary-200",
             "bg-white text-base text-gray-900",
             "placeholder:text-gray-700/60",
@@ -84,5 +71,5 @@ const InputField = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-InputField.displayName = "InputField";
-export default InputField;
+TextArea.displayName = "TextArea";
+export default TextArea;

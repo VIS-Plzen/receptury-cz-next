@@ -3,6 +3,7 @@ import { cn } from "@/utils/cn";
 type Props = React.ComponentPropsWithoutRef<"p"> & {
   children: React.ReactNode;
   className?: string;
+  [key: string]: any;
 };
 
 export default function ErrorText({
@@ -12,7 +13,7 @@ export default function ErrorText({
 }: Props) {
   return (
     <p
-      className={cn("text-sm leading-tight text-error-500", className)}
+      className={cn("text-sm leading-tight text-error-600", className)}
       {...props}
     >
       {children}

@@ -12,6 +12,7 @@ type Props = React.ComponentPropsWithoutRef<"label"> & {
   children: React.ReactNode;
   asChild?: boolean;
   className?: string;
+  [key: string]: any;
 };
 
 // Component Variants
