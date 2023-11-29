@@ -30,9 +30,6 @@ const InputField = forwardRef<HTMLInputElement, Props>(
       helperText,
       errorText,
       className = "",
-      onChange,
-      onBlur,
-      value,
       ...props
     },
     forwardedRef
