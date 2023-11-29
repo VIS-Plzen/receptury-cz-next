@@ -18,9 +18,9 @@ type Props = {
 // }
 
 const ForwardRefComponent = forwardRef<HTMLDivElement, Props>(
-  ({ children, className = "", ...props }, ref) => {
+  ({ children, className = "", ...props }, forwardedRef) => {
     return (
-      <div ref={ref} className={cn("", className)} {...props}>
+      <div ref={forwardedRef} className={cn("", className)} {...props}>
         {children}
       </div>
     );

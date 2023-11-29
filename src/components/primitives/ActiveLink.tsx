@@ -14,14 +14,14 @@ type Props = React.ComponentPropsWithRef<typeof Link> & {
 };
 
 const ActiveLink = forwardRef<HTMLAnchorElement, Props>(
-  ({ activeClassName = "", className = "", ...props }, ref) => {
+  ({ activeClassName = "", className = "", ...props }, forwardedRef) => {
     const pathname = usePathname();
     const isActive = pathname === props.href;
     return (
       <Link
+        ref={forwardedRef}
         className={cn(className, isActive && activeClassName)}
         {...props}
-        ref={ref}
       />
     );
   }

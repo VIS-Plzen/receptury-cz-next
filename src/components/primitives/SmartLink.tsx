@@ -10,10 +10,10 @@ type Props = React.ComponentPropsWithRef<typeof Link> &
   React.ComponentPropsWithRef<"a">;
 
 const SmartLink = forwardRef<HTMLAnchorElement, Props>(
-  ({ href, ...props }, ref) => {
+  ({ href, ...props }, forwardedRef) => {
     // Internal links (starting with "/") render with Next's Link component
     if (href.startsWith("/")) {
-      return <Link href={href} ref={ref} {...props} />;
+      return <Link href={href} ref={forwardedRef} {...props} />;
     }
 
     // External links (http, https, ftp), render with target="_blank" and rel="noopener noreferrer"
@@ -21,7 +21,7 @@ const SmartLink = forwardRef<HTMLAnchorElement, Props>(
       return (
         <a
           href={href}
-          ref={ref}
+          ref={forwardedRef}
           target="_blank"
           rel="noopener noreferrer"
           {...props}
@@ -30,7 +30,7 @@ const SmartLink = forwardRef<HTMLAnchorElement, Props>(
     }
 
     // In all other cases, render a regular anchor tag
-    return <a href={href} ref={ref} {...props} />;
+    return <a href={href} ref={forwardedRef} {...props} />;
   }
 );
 

@@ -27,7 +27,7 @@ const componentVariants = {
   },
   color: {
     inherit: "border-current",
-    primary: "border-primary-500",
+    primary: "border-primary",
     white: "border-white",
     black: "border-gray-950",
   },

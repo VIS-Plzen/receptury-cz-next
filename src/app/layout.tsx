@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`bg-primary-50 font-sans text-gray-600 selection:bg-primary-600/80 selection:text-primary-50 ${nunito.variable}`}
+        className={`selection:bg-primary/80 bg-primary-50 font-sans text-gray-700 selection:text-primary-50 ${nunito.variable}`}
       >
         <main>{children}</main>
       </body>

@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
+
+@layer base {
+  /* Apply styles on focus */
+  :focus {
+    @apply ring-primary/50 outline-none ring-[3px] ring-offset-0;
+  }
+
+  /* Remove styles for non-keyboard focus */
+  :focus:not(:focus-visible) {
+    @apply outline-none;
+  }
+}
