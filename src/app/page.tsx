@@ -1,9 +1,47 @@
+import {
+  AccountCircleIcon,
+  AddIcon,
+  ArchiveIcon,
+  ArrowDownwardAltIcon,
+  ArrowLeftAltIcon,
+  ArrowRightAltIcon,
+  ArrowUpwardAltIcon,
+  CalendarViewMontsIcon,
+  CallIcon,
+  CancelIcon,
+  CheckCircleIcon,
+  CheckIcon,
+  CheckSmallIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  DownloadingIcon,
+  ErrorIcon,
+  ExpandLessIcon,
+  ExpandMoreIcon,
+  FavoriteIcon,
+  FilterListIcon,
+  HelpIcon,
+  HomeIcon,
+  ListIcon,
+  MailIcon,
+  PhoneIphoneIcon,
+  PlayArrowIcon,
+  PrintIcon,
+  RateReviewIcon,
+  SearchIcon,
+  ShareIcon,
+  TuneIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
+} from "@/components/icons";
 import FormComponent from "@/components/templates/FormComponent";
 import Container from "@/components/ui/Container";
+import StyledLink from "@/components/ui/StyledLink";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-10 p-24 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-10 p-24">
       <h1 className="text-2xl font-bold text-gray-900 sm:text-4xl lg:text-6xl">
         Receptury - základ projektu
       </h1>
@@ -14,6 +52,50 @@ export default function Home() {
       </p>
       <Container>
         <FormComponent />
+      </Container>
+
+      <Container className="flex flex-wrap gap-5">
+        <AccountCircleIcon />
+        <AddIcon />
+        <ArchiveIcon />
+        <ArrowDownwardAltIcon />
+        <ArrowLeftAltIcon />
+        <ArrowRightAltIcon />
+        <ArrowUpwardAltIcon />
+        <CalendarViewMontsIcon />
+        <CallIcon />
+        <CancelIcon />
+        <CheckCircleIcon />
+        <CheckIcon />
+        <CheckSmallIcon />
+        <ChevronLeftIcon />
+        <ChevronRightIcon />
+        <CloseIcon />
+        <DownloadingIcon />
+        <ErrorIcon />
+        <ExpandLessIcon />
+        <ExpandMoreIcon />
+        <FavoriteIcon />
+        <FilterListIcon />
+        <HelpIcon />
+        <HomeIcon />
+        <ListIcon />
+        <MailIcon />
+        <PhoneIphoneIcon />
+        <PlayArrowIcon />
+        <PrintIcon />
+        <RateReviewIcon />
+        <SearchIcon />
+        <ShareIcon />
+        <TuneIcon />
+        <VisibilityIcon />
+        <VisibilityOffIcon />
+      </Container>
+
+      <Container>
+        <StyledLink asChild className="bg-error-100">
+          <button>Google</button>
+        </StyledLink>
       </Container>
     </div>
   );

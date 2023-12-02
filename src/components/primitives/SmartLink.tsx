@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 // Custom link component that inteligently handles both internal and external links automaticly.
 // Output is resolved based on the `href` prop
 
-// It accepts all the props of an HTML anchor element and Next.js LinkProps.
+// It accepts all the props of an HTML anchor element and Next.js Link Props.
 
 type Props = React.ComponentPropsWithRef<typeof Link> &
   React.ComponentPropsWithRef<"a">;
