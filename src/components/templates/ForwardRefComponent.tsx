@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 import { forwardRef } from "react";
 
-type Props = {
+type Props = React.ComponentPropsWithoutRef<"div"> & {
   children: React.ReactNode;
   className?: string;
   [key: string]: any;

@@ -124,9 +124,7 @@ export default function FormComponent({ className = "", ...props }: Props) {
         onBlur={formik.handleBlur}
         value={formik.values.message}
       />
-      <Button type="submit" isLoading={formik.isSubmitting}>
-        Odeslat
-      </Button>
+      <Button type="submit">Odeslat</Button>
     </form>
   );
 }

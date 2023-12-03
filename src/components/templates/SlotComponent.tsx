@@ -13,7 +13,7 @@ import { Slot } from "@radix-ui/react-slot";
 // Output:
 // <button data-something="true" ... onClick={() => {...do something}} />
 
-type Props = {
+type Props = React.ComponentPropsWithoutRef<"div"> & {
   children: React.ReactNode;
   asChild?: boolean;
   className?: string;

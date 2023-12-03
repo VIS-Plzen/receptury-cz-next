@@ -1,30 +1,24 @@
 import { cn } from "@/utils/cn";
 
-type Props = {
+type Props<E extends React.ElementType = "div"> = {
   children: React.ReactNode;
-  as?: React.ElementType;
+  as?: E;
   className?: string;
-  [key: string]: any;
 };
 
-// Component Variants
-// const componentVariants = {
-//   base: "",
-//   prop: {
-//     value: "",
-//     value: "",
-//     value: "",
-//   },
-// }
+type GenericProps<E extends React.ElementType> = Props<E> &
+  Omit<React.ComponentProps<E>, keyof Props<E>>;
 
-export default function Container({
+export default function Container<E extends React.ElementType = "div">({
   children,
-  as: AsElement = "div",
+  as,
   className = "",
   ...props
-}: Props) {
+}: GenericProps<E>) {
+  const Component = as || "div";
+
   return (
-    <AsElement
+    <Component
       className={cn(
         "mx-auto block w-full max-w-[84rem] px-4 sm:px-6 lg:px-8",
         className
@@ -32,6 +26,6 @@ export default function Container({
       {...props}
     >
       {children}
-    </AsElement>
+    </Component>
   );
 }

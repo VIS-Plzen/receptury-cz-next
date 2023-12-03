@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
+import React from "react";
 
-type Props = {
+type Props = React.ComponentPropsWithRef<"div"> & {
   children: React.ReactNode;
   className?: string;
   [key: string]: any;

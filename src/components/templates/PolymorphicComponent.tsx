@@ -1,11 +1,13 @@
 import { cn } from "@/utils/cn";
 
-type Props = {
-  children: React.ReactNode;
-  as?: React.ElementType;
+type Props<E extends React.ElementType = "div"> = {
+  as?: E;
   className?: string;
-  [key: string]: any;
+  children?: React.ReactNode;
 };
+
+type GenericProps<E extends React.ElementType> = Props<E> &
+  Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
 // const componentVariants = {
@@ -17,15 +19,14 @@ type Props = {
 //   },
 // }
 
-export default function PolymorphicComponent({
-  children,
-  as: AsElement = "div",
-  className = "",
-  ...props
-}: Props) {
+export default function PolymorphicComponent<
+  E extends React.ElementType = "div",
+>({ as, className = "", children, ...props }: GenericProps<E>) {
+  const Component = as || "div";
+
   return (
-    <AsElement className={cn("", className)} {...props}>
+    <Component className={cn("", className)} {...props}>
       {children}
-    </AsElement>
+    </Component>
   );
 }

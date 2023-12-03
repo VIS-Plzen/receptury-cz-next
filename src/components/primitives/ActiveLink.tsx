@@ -8,7 +8,7 @@ import { forwardRef } from "react";
 // Wrapper for Next.js Link component that adds an activeClassName prop
 // for styling active links (Url pathname matches the href prop)
 
-type Props = React.ComponentPropsWithRef<typeof Link> & {
+type Props = React.ComponentPropsWithoutRef<typeof Link> & {
   activeClassName: string;
   className?: string;
   [key: string]: any;

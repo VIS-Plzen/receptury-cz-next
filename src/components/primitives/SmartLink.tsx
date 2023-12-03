@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { forwardRef } from "react";
 
 // Custom link component that inteligently handles both internal and external links automaticly.
@@ -6,20 +6,32 @@ import { forwardRef } from "react";
 
 // It accepts all the props of an HTML anchor element and Next.js Link Props.
 
-type Props = React.ComponentPropsWithRef<typeof Link> &
-  React.ComponentPropsWithRef<"a">;
+type InternalLinkProps = LinkProps & {
+  href: string;
+};
 
-const SmartLink = forwardRef<HTMLAnchorElement, Props>(
+type AnchorProps = React.ComponentPropsWithoutRef<"a"> & {
+  href: string;
+};
+
+type Props<T extends string> = T extends "/" | `/${string}`
+  ? InternalLinkProps
+  : AnchorProps;
+
+const SmartLink = forwardRef<HTMLAnchorElement, Props<string>>(
   ({ href, ...props }, forwardedRef) => {
     // Internal links (starting with "/") render with Next's Link component
     if (href.startsWith("/")) {
-      return <Link href={href} ref={forwardedRef} {...props} />;
+      return (
+        <Link data-internal="true" href={href} ref={forwardedRef} {...props} />
+      );
     }
 
     // External links (http, https, ftp), render with target="_blank" and rel="noopener noreferrer"
     if (href.match(/^(http|https|ftp):/)) {
       return (
         <a
+          data-external="true"
           href={href}
           ref={forwardedRef}
           target="_blank"
@@ -30,7 +42,7 @@ const SmartLink = forwardRef<HTMLAnchorElement, Props>(
     }
 
     // In all other cases, render a regular anchor tag
-    return <a href={href} ref={forwardedRef} {...props} />;
+    return <a data-external="true" href={href} ref={forwardedRef} {...props} />;
   }
 );
 

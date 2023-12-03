@@ -1,14 +1,15 @@
 import { cn } from "@/utils/cn";
 
-type Props = {
+type Props<E extends React.ElementType = "h2"> = {
   children: React.ReactNode;
-  as?: React.ElementType;
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  as?: E;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
   hasMarginBottom?: boolean;
   className?: string;
-  [key: string]: any;
 };
+
+type GenericProps<E extends React.ElementType> = Props<E> &
+  Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
 const componentVariants = {
@@ -25,17 +26,16 @@ const componentVariants = {
   hasMarginBottom: "mb-[0.65em]",
 };
 
-export default function Heading({
+export default function Heading<E extends React.ElementType = "h2">({
+  children,
   as,
-  level = 2,
   size = "md",
   hasMarginBottom = false,
   className = "",
-  children,
   ...props
-}: Props) {
-  // as prop takes precedence over level prop (defined by default)
-  const Component = as || (`h${level}` as React.ElementType);
+}: GenericProps<E>) {
+  const Component = as || "h2";
+
   return (
     <Component
       className={cn(
