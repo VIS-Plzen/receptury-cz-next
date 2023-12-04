@@ -19,6 +19,7 @@ import {
   ErrorIcon,
   ExpandLessIcon,
   ExpandMoreIcon,
+  FavoriteFillIcon,
   FavoriteIcon,
   FilterListIcon,
   HelpIcon,
@@ -26,7 +27,7 @@ import {
   ListIcon,
   MailIcon,
   PhoneIphoneIcon,
-  PlayArrowIcon,
+  PlayIcon,
   PrintIcon,
   RateReviewIcon,
   SearchIcon,
@@ -36,7 +37,10 @@ import {
   VisibilityOffIcon,
 } from "@/components/icons";
 import SmartLink from "@/components/primitives/SmartLink";
+import MealSymbol from "@/components/symbols/MealSymbol";
 import FormComponent from "@/components/templates/FormComponent";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
@@ -84,6 +88,7 @@ export default function Home() {
         <ErrorIcon />
         <ExpandLessIcon />
         <ExpandMoreIcon />
+        <FavoriteFillIcon />
         <FavoriteIcon />
         <FilterListIcon />
         <HelpIcon />
@@ -91,7 +96,7 @@ export default function Home() {
         <ListIcon />
         <MailIcon />
         <PhoneIphoneIcon />
-        <PlayArrowIcon />
+        <PlayIcon />
         <PrintIcon />
         <RateReviewIcon />
         <SearchIcon />
@@ -99,6 +104,38 @@ export default function Home() {
         <TuneIcon />
         <VisibilityIcon />
         <VisibilityOffIcon />
+      </Container>
+
+      <Container className="flex flex-wrap gap-5">
+        <MealSymbol />
+      </Container>
+
+      <Container className="flex flex-wrap items-start justify-start gap-5 py-20">
+        <Button variant="primary">
+          Button <CheckIcon />
+        </Button>
+        <Button variant="primary-outline">
+          <CheckIcon /> Button
+        </Button>
+        <Button variant="primary-text">
+          <CheckIcon /> Button
+        </Button>
+
+        <Button variant="secondary">Button</Button>
+        <Button variant="secondary-outline">Button</Button>
+
+        <Button variant="black">Button</Button>
+      </Container>
+
+      <Container className="flex flex-wrap items-start justify-start gap-5 py-20">
+        <Button size="sm">Button</Button>
+        <Button size="md">Button</Button>
+        <Button size="lg">Button</Button>
+      </Container>
+
+      <Container className="flex flex-wrap items-start justify-start gap-5 py-20">
+        <Badge>Badge</Badge>
+        <Badge>Badge very long</Badge>
       </Container>
 
       <SmartLink href="/about">About</SmartLink>

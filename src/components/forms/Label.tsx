@@ -16,7 +16,7 @@ type Props = React.ComponentPropsWithoutRef<"label"> & {
 };
 
 // Component Variants
-// const componentVariants = {
+// const cv = {
 //   base: "",
 //   prop: {
 //     value: "",

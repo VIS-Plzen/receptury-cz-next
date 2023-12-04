@@ -10,7 +10,7 @@ type GenericProps<E extends React.ElementType> = Props<E> &
   Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
-// const componentVariants = {
+// const cv = {
 //   base: "",
 //   prop: {
 //     value: "",

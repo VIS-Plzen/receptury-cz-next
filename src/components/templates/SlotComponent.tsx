@@ -21,7 +21,7 @@ type Props = React.ComponentPropsWithoutRef<"div"> & {
 };
 
 // Component Variants
-// const componentVariants = {
+// const cv = {
 //   base: "",
 //   prop: {
 //     value: "",

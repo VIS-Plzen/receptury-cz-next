@@ -62,7 +62,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           type={type}
           name={name}
           className={cn(
-            "block w-full appearance-none px-3 py-2",
+            "block w-full appearance-none px-3 py-2.5",
             "rounded-lg border-2 border-primary-200",
             "bg-white text-base text-gray-900",
             "placeholder:text-gray-700/60",

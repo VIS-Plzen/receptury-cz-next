@@ -4,8 +4,8 @@ type Props = React.ComponentPropsWithRef<"svg"> & {
   [key: string]: any;
 };
 
-export default function PlayArrowIcon({
-  size = 20,
+export default function PlayIcon({
+  size = 24,
   ariaHidden = true,
   ...props
 }: Props) {
@@ -19,7 +19,7 @@ export default function PlayArrowIcon({
       {...props}
     >
       <path
-        d="M356.001-252.156v-455.688L707.074-480 356.001-252.156ZM409-481Zm-1 133 204.769-132L408-612v264Z"
+        d="M356.001-252.156v-455.688L707.074-480 356.001-252.156Z"
         fill="currentColor"
       />
     </svg>

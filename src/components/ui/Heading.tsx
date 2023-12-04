@@ -12,7 +12,7 @@ type GenericProps<E extends React.ElementType> = Props<E> &
   Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
-const componentVariants = {
+const cv = {
   base: "leading-[1.15] font-sans font-bold text-gray-950",
   size: {
     xs: "text-sm md:text-xl",
@@ -39,9 +39,9 @@ export default function Heading<E extends React.ElementType = "h2">({
   return (
     <Component
       className={cn(
-        componentVariants.base,
-        componentVariants.size[size],
-        hasMarginBottom && componentVariants.hasMarginBottom,
+        cv.base,
+        cv.size[size],
+        hasMarginBottom && cv.hasMarginBottom,
         className
       )}
       {...props}

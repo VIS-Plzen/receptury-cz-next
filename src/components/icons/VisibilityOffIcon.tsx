@@ -5,7 +5,7 @@ type Props = React.ComponentPropsWithRef<"svg"> & {
 };
 
 export default function VisibilityOffIcon({
-  size = 20,
+  size = 24,
   ariaHidden = true,
   ...props
 }: Props) {

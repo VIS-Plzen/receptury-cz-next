@@ -8,7 +8,7 @@ type Props = React.ComponentPropsWithRef<"div"> & {
 };
 
 // Component Variants
-// const componentVariants = {
+// const cv = {
 //   base: "",
 //   prop: {
 //     value: "",

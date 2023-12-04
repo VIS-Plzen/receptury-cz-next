@@ -22,16 +22,13 @@ const SmartLink = forwardRef<HTMLAnchorElement, Props<string>>(
   ({ href, ...props }, forwardedRef) => {
     // Internal links (starting with "/") render with Next's Link component
     if (href.startsWith("/")) {
-      return (
-        <Link data-internal="true" href={href} ref={forwardedRef} {...props} />
-      );
+      return <Link href={href} ref={forwardedRef} {...props} />;
     }
 
     // External links (http, https, ftp), render with target="_blank" and rel="noopener noreferrer"
     if (href.match(/^(http|https|ftp):/)) {
       return (
         <a
-          data-external="true"
           href={href}
           ref={forwardedRef}
           target="_blank"
@@ -42,7 +39,7 @@ const SmartLink = forwardRef<HTMLAnchorElement, Props<string>>(
     }
 
     // In all other cases, render a regular anchor tag
-    return <a data-external="true" href={href} ref={forwardedRef} {...props} />;
+    return <a href={href} ref={forwardedRef} {...props} />;
   }
 );
 

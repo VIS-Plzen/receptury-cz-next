@@ -1,14 +1,14 @@
 "use client";
 
 import { cn } from "@/utils/cn";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { usePathname } from "next/navigation";
 import { forwardRef } from "react";
 
 // Wrapper for Next.js Link component that adds an activeClassName prop
 // for styling active links (Url pathname matches the href prop)
 
-type Props = React.ComponentPropsWithoutRef<typeof Link> & {
+type Props = LinkProps & {
   activeClassName: string;
   className?: string;
   [key: string]: any;

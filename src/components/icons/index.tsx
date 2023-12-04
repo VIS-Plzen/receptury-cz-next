@@ -18,6 +18,7 @@ import DownloadingIcon from "./DownloadingIcon";
 import ErrorIcon from "./ErrorIcon";
 import ExpandLessIcon from "./ExpandLessIcon";
 import ExpandMoreIcon from "./ExpandMoreIcon";
+import FavoriteFillIcon from "./FavoriteFillIcon";
 import FavoriteIcon from "./FavoriteIcon";
 import FilterListIcon from "./FilterListIcon";
 import HelpIcon from "./HelpIcon";
@@ -25,7 +26,7 @@ import HomeIcon from "./HomeIcon";
 import ListIcon from "./ListIcon";
 import MailIcon from "./MailIcon";
 import PhoneIphoneIcon from "./PhoneIphoneIcon";
-import PlayArrowIcon from "./PlayArrowIcon";
+import PlayIcon from "./PlayIcon";
 import PrintIcon from "./PrintIcon";
 import RateReviewIcon from "./RateReviewIcon";
 import SearchIcon from "./SearchIcon";
@@ -55,6 +56,7 @@ export {
   ErrorIcon,
   ExpandLessIcon,
   ExpandMoreIcon,
+  FavoriteFillIcon,
   FavoriteIcon,
   FilterListIcon,
   HelpIcon,
@@ -62,7 +64,7 @@ export {
   ListIcon,
   MailIcon,
   PhoneIphoneIcon,
-  PlayArrowIcon,
+  PlayIcon,
   PrintIcon,
   RateReviewIcon,
   SearchIcon,

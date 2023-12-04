@@ -3,7 +3,9 @@
 import InputField from "@/components/forms/InputField";
 import TextArea from "@/components/forms/TextArea";
 import Button from "@/components/ui/Button";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { cn } from "@/utils/cn";
+import clsx from "clsx";
 import { useFormik } from "formik";
 import React from "react";
 import { z } from "zod";
@@ -124,7 +126,14 @@ export default function FormComponent({ className = "", ...props }: Props) {
         onBlur={formik.handleBlur}
         value={formik.values.message}
       />
-      <Button type="submit">Odeslat</Button>
+      <Button type="submit" disabled={formik.isSubmitting} className="relative">
+        {formik.isSubmitting && (
+          <LoadingSpinner className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2" />
+        )}
+        <span className={clsx(formik.isSubmitting && "invisible")}>
+          Odeslat
+        </span>
+      </Button>
     </form>
   );
 }

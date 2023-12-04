@@ -3,10 +3,11 @@ import clsx from "clsx";
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
   color?: "inherit" | "primary" | "white" | "black";
+  [key: string]: any;
 };
 
 // Component Variants
-const componentVariants = {
+const cv = {
   size: {
     xs: "h-4 w-4",
     sm: "h-6 w-6",
@@ -40,24 +41,21 @@ export default function LoadingSpinner({
 }: Props) {
   return (
     <div {...props}>
-      <div
-        aria-label="načítání..."
-        className={clsx("relative", componentVariants.size[size])}
-      >
+      <div aria-label="načítání..." className={clsx("relative", cv.size[size])}>
         <div
           className={clsx(
             "absolute origin-center animate-[spin_0.7s_linear_infinite] rounded-full border-dashed border-b-transparent border-l-transparent border-r-transparent opacity-25",
-            componentVariants.size[size],
-            componentVariants.borderSize[size],
-            componentVariants.color[color]
+            cv.size[size],
+            cv.borderSize[size],
+            cv.color[color]
           )}
         ></div>
         <div
           className={clsx(
             "absolute origin-center animate-[spin_0.7s_ease_infinite] rounded-full border-b-transparent border-l-transparent border-r-transparent",
-            componentVariants.size[size],
-            componentVariants.borderSize[size],
-            componentVariants.color[color]
+            cv.size[size],
+            cv.borderSize[size],
+            cv.color[color]
           )}
         ></div>
       </div>

@@ -6,7 +6,7 @@
 @layer base {
   /* Apply styles on focus */
   :focus {
-    @apply ring-primary/50 outline-none ring-[3px] ring-offset-0;
+    @apply outline-none ring-[3px] ring-primary/50 ring-offset-0;
   }
 
   /* Remove styles for non-keyboard focus */
