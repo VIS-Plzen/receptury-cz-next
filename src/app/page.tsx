@@ -38,11 +38,14 @@ import {
 } from "@/components/icons";
 import SmartLink from "@/components/primitives/SmartLink";
 import MealSymbol from "@/components/symbols/MealSymbol";
+import Compound from "@/components/templates/CompoundComponents";
 import FormComponent from "@/components/templates/FormComponent";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import Link from "next/link";
 
 export default function Home() {
@@ -58,11 +61,27 @@ export default function Home() {
           voluptatum!
         </p>
       </Container>
+
+      <Container className="flex flex-wrap gap-2 py-10">
+        <ButtonIcon icon="favorite" />
+        <ButtonIcon icon="favorite-fill" />
+        <ButtonIcon icon="share" />
+        <ButtonIcon icon="print" />
+        <ButtonIcon icon="downloading" />
+        <ButtonIcon icon="archive" />
+        <ButtonIcon icon="rate-review" />
+
+        <ButtonIcon>
+          <ErrorIcon />
+        </ButtonIcon>
+      </Container>
+
       <Container as={"section"}>
         <Heading as={"h1"} size="md">
           Lorem ipsum dolor
         </Heading>
       </Container>
+
       <Container>
         <FormComponent />
       </Container>
@@ -125,6 +144,38 @@ export default function Home() {
         <Button variant="secondary-outline">Button</Button>
 
         <Button variant="black">Button</Button>
+      </Container>
+
+      <Container>
+        <Tabs defaultValue="recommended" className="w-[400px]">
+          <TabsList>
+            <TabsTrigger value="recommended">Doporučené pro vás</TabsTrigger>
+            <TabsTrigger value="favorites">Oblíbené</TabsTrigger>
+            <TabsTrigger value="new">Nové recepty</TabsTrigger>
+          </TabsList>
+          <TabsContent value="recommended">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
+            nostrum dicta, unde deserunt, ipsum, quas repudiandae.
+          </TabsContent>
+          <TabsContent value="favorites">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi
+            reiciendis, fugiat dicta inventore magni ut incidunt ipsam impedit,
+            veniam recusandae magnam aliquam aliquid earum rem odit.
+          </TabsContent>
+          <TabsContent value="new">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
+            nostrum dicta, unde deserunt, ipsum, quas repudiandae excepturi
+            ullam sapiente nobis veniam eum.
+          </TabsContent>
+        </Tabs>
+      </Container>
+
+      <Container>
+        <Compound.Root>
+          <Compound.First>
+            <Compound.Second />
+          </Compound.First>
+        </Compound.Root>
       </Container>
 
       <Container className="flex flex-wrap items-start justify-start gap-5 py-20">
