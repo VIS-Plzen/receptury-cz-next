@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import clsx from "clsx";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
@@ -42,7 +43,7 @@ export default function LoadingSpinner({
   return (
     <div
       aria-label="načítání..."
-      className={clsx("relative", cv.size[size])}
+      className={cn("relative", cv.size[size])}
       {...props}
     >
       <div

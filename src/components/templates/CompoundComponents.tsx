@@ -2,9 +2,6 @@ import { cn } from "@/utils/cn";
 
 // This pattern defines a set of React components that are designed to be used together to form a single, configurable component.
 
-// APIS:
-// Compound components: https://kentcdodds.com/blog/compound-components-with-react-hooks
-
 // Usage:
 //
 // import Compound from "@/components/templates/CompoundComponents";

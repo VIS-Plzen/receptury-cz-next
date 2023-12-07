@@ -8,7 +8,7 @@ import { cn } from "@/utils/cn";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const menuRoutes = [
@@ -106,7 +106,7 @@ function TouchMenu({
 }) {
   // Prevents scrolling when menu is open
   useEffect(() => {
-    if (isOpen === true) {
+    if (isOpen) {
       document.body.classList.add(
         "overflow-hidden",
         "relative",
@@ -122,6 +122,16 @@ function TouchMenu({
       );
     }
   }, [isOpen, setIsOpen]);
+
+  // Closes the menu when user navigates to another page
+  // however it will close the menu after the page is loaded and not immediately
+  // (depends on the url)
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname, searchParams, setIsOpen]);
 
   return (
     <AnimatePresence>
@@ -195,13 +205,12 @@ export default function Navbar() {
     });
   }, [scrollY, setIsVisible]);
 
-  const pathname = usePathname();
-
   return (
     <nav
       className={cn(
         "fixed inset-x-0 top-0 z-fixed w-full transition duration-500",
-        "border-b-2 border-primary-200 bg-white",
+        "border-b-2 border-primary-200",
+        isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white",
         !isVisible && "-translate-y-full"
       )}
     >
@@ -232,7 +241,7 @@ export default function Navbar() {
         <BurgerButton
           isOpen={isMenuOpen}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className={"flex lg:hidden"}
+          className="flex lg:hidden"
         />
         <TouchMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
       </Container>
