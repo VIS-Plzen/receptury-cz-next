@@ -1,4 +1,3 @@
-import TemplateBase from "@/components/templates/TemplateBase";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -6,8 +5,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 export default function Home() {
   return (
     <div className="flex min-h-screen">
-      <Container className="rounded-2xl bg-white py-24">
-        <TemplateBase>This is template</TemplateBase>
+      <Container className="rounded-2xl py-24">
         <div className="flex flex-wrap gap-8">
           <LoadingSpinner color="black" size="xs" />
           <LoadingSpinner color="black" size="sm" />

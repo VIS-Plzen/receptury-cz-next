@@ -27,11 +27,12 @@ const menuRoutes = [
     href: "/partner-1",
   },
   {
-    label: "Kontakt",
-    href: "/about",
+    label: "Testing",
+    href: "/testing",
   },
 ];
 
+import StyledLink from "@/components/ui/StyledLink";
 import { usePathname } from "next/navigation";
 import { forwardRef } from "react";
 
@@ -73,26 +74,26 @@ function BurgerButton({
     <button
       aria-label="Otevřít / zavřít menu"
       className={cn(
-        "z-offcanvas-above group relative flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-xl",
+        "group relative z-offcanvas-above flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-xl",
         className
       )}
       onClick={onClick}
     >
       <span
         className={clsx(
-          "ease-out-back h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300",
+          "h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300 ease-out-back",
           isOpen && "translate-y-[7px] -rotate-45"
         )}
       />
       <span
         className={clsx(
-          "ease-out-back h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300",
+          "h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300 ease-out-back",
           isOpen && "opacity-0"
         )}
       />
       <span
         className={clsx(
-          "ease-out-back h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300",
+          "h-0.5 w-7 origin-center transform-gpu rounded-full bg-gray-900 transition duration-300 ease-out-back",
           isOpen && "translate-y-[-7px] rotate-45"
         )}
       />
@@ -133,10 +134,12 @@ export default function Navbar() {
     });
   }, [scrollY, setIsVisible]);
 
+  const pathname = usePathname();
+
   return (
     <nav
       className={cn(
-        "z-fixed fixed inset-x-0 top-0 w-full transition duration-500",
+        "fixed inset-x-0 top-0 z-fixed w-full transition duration-500",
         "border-b-2 border-primary-200 bg-white",
         !isVisible && "-translate-y-full"
       )}
@@ -149,13 +152,12 @@ export default function Navbar() {
         <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-7 lg:flex">
           {menuRoutes.map((route) => (
             <li key={route.href}>
-              <ActiveLink
-                href={route.href}
-                className="font-semibold text-gray-600 decoration-current decoration-[0.09375em] underline-offset-[0.25em] hover:underline"
-                activeClassName="text-primary"
+              <StyledLink
+                asChild
+                className={cn(pathname === route.href && "text-primary")}
               >
-                {route.label}
-              </ActiveLink>
+                <Link href={route.href}>{route.label}</Link>
+              </StyledLink>
             </li>
           ))}
         </ul>
