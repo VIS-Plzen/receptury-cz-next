@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "@/components/brand/Logo";
+import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";
 import StyledLink from "@/components/ui/StyledLink";
@@ -34,6 +35,7 @@ const menuRoutes = [
   },
 ];
 
+// Hihlights link with href matching current url
 function ActiveNavLink({
   hoverEffect = "appear",
   activeClassName = "",
@@ -180,6 +182,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  // Thresholds
   const thresholdScrolledPx = 64;
   const thresholHideVisiblePx = 540;
 
@@ -235,7 +238,8 @@ export default function Navbar() {
 
         <div className="hidden items-center justify-start gap-2 lg:flex">
           <Avatar size="sm" loading="eager" name="Jméno a příjmení" />
-          Jméno a příjmení
+          <span>Jméno a příjmení</span>
+          <ExpandMoreIcon />
         </div>
 
         <BurgerButton
