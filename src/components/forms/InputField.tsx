@@ -4,13 +4,6 @@ import ErrorText from "./ErrorText";
 import HelperText from "./HelperText";
 import Label from "./Label";
 
-// Features:
-// - [x] custom generated id for input and label
-// - [x] Required input - add asterisk to label
-// - [x] Helper text
-// - [x] Disabled state
-// - [x] Error state and error text
-
 type Props = React.ComponentPropsWithoutRef<"input"> & {
   name: string;
   type?: "text" | "email" | "tel" | "url" | "number";

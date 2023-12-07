@@ -36,7 +36,6 @@ import {
   VisibilityIcon,
   VisibilityOffIcon,
 } from "@/components/icons";
-import SmartLink from "@/components/primitives/SmartLink";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Compound from "@/components/templates/CompoundComponents";
 import FormComponent from "@/components/templates/FormComponent";
@@ -70,6 +69,8 @@ export default function Home() {
         <ButtonIcon icon="downloading" />
         <ButtonIcon icon="archive" />
         <ButtonIcon icon="rate-review" />
+        <ButtonIcon icon="visibility" />
+        <ButtonIcon icon="visibility-off" />
 
         <ButtonIcon>
           <ErrorIcon />
@@ -188,8 +189,6 @@ export default function Home() {
         <Badge>Badge</Badge>
         <Badge>Badge very long</Badge>
       </Container>
-
-      <SmartLink href="/about">About</SmartLink>
       <Link href="/about">About</Link>
     </div>
   );

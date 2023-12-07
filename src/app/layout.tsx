@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import Navbar from "./Navbar";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -21,9 +22,14 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`selection:bg-primary/80 bg-primary-50 font-sans text-gray-700 selection:text-primary-50 ${nunito.variable}`}
+        className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        <main>{children}</main>
+        <main>
+          <header>
+            <Navbar />
+          </header>
+          {children}
+        </main>
       </body>
     </html>
   );

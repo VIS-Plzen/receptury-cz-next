@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 
 type Props<E extends React.ElementType = "div"> = {
-  as?: E;
+  as?: E | keyof JSX.IntrinsicElements;
   className?: string;
   children?: React.ReactNode;
 };

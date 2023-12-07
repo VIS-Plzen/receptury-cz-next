@@ -6,6 +6,8 @@ import {
   PrintIcon,
   RateReviewIcon,
   ShareIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
 } from "@/components/icons";
 import { cn } from "@/utils/cn";
 
@@ -18,6 +20,8 @@ type Props = React.ComponentPropsWithRef<"button"> & {
     | "downloading"
     | "archive"
     | "rate-review"
+    | "visibility"
+    | "visibility-off"
     | undefined;
   children?: React.ReactElement;
   className?: string;
@@ -41,6 +45,8 @@ export default function ButtonIcon({
     downloading: DownloadingIcon,
     archive: ArchiveIcon,
     "rate-review": RateReviewIcon,
+    visibility: VisibilityIcon,
+    "visibility-off": VisibilityOffIcon,
   };
 
   const IconComponent = Icons[icon || "favorite"];

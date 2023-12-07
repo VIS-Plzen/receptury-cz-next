@@ -1,5 +1,5 @@
 type ComponentProps<E extends React.ElementType = "div"> = {
-  as?: E;
+  as?: E | keyof JSX.IntrinsicElements;
 };
 
 type GenericProps<E extends React.ElementType> = ComponentProps<E> &
