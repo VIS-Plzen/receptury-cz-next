@@ -44,8 +44,8 @@ import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import StyledLink from "@/components/ui/StyledLink";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -189,7 +189,10 @@ export default function Home() {
         <Badge>Badge</Badge>
         <Badge>Badge very long</Badge>
       </Container>
-      <Link href="/about">About</Link>
+
+      <Container className="flex flex-wrap items-start justify-start gap-5 py-20">
+        <StyledLink href="https://facebook.com">StyledLink</StyledLink>
+      </Container>
     </div>
   );
 }

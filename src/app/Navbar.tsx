@@ -3,10 +3,12 @@
 import Logo from "@/components/brand/Logo";
 import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";
+import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
 import clsx from "clsx";
-import { useScroll } from "framer-motion";
-import Link, { LinkProps } from "next/link";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const menuRoutes = [
@@ -32,34 +34,28 @@ const menuRoutes = [
   },
 ];
 
-import StyledLink from "@/components/ui/StyledLink";
-import { usePathname } from "next/navigation";
-import { forwardRef } from "react";
-
-// Wrapper for Next.js Link component that adds an activeClassName prop
-// for styling active links (Url pathname matches the href prop)
-
-type Props = LinkProps & {
+function ActiveNavLink({
+  hoverEffect = "appear",
+  activeClassName = "",
+  className = "",
+  ...props
+}: React.ComponentPropsWithoutRef<typeof Link> & {
+  hoverEffect?: "underline" | "appear" | "none";
   activeClassName: string;
   className?: string;
-  [key: string]: any;
-};
-
-const ActiveLink = forwardRef<HTMLAnchorElement, Props>(
-  ({ activeClassName = "", className = "", ...props }, forwardedRef) => {
-    const pathname = usePathname();
-    const isActive = pathname === props.href;
-    return (
-      <Link
-        ref={forwardedRef}
-        className={cn(className, isActive && activeClassName)}
-        {...props}
-      />
-    );
-  }
-);
-
-ActiveLink.displayName = "ActiveLink";
+}) {
+  const pathname = usePathname();
+  const isActive = pathname === props.href;
+  return (
+    <StyledLink
+      asChild
+      hoverEffect={hoverEffect}
+      className={cn(className, isActive && activeClassName)}
+    >
+      <Link {...props} />
+    </StyledLink>
+  );
+}
 
 function BurgerButton({
   isOpen,
@@ -98,6 +94,71 @@ function BurgerButton({
         )}
       />
     </button>
+  );
+}
+
+function TouchMenu({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}) {
+  // Prevents scrolling when menu is open
+  useEffect(() => {
+    if (isOpen === true) {
+      document.body.classList.add(
+        "overflow-hidden",
+        "relative",
+        "h-full",
+        "touch-none"
+      );
+    } else {
+      document.body.classList.remove(
+        "overflow-hidden",
+        "relative",
+        "h-full",
+        "touch-none"
+      );
+    }
+  }, [isOpen, setIsOpen]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { duration: 0.4, ease: [0.33, 1, 0.68, 1] },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
+            }}
+            className="fixed inset-0 z-offcanvas min-h-screen w-screen bg-white"
+          >
+            <Container className="pt-28">
+              <motion.ul className="flex flex-col gap-6">
+                {menuRoutes.map((route) => (
+                  <li key={route.href}>
+                    <ActiveNavLink
+                      hoverEffect="appear"
+                      href={route.href}
+                      className="text-xl font-bold"
+                      activeClassName="text-primary"
+                    >
+                      {route.label}
+                    </ActiveNavLink>
+                  </li>
+                ))}
+              </motion.ul>
+            </Container>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -152,18 +213,19 @@ export default function Navbar() {
         <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-7 lg:flex">
           {menuRoutes.map((route) => (
             <li key={route.href}>
-              <StyledLink
-                asChild
-                className={cn(pathname === route.href && "text-primary")}
+              <ActiveNavLink
+                hoverEffect="appear"
+                href={route.href}
+                activeClassName="text-primary"
               >
-                <Link href={route.href}>{route.label}</Link>
-              </StyledLink>
+                {route.label}
+              </ActiveNavLink>
             </li>
           ))}
         </ul>
 
         <div className="hidden items-center justify-start gap-2 lg:flex">
-          <Avatar size="sm" name="Jméno a příjmení" />
+          <Avatar size="sm" loading="eager" name="Jméno a příjmení" />
           Jméno a příjmení
         </div>
 
@@ -172,6 +234,7 @@ export default function Navbar() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className={"flex lg:hidden"}
         />
+        <TouchMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
       </Container>
     </nav>
   );

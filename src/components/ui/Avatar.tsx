@@ -37,7 +37,7 @@ export default function Avatar({
   loading = "lazy",
   size = "md",
   className = "",
-  ...rest
+  ...props
 }: AvatarProps) {
   // Get initials from the first and the last name and save them in a variable
   const initials = name
@@ -47,8 +47,8 @@ export default function Avatar({
 
   return (
     <AvatarPrimitive.Root
+      {...props}
       className={cn(cv.root, cv.size[size], cv.radius, className)}
-      {...rest}
     >
       <AvatarPrimitive.Image
         src={src}

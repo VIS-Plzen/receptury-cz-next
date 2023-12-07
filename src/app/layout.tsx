@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import Navbar from "./Navbar";
+import SkipNavigationButton from "./SkipNavigationButton";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -24,12 +25,11 @@ export default function RootLayout({
       <body
         className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        <main>
-          <header>
-            <Navbar />
-          </header>
-          {children}
-        </main>
+        <SkipNavigationButton className="hidden lg:inline-flex" />
+        <header>
+          <Navbar />
+        </header>
+        <main id="obsah">{children}</main>
       </body>
     </html>
   );

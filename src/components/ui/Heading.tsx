@@ -2,7 +2,7 @@ import { cn } from "@/utils/cn";
 
 type Props<E extends React.ElementType = "h2"> = {
   children: React.ReactNode;
-  as?: E;
+  as?: E | keyof JSX.IntrinsicElements;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
   hasMarginBottom?: boolean;
   className?: string;

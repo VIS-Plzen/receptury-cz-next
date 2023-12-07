@@ -4,6 +4,7 @@
 @tailwind variants;
 
 @layer base {
+  /* Global focus styles --> should be in base so we can override them at the lower level */
   /* Apply styles on focus */
   :focus {
     @apply outline-none ring-[3px] ring-primary/50 ring-offset-0;
@@ -12,5 +13,29 @@
   /* Remove styles for non-keyboard focus */
   :focus:not(:focus-visible) {
     @apply outline-none;
+  }
+}
+
+@layer components {
+  /* StyledLink component - hoverEffect prop - underline option */
+  .ui-styled-link.ui-styled-link--underline::before {
+    content: "";
+    @apply absolute inset-x-0 top-[92%] h-[0.09375em] w-full;
+    @apply origin-left scale-x-100 transform-gpu bg-current opacity-60;
+    @apply transition-transform duration-300 ease-out-circ hover:origin-right hover:scale-x-0;
+  }
+
+  .ui-styled-link.ui-styled-link--underline::after {
+    content: "";
+    @apply absolute inset-x-0 top-[92%] h-[0.09375em];
+    @apply w-full origin-right scale-x-0 transform-gpu bg-current opacity-60;
+    @apply transition-transform duration-300 ease-out-circ hover:origin-left hover:scale-x-100 hover:delay-300;
+  }
+  /* StyledLink component - hoverEffect prop - appear option */
+  .ui-styled-link.ui-styled-link--appear::before {
+    content: "";
+    @apply absolute inset-x-0 top-[92%] h-[0.09375em] w-full;
+    @apply origin-center translate-y-[-0.2875em] transform-gpu bg-current opacity-0;
+    @apply transition duration-200 hover:translate-y-0 hover:opacity-60;
   }
 }

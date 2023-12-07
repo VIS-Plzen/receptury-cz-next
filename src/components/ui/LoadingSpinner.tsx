@@ -40,25 +40,27 @@ export default function LoadingSpinner({
   ...props
 }: Props) {
   return (
-    <div {...props}>
-      <div aria-label="načítání..." className={clsx("relative", cv.size[size])}>
-        <div
-          className={clsx(
-            "absolute origin-center animate-[spin_0.7s_linear_infinite] rounded-full border-dashed border-b-transparent border-l-transparent border-r-transparent opacity-25",
-            cv.size[size],
-            cv.borderSize[size],
-            cv.color[color]
-          )}
-        ></div>
-        <div
-          className={clsx(
-            "absolute origin-center animate-[spin_0.7s_ease_infinite] rounded-full border-b-transparent border-l-transparent border-r-transparent",
-            cv.size[size],
-            cv.borderSize[size],
-            cv.color[color]
-          )}
-        ></div>
-      </div>
+    <div
+      aria-label="načítání..."
+      className={clsx("relative", cv.size[size])}
+      {...props}
+    >
+      <div
+        className={clsx(
+          "absolute origin-center animate-[spin_0.7s_linear_infinite] rounded-full border-dashed border-b-transparent border-l-transparent border-r-transparent opacity-25",
+          cv.size[size],
+          cv.borderSize[size],
+          cv.color[color]
+        )}
+      />
+      <div
+        className={clsx(
+          "absolute origin-center animate-[spin_0.7s_ease_infinite] rounded-full border-b-transparent border-l-transparent border-r-transparent",
+          cv.size[size],
+          cv.borderSize[size],
+          cv.color[color]
+        )}
+      />
     </div>
   );
 }
