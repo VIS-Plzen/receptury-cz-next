@@ -8,7 +8,7 @@ type Props<E extends React.ElementType = "h2"> = {
   className?: string;
 };
 
-type GenericProps<E extends React.ElementType> = Props<E> &
+type ElementTypeProps<E extends React.ElementType> = Props<E> &
   Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
@@ -33,7 +33,7 @@ export default function Heading<E extends React.ElementType = "h2">({
   hasMarginBottom = false,
   className = "",
   ...props
-}: GenericProps<E>) {
+}: ElementTypeProps<E>) {
   const Component = as || "h2";
 
   return (

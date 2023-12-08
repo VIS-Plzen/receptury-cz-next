@@ -6,7 +6,7 @@ type Props<E extends React.ElementType = "div"> = {
   className?: string;
 };
 
-type GenericProps<E extends React.ElementType> = Props<E> &
+type ElementTypeProps<E extends React.ElementType> = Props<E> &
   Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 export default function Container<E extends React.ElementType = "div">({
@@ -14,7 +14,7 @@ export default function Container<E extends React.ElementType = "div">({
   as,
   className = "",
   ...props
-}: GenericProps<E>) {
+}: ElementTypeProps<E>) {
   const Component = as || "div";
 
   return (

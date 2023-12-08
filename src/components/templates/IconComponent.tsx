@@ -1,3 +1,6 @@
+// Source: https://fonts.google.com/icons
+// weight: 300
+
 type Props = React.ComponentPropsWithRef<"svg"> & {
   size?: number;
   ariaHidden?: boolean;

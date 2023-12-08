@@ -1,8 +1,10 @@
 "use client";
 
-// Radix UI component docs: https://www.radix-ui.com/docs/primitives/components/avatar
 import { cn } from "@/utils/cn";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import clsx from "clsx";
+
+// Component docs: https://www.radix-ui.com/docs/primitives/components/avatar
 
 //
 // Avatar component
@@ -13,6 +15,7 @@ type AvatarProps = React.ComponentPropsWithoutRef<
   name: string;
   loading?: "eager" | "lazy";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  fallbackColor?: "primary" | "secondary";
   className?: string;
   [x: string]: any;
 };
@@ -29,6 +32,10 @@ const cv = {
     xl: "h-16 w-16 text-xl",
     "2xl": "h-20 w-20 text-2xl",
   },
+  color: {
+    primary: "bg-primary-700 text-primary-50",
+    secondary: "bg-secondary-700 text-secondary-50",
+  },
 };
 
 export default function Avatar({
@@ -36,6 +43,7 @@ export default function Avatar({
   name = "John Doe",
   loading = "lazy",
   size = "md",
+  fallbackColor = "secondary",
   className = "",
   ...props
 }: AvatarProps) {
@@ -57,7 +65,12 @@ export default function Avatar({
         className="h-full w-full object-cover"
       />
 
-      <AvatarPrimitive.Fallback className="flex h-full w-full items-center justify-center bg-secondary-700 text-[1em] font-semibold uppercase leading-none text-secondary-50">
+      <AvatarPrimitive.Fallback
+        className={clsx(
+          cv.color[fallbackColor],
+          "flex h-full w-full items-center justify-center text-[1em] font-semibold uppercase leading-none"
+        )}
+      >
         {initials}
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>

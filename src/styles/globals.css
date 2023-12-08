@@ -17,20 +17,20 @@
 }
 
 @layer components {
-  /* StyledLink component - hoverEffect prop - underline option */
-  .ui-styled-link.ui-styled-link--underline::before {
+  /* StyledLink component - hoverEffect prop - slide-back option */
+  .ui-styled-link.ui-styled-link--slide-back::before {
     content: "";
     @apply absolute inset-x-0 top-[92%] h-[0.09375em] w-full;
     @apply origin-left scale-x-100 transform-gpu bg-current opacity-60;
     @apply transition-transform duration-300 ease-out-circ hover:origin-right hover:scale-x-0;
   }
-
-  .ui-styled-link.ui-styled-link--underline::after {
+  .ui-styled-link.ui-styled-link--slide-back::after {
     content: "";
     @apply absolute inset-x-0 top-[92%] h-[0.09375em];
     @apply w-full origin-right scale-x-0 transform-gpu bg-current opacity-60;
     @apply transition-transform duration-300 ease-out-circ hover:origin-left hover:scale-x-100 hover:delay-300;
   }
+
   /* StyledLink component - hoverEffect prop - appear option */
   .ui-styled-link.ui-styled-link--appear::before {
     content: "";

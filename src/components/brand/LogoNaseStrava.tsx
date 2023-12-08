@@ -1,5 +1,4 @@
 import { cn } from "@/utils/cn";
-import SmartLink from "../primitives/SmartLink";
 
 function Logomark({
   className = "",
@@ -55,7 +54,7 @@ export default function LogoNaseStrava({
   href?: string;
 }) {
   return (
-    <SmartLink
+    <a
       href={href}
       className={cn(
         "relative flex items-center justify-start gap-4",
@@ -63,9 +62,9 @@ export default function LogoNaseStrava({
       )}
     >
       <Logomark className="origin-right scale-90" />
-      <span className="text-dark-purple block text-lg font-semibold min-[374px]:text-2xl">
+      <span className="block text-lg font-semibold text-dark-purple min-[374px]:text-2xl">
         Naše strava od VIS Plzeň
       </span>
-    </SmartLink>
+    </a>
   );
 }

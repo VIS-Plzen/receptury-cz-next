@@ -37,12 +37,10 @@ const menuRoutes = [
 
 // Hihlights link with href matching current url
 function ActiveNavLink({
-  hoverEffect = "appear",
   activeClassName = "",
   className = "",
   ...props
 }: React.ComponentPropsWithoutRef<typeof Link> & {
-  hoverEffect?: "underline" | "appear" | "none";
   activeClassName: string;
   className?: string;
 }) {
@@ -51,7 +49,7 @@ function ActiveNavLink({
   return (
     <StyledLink
       asChild
-      hoverEffect={hoverEffect}
+      hoverEffect="appear"
       className={cn(className, isActive && activeClassName)}
     >
       <Link {...props} />
@@ -156,7 +154,6 @@ function TouchMenu({
                 {menuRoutes.map((route) => (
                   <li key={route.href}>
                     <ActiveNavLink
-                      hoverEffect="appear"
                       href={route.href}
                       className="text-xl font-bold"
                       activeClassName="text-primary"
@@ -226,8 +223,8 @@ export default function Navbar() {
           {menuRoutes.map((route) => (
             <li key={route.href}>
               <ActiveNavLink
-                hoverEffect="appear"
                 href={route.href}
+                className="font-semibold"
                 activeClassName="text-primary"
               >
                 {route.label}
@@ -236,10 +233,12 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden items-center justify-start gap-2 lg:flex">
-          <Avatar size="sm" loading="eager" name="Jméno a příjmení" />
-          <span>Jméno a příjmení</span>
-          <ExpandMoreIcon />
+        <div className="hidden w-56 items-center justify-start gap-2 lg:flex">
+          <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+          <span className="mr-auto block font-semibold leading-tight">
+            Jméno Příjmení
+          </span>
+          <ExpandMoreIcon className="shrink-0" />
         </div>
 
         <BurgerButton

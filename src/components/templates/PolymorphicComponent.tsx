@@ -6,7 +6,7 @@ type Props<E extends React.ElementType = "div"> = {
   children?: React.ReactNode;
 };
 
-type GenericProps<E extends React.ElementType> = Props<E> &
+type ElementTypeProps<E extends React.ElementType> = Props<E> &
   Omit<React.ComponentProps<E>, keyof Props<E>>;
 
 // Component Variants
@@ -21,7 +21,7 @@ type GenericProps<E extends React.ElementType> = Props<E> &
 
 export default function PolymorphicComponent<
   E extends React.ElementType = "div",
->({ as, className = "", children, ...props }: GenericProps<E>) {
+>({ as, className = "", children, ...props }: ElementTypeProps<E>) {
   const Component = as || "div";
 
   return (

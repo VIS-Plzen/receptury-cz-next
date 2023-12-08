@@ -4,6 +4,8 @@ import { cn } from "@/utils/cn";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { forwardRef } from "react";
 
+// Component docs: https://www.radix-ui.com/primitives/docs/components/tabs
+
 // Usage:
 //
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
@@ -45,6 +47,7 @@ const TabsTrigger = forwardRef<
     className={cn(
       "inline-flex items-center justify-center whitespace-nowrap rounded-full px-2.5 py-1.5  transition-all duration-200 sm:px-3.5 sm:py-2",
       "text-sm font-bold sm:text-base lg:text-lg lg:tracking-wide",
+      "focns:outline-none focus:ring-0",
       "data-[state=active]:bg-primary data-[state=active]:text-primary-50 data-[state=active]:shadow-sm",
       "disabled:pointer-events-none disabled:opacity-50",
       className

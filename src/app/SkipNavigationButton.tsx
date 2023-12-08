@@ -2,8 +2,10 @@ import Button from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
 
 export default function SkipNavigationButton({
+  href = "#obsah",
   className,
 }: {
+  href: string;
   className?: string;
 }) {
   return (
@@ -15,7 +17,7 @@ export default function SkipNavigationButton({
         className
       )}
     >
-      <a href="#obsah">Přeskočit navigaci</a>
+      <a href={href}>Přeskočit navigaci</a>
     </Button>
   );
 }

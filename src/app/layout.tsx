@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        <SkipNavigationButton className="hidden lg:inline-flex" />
+        <SkipNavigationButton href="#obsah" className="hidden lg:inline-flex" />
         <header>
           <Navbar />
         </header>
