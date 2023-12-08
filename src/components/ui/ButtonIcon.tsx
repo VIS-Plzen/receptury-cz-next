@@ -1,8 +1,10 @@
 import {
   ArchiveIcon,
+  CalendarViewMontsIcon,
   DownloadingIcon,
   FavoriteFillIcon,
   FavoriteIcon,
+  ListIcon,
   PrintIcon,
   RateReviewIcon,
   ShareIcon,
@@ -13,13 +15,15 @@ import { cn } from "@/utils/cn";
 
 type Props = React.ComponentPropsWithRef<"button"> & {
   icon?:
-    | "favorite"
-    | "favorite-fill"
-    | "share"
-    | "print"
-    | "downloading"
     | "archive"
+    | "calendar-view-months"
+    | "downloading"
+    | "favorite-fill"
+    | "favorite"
+    | "list"
+    | "print"
     | "rate-review"
+    | "share"
     | "visibility"
     | "visibility-off"
     | undefined;
@@ -38,13 +42,15 @@ export default function ButtonIcon({
     throw new Error("ButtonIcon component can't have both icon and children");
 
   const Icons = {
-    favorite: FavoriteIcon,
-    "favorite-fill": FavoriteFillIcon,
-    share: ShareIcon,
-    print: PrintIcon,
-    downloading: DownloadingIcon,
     archive: ArchiveIcon,
+    "calendar-view-months": CalendarViewMontsIcon,
+    downloading: DownloadingIcon,
+    "favorite-fill": FavoriteFillIcon,
+    favorite: FavoriteIcon,
+    list: ListIcon,
+    print: PrintIcon,
     "rate-review": RateReviewIcon,
+    share: ShareIcon,
     visibility: VisibilityIcon,
     "visibility-off": VisibilityOffIcon,
   };

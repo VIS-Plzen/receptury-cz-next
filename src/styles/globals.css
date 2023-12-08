@@ -38,4 +38,10 @@
     @apply origin-center translate-y-[-0.2875em] transform-gpu bg-current opacity-0;
     @apply transition duration-200 hover:translate-y-0 hover:opacity-60;
   }
+
+  /* StyledLink component - hoverEffect prop - static option */
+  .ui-styled-link.ui-styled-link--static::before {
+    content: "";
+    @apply absolute inset-x-0 top-[92%] h-[0.09375em] w-full origin-center bg-current opacity-60;
+  }
 }

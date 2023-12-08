@@ -56,13 +56,15 @@ export default function LogoNaseStrava({
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(
         "relative flex items-center justify-start gap-4",
         className
       )}
     >
       <Logomark className="origin-right scale-90" />
-      <span className="block text-lg font-semibold text-dark-purple min-[374px]:text-2xl">
+      <span className="block text-lg font-bold text-dark-purple min-[374px]:text-2xl">
         Naše strava od VIS Plzeň
       </span>
     </a>

@@ -6,11 +6,7 @@ import clsx from "clsx";
 
 // Component docs: https://www.radix-ui.com/docs/primitives/components/avatar
 
-//
-// Avatar component
-type AvatarProps = React.ComponentPropsWithoutRef<
-  typeof AvatarPrimitive.Root
-> & {
+type Props = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
   src?: string;
   name: string;
   loading?: "eager" | "lazy";
@@ -30,10 +26,10 @@ const cv = {
     md: "h-10 w-10",
     lg: "h-12 w-12 text-lg",
     xl: "h-16 w-16 text-xl",
-    "2xl": "h-20 w-20 text-2xl",
+    "2xl": "h-24 w-24 text-2xl",
   },
   color: {
-    primary: "bg-primary-700 text-primary-50",
+    primary: "bg-primary text-primary-50",
     secondary: "bg-secondary-700 text-secondary-50",
   },
 };
@@ -46,7 +42,7 @@ export default function Avatar({
   fallbackColor = "secondary",
   className = "",
   ...props
-}: AvatarProps) {
+}: Props) {
   // Get initials from the first and the last name and save them in a variable
   const initials = name
     .split(" ")

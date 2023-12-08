@@ -1,30 +1,13 @@
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
-export default function Home() {
+export default function Testing() {
   return (
-    <div className="flex min-h-screen">
-      <Container className="rounded-2xl py-24">
-        <div className="flex flex-wrap gap-8">
-          <LoadingSpinner color="black" size="xs" />
-          <LoadingSpinner color="black" size="sm" />
-          <LoadingSpinner color="black" size="md" />
-          <LoadingSpinner color="black" size="lg" />
-          <LoadingSpinner color="black" size="xl" />
-          <LoadingSpinner color="black" size="2xl" />
-          <div className="text-base">
-            <LoadingSpinner color="black" size="inherit" />
-          </div>
-        </div>
-        <div>
-          <Heading size="2xl">Lorem ipsum dolor</Heading>
-          <Heading size="xl">Lorem ipsum dolor</Heading>
-          <Heading size="lg">Lorem ipsum dolor</Heading>
-          <Heading size="md">Lorem ipsum dolor</Heading>
-          <Heading size="sm">Lorem ipsum dolor</Heading>
-          <Heading size="xs">Lorem ipsum dolor</Heading>
-        </div>
+    <div className="min-h-screen pt-40">
+      <Container>
+        <Heading as="h1" size="2xl" className="text-center">
+          Stránka pro testování komponent
+        </Heading>
       </Container>
     </div>
   );

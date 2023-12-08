@@ -18,6 +18,14 @@ const menuRoutes = [
     href: "/",
   },
   {
+    label: "Komponenty",
+    href: "/components",
+  },
+  {
+    label: "Testing",
+    href: "/testing",
+  },
+  {
     label: "Partner 1",
     href: "/partner-1",
   },
@@ -26,12 +34,8 @@ const menuRoutes = [
     href: "/partner-2",
   },
   {
-    label: "Partner 3",
-    href: "/partner-1",
-  },
-  {
-    label: "Testing",
-    href: "/testing",
+    label: "Kontakt",
+    href: "/kontakt",
   },
 ];
 
@@ -215,16 +219,16 @@ export default function Navbar() {
       )}
     >
       <Container className="relative flex items-center justify-between py-3 lg:py-5">
-        <Link href="/">
+        <Link href="/" className="relative z-offcanvas-above">
           <Logo />
         </Link>
 
-        <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-7 lg:flex">
+        <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">
           {menuRoutes.map((route) => (
             <li key={route.href}>
               <ActiveNavLink
                 href={route.href}
-                className="font-semibold"
+                className="text-sm font-semibold 2xl:text-base"
                 activeClassName="text-primary"
               >
                 {route.label}
