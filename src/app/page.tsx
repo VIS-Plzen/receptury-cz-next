@@ -46,8 +46,8 @@ function PaginatorTester() {
       <Paginator
         currentPage={page}
         totalPages={totalPages}
-        onArrowLeft={() => setPage(page - 1)}
-        onArrowRight={() => setPage(page + 1)}
+        onArrowLeft={() => page !== 1 && setPage(page - 1)}
+        onArrowRight={() => page !== totalPages && setPage(page + 1)}
         onPageClick={(newPage: number) => setPage(newPage)}
       />
     </div>
