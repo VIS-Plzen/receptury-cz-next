@@ -83,7 +83,7 @@ export default function Paginator({
     return (
       <button
         onClick={() => {
-          () => setOffset(0);
+          setOffset(0);
           back ? onArrowLeft() : onArrowRight();
         }}
         className={`rounded-full bg-white text-black duration-300 hover:bg-primary hover:text-white ${
