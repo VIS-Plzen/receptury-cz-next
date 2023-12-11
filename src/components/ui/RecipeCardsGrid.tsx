@@ -37,8 +37,8 @@ function RecipeCardsGrid() {
 
       <div
         className={clsx(
-          gridView && "flex grid grid-cols-6 justify-center gap-4 py-6",
-          !gridView && "flex grid grid-cols-1 justify-center gap-4 py-6"
+          gridView && "grid grid-cols-6 justify-center gap-4 py-6",
+          !gridView && "grid grid-cols-1 justify-center gap-4 py-6"
         )}
       >
         {Array.from({ length: 18 }, (_, index) => (
