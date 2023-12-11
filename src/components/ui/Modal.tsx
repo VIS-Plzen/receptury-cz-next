@@ -160,7 +160,7 @@ export default function Modal({
                   </DialogPrimitive.Close>
                 </Container>
 
-                <Container>{children}</Container>
+                <Container className="bg-white">{children}</Container>
               </DialogPrimitive.Content>
             </motion.div>
           </DialogPrimitive.Portal>
