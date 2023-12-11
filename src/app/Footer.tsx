@@ -1,7 +1,7 @@
+import { HomeIcon, MailIcon, PhoneIphoneIcon } from "@/components/icons";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const currentYear = new Date().getFullYear();
@@ -44,26 +44,20 @@ const partners = [
   },
 ];
 
-const MailIcon = dynamic(() => import("@/components/icons/MailIcon"));
-const PhoneIphoneIcon = dynamic(
-  () => import("@/components/icons/PhoneIphoneIcon")
-);
-const HomeIcon = dynamic(() => import("@/components/icons/HomeIcon"));
-
 const contacts = [
   {
     label: "info@jidelny.cz",
-    icon: <MailIcon />,
+    icon: MailIcon,
     href: "/",
   },
   {
     label: "+420 720 962 105",
-    icon: <PhoneIphoneIcon />,
+    icon: PhoneIphoneIcon,
     href: "/",
   },
   {
     label: "Farského 14, Plzeň",
-    icon: <HomeIcon />,
+    icon: HomeIcon,
     href: "/",
   },
 ];
@@ -75,12 +69,12 @@ export default function Footer() {
         <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
           {/* Navigation */}
           <div className="flex flex-col justify-between pb-[20px] pr-[20px]">
-            <Heading as={"h2"} size="sm" className="lg:pb-[20px]">
+            <Heading as={"h2"} size="sm" hasMarginBottom>
               Navigace
             </Heading>
             <ul className="flex flex-col justify-between">
-              {footerRoutes.map((route) => (
-                <li className="py-[10px] font-bold">
+              {footerRoutes.map((route, i) => (
+                <li key={i} className="py-[10px] font-bold">
                   <StyledLink asChild hoverEffect="appear">
                     <Link href={route.href}>{route.label}</Link>
                   </StyledLink>
@@ -91,12 +85,12 @@ export default function Footer() {
 
           {/* Partners */}
           <div className="flex flex-col justify-between pb-[20px]">
-            <Heading as={"h2"} size="sm" className="lg:pb-[20px]">
+            <Heading as={"h2"} size="sm" hasMarginBottom>
               Partneři
             </Heading>
             <ul className="flex flex-col justify-between ">
-              {partners.map((partner) => (
-                <li className="py-[10px] font-bold">
+              {partners.map((partner, i) => (
+                <li key={i} className="py-[10px] font-bold">
                   <StyledLink asChild hoverEffect="appear">
                     <Link href={partner.href}>{partner.label}</Link>
                   </StyledLink>
@@ -107,15 +101,15 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="flex flex-col justify-start pr-[20px]">
-            <Heading as={"h2"} size="sm" className="lg:pb-[20px]">
+            <Heading as={"h2"} size="sm" hasMarginBottom>
               Kontakt
             </Heading>
             <ul className="flex flex-col ">
-              {contacts.map((contact) => (
-                <li className="pt-[10px] font-bold">
+              {contacts.map((contact, i) => (
+                <li key={i} className="pt-[10px] font-bold">
                   <StyledLink asChild hoverEffect="appear">
                     <Link href={contact.href}>
-                      <div className="">{contact.icon}</div>
+                      <contact.icon className="translate-x-0 translate-y-0 transform-gpu" />
                       {contact.label}
                     </Link>
                   </StyledLink>
@@ -126,7 +120,7 @@ export default function Footer() {
 
           {/* Search */}
           <div className="flex flex-col justify-between">
-            <Heading as={"h2"} size="sm" className="lg:pb-[20px]">
+            <Heading as={"h2"} size="sm" hasMarginBottom>
               Vyhledávání
             </Heading>
             <ul>
