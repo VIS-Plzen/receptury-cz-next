@@ -1,6 +1,7 @@
 "use client";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import Modal from "@/components/ui/Modal";
 import Paginator from "@/components/ui/Paginator";
 import { useState } from "react";
 
@@ -9,6 +10,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <PaginatorTester />
+      <ModalTester />
       <Container className="flex items-center justify-center rounded-3xl bg-primary-600 py-52 text-center">
         <Heading as={"h2"} size="xl" className="text-primary-50">
           Sekce Inspirace na vaření
@@ -51,5 +53,14 @@ function PaginatorTester() {
         onPageClick={(newPage: number) => setPage(newPage)}
       />
     </div>
+  );
+}
+function ModalTester() {
+  const [open, setOpen] = useState<boolean>(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>ukaž modal</button>
+      <Modal isOpen={open} setIsOpen={setOpen}></Modal>
+    </>
   );
 }
