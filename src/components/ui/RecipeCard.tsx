@@ -54,6 +54,7 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
       )}
       <></>
       {isGridView ? (
+        // Card with grid layout
         <>
           <div className="flex h-[120px] w-full items-start justify-end bg-primary-300/30">
             <div className="right-20 top-6 z-50 flex space-x-2 p-2">
@@ -74,7 +75,7 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
             </div>
             <div className="space-y-[4px] ">
               {badges.map((badge, index) => (
-                <Badge key={index} className="md:text-xs">
+                <Badge key={index} className="md:px-1.5 md:py-0.5 md:text-xs">
                   {badge}
                 </Badge>
               ))}
@@ -82,6 +83,7 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
           </div>
         </>
       ) : (
+        // Card with row layout
         <>
           <div className="flex flex-grow flex-row items-center bg-white">
             <div className="bg-primary-300/30 p-3">
