@@ -68,7 +68,7 @@ export default function Footer() {
       <Container className="flex items-center justify-start py-[40px] lg:py-[100px]">
         <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
           {/* Navigation */}
-          <div className="flex flex-col justify-between pb-[20px] pr-[20px]">
+          <div className="flex flex-col justify-start pb-[20px] pr-[20px]">
             <Heading as={"h2"} size="sm" hasMarginBottom>
               Navigace
             </Heading>
