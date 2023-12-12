@@ -12,14 +12,6 @@ function RecipeCardsGrid() {
   const [gridView, setGridView] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const toggleGridView = () => {
-    setGridView((prevGridView) => !prevGridView);
-  };
-
-  const toggleLoading = () => {
-    setIsLoading((prevIsLoading) => !prevIsLoading);
-  };
-
   return (
     <div>
       <div className="flex justify-center py-28">
@@ -31,8 +23,8 @@ function RecipeCardsGrid() {
         />
       </div>
       <div className="space-x-4 py-4">
-        <Button onClick={toggleGridView}>Change layout</Button>
-        <Button onClick={toggleLoading}>Set Loading</Button>
+        <Button onClick={() => setGridView(!gridView)}>Change layout</Button>
+        <Button onClick={() => setIsLoading(!isLoading)}>Set Loading</Button>
       </div>
 
       <div

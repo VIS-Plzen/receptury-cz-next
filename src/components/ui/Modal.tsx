@@ -1,9 +1,10 @@
+"use client";
 import Container from "@/components/ui/Container";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import type { MutableRefObject } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeftAltIcon } from "../icons";
 import CloseButton from "./CloseButton";
 
@@ -167,5 +168,15 @@ export default function Modal({
         )}
       </AnimatePresence>
     </DialogPrimitive.Root>
+  );
+}
+
+export function ModalTester() {
+  const [open, setOpen] = useState<boolean>(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>ukaž modal</button>
+      <Modal isOpen={open} setIsOpen={setOpen}></Modal>
+    </>
   );
 }

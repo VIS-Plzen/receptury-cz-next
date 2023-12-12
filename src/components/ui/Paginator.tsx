@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
+import Heading from "./Heading";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   currentPage: number;
@@ -142,6 +143,25 @@ export default function Paginator({
         <DayButton page={totalPages} />
       </div>
       <ChevronButton />
+    </div>
+  );
+}
+
+export function PaginatorTester() {
+  const [page, setPage] = useState<number>(1);
+  const totalPages = 47;
+  return (
+    <div className="mx-auto flex flex-col">
+      <Heading size="2xl" className="mb-5 text-center">
+        {page}
+      </Heading>
+      <Paginator
+        currentPage={page}
+        totalPages={totalPages}
+        onArrowLeft={() => page !== 1 && setPage(page - 1)}
+        onArrowRight={() => page !== totalPages && setPage(page + 1)}
+        onPageClick={(newPage: number) => setPage(newPage)}
+      />
     </div>
   );
 }
