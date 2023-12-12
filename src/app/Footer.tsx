@@ -65,7 +65,7 @@ const contacts = [
 export default function Footer() {
   return (
     <footer className="w-full items-center bg-white">
-      <Container className="flex items-center justify-center py-[40px] lg:py-[100px]">
+      <Container className="flex items-center justify-start py-[40px] lg:py-[100px]">
         <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
           {/* Navigation */}
           <div className="flex flex-col justify-between pb-[20px] pr-[20px]">
@@ -84,7 +84,7 @@ export default function Footer() {
           </div>
 
           {/* Partners */}
-          <div className="flex flex-col justify-between pb-[20px]">
+          <div className="flex flex-col justify-start pb-[20px]">
             <Heading as={"h2"} size="sm" hasMarginBottom>
               Partneři
             </Heading>
@@ -119,7 +119,7 @@ export default function Footer() {
           </div>
 
           {/* Search */}
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-start">
             <Heading as={"h2"} size="sm" hasMarginBottom>
               Vyhledávání
             </Heading>
