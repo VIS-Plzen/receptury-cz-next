@@ -22,13 +22,14 @@ export default function Paginator({
   const iconSize = "h-9 w-9";
 
   useEffect(() => {
+    console.log("tu");
     if (currentPage < 1) {
       changePage(1);
     }
     if (currentPage > totalPages) {
       changePage(totalPages);
     }
-  }, [currentPage]);
+  }, [currentPage, changePage, totalPages]);
 
   function DayButton({ page }: { page: number }) {
     return (

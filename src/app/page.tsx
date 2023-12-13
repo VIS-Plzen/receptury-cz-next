@@ -101,7 +101,7 @@ function Receptury() {
     });
 
     return holder;
-  }, []);
+  }, [urlParamsSplitted]);
   const comboBoxValues = useMemo(() => {
     const holder = [
       {
@@ -126,7 +126,7 @@ function Receptury() {
       }
     });
     return holder;
-  }, []);
+  }, [urlParamsSplitted]);
   let pageValue = useRef(returnPage());
 
   function updateSideBarValue(
