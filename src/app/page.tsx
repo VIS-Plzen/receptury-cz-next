@@ -229,7 +229,9 @@ function Receptury() {
 
   const data = [
     {
-      title: `C1: ${easyReturned[1].receptura} | C2: ${easyReturned[1].surovina} | Page: ${pageValue.current}`,
+      title: `${Object.values(easyReturned[1]).map(
+        (combo, index) => `C${index + 1}: ${combo} |`
+      )} Page: ${pageValue.current}`,
       badges: easyReturned[2].slice(0, 2),
     },
     {
