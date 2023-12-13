@@ -128,7 +128,7 @@ function Receptury() {
       }
     });
     return holder;
-  }, []);
+  }, [urlParamsSplitted]);
   let pageValue = useRef(returnPage());
 
   function updateSideBarValue(
@@ -200,10 +200,37 @@ function Receptury() {
     router.replace("?" + query, { scroll: false });
   }
 
+  function returnSelectedValues() {
+    const allValues: any = { comboBoxes: {}, sideBar: {} };
+    const allComboValues: any = {};
+    const allSelectedBoxes: string[] = [];
+    comboBoxValues.forEach((combo) => {
+      allComboValues[combo.name] = combo.value;
+      if (combo.value !== "") {
+        allValues.comboBoxes[combo.name] = combo;
+      }
+    });
+    sideBarValues.forEach((box) =>
+      box.options.map((option) => {
+        if (option.checked) {
+          allSelectedBoxes.push(option.name);
+          if (!allValues.sideBar[box.name]) {
+            allValues.sideBar[box.name] = [option.name];
+          } else {
+            allValues.sideBar[box.name].push(option.name);
+          }
+        }
+      })
+    );
+    return [allValues, allComboValues, allSelectedBoxes];
+  }
+
+  const easyReturned = returnSelectedValues();
+
   const data = [
     {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
+      title: `C1: ${easyReturned[1].receptura} | C2: ${easyReturned[1].surovina} | Page: ${pageValue.current}`,
+      badges: easyReturned[2].slice(0, 2),
     },
     {
       title: "Smažené kuřecí řízečky, bramborové placičky",
