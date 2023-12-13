@@ -15,10 +15,10 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
   return (
     <div
       className={cn(
-        isGridView &&
-          "h-[280px] w-[196px] overflow-hidden rounded-2xl border-2 border-primary-300/30",
+        "h-auto w-full",
+        isGridView && "rounded-2xl border-2 border-primary-300/30",
         !isGridView &&
-          "flex h-[70px] w-[1080px] flex-row overflow-hidden rounded-2xl border-2 border-primary-300/30",
+          "flex flex-row rounded-2xl border-2 border-primary-300/30",
         isLoading && "border-gray-200"
       )}
     >

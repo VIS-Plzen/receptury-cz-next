@@ -1,14 +1,11 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
-import Heading from "./Heading";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   currentPage: number;
   totalPages: number;
-  onArrowLeft: () => void;
-  onArrowRight: () => void;
-  onPageClick: (page: number) => void;
+  changePage: (page: number) => void;
   variant?: "primary" | "secondary";
   className?: string;
 };
@@ -16,9 +13,7 @@ type Props = React.ComponentPropsWithoutRef<"div"> & {
 export default function Paginator({
   currentPage,
   totalPages,
-  onArrowLeft,
-  onArrowRight,
-  onPageClick,
+  changePage,
   variant,
   className,
 }: Props) {
@@ -26,12 +21,21 @@ export default function Paginator({
   const [offset, setOffset] = useState<number>(0);
   const iconSize = "h-9 w-9";
 
+  useEffect(() => {
+    if (currentPage < 1) {
+      changePage(1);
+    }
+    if (currentPage > totalPages) {
+      changePage(totalPages);
+    }
+  }, [currentPage]);
+
   function DayButton({ page }: { page: number }) {
     return (
       <button
         onClick={() => {
           setOffset(0);
-          onPageClick(page);
+          changePage(page);
         }}
         className={`${iconSize} rounded-full font-bold duration-300 hover:bg-primary hover:text-white ${
           page === currentPage && "bg-primary font-extrabold text-white"
@@ -81,14 +85,33 @@ export default function Paginator({
     );
   }
   function ChevronButton({ back = false }) {
+    const isDisabled = back
+      ? currentPage <= 1
+        ? true
+        : false
+      : currentPage >= totalPages
+        ? true
+        : false;
+
     return (
       <button
         onClick={() => {
           setOffset(0);
-          back ? onArrowLeft() : onArrowRight();
+          if (isDisabled) return;
+          back ? changePage(currentPage - 1) : changePage(currentPage + 1);
         }}
-        className={`rounded-full bg-white text-black duration-300 hover:bg-primary hover:text-white ${
-          back ? "hover:-translate-x-2" : "hover:translate-x-2"
+        tabIndex={isDisabled ? -1 : undefined}
+        className={`rounded-full bg-white text-black duration-300
+        ${
+          isDisabled
+            ? "cursor-default opacity-30 ring-0"
+            : "hover:bg-primary hover:text-white"
+        } ${
+          !isDisabled
+            ? back
+              ? "hover:-translate-x-2"
+              : "hover:translate-x-2"
+            : ""
         }`}
       >
         {back ? (
@@ -100,7 +123,7 @@ export default function Paginator({
     );
   }
   return (
-    <div className="flex flex-row gap-x-2">
+    <div className="my-7 flex w-full flex-row justify-center gap-x-2">
       <ChevronButton back />
       <div className="flex flex-row items-center justify-around gap-x-1 rounded-full bg-white px-3 text-black">
         <DayButton page={1} />
@@ -143,25 +166,6 @@ export default function Paginator({
         <DayButton page={totalPages} />
       </div>
       <ChevronButton />
-    </div>
-  );
-}
-
-export function PaginatorTester() {
-  const [page, setPage] = useState<number>(1);
-  const totalPages = 47;
-  return (
-    <div className="mx-auto flex flex-col">
-      <Heading size="2xl" className="mb-5 text-center">
-        {page}
-      </Heading>
-      <Paginator
-        currentPage={page}
-        totalPages={totalPages}
-        onArrowLeft={() => page !== 1 && setPage(page - 1)}
-        onArrowRight={() => page !== totalPages && setPage(page + 1)}
-        onPageClick={(newPage: number) => setPage(newPage)}
-      />
     </div>
   );
 }

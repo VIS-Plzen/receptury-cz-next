@@ -1,15 +1,15 @@
-"use client";
+"use";
 import { Combobox, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
-import { ArrowDownwardAltIcon, CheckIcon } from "../icons";
+import { CheckIcon, SearchIcon } from "../icons";
 
 type Props = {
   id?: string;
   name?: string;
   label?: string;
   options: string[];
-  selectedOption?: number;
+  selectedOption?: string;
   z?: number;
   isDisabled?: boolean;
   isRequired?: boolean;
@@ -23,7 +23,7 @@ export default function MyCombobox({
   name,
   label,
   options,
-  selectedOption = 0,
+  selectedOption = "",
   z,
   isDisabled = false,
   isRequired = false,
@@ -31,8 +31,9 @@ export default function MyCombobox({
   error,
   ...rest
 }: Props) {
-  const [selectedValue, setSelectedValue] = useState(options[selectedOption]);
-  const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(selectedOption);
+  const [query, setQuery] = useState(selectedOption);
 
   const filteredValues =
     query === ""
@@ -95,17 +96,15 @@ export default function MyCombobox({
         value={selectedValue ? selectedValue : ""}
         onChange={(e: any) => {
           setSelectedValue(e);
-          onChange && onChange(options.indexOf(e));
+          onChange(e);
         }}
       >
-        <div
-          className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
-        >
-          <div className={`h-16 ${error && "mb-3"}`}>
+        <div className={clsx("mt-1", isDisabled && "cursor-not-allowed")}>
+          <div className={`relative h-16 ${error && "mb-3"}`}>
             <Combobox.Input
               className={clsx(
-                "flex h-full w-full items-start justify-start rounded-2xl border-0 outline-none ring-0",
-                "h-16 px-5 py-2.5",
+                "flex h-full w-full items-start justify-start rounded-2xl border border-primary-400 bg-white outline-none ring-0",
+                "h-16 py-2.5 pl-9 pr-5",
                 "bg-gray-75 text-default dark:bg-gray-975 hover:bg-gray-100 focus:bg-gray-100",
                 "focus:outline-none focus:ring-0",
                 "transition-colors duration-200",
@@ -126,15 +125,15 @@ export default function MyCombobox({
                 if (isDisabled) return;
                 setSelectedValue(e.target.value);
                 setQuery(e.target.value);
-                onChange &&
-                  options.indexOf(e.target.value) !== -1 &&
-                  onChange(options.indexOf(e.target.value));
               }}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              autoComplete="off"
               {...rest}
             />
             <Combobox.Button
               className={clsx(
-                "absolute inset-y-0 right-0 flex items-center pr-2",
+                "absolute inset-y-0 flex items-center pl-2",
                 isDisabled && "cursor-not-allowed"
               )}
               onClick={(e) => {
@@ -143,8 +142,8 @@ export default function MyCombobox({
                 }
               }}
             >
-              <ArrowDownwardAltIcon
-                className="h-5 w-5 text-gray-400"
+              <SearchIcon
+                className="h-5 w-5 text-primary-500"
                 aria-hidden="true"
               />
             </Combobox.Button>
@@ -152,11 +151,12 @@ export default function MyCombobox({
               <label
                 htmlFor={id}
                 className={clsx(
-                  "text-default pointer-events-none absolute block h-full origin-top-left text-base font-medium",
-                  "left-5 top-3 z-10 -translate-y-1 scale-[0.8] transform-gpu opacity-90",
-                  "peer-placeholder-shown:translate-y-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:opacity-60",
-                  "peer-focus:-translate-y-1 peer-focus:scale-[0.8] peer-focus:opacity-90",
-                  "transition duration-200 ease-out"
+                  "text-default pointer-events-none absolute block h-min origin-top-left text-center text-base font-medium",
+                  "left-10 z-10 scale-[0.8] transform-gpu opacity-90",
+                  "duration-200 ease-out",
+                  query === "" && !focused
+                    ? "top-1/2 -translate-y-1/2"
+                    : "top-3"
                 )}
               >
                 {label}
@@ -174,13 +174,16 @@ export default function MyCombobox({
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            afterLeave={() => setQuery("")}
+            afterLeave={() => onChange(query)}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-1 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredValues.length === 0 && query !== "" ? (
-                <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
-                  Nothing found.
-                </div>
+                <button
+                  className="relative cursor-default select-none px-4 py-2 text-gray-700"
+                  onClick={() => onChange(query)}
+                >
+                  Nenalezeno, přesto vyhledat.
+                </button>
               ) : (
                 filteredValues.map((value, key) => (
                   <Combobox.Option
@@ -198,7 +201,7 @@ export default function MyCombobox({
                           className={`block truncate ${
                             selected ? "font-medium" : "font-normal"
                           }`}
-                          onClick={() => onChange && onChange(key)}
+                          onClick={() => onChange && onChange(value)}
                         >
                           {value}
                         </span>

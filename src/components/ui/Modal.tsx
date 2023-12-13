@@ -24,7 +24,7 @@ type ModalProps = {
 };
 
 const componentVariants = {
-  root: "top-[12%] tablet:top-[15%] left-1/2 -translate-x-1/2 w-[92%] max-h-[76%] tablet:max-h-[70%] h-auto overflow-y-auto z-modal-above bg-surface-100 rounded-2xl origin-top",
+  root: "top-[12%] md:top-[15%] left-1/2 -translate-x-1/2 w-[92%] max-h-[76%] md:max-h-[70%] h-auto overflow-y-auto z-modal-above bg-surface-100 rounded-2xl origin-top",
   width: {
     sm: "max-w-lg",
     md: "max-w-2xl",
@@ -47,7 +47,6 @@ export default function Modal({
   setCity,
   cancelAnimations,
 }: ModalProps) {
-  // Manage initial focus manually -> different from headlessui approach, where they cover this for us
   useEffect(() => {
     if (isOpen && initialFocus) {
       const timer = setTimeout(() => {

@@ -4,7 +4,6 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { ModalTester } from "@/components/ui/Modal";
-import { PaginatorTester } from "@/components/ui/Paginator";
 
 export default function Testing() {
   async function createNew() {
@@ -51,7 +50,6 @@ export default function Testing() {
         </Heading>
         <Button onClick={readSome}>Zavolej funkci</Button>
         {/* <RecipeCardsGrid /> */}
-        <PaginatorTester />
         <ModalTester />
         <MyCombobox
           options={["Option 1"]}
