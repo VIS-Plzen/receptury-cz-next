@@ -22,7 +22,6 @@ export default function Paginator({
   const iconSize = "h-9 w-9";
 
   useEffect(() => {
-    console.log("tu");
     if (currentPage < 1) {
       changePage(1);
     }

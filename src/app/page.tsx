@@ -31,7 +31,9 @@ function Receptury() {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const paramsHook = useSearchParams();
-  const urlParams = decodeURI(paramsHook.toString().replaceAll("+", " "));
+  const urlParams = decodeURIComponent(
+    paramsHook.toString().replaceAll("+", " ")
+  );
   const urlParamsSplitted = urlParams.split("&");
   const router = useRouter();
 
@@ -126,7 +128,7 @@ function Receptury() {
       }
     });
     return holder;
-  }, [urlParamsSplitted]);
+  }, []);
   let pageValue = useRef(returnPage());
 
   function updateSideBarValue(
@@ -195,7 +197,7 @@ function Receptury() {
 
     setRefresh(!refresh);
 
-    router.replace("?" + encodeURI(query), { scroll: false });
+    router.replace("?" + query, { scroll: false });
   }
 
   const data = [
