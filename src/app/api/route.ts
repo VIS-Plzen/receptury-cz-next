@@ -29,6 +29,10 @@ export async function POST(request: Request) {
     );
     const data = await res.json();
 
+    if (data.Result.Status === true) {
+      data.Vety = data.Vety.slice(0, 100);
+    }
+
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json({ Chyba: error });
