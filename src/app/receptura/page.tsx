@@ -63,7 +63,7 @@ function Hero() {
   ];
   return (
     <Container className="relative flex flex-col gap-y-3 rounded-3xl border border-primary-600/30 bg-white pb-4 md:flex-row-reverse md:justify-between md:gap-x-7 md:!pr-0 md:pb-0">
-      <div className="mx-auto h-[200px] w-[300px] rounded-2xl bg-secondary-700 md:mx-0 md:mb-auto md:h-[275px] md:w-[275px] lg:h-[350px] lg:w-[750px]"></div>
+      <div className="mx-auto h-[300px] w-[400px] rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:w-[650px] lg:h-[400px] lg:w-[750px]"></div>
       <div className="flex flex-col gap-y-5 p-3 md:max-w-[450px] md:px-0 md:pt-8">
         <div className="flex flex-col gap-y-3 md:flex-col-reverse">
           <div className="flex gap-x-2">
@@ -82,7 +82,7 @@ function Hero() {
           <Badge>Ryby a mořské plody</Badge>
           <Badge>Bezmléčná dieta</Badge>
         </div>
-        <div className="absolute right-5 top-5 flex gap-x-3 md:static">
+        <div className="absolute right-5 top-5 flex gap-x-3 md:static md:mt-20">
           {icons.map((icon) => (
             <div
               className={`${
