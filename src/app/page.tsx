@@ -43,7 +43,8 @@ function Inspirace() {
       <div
         className={`items-center gap-x-2 whitespace-nowrap font-semibold ${className}`}
       >
-        {hidden ? "Zobrazit " : "Skrýt "}inspirace
+        {hidden ? "Zobrazit " : "Skrýt "}
+        <span className="hidden md:inline-block">inspirace</span>
         <ButtonIcon
           icon={hidden ? "visibility" : "visibility-off"}
           onClick={() => setHidden(!hidden)}
