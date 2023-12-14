@@ -86,8 +86,9 @@ function Hero() {
           <Badge>Bezmléčná dieta</Badge>
         </div>
         <div className="absolute right-5 top-5 flex gap-x-3 md:static md:mt-20">
-          {icons.map((icon) => (
+          {icons.map((icon, index) => (
             <div
+              key={"kfhi" + index}
               className={`${
                 icon.name === "share" || icon.name === "favorite"
                   ? "flex"
@@ -114,8 +115,11 @@ function Informations() {
           Sumeček v parmazánovém těstíčku s bramborovou kaší
         </Heading>
         <div className="right-5 top-5 flex gap-x-3">
-          {icons.map((icon) => (
-            <div className={`flex w-min flex-col items-center text-center`}>
+          {icons.map((icon, index) => (
+            <div
+              key={"kfii" + index}
+              className={`flex w-min flex-col items-center text-center`}
+            >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
               <span className="text-sm font-bold">{icon.label}</span>
             </div>
