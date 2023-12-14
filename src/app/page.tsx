@@ -15,7 +15,7 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function Home() {
   return (
@@ -121,6 +121,14 @@ function Receptury() {
     const values = prevalues ? prevalues.split(",") : "";
     return [key, values, prevalues];
   }
+
+  useEffect(() => {
+    if (sideBarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [sideBarOpen]);
 
   const sideBarValues = useMemo(() => {
     // Základní filtry
@@ -399,7 +407,7 @@ function Receptury() {
             <CancelIcon />
           </button>
         </div>
-        <Comboboxes className="my-8 flex flex-col gap-x-5 md:hidden" />
+        <Comboboxes className="my-8 flex flex-col gap-y-5 md:hidden" />
         {sideBarValues.map((box, index) => (
           <SideBarBox
             key={"ffsbb" + index}
@@ -482,7 +490,6 @@ function Spolupracujeme({}) {
     </Container>
   );
 }
-
 function VolitelnyObsah({
   title,
   text,
