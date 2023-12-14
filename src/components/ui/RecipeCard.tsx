@@ -13,7 +13,8 @@ type Props = {
 
 function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
   return (
-    <div
+    <a
+      href={"/receptura"}
       className={cn(
         "h-full w-full bg-white",
         isGridView && "rounded-2xl border-2 border-primary-300/30",
@@ -112,7 +113,7 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
           </div>
         </>
       )}
-    </div>
+    </a>
   );
 }
 
