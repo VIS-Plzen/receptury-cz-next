@@ -131,7 +131,7 @@ function Informations() {
   function Hmotnost() {
     return (
       <div className="flex flex-row justify-between rounded-3xl border-2 border-primary-300/60 bg-white p-5">
-        <span className="font-bold">Hmotnost</span>
+        <span className="my-auto font-bold">Hmotnost</span>
         <div className="flex flex-row gap-x-3">
           <div className="flex flex-col items-center">
             <span className="font-bold">Porce</span>
@@ -159,7 +159,7 @@ function Informations() {
       { vaha: 0.3, surovina: "Citrón (ks)" },
     ];
     return (
-      <div className="flex w-min min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5">
+      <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 md:w-min">
         <Heading>Kalkulačka surovin</Heading>
         <div className="flex flex-row gap-x-5 border-b-2 border-primary-300/60 py-3">
           <div className="flex gap-x-1.5">
