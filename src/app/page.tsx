@@ -1,4 +1,5 @@
 "use client";
+import Logo from "@/components/brand/Logo";
 import MyCombobox from "@/components/forms/Combobox";
 import {
   ArrowDownwardAltIcon,
@@ -21,6 +22,7 @@ export default function Home() {
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
       <Receptury />
+      <Spolupracujeme />
     </div>
   );
 }
@@ -229,9 +231,9 @@ function Receptury() {
 
   const data = [
     {
-      title: `${Object.values(easyReturned[1]).map(
-        (combo, index) => `C${index + 1}: ${combo} |`
-      )} Page: ${pageValue.current}`,
+      title: `${Object.values(easyReturned[1])
+        .map((combo, index) => `C${index + 1}: ${combo}`)
+        .join(" | ")} | Page: ${pageValue.current}`,
       badges: easyReturned[2].slice(0, 2),
     },
     {
@@ -256,7 +258,7 @@ function Receptury() {
     },
     {
       title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Stránka", pageValue.current.toString()],
+      badges: ["Dieta", "Ryba a mořské plody"],
     },
   ];
 
@@ -279,7 +281,7 @@ function Receptury() {
 
   function TopRow() {
     return (
-      <div className="flex flex-row items-center justify-between py-5">
+      <div className="flex flex-row items-center justify-between py-7">
         <div className="flex flex-col">
           <Heading>Receptury</Heading>
           <p className="pt-3 font-bold text-black">
@@ -316,7 +318,7 @@ function Receptury() {
   function SideBar() {
     return (
       <div
-        className={`z-fixed flex flex-col p-7 md:mr-5 md:block md:p-3 ${
+        className={`z-fixed flex flex-col p-7 md:mr-5 md:block md:pl-0 md:pr-3 ${
           sideBarOpen ? "fixed inset-0 bg-white" : "hidden"
         }`}
       >
@@ -377,7 +379,7 @@ function Receptury() {
   }
 
   return (
-    <Container className="border-y-2 border-primary-200">
+    <Container className="border-y-2 border-primary-200 py-6">
       <TopRow />
       <div className="block md:grid md:grid-cols-6">
         <SideBar />
@@ -394,6 +396,21 @@ function Receptury() {
         totalPages={25}
         changePage={(page) => updatePage(page)}
       />
+    </Container>
+  );
+}
+
+function Spolupracujeme({}) {
+  return (
+    <Container>
+      <Heading as="h3" size="md">
+        Spolupracujeme
+      </Heading>
+      <div className="my-8 grid grid-cols-3 gap-x-5 gap-y-8 md:grid-cols-6">
+        {Array.from({ length: 12 }, (_, index) => (
+          <Logo className="w-full" key={"safl" + index} />
+        ))}
+      </div>
     </Container>
   );
 }
