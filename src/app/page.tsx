@@ -421,8 +421,10 @@ function Inspirace() {
 
   function HideButton({ className = "" }: { className?: string }) {
     return (
-      <div className={`items-center gap-x-2 font-semibold ${className}`}>
-        Skrýt inspirace
+      <div
+        className={`items-center gap-x-2 whitespace-nowrap font-semibold ${className}`}
+      >
+        {hidden ? "Zobrazit " : "Skrýt "}inspirace
         <ButtonIcon
           icon={hidden ? "visibility" : "visibility-off"}
           onClick={() => setHidden(!hidden)}
@@ -432,17 +434,26 @@ function Inspirace() {
   }
 
   return (
-    <Container>
+    <Container
+      className={`${
+        hidden &&
+        "absolute left-1/2 top-28 -translate-x-1/2 -translate-y-full md:top-32"
+      }`}
+    >
       <div className="flex flex-row items-center justify-between">
-        <Heading as="h1" size="lg">
+        <Heading as="h1" size="lg" className={`${hidden && "hidden"}`}>
           Inspirace na vaření
         </Heading>
-        <HideButton className="flex md:hidden" />
+        <HideButton className="ml-auto flex md:hidden" />
       </div>
-      <div className="flex w-full items-center justify-between">
+      <div
+        className={`flex w-full items-center justify-between ${
+          !hidden && " pt-5 md:pt-20"
+        }`}
+      >
         <Tabs
           defaultValue={selected}
-          className="w-full pt-20"
+          className={`w-full ${hidden && "hidden"}`}
           onValueChange={(value: string) => setSelected(value)}
         >
           <div className="flex w-full flex-row justify-between">
@@ -457,9 +468,9 @@ function Inspirace() {
                 Nové recepty
               </TabsTrigger>
             </TabsList>
-            <HideButton className="hidden md:flex" />
           </div>
         </Tabs>
+        <HideButton className="ml-auto hidden md:flex" />
       </div>
       {!hidden && (
         <RecipeCardsGrid length={12} gridView className="flex flex-row" />
