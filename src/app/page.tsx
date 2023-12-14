@@ -23,10 +23,80 @@ export default function Home() {
       <Inspirace />
       <Receptury />
       <Spolupracujeme />
+      <VolitelnyObsah
+        title="Volitelný obsah"
+        img=""
+        text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+      />
     </div>
   );
 }
 
+function Inspirace() {
+  const [hidden, setHidden] = useState<boolean>(false);
+  const [selected, setSelected] = useState<
+    "recommended" | "favorites" | "new" | string
+  >("recommended");
+
+  function HideButton({ className = "" }: { className?: string }) {
+    return (
+      <div
+        className={`items-center gap-x-2 whitespace-nowrap font-semibold ${className}`}
+      >
+        {hidden ? "Zobrazit " : "Skrýt "}inspirace
+        <ButtonIcon
+          icon={hidden ? "visibility" : "visibility-off"}
+          onClick={() => setHidden(!hidden)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <Container
+      className={`${
+        hidden &&
+        "absolute left-1/2 top-28 -translate-x-1/2 -translate-y-full md:top-32"
+      }`}
+    >
+      <div className="flex flex-row items-center justify-between">
+        <Heading as="h1" size="lg" className={`${hidden && "hidden"}`}>
+          Inspirace na vaření
+        </Heading>
+        <HideButton className="ml-auto flex md:hidden" />
+      </div>
+      <div
+        className={`flex w-full items-center justify-between ${
+          !hidden && " pt-5 md:pt-20"
+        }`}
+      >
+        <Tabs
+          defaultValue={selected}
+          className={`w-full ${hidden && "hidden"}`}
+          onValueChange={(value: string) => setSelected(value)}
+        >
+          <div className="flex w-full flex-row justify-between">
+            <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
+              <TabsTrigger value="recommended" className="w-full">
+                Doporučené pro vás
+              </TabsTrigger>
+              <TabsTrigger value="favorites" className="w-full">
+                Oblíbené
+              </TabsTrigger>
+              <TabsTrigger value="new" className="w-full">
+                Nové recepty
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        </Tabs>
+        <HideButton className="ml-auto hidden md:flex" />
+      </div>
+      {!hidden && (
+        <RecipeCardsGrid length={12} gridView className="flex flex-row" />
+      )}
+    </Container>
+  );
+}
 function Receptury() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [gridView, setGridView] = useState(true);
@@ -399,7 +469,6 @@ function Receptury() {
     </Container>
   );
 }
-
 function Spolupracujeme({}) {
   return (
     <Container>
@@ -413,68 +482,24 @@ function Spolupracujeme({}) {
   );
 }
 
-function Inspirace() {
-  const [hidden, setHidden] = useState<boolean>(false);
-  const [selected, setSelected] = useState<
-    "recommended" | "favorites" | "new" | string
-  >("recommended");
-
-  function HideButton({ className = "" }: { className?: string }) {
-    return (
-      <div
-        className={`items-center gap-x-2 whitespace-nowrap font-semibold ${className}`}
-      >
-        {hidden ? "Zobrazit " : "Skrýt "}inspirace
-        <ButtonIcon
-          icon={hidden ? "visibility" : "visibility-off"}
-          onClick={() => setHidden(!hidden)}
-        />
-      </div>
-    );
-  }
-
+function VolitelnyObsah({
+  title,
+  text,
+  img,
+}: {
+  title: string;
+  text: string;
+  img: string;
+}) {
   return (
-    <Container
-      className={`${
-        hidden &&
-        "absolute left-1/2 top-28 -translate-x-1/2 -translate-y-full md:top-32"
-      }`}
-    >
-      <div className="flex flex-row items-center justify-between">
-        <Heading as="h1" size="lg" className={`${hidden && "hidden"}`}>
-          Inspirace na vaření
-        </Heading>
-        <HideButton className="ml-auto flex md:hidden" />
+    <Container>
+      <div className="flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl bg-primary-300/30 p-6 md:flex-row lg:p-8">
+        <div className="max-w-xl">
+          <Heading>{title}</Heading>
+          <p>{text}</p>
+        </div>
+        <div className="mx-auto mb-6 flex h-[200px] w-[300px] flex-shrink-0 rounded-2xl bg-secondary-700 md:mx-0 md:mb-auto md:h-[275px] md:w-[275px] lg:h-[350px] lg:w-[350px]"></div>
       </div>
-      <div
-        className={`flex w-full items-center justify-between ${
-          !hidden && " pt-5 md:pt-20"
-        }`}
-      >
-        <Tabs
-          defaultValue={selected}
-          className={`w-full ${hidden && "hidden"}`}
-          onValueChange={(value: string) => setSelected(value)}
-        >
-          <div className="flex w-full flex-row justify-between">
-            <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
-              <TabsTrigger value="recommended" className="w-full">
-                Doporučené pro vás
-              </TabsTrigger>
-              <TabsTrigger value="favorites" className="w-full">
-                Oblíbené
-              </TabsTrigger>
-              <TabsTrigger value="new" className="w-full">
-                Nové recepty
-              </TabsTrigger>
-            </TabsList>
-          </div>
-        </Tabs>
-        <HideButton className="ml-auto hidden md:flex" />
-      </div>
-      {!hidden && (
-        <RecipeCardsGrid length={12} gridView className="flex flex-row" />
-      )}
     </Container>
   );
 }
