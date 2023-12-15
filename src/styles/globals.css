@@ -45,3 +45,22 @@
     @apply absolute inset-x-0 top-[92%] h-[0.09375em] w-full origin-center bg-current opacity-60;
   }
 }
+
+/* RadioButton animations */
+@keyframes grow {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes shrink {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
