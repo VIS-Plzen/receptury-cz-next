@@ -5,14 +5,18 @@ export default function VolitelnyObsah({
   title,
   text,
   img,
+  className = "",
 }: {
   title: string;
   text: string;
-  img: string;
+  img?: string;
+  className?: string;
 }) {
   return (
     <Container>
-      <div className="flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl bg-primary-300/30 p-6 md:flex-row lg:p-8">
+      <div
+        className={`flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl bg-primary-300/30 p-6 md:flex-row lg:p-8 ${className}`}
+      >
         <div className="max-w-xl">
           <Heading hasMarginBottom>{title}</Heading>
           <p>{text}</p>
