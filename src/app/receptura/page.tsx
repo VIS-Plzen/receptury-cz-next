@@ -398,7 +398,7 @@ function Informations({
 function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] w-full rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent px-3 py-5 md:aspect-[3/1] md:items-center md:bg-gradient-to-r md:p-10">
+      <div className="relative flex aspect-[9/10] max-h-[450px] w-full rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent px-3 py-5 md:aspect-[3/1] md:max-h-full md:items-center md:bg-gradient-to-r md:p-10">
         <div className="flex flex-col gap-y-5">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
