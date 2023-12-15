@@ -127,8 +127,8 @@ function Hero({
             <Heading as="h1">{title}</Heading>
           </div>
           <div className="flex gap-x-1.5">
-            {badges.map((badge) => (
-              <Badge>{badge}</Badge>
+            {badges.map((badge, index) => (
+              <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
           <div className="absolute right-5 top-5 flex gap-x-3 md:static md:mt-20">
@@ -223,7 +223,10 @@ function Informations({
         <Heading>Kalkulačka surovin</Heading>
         <div className="flex flex-row gap-x-5 border-b-2 border-primary-300/60 py-3">
           <div className="flex gap-x-1.5">
-            <label htmlFor="pocet" className="text-sm font-bold md:text-base">
+            <label
+              htmlFor="pocet"
+              className="whitespace-nowrap text-sm font-bold md:text-base"
+            >
               Počet porcí
             </label>
             <input
