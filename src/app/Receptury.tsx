@@ -14,7 +14,13 @@ import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-export default function Receptury({ initialData }: { initialData: any }) {
+export default function Receptury({
+  initialData,
+  className = "",
+}: {
+  initialData: any;
+  className?: string;
+}) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [gridView, setGridView] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -356,7 +362,7 @@ export default function Receptury({ initialData }: { initialData: any }) {
 
   /*  */
   return (
-    <Container className="border-y-2 border-primary-200 py-6">
+    <Container className={`py-6 ${className}`}>
       <TopRow />
       <div className="block md:grid md:grid-cols-6">
         <SideBar />

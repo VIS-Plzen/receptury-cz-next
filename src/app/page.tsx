@@ -77,7 +77,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
-      <Receptury initialData={data} />
+      <Receptury initialData={data} className="border-y-2 border-primary-200" />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"
