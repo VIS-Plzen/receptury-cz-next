@@ -227,6 +227,7 @@ export default function Home() {
                 errorText={
                   formWasTouched && formik.touched.name && formik.errors.name
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
@@ -239,6 +240,7 @@ export default function Home() {
                   formik.touched.surname &&
                   formik.errors.surname
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.surname}
@@ -252,6 +254,7 @@ export default function Home() {
                   formik.touched.password &&
                   formik.errors.password
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
@@ -265,6 +268,7 @@ export default function Home() {
                   formik.touched.password2 &&
                   formik.errors.password
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password2}
@@ -276,6 +280,7 @@ export default function Home() {
                 errorText={
                   formWasTouched && formik.touched.email && formik.errors.email
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
@@ -321,6 +326,7 @@ export default function Home() {
                 errorText={
                   formWasTouched && formik.touched.ulice && formik.errors.ulice
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.ulice}
@@ -331,6 +337,7 @@ export default function Home() {
                 errorText={
                   formWasTouched && formik.touched.mesto && formik.errors.mesto
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.mesto}
@@ -341,6 +348,7 @@ export default function Home() {
                 errorText={
                   formWasTouched && formik.touched.PSC && formik.errors.PSC
                 }
+                required
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.PSC}

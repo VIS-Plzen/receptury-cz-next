@@ -69,7 +69,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
               className={cn("pb-1", props.disabled && "pointer-events-none")}
             >
               {label}
-              {props.required && <span className="text-error-500">*</span>}
+              {props.required && <span className="ml-1 text-error-500">*</span>}
             </Label>
           )}
           {errorText && <ErrorText>{errorText}</ErrorText>}
