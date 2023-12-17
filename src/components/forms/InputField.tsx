@@ -41,7 +41,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
     };
 
     return (
-      <div className={cn("relative w-full cursor-not-allowed py-3", className)}>
+      <div className={cn("relative w-full py-3", className)}>
         <div className="relative">
           <input
             ref={forwardedRef}
