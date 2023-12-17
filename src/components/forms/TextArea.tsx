@@ -29,7 +29,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     return (
       <div
         className={cn(
-          "flex w-full flex-col items-start justify-start gap-1",
+          "relative my-3 flex w-full flex-col items-start justify-start gap-1",
           props.disabled && "cursor-not-allowed opacity-70",
           className
         )}
