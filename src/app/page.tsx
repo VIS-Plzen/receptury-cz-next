@@ -4,34 +4,9 @@ import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
 
 export default async function Home() {
-  let data: any = [
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-  ];
   // základní fetch kterej chce dodělat
   if (false) {
+    let data;
     const result = await readSome();
     if (result.Result.Status === true) {
       data = result.Vety;
@@ -77,7 +52,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
-      <Receptury initialData={data} className="border-y-2 border-primary-200" />
+      <Receptury className="border-y-2 border-primary-200" />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"

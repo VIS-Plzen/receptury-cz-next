@@ -26,12 +26,12 @@ const menuRoutes = [
     href: "/partner",
   },
   {
-    label: "Komponenty",
-    href: "/components",
+    label: "Uživatel",
+    href: "/uzivatel",
   },
   {
-    label: "Testing",
-    href: "/testing",
+    label: "Komponenty",
+    href: "/components",
   },
   {
     label: "Kontakt",

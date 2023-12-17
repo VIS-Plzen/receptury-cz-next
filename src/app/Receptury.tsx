@@ -15,10 +15,37 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function Receptury({
-  initialData,
+  title = "Receptury",
+  initialData = [
+    {
+      title: "Smažené kuřecí řízečky, bramborové placičky",
+      badges: ["Smažené", "Oblíbené"],
+    },
+    {
+      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
+      badges: ["Dieta", "Ryba a mořské plody"],
+    },
+    {
+      title: "Smažené kuřecí řízečky, bramborové placičky",
+      badges: ["Smažené", "Oblíbené"],
+    },
+    {
+      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
+      badges: ["Dieta", "Ryba a mořské plody"],
+    },
+    {
+      title: "Smažené kuřecí řízečky, bramborové placičky",
+      badges: ["Smažené", "Oblíbené"],
+    },
+    {
+      title: "Smažené kuřecí řízečky, bramborové placičky",
+      badges: ["Dieta", "Ryba a mořské plody"],
+    },
+  ],
   className = "",
 }: {
-  initialData: any;
+  title?: string;
+  initialData?: any;
   className?: string;
 }) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -251,7 +278,7 @@ export default function Receptury({
     return (
       <div className="flex flex-row items-center justify-between py-7">
         <div className="flex flex-col">
-          <Heading>Receptury</Heading>
+          <Heading>{title}</Heading>
           <p className="pt-3 font-bold text-black">
             Našli jsme pro vás {data.length} receptů
           </p>

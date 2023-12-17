@@ -9,32 +9,6 @@ import Receptury from "../Receptury";
 import { Partner } from "../receptura/page";
 
 export default function Home() {
-  let data: any = [
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
-    },
-    {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Dieta", "Ryba a mořské plody"],
-    },
-  ];
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Partner
@@ -73,7 +47,7 @@ export default function Home() {
           "Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         }
       />
-      <Receptury initialData={data} />
+      <Receptury />
     </div>
   );
   function Produkty({
