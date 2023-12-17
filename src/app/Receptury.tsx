@@ -43,10 +43,12 @@ export default function Receptury({
     },
   ],
   className = "",
+  urlPreQuery = "",
 }: {
   title?: string;
   initialData?: any;
   className?: string;
+  urlPreQuery?: string;
 }) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [gridView, setGridView] = useState(true);
@@ -182,7 +184,7 @@ export default function Receptury({
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   function updateQuery() {
-    let query = "";
+    let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
       if (combo.value === "") return;

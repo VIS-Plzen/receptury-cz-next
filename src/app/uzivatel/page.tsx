@@ -11,7 +11,8 @@ import Heading from "@/components/ui/Heading";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import clsx from "clsx";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import Receptury from "../Receptury";
@@ -23,11 +24,43 @@ export default function Home() {
     </div>
   );
   function ContentSelector() {
-    const [content, setContent] = useState<"form" | "recepty">("form");
-    const contents: { key: "form" | "recepty"; title: string }[] = [
-      { key: "form", title: "Osobní informace" },
+    const [content, setContent] = useState<"informace" | "recepty" | null>(
+      null
+    );
+    const contents: { key: "informace" | "recepty"; title: string }[] = [
+      { key: "informace", title: "Osobní informace" },
       { key: "recepty", title: "Oblíbené recepty" },
     ];
+    const paramsHook = useSearchParams();
+    const urlParams = decodeURIComponent(
+      paramsHook.toString().replaceAll("+", " ")
+    );
+    const router = useRouter();
+
+    useEffect(() => {
+      const regexMatch = urlParams.match(/obsah=(informace|recepty)/);
+      if (!regexMatch) return setContent("informace");
+      let cont = regexMatch[1];
+      if (cont !== "informace" && cont !== "recepty")
+        return setContent("informace");
+      setContent(cont);
+    }, []);
+
+    function updateContent(cont: "informace" | "recepty") {
+      let query = urlParams;
+      const regexMatch = query.match(/obsah=(informace|recepty)/);
+      if (regexMatch) {
+        query = query.replace(regexMatch[1], cont);
+      } else {
+        if (query === "") {
+          query = "obsah=" + cont;
+        } else {
+          query = "obsah=" + cont + "&" + query;
+        }
+      }
+      router.replace("?" + query, { scroll: false });
+    }
+
     return (
       <div>
         <Container>
@@ -40,18 +73,21 @@ export default function Home() {
                     ? "bg-primary text-white"
                     : "bg-white text-black"
                 }`}
-                onClick={() => setContent(cont.key)}
+                onClick={() => updateContent(cont.key)}
               >
                 {cont.title}
               </button>
             ))}
           </div>
         </Container>
-        {content === "form" && <Form />}
-        {content === "recepty" && <Receptury title="Oblíbené" />}
+        {content === "informace" && <Form />}
+        {content === "recepty" && (
+          <Receptury title="Oblíbené" urlPreQuery={`obsah=${content}`} />
+        )}
       </div>
     );
   }
+
   function Form() {
     const formValidationSchema = z.object({
       name: z
@@ -252,7 +288,9 @@ export default function Home() {
               <TextInput
                 name="IC"
                 label="IČ"
-                error={formWasTouched && formik.touched.IC && formik.errors.IC}
+                errorText={
+                  formWasTouched && formik.touched.IC && formik.errors.IC
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.IC}
