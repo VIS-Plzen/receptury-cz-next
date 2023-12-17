@@ -404,7 +404,7 @@ export default function Home() {
             </Button>
           </form>
           <svg
-            className="mt-40"
+            className="mt-40 hidden md:block"
             width="514"
             height="797"
             viewBox="0 0 514 797"
