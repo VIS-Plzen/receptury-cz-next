@@ -1,10 +1,11 @@
 "use client";
-import CheckboxesGroup from "@/components/ui/CheckboxesGroup";
+import Checkbox from "@/components/forms/Checkbox";
+import { RadioGroup } from "@/components/forms/Radio";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Modal from "@/components/ui/Modal";
 import Paginator from "@/components/ui/Paginator";
-import RadioButtonsGroup from "@/components/ui/RadioButtonsGroup";
+import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { useState } from "react";
 import IsGridView from "./ViewContext";
 
@@ -15,9 +16,9 @@ export default function Home() {
     <IsGridView.Provider value={contextValue}>
       <div className="flex flex-col justify-center gap-24 py-32 md:py-48">
         <Container className="space-y-6">
-          {/* <RecipeCardsGrid /> */}
-          <RadioButtonsGroup />
-          <CheckboxesGroup />
+          <RecipeCardsGrid />
+          <RadioGroup />
+          <Checkbox label="Checkbox" />
         </Container>
         {/* <PaginatorTester /> */}
         <ModalTester />
