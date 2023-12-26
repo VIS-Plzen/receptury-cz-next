@@ -15,12 +15,14 @@ export default function Home() {
     function Column({
       title,
       children,
+      className = "",
     }: {
       title: string;
       children: React.ReactNode;
+      className?: string;
     }) {
       return (
-        <div>
+        <div className={`${className}`}>
           <Heading size="sm" hasMarginBottom>
             {title}
           </Heading>
@@ -48,7 +50,7 @@ export default function Home() {
           <div className="flex flex-col">
             <StyledLink
               href={`mailto:${email}`}
-              className="font-bold text-primary"
+              className="whitespace-normal break-all font-bold text-primary"
             >
               {email}
             </StyledLink>
@@ -70,29 +72,59 @@ export default function Home() {
           Kontakty a firemní údaje
         </Heading>
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
-          <Column title="Tým Knihovna Receptur.cz">
-            <div className="flex flex-col">
-              <span className="font-semibold">Sekretariát</span>
-              <StyledLink
-                href="mailto:info@jidelny.cz"
-                className="font-bold text-primary"
-              >
-                info@jidelny.cz
-              </StyledLink>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-semibold">Sídlo</span>
-              <StyledLink
-                href="https://maps.app.goo.gl/VhNS1rQfZRGhouGR9"
-                className="font-extrabold"
-                hoverEffect="none"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Farského 14, Plzeň
-              </StyledLink>
-            </div>
-          </Column>
+          <div className="flex flex-col gap-y-5">
+            <Column title="Tým Knihovna Receptur.cz">
+              <div className="flex flex-col">
+                <span className="font-semibold">Sekretariát</span>
+                <StyledLink
+                  href="mailto:info@jidelny.cz"
+                  className="font-bold text-primary"
+                >
+                  info@jidelny.cz
+                </StyledLink>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-semibold">Sídlo</span>
+                <StyledLink
+                  href="https://maps.app.goo.gl/VhNS1rQfZRGhouGR9"
+                  className="font-extrabold"
+                  hoverEffect="none"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Farského 14, Plzeň
+                </StyledLink>
+              </div>
+            </Column>
+            <Column title="Produkce" className="block md:hidden">
+              <Person
+                name="Lukáš Doubek"
+                job="projektový manažer"
+                email="doubek@visplzen.cz"
+              />
+              <Person
+                name="Tereza Ottová"
+                job="administrace přihlášek, fakturace"
+                email="ottova@visplzen.cz"
+                tel="+420 720 962 105"
+              />
+            </Column>
+            <Column
+              title="Portál Knihovna Receptur.cz"
+              className="block md:hidden"
+            >
+              <Person
+                name="Pavel Ludvík"
+                job="redakce, odborný garant"
+                email="redakce@jidelny.cz"
+              />
+              <Person
+                name="Michaela Divišová"
+                job="redakce"
+                email="michaela.divisova@jidelny.cz"
+              />
+            </Column>
+          </div>
           <Column title="Vydavatel">
             <div className="font-bold">
               <p>VIS Plzeň, s.r.o</p>
@@ -123,7 +155,7 @@ export default function Home() {
               <p className="font-bold">FIOBCZPPXXX</p>
             </div>
           </Column>
-          <Column title="Produkce">
+          <Column title="Produkce" className="hidden md:block">
             <Person
               name="Lukáš Doubek"
               job="projektový manažer"
@@ -136,7 +168,10 @@ export default function Home() {
               tel="+420 720 962 105"
             />
           </Column>
-          <Column title="Portál Knihovna Receptur.cz">
+          <Column
+            title="Portál Knihovna Receptur.cz"
+            className="hidden md:block"
+          >
             <Person
               name="Pavel Ludvík"
               job="redakce, odborný garant"
