@@ -1,6 +1,7 @@
 "use client";
+
 import Checkbox from "@/components/forms/Checkbox";
-import { RadioGroup } from "@/components/forms/Radio";
+import Radio from "@/components/forms/Radio";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Modal from "@/components/ui/Modal";
@@ -10,6 +11,16 @@ import { useState } from "react";
 import IsGridView from "./ViewContext";
 
 export default function Home() {
+  const [selectedRadio, setSelectedRadio] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleRadioChange = (event: any) => {
+    setSelectedRadio(event.target.id);
+  };
+
+  const handleCheckboxChange = (event: any) => {
+    setIsChecked(event.target.checked);
+  };
   const contextValue = true;
   //const res = await backendWorker("12345VIS", "Test");
   return (
@@ -17,8 +28,36 @@ export default function Home() {
       <div className="flex flex-col justify-center gap-24 py-32 md:py-48">
         <Container className="space-y-6">
           <RecipeCardsGrid />
-          <RadioGroup />
-          <Checkbox label="Checkbox" />
+          <form className="space-y-2">
+            <Radio
+              name="radio"
+              id="1"
+              label="Option 1"
+              checked={selectedRadio === "1"}
+              onChange={handleRadioChange}
+            />
+            <Radio
+              name="radio"
+              id="2"
+              label="Option 2"
+              checked={selectedRadio === "2"}
+              onChange={handleRadioChange}
+            />
+            <Radio
+              name="radio"
+              id="3"
+              label="Option 3"
+              checked={selectedRadio === "3"}
+              onChange={handleRadioChange}
+            />
+          </form>
+          <form>
+            <Checkbox
+              label="AHOJ"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
+          </form>
         </Container>
         {/* <PaginatorTester /> */}
         <ModalTester />

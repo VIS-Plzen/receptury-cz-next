@@ -53,13 +53,13 @@ function BadgeRenderer({ badges }: BadgesProps) {
 // Card for grid layout
 function GridCardLayout({ label, badges }: CardLayoutProps) {
   return (
-    <div>
-      <div className="flex h-[120px] w-full items-start justify-end border-primary-300/30 bg-primary-300/30">
+    <div className="h-[300px] bg-white">
+      <div className="flex h-[140px] w-full items-start justify-end border-primary-300/30 bg-primary-300/30">
         <div className="right-20 top-6 z-50 flex space-x-2 p-2">
           <ActionButtons isGridView={true} />
         </div>
       </div>
-      <div className="flex flex-grow flex-col justify-between bg-white p-[16px]">
+      <div className="flex flex-grow flex-col justify-between p-[16px]">
         <div className="mb-4 line-clamp-3 text-sm font-bold">
           <p>{label}</p>
         </div>
@@ -74,7 +74,7 @@ function RowCardLayout({ label, badges }: CardLayoutProps) {
   return (
     <div
       className={cn(
-        "flex flex-row justify-between border-primary-300/30 bg-white"
+        "flex h-[70px] flex-row justify-between border-primary-300/30 bg-white"
       )}
     >
       <div className="bg-primary-300/30 p-3">
@@ -99,9 +99,9 @@ function RowCardLayout({ label, badges }: CardLayoutProps) {
 function LoadingPlaceholderGrid() {
   // Render the loading placeholder for the grid view
   return (
-    <div>
-      <div className="flex h-[120px] w-full items-center justify-center border-gray-200 bg-gray-200"></div>
-      <div className="flex flex-grow flex-col justify-between bg-white p-[16px]">
+    <div className="h-[300px] bg-white">
+      <div className="flex h-[140px] w-full items-center justify-center border-gray-200 bg-gray-200"></div>
+      <div className="flex flex-grow flex-col justify-between p-[16px]">
         <div className="mb-4 text-sm font-bold">
           <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
           <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
@@ -120,7 +120,7 @@ function LoadingPlaceholderGrid() {
 function LoadingPlaceholderRow() {
   return (
     <div className="flex h-[70px] w-full items-center justify-between border-gray-200 bg-white">
-      <div className="h-full w-16 animate-pulse bg-gray-200"></div>
+      <div className="h-full w-[72px] animate-pulse bg-gray-200"></div>
       <div className="flex flex-grow flex-col justify-center px-4">
         <div className="h-4 w-1/2 animate-pulse rounded-full bg-gray-500"></div>
       </div>
@@ -136,7 +136,7 @@ function LoadingPlaceholderRow() {
 function LoadingPlaceholderMobile() {
   return (
     <div className="flex h-[70px] w-full items-center justify-between border-gray-200 bg-white">
-      <div className="h-full w-16 animate-pulse bg-gray-200"></div>
+      <div className="h-full w-[72px] animate-pulse bg-gray-200"></div>
       <div className="flex flex-grow flex-col justify-center px-4">
         <div className="h-4 w-1/2 animate-pulse rounded-full bg-gray-500"></div>
       </div>
@@ -147,12 +147,12 @@ function LoadingPlaceholderMobile() {
 // Mobile card
 function MobileCardLayout({ label, badges }: CardLayoutProps) {
   return (
-    <div className="flex justify-start rounded-2xl bg-white">
+    <div className="flex h-[70px] items-center justify-start rounded-2xl bg-white">
       <div className="items-center p-4">
         <MealSymbol className=" text-primary-300" />
       </div>
       <div className="flex flex-col items-start">
-        <div className="line-clamp-2 pr-2 pt-2 text-sm font-bold">
+        <div className="line-clamp-2 pr-2 text-sm font-bold">
           <p>{label}</p>
         </div>
         <div className="flex flex-row items-center">
