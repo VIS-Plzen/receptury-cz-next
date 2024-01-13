@@ -7,26 +7,44 @@ import Heading from "@/components/ui/Heading";
 import Modal from "@/components/ui/Modal";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useState } from "react";
 import IsGridView from "./ViewContext";
 
 export default function Home() {
   const [selectedRadio, setSelectedRadio] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
 
   const handleRadioChange = (event: any) => {
     setSelectedRadio(event.target.id);
   };
 
-  const handleCheckboxChange = (event: any) => {
-    setIsChecked(event.target.checked);
-  };
   const contextValue = true;
   //const res = await backendWorker("12345VIS", "Test");
   return (
     <IsGridView.Provider value={contextValue}>
       <div className="flex flex-col justify-center gap-24 py-32 md:py-48">
         <Container className="space-y-6">
+          <Tabs defaultValue="recommended" className="w-[640px]">
+            <TabsList>
+              <TabsTrigger value="recommended">Doporučené pro vás</TabsTrigger>
+              <TabsTrigger value="favorites">Oblíbené</TabsTrigger>
+              <TabsTrigger value="new">Nové recepty</TabsTrigger>
+            </TabsList>
+            <TabsContent value="recommended">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
+              nostrum dicta, unde deserunt, ipsum, quas repudiandae.
+            </TabsContent>
+            <TabsContent value="favorites">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi
+              reiciendis, fugiat dicta inventore magni ut incidunt ipsam
+              impedit, veniam recusandae magnam aliquam aliquid earum rem odit.
+            </TabsContent>
+            <TabsContent value="new">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
+              nostrum dicta, unde deserunt, ipsum, quas repudiandae excepturi
+              ullam sapiente nobis veniam eum.
+            </TabsContent>
+          </Tabs>
           <RecipeCardsGrid />
           <form className="space-y-2">
             <Radio
@@ -51,12 +69,10 @@ export default function Home() {
               onChange={handleRadioChange}
             />
           </form>
-          <form>
-            <Checkbox
-              label="AHOJ"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-            />
+          <form className="space-y-1">
+            <Checkbox label="Option 1" onChange={(e) => e.checked} />
+            <Checkbox label="Option 2" onChange={(e) => e.checked} />
+            <Checkbox label="Option 3" onChange={(e) => e.checked} />
           </form>
         </Container>
         {/* <PaginatorTester /> */}
