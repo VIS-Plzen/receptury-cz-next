@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import Image, { StaticImageData } from "next/legacy/image";
+import Image from "next/legacy/image";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -8,7 +8,7 @@ type RecipeCardProps = {
   isGridView?: Boolean;
   isLoading?: Boolean;
   label: string;
-  img?: StaticImageData;
+  img?: any;
   badges: string[];
 };
 
@@ -82,14 +82,9 @@ function GridCardLayout({ label, badges, img }: RecipeCardProps) {
 // Card for row layout
 function RowCardLayout({ label, badges, img }: RecipeCardProps) {
   return (
-    <a
-      href={"/receptura"}
+    <div
       className={cn(
-        "h-full w-full bg-white",
-        isGridView && "rounded-2xl border-2 border-primary-300/30",
-        !isGridView &&
-          "flex flex-row rounded-2xl border-2 border-primary-300/30",
-        isLoading && "border-gray-200"
+        "flex h-[70px] flex-row justify-between border-primary-300/30"
       )}
     >
       {img ? (
@@ -177,67 +172,56 @@ function MobileCardLayout({ label, badges, img }: RecipeCardProps) {
           <MealSymbol className=" text-primary-300" />
         </div>
       )}
-      {isGridView ? (
+      <div className="flex h-full w-full flex-col items-start justify-center overflow-hidden rounded-r-xl border-2 border-l-0 border-primary-300/30 bg-white">
+        <div className="line-clamp-2 px-4 text-sm font-bold">
+          <p>{label}</p>
+        </div>
+        <div className="flex flex-row  items-center px-4">
+          <BadgeRenderer badges={badges} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RecipeCard({
+  isGridView,
+  isLoading,
+  label,
+  img,
+  badges,
+}: RecipeCardProps) {
+  const Placeholder = isGridView
+    ? LoadingPlaceholderGrid
+    : LoadingPlaceholderRow;
+  const MobilePlaceholder = LoadingPlaceholderMobile;
+
+  return (
+    <>
+      {isLoading ? (
         <>
-          <div className="flex h-[120px] w-full items-start justify-end rounded-t-xl bg-primary-300/30">
-            <div className="right-20 top-6 z-50 flex space-x-2 p-2">
-              <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                <FavoriteIcon size={36} className="p-1" />
-              </div>
-              <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                <ShareIcon size={36} className="p-1" />
-              </div>
-              <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                <DownloadingIcon size={36} className="p-1" />
-              </div>
-            </div>
+          <div className="lg:hidden">
+            <MobilePlaceholder />
           </div>
-          <div className="flex flex-col justify-between rounded-b-xl bg-white p-4">
-            <p className="mb-4 text-sm font-bold">{label}</p>
-            <div className="space-y-[4px] ">
-              {badges.map((badge, index) => (
-                <Badge key={index} className="md:text-xs">
-                  {badge}
-                </Badge>
-              ))}
-            </div>
+          <div className="hidden lg:block">
+            <Placeholder />
           </div>
         </>
       ) : (
         <>
-          <div className="flex flex-grow flex-row items-center bg-white">
-            <div className="bg-primary-300/30 p-3">
-              <MealSymbol />
-            </div>
-            <div className="flex flex-grow flex-row items-center justify-between">
-              <div className="pl-5 text-sm font-bold">
-                <p>{label}</p>
-              </div>
-
-              <div className="flex flex-grow justify-center space-x-[4px]">
-                {badges.map((badge, index) => (
-                  <Badge key={index}>{badge}</Badge>
-                ))}
-              </div>
-
-              <div className="items-center bg-white">
-                <div className="flex space-x-2 p-3">
-                  <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                    <FavoriteIcon size={36} className="p-1" />
-                  </div>
-                  <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                    <ShareIcon size={36} className="p-1" />
-                  </div>
-                  <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-                    <DownloadingIcon size={36} className="p-1" />
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="block lg:hidden">
+            <MobileCardLayout label={label} badges={badges} img={img} />
+          </div>
+          <div className="hidden lg:block">
+            {isGridView ? (
+              <GridCardLayout label={label} badges={badges} img={img} />
+            ) : (
+              <RowCardLayout label={label} badges={badges} img={img} />
+            )}
           </div>
         </>
       )}
-    </a>
+    </>
   );
 }
 
