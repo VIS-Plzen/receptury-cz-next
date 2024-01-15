@@ -4,24 +4,38 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Inspirace() {
-  const [hidden, setHidden] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+
   const [selected, setSelected] = useState<
     "recommended" | "favorites" | "new" | string
   >("recommended");
+
+  useEffect(() => {
+    if (!window) return;
+    const localVisible =
+      window.localStorage.getItem("inspiraceVisible") === "true";
+    setIsVisible(localVisible);
+  });
+
+  function setLocalVisible(visible: boolean) {
+    if (!window) return;
+    window.localStorage.setItem("inspiraceVisible", visible.toString());
+    setIsVisible(visible);
+  }
 
   function HideButton({ className = "" }: { className?: string }) {
     return (
       <div
         className={`items-center gap-x-2 whitespace-nowrap font-semibold ${className}`}
       >
-        {hidden ? "Zobrazit " : "Skrýt "}
+        {!isVisible ? "Zobrazit " : "Skrýt "}
         <span className="hidden md:inline-block">inspirace</span>
         <ButtonIcon
-          icon={hidden ? "visibility" : "visibility-off"}
-          onClick={() => setHidden(!hidden)}
+          icon={!isVisible ? "visibility" : "visibility-off"}
+          onClick={() => setLocalVisible(!isVisible)}
         />
       </div>
     );
@@ -35,7 +49,7 @@ export default function Inspirace() {
         </Heading>
         <HideButton className="ml-auto flex" />
       </div>
-      <div className={`${hidden && "hidden"}`}>
+      <div className={`${!isVisible && "hidden"}`}>
         <div className="flex w-full items-center justify-between pt-5 md:pt-20">
           <Tabs
             defaultValue={selected}
