@@ -71,7 +71,7 @@ export default function Footer() {
   const [isDebugModalOpen, setIsDebugModalOpen] = useState(false);
   const { isDebugModeEnabled, updateDebugModeClickCount } = useDebugMode();
 
-  return (
+  return 
     <>
       <footer className="w-full items-center bg-white">
         <Container className="flex items-center justify-start py-[40px] lg:py-[100px]">
@@ -157,7 +157,6 @@ export default function Footer() {
           </div>
         </Container>
       </footer>
-
       {/* Debug Modal */}
       <DebugModal isOpen={isDebugModalOpen} setIsOpen={setIsDebugModalOpen} />
     </>
