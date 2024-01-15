@@ -1,36 +1,40 @@
 "use client";
-import { useRef, useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   currentPage: number;
   totalPages: number;
-  onArrowLeft: () => void;
-  onArrowRight: () => void;
-  onPageClick: (page: number) => void;
-  variant?: "primary" | "secondary";
-  className?: string;
+  changePage: (page: number) => void;
 };
 
 export default function Paginator({
   currentPage,
   totalPages,
-  onArrowLeft,
-  onArrowRight,
-  onPageClick,
-  variant,
-  className,
+  changePage,
 }: Props) {
   // set by ElipssisButton - on click sets +/- 5, showing currenently selected page + offset <DayButton>s
   const [offset, setOffset] = useState<number>(0);
   const iconSize = "h-9 w-9";
+  const isTablet = useMediaQuery("(min-width: 768px)");
+  const pagesOffset = isTablet ? 5 : 3;
+
+  useEffect(() => {
+    if (currentPage < 1) {
+      changePage(1);
+    }
+    if (currentPage > totalPages) {
+      changePage(totalPages);
+    }
+  }, [currentPage, changePage, totalPages]);
 
   function DayButton({ page }: { page: number }) {
     return (
       <button
         onClick={() => {
           setOffset(0);
-          onPageClick(page);
+          changePage(page);
         }}
         className={`${iconSize} rounded-full font-bold duration-300 hover:bg-primary hover:text-white ${
           page === currentPage && "bg-primary font-extrabold text-white"
@@ -60,7 +64,9 @@ export default function Paginator({
 
     return (
       <button
-        onClick={() => (back ? setOffset(offset + 5) : setOffset(offset - 5))}
+        onClick={() =>
+          back ? setOffset(offset + pagesOffset) : setOffset(offset - 5)
+        }
         className={`${iconSize} flex justify-center rounded-full text-2xl font-semibold ${
           back ? "flex-row" : "flex-row-reverse"
         }`}
@@ -80,14 +86,33 @@ export default function Paginator({
     );
   }
   function ChevronButton({ back = false }) {
+    const isDisabled = back
+      ? currentPage <= 1
+        ? true
+        : false
+      : currentPage >= totalPages
+        ? true
+        : false;
+
     return (
       <button
         onClick={() => {
           setOffset(0);
-          back ? onArrowLeft() : onArrowRight();
+          if (isDisabled) return;
+          back ? changePage(currentPage - 1) : changePage(currentPage + 1);
         }}
-        className={`rounded-full bg-white text-black duration-300 hover:bg-primary hover:text-white ${
-          back ? "hover:-translate-x-2" : "hover:translate-x-2"
+        tabIndex={isDisabled ? -1 : undefined}
+        className={`rounded-full bg-white text-black duration-300
+        ${
+          isDisabled
+            ? "cursor-default opacity-30 ring-0"
+            : "hover:bg-primary hover:text-white"
+        } ${
+          !isDisabled
+            ? back
+              ? "hover:-translate-x-2"
+              : "hover:translate-x-2"
+            : ""
         }`}
       >
         {back ? (
@@ -99,18 +124,21 @@ export default function Paginator({
     );
   }
   return (
-    <div className="flex flex-row gap-x-2">
+    <div className="my-7 flex w-full flex-row justify-center gap-x-2">
       <ChevronButton back />
-      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full bg-white px-3 text-black">
+      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full bg-white text-black md:px-3">
         <DayButton page={1} />
-        {currentPage + offset <= 5 ? (
+        {currentPage + offset <= pagesOffset ? (
           <>
-            {[2, 3, 4, 5, 6, 7].map((page: number) => (
-              <DayButton page={page} key={"ppbn" + page} />
-            ))}
+            {[2, 3, 4, 5, 6, 7].map(
+              (page, index) =>
+                (isTablet || index <= 3) && (
+                  <DayButton page={page} key={"ppbn" + page} />
+                )
+            )}
             <ElipssisButton back />
           </>
-        ) : currentPage + offset >= totalPages - 4 ? (
+        ) : currentPage + offset >= totalPages - pagesOffset + 1 ? (
           <>
             <ElipssisButton />
             {[
@@ -120,9 +148,12 @@ export default function Paginator({
               totalPages - 3,
               totalPages - 2,
               totalPages - 1,
-            ].map((page: number) => (
-              <DayButton page={page} key={"ppbn" + page} />
-            ))}
+            ].map(
+              (page, index) =>
+                (isTablet || index >= 2) && (
+                  <DayButton page={page} key={"ppbn" + page} />
+                )
+            )}
           </>
         ) : (
           <>
@@ -133,9 +164,12 @@ export default function Paginator({
               currentPage + offset,
               currentPage + offset + 1,
               currentPage + offset + 2,
-            ].map((page: number) => (
-              <DayButton page={page} key={"ppbn" + page} />
-            ))}
+            ].map(
+              (page, index) =>
+                (isTablet || (index >= 1 && index <= 3)) && (
+                  <DayButton page={page} key={"ppbn" + page} />
+                )
+            )}
             <ElipssisButton back />
           </>
         )}

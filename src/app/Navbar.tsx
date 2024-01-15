@@ -18,20 +18,20 @@ const menuRoutes = [
     href: "/",
   },
   {
+    label: "Receptura",
+    href: "/receptura",
+  },
+  {
+    label: "Partner",
+    href: "/partner",
+  },
+  {
+    label: "Uživatel",
+    href: "/uzivatel",
+  },
+  {
     label: "Komponenty",
     href: "/components",
-  },
-  {
-    label: "Testing",
-    href: "/testing",
-  },
-  {
-    label: "Partner 1",
-    href: "/partner-1",
-  },
-  {
-    label: "Partner 2",
-    href: "/partner-2",
   },
   {
     label: "Kontakt",

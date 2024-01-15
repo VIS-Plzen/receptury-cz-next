@@ -50,5 +50,9 @@ export default function DebugContextProvider({
     };
   }, [keyPressCount, toggleDebugMode]);
 
-  return <DebugContext.Provider value={{ debugMode, toggleDebugMode }} />;
+  return (
+    <DebugContext.Provider value={{ debugMode, toggleDebugMode }}>
+      {children}
+    </DebugContext.Provider>
+  );
 }
