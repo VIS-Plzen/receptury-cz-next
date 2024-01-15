@@ -92,7 +92,7 @@ export default function Home() {
   function Kontakt({ telefon, email }: { telefon: string; email: string }) {
     return (
       <Container>
-        <div className="flex flex-col justify-between gap-5 rounded-2xl border-2 border-secondary-700 bg-secondary-700/30 p-5 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-5 rounded-2xl border-2 border-secondary-700 bg-secondary-700/15 p-5 md:flex-row md:items-center">
           <Heading as="h2" size="sm">
             Kontaktujte obchodního zástupce
           </Heading>
@@ -137,7 +137,7 @@ export default function Home() {
     return (
       <Container>
         <div
-          className={`flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl border-2 border-secondary-700 bg-secondary-700/30 p-6 md:flex-row lg:p-8 ${className}`}
+          className={`flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl border-2 border-secondary-700 bg-secondary-700/15 p-6 md:flex-row lg:p-8 ${className}`}
         >
           <div className="flex max-w-xl flex-col gap-y-7">
             <Heading>{title}</Heading>

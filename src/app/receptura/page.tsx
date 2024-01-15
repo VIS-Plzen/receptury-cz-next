@@ -116,6 +116,7 @@ export default function Home() {
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
+        hasButton
       />
     </div>
   );
@@ -151,7 +152,7 @@ function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 flex gap-x-3 md:static md:mt-20">
+          <div className="absolute right-5 top-5 grid grid-cols-2 gap-x-1.5 md:static md:mt-20 md:grid-cols-6">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -159,7 +160,7 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } w-min flex-col items-center text-center`}
+                } flex-col items-center text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
@@ -199,11 +200,11 @@ function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 flex gap-x-3">
+        <div className="right-5 top-5 grid min-w-max grid-cols-6 gap-x-3">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
-              className={`flex w-min flex-col items-center text-center`}
+              className={`flex flex-col items-center text-center`}
             >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
               <span className="text-sm font-bold">{icon.label}</span>
@@ -417,7 +418,15 @@ function Informations({
     </Container>
   );
 }
-export function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
+export function Partner({
+  jmeno,
+  heslo,
+  hasButton,
+}: {
+  jmeno: string;
+  heslo: string;
+  hasButton?: boolean;
+}) {
   return (
     <Container>
       <div className="relative flex aspect-[9/10] max-h-[450px] w-full rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent px-3 py-5 md:aspect-[3/1] md:max-h-full md:items-center md:bg-gradient-to-r md:p-10">
@@ -427,7 +436,7 @@ export function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
           </span>
           <Heading className="text-white">{jmeno}</Heading>
           <p className="font-semibold text-white">{heslo}</p>
-          <Button className="w-min">Více o nás</Button>
+          {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
         <span className="absolute right-5 top-5 text-xs text-secondary-900">
           Inspirační foto
