@@ -32,7 +32,6 @@ function RecipeCardsGrid({
     "grid-cols-6",
   ];
 
-function RecipeCardsGrid({ isGridView, isLoading }: CardsGridProps) {
   return (
     <div
       className={cn(
