@@ -2,26 +2,37 @@
 
 import Checkbox from "@/components/forms/Checkbox";
 import Radio from "@/components/forms/Radio";
+import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Modal from "@/components/ui/Modal";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import IsGridView from "./ViewContext";
 
 export default function Home() {
-  const [selectedRadio, setSelectedRadio] = useState("");
+  const [gridView, setGridView] = useLocalStorage<boolean>("gridView", true);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const toggleGridView = () => {
+    setGridView((prevGridView) => !prevGridView);
+  };
+
+  const toggleLoading = () => {
+    setIsLoading((prevIsLoading) => !prevIsLoading);
+  };
+
+  const [selectedRadio, setSelectedRadio] = useState("");
   const handleRadioChange = (event: any) => {
     setSelectedRadio(event.target.id);
   };
 
-  const contextValue = true;
   //const res = await backendWorker("12345VIS", "Test");
   return (
-    <IsGridView.Provider value={contextValue}>
+    <IsGridView.Provider value={gridView}>
       <div className="flex flex-col justify-center gap-24 py-32 md:py-48">
         <Container className="space-y-6">
           <Tabs defaultValue="recommended" className="w-[640px]">
@@ -45,7 +56,13 @@ export default function Home() {
               ullam sapiente nobis veniam eum.
             </TabsContent>
           </Tabs>
-          <RecipeCardsGrid />
+          <div>
+            <div className="space-x-4 py-4">
+              <Button onClick={toggleGridView}>Change layout</Button>
+              <Button onClick={toggleLoading}>Set Loading</Button>
+            </div>
+            <RecipeCardsGrid isGridView={gridView} isLoading={isLoading} />
+          </div>
           <form className="space-y-2">
             <Radio
               name="radio"
@@ -100,6 +117,13 @@ export default function Home() {
             Volitelný obsah
           </Heading>
         </Container>
+        <div>
+          <div className="space-x-4 py-4">
+            <Button onClick={toggleGridView}>Change layout</Button>
+            <Button onClick={toggleLoading}>Set Loading</Button>
+          </div>
+          <RecipeCardsGrid isGridView={gridView} isLoading={isLoading} />
+        </div>
       </div>
     </IsGridView.Provider>
   );

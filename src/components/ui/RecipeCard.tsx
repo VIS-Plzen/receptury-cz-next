@@ -1,18 +1,14 @@
 import { cn } from "@/utils/cn";
-import { DownloadingIcon, FavoriteIcon, ShareIcon } from "../icons";
+import Image, { StaticImageData } from "next/legacy/image";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
+import ButtonIcon from "./ButtonIcon";
 
-type Props = {
-  isGridView: Boolean;
-  isLoading: Boolean;
+type RecipeCardProps = {
+  isGridView?: Boolean;
+  isLoading?: Boolean;
   label: string;
-  img?: string;
-  badges: string[];
-};
-
-type CardLayoutProps = {
-  label: string;
+  img?: StaticImageData;
   badges: string[];
 };
 
@@ -25,13 +21,13 @@ function ActionButtons({ isGridView }: any) {
   return (
     <div className={cn("flex flex-row space-x-1", !isGridView && "space-x-3")}>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <FavoriteIcon size={36} className="p-1" />
+        <ButtonIcon icon="favorite" />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ShareIcon size={36} className="p-1" />
+        <ButtonIcon icon="share" />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <DownloadingIcon size={36} className="p-1" />
+        <ButtonIcon icon="archive" />
       </div>
     </div>
   );
@@ -51,16 +47,30 @@ function BadgeRenderer({ badges }: BadgesProps) {
 }
 
 // Card for grid layout
-function GridCardLayout({ label, badges }: CardLayoutProps) {
+function GridCardLayout({ label, badges, img }: RecipeCardProps) {
   return (
-    <div className="h-[300px] bg-white">
-      <div className="flex h-[140px] w-full items-start justify-end border-primary-300/30 bg-primary-300/30">
-        <div className="right-20 top-6 z-50 flex space-x-2 p-2">
+    <div className={cn("h-80 w-11/12 max-w-[220px] ")}>
+      <div
+        className={cn(
+          "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
+          img ? "border-none" : "border-primary-300/30 bg-primary-300/30"
+        )}
+      >
+        {img ? (
+          <div>
+            <Image alt="" src={img} className="h-full w-full" />
+          </div>
+        ) : (
+          <div className="flex scale-125 justify-center pt-11">
+            <MealSymbol className="scale-150" />
+          </div>
+        )}
+        <div className="absolute right-2 top-2 z-50 flex space-x-2 p-1">
           <ActionButtons isGridView={true} />
         </div>
       </div>
-      <div className="flex flex-grow flex-col justify-between p-[16px]">
-        <div className="mb-4 line-clamp-3 text-sm font-bold">
+      <div className="flex h-44 flex-grow flex-col justify-between overflow-hidden rounded-b-2xl border-2 border-t-0 border-primary-300/30 bg-white p-[16px]">
+        <div className="line-clamp-3 text-sm font-bold">
           <p>{label}</p>
         </div>
         <BadgeRenderer badges={badges} />
@@ -70,22 +80,28 @@ function GridCardLayout({ label, badges }: CardLayoutProps) {
 }
 
 // Card for row layout
-function RowCardLayout({ label, badges }: CardLayoutProps) {
+function RowCardLayout({ label, badges, img }: RecipeCardProps) {
   return (
     <div
       className={cn(
-        "flex h-[70px] flex-row justify-between border-primary-300/30 bg-white"
+        "flex h-[70px] flex-row justify-between border-primary-300/30"
       )}
     >
-      <div className="bg-primary-300/30 p-3">
-        <MealSymbol />
-      </div>
-      <div className="flex flex-grow flex-row items-center justify-between">
+      {img ? (
+        <div className="relative h-[70px] w-[70px] overflow-hidden rounded-l-2xl">
+          <Image alt="" src={img} layout="fill" objectFit="cover" />
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-l-2xl bg-primary-300/30 p-3">
+          <MealSymbol />
+        </div>
+      )}
+      <div className="flex flex-grow flex-row items-center justify-between overflow-hidden rounded-r-2xl border-2 border-l-0 border-primary-300/30 bg-white">
         <div className="line-clamp-3 pl-[20px] pr-2 text-sm font-bold">
           <p>{label}</p>
         </div>
         <BadgeRenderer badges={badges} />
-        <div className="items-center bg-white">
+        <div className="items-center ">
           <div className="flex space-x-2 p-3">
             <ActionButtons isGridView={false} />
           </div>
@@ -97,10 +113,9 @@ function RowCardLayout({ label, badges }: CardLayoutProps) {
 
 // Grid card loading placeholder
 function LoadingPlaceholderGrid() {
-  // Render the loading placeholder for the grid view
   return (
-    <div className="h-[300px] bg-white">
-      <div className="flex h-[140px] w-full items-center justify-center border-gray-200 bg-gray-200"></div>
+    <div className="flex h-80 w-11/12 max-w-[220px] flex-col justify-between overflow-hidden rounded-2xl border-2 border-gray-200 bg-white">
+      <div className="flex h-36 w-full items-center justify-center border-gray-200 bg-gray-200"></div>
       <div className="flex flex-grow flex-col justify-between p-[16px]">
         <div className="mb-4 text-sm font-bold">
           <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
@@ -119,7 +134,7 @@ function LoadingPlaceholderGrid() {
 // Row card loading placeholder
 function LoadingPlaceholderRow() {
   return (
-    <div className="flex h-[70px] w-full items-center justify-between border-gray-200 bg-white">
+    <div className="flex h-[70px] w-full items-center justify-between overflow-hidden rounded-2xl border-2 border-gray-200 bg-white">
       <div className="h-full w-[72px] animate-pulse bg-gray-200"></div>
       <div className="flex flex-grow flex-col justify-center px-4">
         <div className="h-4 w-1/2 animate-pulse rounded-full bg-gray-500"></div>
@@ -135,8 +150,8 @@ function LoadingPlaceholderRow() {
 // Mobile loading placeholder
 function LoadingPlaceholderMobile() {
   return (
-    <div className="flex h-[70px] w-full items-center justify-between border-gray-200 bg-white">
-      <div className="h-full w-[72px] animate-pulse bg-gray-200"></div>
+    <div className="flex h-[90px] w-full items-center justify-between rounded-xl border-2 border-gray-200 bg-white">
+      <div className="h-full w-[75px] animate-pulse bg-gray-200"></div>
       <div className="flex flex-grow flex-col justify-center px-4">
         <div className="h-4 w-1/2 animate-pulse rounded-full bg-gray-500"></div>
       </div>
@@ -145,17 +160,23 @@ function LoadingPlaceholderMobile() {
 }
 
 // Mobile card
-function MobileCardLayout({ label, badges }: CardLayoutProps) {
+function MobileCardLayout({ label, badges, img }: RecipeCardProps) {
   return (
-    <div className="flex h-[70px] items-center justify-start rounded-2xl bg-white">
-      <div className="items-center p-4">
-        <MealSymbol className=" text-primary-300" />
-      </div>
-      <div className="flex flex-col items-start">
-        <div className="line-clamp-2 pr-2 text-sm font-bold">
+    <div className="flex h-[90px] items-center justify-start overflow-hidden">
+      {img ? (
+        <div className="relative h-[90px] w-[90px] overflow-hidden rounded-l-xl">
+          <Image alt="" src={img} layout="fill" objectFit="cover" />
+        </div>
+      ) : (
+        <div className="items-center p-4">
+          <MealSymbol className=" text-primary-300" />
+        </div>
+      )}
+      <div className="flex h-full w-full flex-col items-start justify-center overflow-hidden rounded-r-xl border-2 border-l-0 border-primary-300/30 bg-white">
+        <div className="line-clamp-2 px-4 text-sm font-bold">
           <p>{label}</p>
         </div>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row  items-center px-4">
           <BadgeRenderer badges={badges} />
         </div>
       </div>
@@ -163,20 +184,20 @@ function MobileCardLayout({ label, badges }: CardLayoutProps) {
   );
 }
 
-function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
+function RecipeCard({
+  isGridView,
+  isLoading,
+  label,
+  img,
+  badges,
+}: RecipeCardProps) {
   const Placeholder = isGridView
     ? LoadingPlaceholderGrid
     : LoadingPlaceholderRow;
   const MobilePlaceholder = LoadingPlaceholderMobile;
 
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-2xl border-2",
-        isLoading && "border-gray-200",
-        !isLoading && "border-primary-300/30"
-      )}
-    >
+    <>
       {isLoading ? (
         <>
           <div className="lg:hidden">
@@ -188,19 +209,19 @@ function RecipeCard({ isGridView, isLoading, label, img, badges }: Props) {
         </>
       ) : (
         <>
-          <div className="lg:hidden">
-            <MobileCardLayout label={label} badges={badges} />
+          <div className="block lg:hidden">
+            <MobileCardLayout label={label} badges={badges} img={img} />
           </div>
           <div className="hidden lg:block">
             {isGridView ? (
-              <GridCardLayout label={label} badges={badges} />
+              <GridCardLayout label={label} badges={badges} img={img} />
             ) : (
-              <RowCardLayout label={label} badges={badges} />
+              <RowCardLayout label={label} badges={badges} img={img} />
             )}
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }
 
