@@ -57,7 +57,12 @@ export default function Inspirace() {
             </div>
           </Tabs>
         </div>
-        <RecipeCardsGrid length={12} gridView className="flex flex-row" />
+        <RecipeCardsGrid
+          length={12}
+          gridView
+          assertCard
+          className="flex flex-row"
+        />
       </div>
     </Container>
   );

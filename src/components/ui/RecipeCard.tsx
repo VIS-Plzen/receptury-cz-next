@@ -10,6 +10,7 @@ type RecipeCardProps = {
   label: string;
   img?: any;
   badges: string[];
+  assertCard?: boolean;
 };
 
 type BadgesProps = {
@@ -47,9 +48,9 @@ function BadgeRenderer({ badges }: BadgesProps) {
 }
 
 // Card for grid layout
-function GridCardLayout({ label, badges, img }: RecipeCardProps) {
+function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-11/12 max-w-[220px] ")}>
+    <div className={cn("h-80 w-full")}>
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
@@ -168,8 +169,8 @@ function MobileCardLayout({ label, badges, img }: RecipeCardProps) {
           <Image alt="" src={img} layout="fill" objectFit="cover" />
         </div>
       ) : (
-        <div className="items-center p-4">
-          <MealSymbol className=" text-primary-300" />
+        <div className="flex aspect-square h-full items-center justify-center overflow-hidden rounded-l-xl bg-primary-300/30">
+          <MealSymbol />
         </div>
       )}
       <div className="flex h-full w-full flex-col items-start justify-center overflow-hidden rounded-r-xl border-2 border-l-0 border-primary-300/30 bg-white">
@@ -190,6 +191,7 @@ function RecipeCard({
   label,
   img,
   badges,
+  assertCard,
 }: RecipeCardProps) {
   const Placeholder = isGridView
     ? LoadingPlaceholderGrid
@@ -210,7 +212,11 @@ function RecipeCard({
       ) : (
         <>
           <div className="block lg:hidden">
-            <MobileCardLayout label={label} badges={badges} img={img} />
+            {assertCard ? (
+              <GridCardLayout label={label} badges={badges} img={img} />
+            ) : (
+              <MobileCardLayout label={label} badges={badges} img={img} />
+            )}
           </div>
           <div className="hidden lg:block">
             {isGridView ? (

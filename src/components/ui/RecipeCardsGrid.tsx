@@ -10,6 +10,7 @@ type Props = {
   length?: number;
   className?: string;
   cardsInGrid?: number;
+  assertCard?: boolean;
 };
 
 function RecipeCardsGrid({
@@ -19,6 +20,7 @@ function RecipeCardsGrid({
   length,
   className = "",
   cardsInGrid,
+  assertCard,
 }: Props) {
   const label1 = "Fusilli s mediteránskou omáčkou a smaženým sumečkem";
   const badgesArray = ["Ryby a mořské plody", "Bezmléčná dieta"];
@@ -50,6 +52,7 @@ function RecipeCardsGrid({
               label={card.title}
               badges={card.badges}
               img={card.img}
+              assertCard={assertCard}
             />
           ))
         : length &&
@@ -60,6 +63,7 @@ function RecipeCardsGrid({
               isLoading={isLoading}
               label={label1}
               badges={badgesArray}
+              assertCard={assertCard}
             />
           ))}
     </div>
