@@ -87,9 +87,12 @@ export default function Home() {
             />
           </form>
           <form className="space-y-1">
-            <Checkbox label="Option 1" onChange={(e) => e.checked} />
-            <Checkbox label="Option 2" onChange={(e) => e.checked} />
-            <Checkbox label="Option 3" onChange={(e) => e.checked} />
+            {/* 
+            <Checkbox
+              label="Option 1"
+              onChange={(checked) => console.log(checked)}
+            /> */}
+            <Checkbox label="Option 2" onChange={(checked) => checked} />
           </form>
         </Container>
         {/* <PaginatorTester /> */}

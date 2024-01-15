@@ -7,7 +7,7 @@ import Label from "./Label";
 type CheckboxProps = React.ComponentPropsWithoutRef<"input"> & {
   className?: string;
   label?: string;
-  onChange: (e: any) => void;
+  onChange: (e: boolean) => void;
 };
 
 function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
@@ -18,7 +18,7 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       <input
         id={generatedId}
         type="checkbox"
-        onChange={onChange}
+        onChange={(e) => onChange && onChange(e.target.checked)}
         {...props}
         className={clsx(
           "peer cursor-pointer appearance-none",
