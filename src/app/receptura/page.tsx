@@ -473,7 +473,6 @@ function Galerie({
   );
 
   useEffect(() => {
-    console.log("tu");
     function keyboardHandler(e: any) {
       const code = e.code;
 
@@ -561,10 +560,11 @@ function Galerie({
 
     function returnStart() {
       if (!imageOpen || !miniImages) return 0;
+      console.log(imageOpen + miniImages, imagesLength);
 
       if (imageOpen - miniImages < 0) return 0;
       else if (imageOpen + miniImages > imagesLength - 1)
-        return imagesLength - 1 - miniImages;
+        return imagesLength - miniImages;
       else return imageOpen - miniImages / 2;
     }
     const start = returnStart();
@@ -575,7 +575,7 @@ function Galerie({
           !fullImageMode && "md:grid"
         }`}
       >
-        {images.slice(start, miniImages).map((image, index) => (
+        {images.slice(start, start + miniImages).map((image, index) => (
           <button
             key={"gifmi" + index}
             onClick={() => setImageOpen(start + index)}
