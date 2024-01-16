@@ -2,16 +2,18 @@ import { cn } from "@/utils/cn";
 import { clsx } from "clsx";
 import React, { useId } from "react";
 import { CheckIcon } from "../icons";
-import Label from "./Label";
 
 type CheckboxProps = React.ComponentPropsWithoutRef<"input"> & {
   className?: string;
   label?: string;
-  onChange: (e: boolean) => void;
+  onChange?: (e: boolean) => void;
 };
 
 function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
   const generatedId = useId();
+  {
+    console.log(label, props.checked);
+  }
 
   return (
     <div className={cn("flex cursor-pointer gap-2", className)}>
@@ -41,9 +43,9 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       />
 
       {label && (
-        <Label htmlFor={generatedId} className="cursor-pointer pt-0.5">
+        <label htmlFor={generatedId} className="cursor-pointer pt-0.5">
           {label}
-        </Label>
+        </label>
       )}
     </div>
   );
