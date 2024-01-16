@@ -1,4 +1,5 @@
 "use client";
+import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
 import {
   ArrowDownwardAltIcon,
@@ -361,12 +362,12 @@ export default function Receptury({
         {open && (
           <ul>
             {options.map((o: any, oIndex: number) => (
-              <li
-                key={"sbbo" + oIndex}
-                className={`cursor-pointer ${o.checked && "bg-primary"}`}
-                onClick={() => updateSideBarValue(bIndex, oIndex, !o.checked)}
-              >
-                {o.title}
+              <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+                <Checkbox
+                  defaultChecked={o.checked}
+                  label={o.title}
+                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                />
               </li>
             ))}
           </ul>

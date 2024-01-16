@@ -50,7 +50,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
 // Card for grid layout
 function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-full")}>
+    <div className={cn("h-80 w-full min-w-[200px]")}>
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",

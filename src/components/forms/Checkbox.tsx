@@ -1,5 +1,4 @@
 import { cn } from "@/utils/cn";
-import { clsx } from "clsx";
 import React, { useId } from "react";
 import { CheckIcon } from "../icons";
 
@@ -11,18 +10,15 @@ type CheckboxProps = React.ComponentPropsWithoutRef<"input"> & {
 
 function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
   const generatedId = useId();
-  {
-    console.log(label, props.checked);
-  }
 
   return (
-    <div className={cn("flex cursor-pointer gap-2", className)}>
+    <div className={cn("flex cursor-pointer items-center gap-2", className)}>
       <input
         id={generatedId}
         type="checkbox"
         onChange={(e) => onChange && onChange(e.target.checked)}
         {...props}
-        className={clsx(
+        className={cn(
           "peer cursor-pointer appearance-none",
           "h-5 w-5 rounded-md border-2 border-black",
           "transition duration-150 ease-in-out",
@@ -33,7 +29,7 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       />
 
       <CheckIcon
-        className={clsx(
+        className={cn(
           "pointer-events-none invisible absolute transition-opacity duration-150 peer-checked:visible"
         )}
         size={20}
