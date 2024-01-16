@@ -98,13 +98,15 @@ function RowCardLayout({ label, badges, img }: RecipeCardProps) {
         </div>
       )}
       <div className="flex flex-grow flex-row items-center justify-between overflow-hidden rounded-r-2xl border-2 border-l-0 border-primary-300/30 bg-white">
-        <div className="line-clamp-3 pl-[20px] pr-2 text-sm font-bold">
+        <div className="line-clamp-3 w-80 pl-[20px] pr-2 text-sm font-bold">
           <p>{label}</p>
         </div>
-        <BadgeRenderer badges={badges} />
-        <div className="items-center ">
-          <div className="flex space-x-2 p-3">
-            <ActionButtons isGridView={false} />
+        <div className="flex items-center justify-between gap-12">
+          <BadgeRenderer badges={badges} />
+          <div className="items-center ">
+            <div className="flex space-x-2 p-3">
+              <ActionButtons isGridView={false} />
+            </div>
           </div>
         </div>
       </div>
