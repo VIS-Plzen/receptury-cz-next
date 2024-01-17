@@ -38,8 +38,10 @@ function RecipeCardsGrid({
     <div
       className={cn(
         "flex flex-col justify-center gap-4 overflow-x-auto py-6 md:overflow-x-hidden",
-        gridView && !cardsInGrid && "md:grid md:grid-cols-5 lg:grid-cols-6",
-        cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
+        gridView &&
+          !cardsInGrid &&
+          "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+        // cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
         className
       )}
     >

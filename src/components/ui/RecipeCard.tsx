@@ -22,13 +22,16 @@ function ActionButtons({ isGridView }: any) {
   return (
     <div className={cn("flex flex-row space-x-1", !isGridView && "space-x-3")}>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon icon="favorite" />
+        <ButtonIcon
+          icon="favorite"
+          aria-label="Přidat recepturu do oblíbených"
+        />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon icon="share" />
+        <ButtonIcon icon="share" aria-label="Sdílet recepturu" />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon icon="archive" />
+        <ButtonIcon icon="archive" aria-label="Uložit recepturu" />
       </div>
     </div>
   );
@@ -50,7 +53,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
 // Card for grid layout
 function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-full min-w-[200px]")}>
+    <div className={cn("h-80 w-full min-w-[180px]")}>
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",

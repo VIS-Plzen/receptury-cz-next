@@ -36,6 +36,7 @@ export default function Inspirace() {
         <ButtonIcon
           icon={!isVisible ? "visibility" : "visibility-off"}
           onClick={() => setLocalVisible(!isVisible)}
+          aria-label={!isVisible ? "Zobrazit inspirace" : "Skrýt inspirace"}
         />
       </div>
     );

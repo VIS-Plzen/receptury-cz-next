@@ -116,9 +116,12 @@ export default function Paginator({
         }`}
       >
         {back ? (
-          <ChevronLeftIcon className={iconSize} />
+          <ChevronLeftIcon
+            className={iconSize}
+            aria-label="Předchozí stránka"
+          />
         ) : (
-          <ChevronRightIcon className={iconSize} />
+          <ChevronRightIcon className={iconSize} aria-label="Další stránka" />
         )}
       </button>
     );

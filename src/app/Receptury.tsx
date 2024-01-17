@@ -271,6 +271,7 @@ export default function Receptury({
             options={combo.options}
             selectedOption={combo.value}
             onChange={(value: string) => updateCombobox(index, value)}
+            aria-label={"Vyhledat " + combo.title}
           />
         ))}
       </div>
@@ -298,7 +299,7 @@ export default function Receptury({
             </>
           ) : (
             <>
-              zobrazit mřízku <CalendarViewMontsIcon />
+              zobrazit mřížku <CalendarViewMontsIcon />
             </>
           )}
         </button>
@@ -355,7 +356,10 @@ export default function Receptury({
           <Heading as="h3" size="xs">
             {title}
           </Heading>
-          <button onClick={() => setOpen(!open)}>
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label={!open ? "Zobrazit" : "Skrýt"}
+          >
             <ArrowDownwardAltIcon className={`${!open && "rotate-180"}`} />
           </button>
         </div>
@@ -398,7 +402,7 @@ export default function Receptury({
         <SideBar />
         <RecipeCardsGrid
           className="col-span-5 pt-0"
-          cardsInGrid={gridView ? 5 : 0}
+          // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
           isLoading={isLoading}
           data={data}
