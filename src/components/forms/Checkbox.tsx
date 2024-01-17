@@ -12,20 +12,21 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
   const generatedId = useId();
 
   return (
-    <div className={cn("flex cursor-pointer items-center gap-2", className)}>
+    <div className={cn("flex cursor-pointer items-center gap-x-1", className)}>
       <input
         id={generatedId}
         type="checkbox"
         onChange={(e) => onChange && onChange(e.target.checked)}
         {...props}
         className={cn(
-          "peer cursor-pointer appearance-none",
-          "h-5 w-5 rounded-md border-2 border-black",
+          "peer flex-none cursor-pointer appearance-none",
+          "rounded-md border-2 border-black",
           "transition duration-150 ease-in-out",
           "focus:ring-gray-200",
           "checked:border-primary-500 checked:bg-primary-500 checked:focus:ring-primary-500/30",
           "relative"
         )}
+        style={{ height: "20px", width: "20px" }}
       />
 
       <CheckIcon
