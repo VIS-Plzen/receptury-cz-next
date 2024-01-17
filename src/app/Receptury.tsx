@@ -5,6 +5,7 @@ import {
   ArrowDownwardAltIcon,
   CalendarViewMontsIcon,
   CancelIcon,
+  ListIcon,
   TuneIcon,
 } from "@/components/icons";
 import Button from "@/components/ui/Button";
@@ -12,6 +13,8 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import { cn } from "@/utils/cn";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -183,6 +186,47 @@ export default function Receptury({
     updateQuery();
   }
 
+  type Props = {
+    className?: string;
+  };
+
+  function ToggleGridButton(className: Props) {
+    return (
+      <ToggleGroup.Root
+        className={cn(
+          className,
+          "ToggleGroup relative space-x-2 rounded-2xl border-black bg-primary-100 px-1.5 pt-1.5"
+        )}
+        type="single"
+        defaultValue="grid"
+        aria-label="View"
+      >
+        <ToggleGroup.Item
+          className={cn(
+            "ToggleGroupItem rounded-xl",
+            !gridView && "bg-primary-300/60 transition duration-100"
+          )}
+          value="row"
+          aria-label="Row view"
+          onClick={() => setGridView(false)}
+        >
+          <ListIcon size={32} className="m-1" />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item
+          className={cn(
+            "ToggleGroupItem rounded-xl",
+            gridView && "bg-primary-300/60 transition duration-100"
+          )}
+          value="grid"
+          aria-label="Grid view"
+          onClick={() => setGridView(true)}
+        >
+          <CalendarViewMontsIcon size={32} className="m-1" />
+        </ToggleGroup.Item>
+      </ToggleGroup.Root>
+    );
+  }
+
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   function updateQuery() {
     let query = urlPreQuery;
@@ -288,21 +332,7 @@ export default function Receptury({
           </p>
         </div>
         <Comboboxes className="hidden flex-row gap-x-5 md:flex" />
-
-        <button
-          className="hidden w-[150px] items-center gap-x-1 font-bold md:flex"
-          onClick={() => setGridView(!gridView)}
-        >
-          {gridView ? (
-            <>
-              zobrazit řádky <CalendarViewMontsIcon />
-            </>
-          ) : (
-            <>
-              zobrazit mřížku <CalendarViewMontsIcon />
-            </>
-          )}
-        </button>
+        <ToggleGridButton className="hidden" />
         <Button
           variant="black"
           className="h-min md:hidden"
