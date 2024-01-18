@@ -12,6 +12,7 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import clsx from "clsx";
 import Image from "next/image";
+import image1 from "public/images/food.jpeg";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import VolitelnyObsah from "../VolitelnyObsah";
 
@@ -134,24 +135,32 @@ function Hero({
 }) {
   return (
     <Container>
-      <div className="relative flex flex-col gap-y-3 rounded-3xl border-2 border-primary-600/30 bg-white p-5 md:flex-row-reverse md:justify-between md:gap-x-7 md:pr-0">
-        <div className="mx-auto flex h-[300px] w-full rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:max-w-[650px] lg:h-[400px] lg:max-w-[750px]"></div>
-        <div className="flex flex-col gap-y-5 p-3 md:max-w-[450px] md:px-0">
-          <div className="flex flex-col gap-y-3 md:flex-col-reverse">
-            <div className="flex gap-x-2">
-              <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
-                Logo
-              </span>
-              <span>Tento recept pro vás připravila společnost {jmeno}</span>
-            </div>
-            <Heading as="h1">{title}</Heading>
+      <div className="relative flex flex-col overflow-hidden rounded-3xl bg-white md:flex-row-reverse md:justify-between md:pr-0">
+        {/* <div className="mx-auto flex h-[300px] w-full rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:max-w-[650px] lg:h-[400px] lg:max-w-[750px]"></div> */}
+        <div>
+          <Image src={image1} alt="" width={1000} />
+        </div>
+
+        <div className="flex flex-col gap-y-5 rounded-b-3xl border-2 border-t-0 border-primary-300/60 p-5 md:rounded-e-none md:rounded-l-3xl md:border-2 md:border-r-0 md:px-0">
+          <div className="flex gap-x-2 md:mt-auto md:px-10">
+            <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
+              Logo
+            </span>
+            <span className="line-clamp-1">
+              Tento recept pro vás připravila společnost {jmeno}
+            </span>
           </div>
-          <div className="flex gap-x-1.5">
+          <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">
+            <Heading className="line-clamp-3 w-5/6" as="h1">
+              {title}
+            </Heading>
+          </div>
+          <div className="flex gap-x-1.5 md:px-10">
             {badges.map((badge, index) => (
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 flex gap-x-3 md:static md:mt-20">
+          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10 ">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -164,7 +173,8 @@ function Hero({
                 <ButtonIcon
                   onClick={icon.onClick}
                   icon={icon.name}
-                ></ButtonIcon>
+                  className="bg-white"
+                />
                 <span className="hidden text-sm font-bold md:block">
                   {icon.label}
                 </span>
