@@ -1,3 +1,4 @@
+import DebugContextProvider from "@/context/Debug";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
@@ -26,12 +27,17 @@ export default function RootLayout({
       <body
         className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        <SkipNavigationButton href="#obsah" className="hidden lg:inline-flex" />
-        <header>
-          <Navbar />
-        </header>
-        <main id="obsah">{children}</main>
-        <Footer />
+        <DebugContextProvider>
+          <SkipNavigationButton
+            href="#obsah"
+            className="hidden lg:inline-flex"
+          />
+          <header>
+            <Navbar />
+          </header>
+          <main id="obsah">{children}</main>
+          <Footer />
+        </DebugContextProvider>
       </body>
     </html>
   );
