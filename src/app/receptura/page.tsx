@@ -240,7 +240,7 @@ function Informations({
 
     return (
       <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 md:w-min">
-        <Heading>Kalkulačka surovin</Heading>
+        <Heading size="sm">Kalkulačka surovin</Heading>
         <div className="flex flex-row gap-x-5 border-b-2 border-primary-300/60 py-3">
           <div className="flex gap-x-1.5">
             <label
@@ -341,16 +341,16 @@ function Informations({
   }
   function Postup() {
     return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-3">
-        <Heading>Postup</Heading>
+      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+        <Heading size="sm">Postup</Heading>
         <p>{postup}</p>
       </div>
     );
   }
   function Alergeny() {
     return (
-      <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-3">
-        <Heading>Alergeny</Heading>
+      <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+        <Heading size="sm">Alergeny</Heading>
         <div className="flex flex-row gap-x-3">
           {alergeny.alergeny.map((alergen, index) => (
             <span
@@ -367,8 +367,8 @@ function Informations({
   }
   function Skladba() {
     return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-3">
-        <Heading>Doporučení ke skladbě</Heading>
+      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+        <Heading size="sm">Doporučení ke skladbě</Heading>
         <p>
           <span className="font-bold text-black">Doporučená polévka: </span>dle
           použité přílohy - s bramborem, s obilovinou
@@ -386,8 +386,8 @@ function Informations({
   }
   function Terapeut() {
     return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-3">
-        <Heading>Nutriční terapeut</Heading>
+      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+        <Heading size="sm">Nutriční terapeut</Heading>
         <p>{terapeut.text}</p>
         <div className="flex flex-row gap-1.5">
           {terapeut.badges.map((badge, index) => (
