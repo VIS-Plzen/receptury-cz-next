@@ -1,5 +1,6 @@
 "use client";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { cn } from "@/utils/cn";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 
@@ -102,7 +103,7 @@ export default function Paginator({
           back ? changePage(currentPage - 1) : changePage(currentPage + 1);
         }}
         tabIndex={isDisabled ? -1 : undefined}
-        className={`rounded-full bg-white text-black duration-300
+        className={`rounded-full border-2 border-primary-200 bg-white p-1 text-black duration-300 hover:border-primary
         ${
           isDisabled
             ? "cursor-default opacity-30 ring-0"
@@ -117,11 +118,14 @@ export default function Paginator({
       >
         {back ? (
           <ChevronLeftIcon
-            className={iconSize}
+            className={cn(iconSize, "pr-0.5")}
             aria-label="Předchozí stránka"
           />
         ) : (
-          <ChevronRightIcon className={iconSize} aria-label="Další stránka" />
+          <ChevronRightIcon
+            className={cn(iconSize, "pl-0.5")}
+            aria-label="Další stránka"
+          />
         )}
       </button>
     );
@@ -129,7 +133,7 @@ export default function Paginator({
   return (
     <div className="my-7 flex w-full flex-row justify-center gap-x-2">
       <ChevronButton back />
-      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full bg-white text-black md:px-3">
+      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full border-2 border-primary-200 bg-white p-1 text-black">
         <DayButton page={1} />
         {currentPage + offset <= pagesOffset ? (
           <>
