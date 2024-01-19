@@ -11,6 +11,7 @@ type RecipeCardProps = {
   img?: any;
   badges: string[];
   assertCard?: boolean;
+  className?: string;
 };
 
 type BadgesProps = {
@@ -51,9 +52,15 @@ function BadgeRenderer({ badges }: BadgesProps) {
 }
 
 // Card for grid layout
-function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function GridCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-full min-w-[180px]")}>
+    <div className={cn("h-80 w-full min-w-[180px]", className)}>
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
@@ -110,12 +117,19 @@ function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
 }
 
 // Card for row layout
-function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function RowCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
     <div
       className={cn(
         "flex h-[70px] flex-row justify-between",
-        isLoading && "animate-pulse"
+        isLoading && "animate-pulse",
+        className
       )}
     >
       {img ? (
@@ -180,12 +194,19 @@ function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
 }
 
 // Mobile card
-function MobileCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function MobileCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
     <div
       className={cn(
         "flex h-[90px] items-center justify-start overflow-hidden",
-        isLoading && "animate-pulse"
+        isLoading && "animate-pulse",
+        className
       )}
     >
       {img ? (
@@ -249,6 +270,7 @@ function RecipeCard({
   img,
   badges,
   assertCard,
+  className,
 }: RecipeCardProps) {
   return (
     <>
@@ -260,6 +282,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           ) : (
             <MobileCardLayout
@@ -267,6 +290,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           )}
         </div>
@@ -277,6 +301,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           ) : (
             <RowCardLayout
@@ -284,6 +309,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           )}
         </div>

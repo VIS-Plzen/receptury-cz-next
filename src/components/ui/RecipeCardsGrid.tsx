@@ -42,7 +42,8 @@ function RecipeCardsGrid({
           !cardsInGrid &&
           "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
         // cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
-        className
+        className,
+        assertCard && "snap-x"
       )}
     >
       {data
@@ -55,6 +56,7 @@ function RecipeCardsGrid({
               badges={card.badges}
               img={card.img}
               assertCard={assertCard}
+              className={cn(assertCard && "snap-center")}
             />
           ))
         : length &&
@@ -66,6 +68,7 @@ function RecipeCardsGrid({
               label={label1}
               badges={badgesArray}
               assertCard={assertCard}
+              className={cn(assertCard && "snap-center")}
             />
           ))}
     </div>
