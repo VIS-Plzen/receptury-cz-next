@@ -16,7 +16,7 @@ export default function Inspirace() {
   useEffect(() => {
     if (!window) return;
     const localVisible =
-      window.localStorage.getItem("inspiraceVisible") === "true";
+      window.localStorage.getItem("inspiraceVisible") !== "false";
     setIsVisible(localVisible);
   });
 
