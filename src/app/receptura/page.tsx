@@ -138,7 +138,12 @@ function Hero({
       <div className="relative flex flex-col overflow-hidden rounded-3xl bg-white md:flex-row-reverse md:justify-between md:pr-0">
         {/* <div className="mx-auto flex h-[300px] w-full rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:max-w-[650px] lg:h-[400px] lg:max-w-[750px]"></div> */}
         <div>
-          <Image src={image1} alt="" width={1000} />
+          <Image
+            src={image1}
+            alt=""
+            className="h-full"
+            style={{ objectFit: "cover" }}
+          />
         </div>
 
         <div className="flex flex-col gap-y-5 rounded-b-3xl border-2 border-t-0 border-primary-300/60 p-5 md:rounded-e-none md:rounded-l-3xl md:border-2 md:border-r-0 md:px-0">
@@ -146,12 +151,12 @@ function Hero({
             <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
               Logo
             </span>
-            <span className="line-clamp-1">
+            <span className="line-clamp-2">
               Tento recept pro vás připravila společnost {jmeno}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">
-            <Heading className="line-clamp-3 w-5/6" as="h1">
+            <Heading className="line-clamp-4 w-5/6" as="h1">
               {title}
             </Heading>
           </div>
