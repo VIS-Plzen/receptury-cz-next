@@ -422,7 +422,7 @@ function Informations({
         </div>
         <div className="flex flex-col gap-5">
           <Postup />
-          <div className="flex flex-col gap-5 md:flex-row">
+          <div className="flex flex-col gap-5 xl:flex-row">
             <Alergeny />
             <Skladba />
           </div>
