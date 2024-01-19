@@ -186,11 +186,7 @@ export default function Receptury({
     updateQuery();
   }
 
-  type Props = {
-    className?: string;
-  };
-
-  function ToggleGridButton(className: Props) {
+  function ToggleGridButton({ className }: { className: string }) {
     return (
       <ToggleGroup.Root
         className={cn(
@@ -332,7 +328,7 @@ export default function Receptury({
           </p>
         </div>
         <Comboboxes className="hidden flex-row gap-x-5 md:flex" />
-        <ToggleGridButton className="hidden" />
+        <ToggleGridButton className="hidden md:block" />
         <Button
           variant="black"
           className="h-min md:hidden"
