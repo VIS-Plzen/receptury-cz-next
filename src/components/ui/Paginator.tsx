@@ -131,9 +131,9 @@ export default function Paginator({
     );
   }
   return (
-    <div className="my-7 flex w-full flex-row justify-center gap-x-2">
+    <div className="my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2">
       <ChevronButton back />
-      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full border-2 border-primary-200 bg-white p-1 text-black">
+      <div className="flex flex-row items-center justify-around rounded-full border-2 border-primary-200 bg-white p-1 text-black md:gap-x-1">
         <DayButton page={1} />
         {currentPage + offset <= pagesOffset ? (
           <>
