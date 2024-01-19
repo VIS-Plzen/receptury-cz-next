@@ -51,7 +51,7 @@ function RecipeCardsGrid({
             <RecipeCard
               key={index}
               isGridView={gridView}
-              isLoading={isLoading}
+              isLoading={true}
               label={card.title}
               badges={card.badges}
               img={card.img}

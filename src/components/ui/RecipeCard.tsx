@@ -98,9 +98,9 @@ function GridCardLayout({
           <p className={cn(isLoading && "hidden")}>{label}</p>
           {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
-            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
-            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
-            <div className="inline-block h-4 w-7 animate-pulse rounded-full bg-gray-500"></div>
+            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
+            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
+            <div className="inline-block h-4 w-7 animate-pulse rounded-full bg-gray-300"></div>
           </div>
         </div>
         <div className={cn(isLoading && "hidden")}>
@@ -167,7 +167,7 @@ function RowCardLayout({
           <p className={cn("block", isLoading && "hidden")}>{label}</p>
           <div
             className={cn(
-              isLoading && " h-4 w-full rounded-full bg-gray-500",
+              isLoading && " h-4 w-full rounded-full bg-gray-300",
               !isLoading && "hidden"
             )}
           ></div>
@@ -254,7 +254,7 @@ function MobileCardLayout({
         </div>
         <div
           className={cn(
-            isLoading && "ml-4 h-4 w-7/12 rounded-full bg-gray-500",
+            isLoading && "ml-4 h-4 w-7/12 rounded-full bg-gray-300",
             !isLoading && "hidden"
           )}
         ></div>
