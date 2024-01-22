@@ -4,9 +4,11 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { cn } from "@/utils/cn";
 import { useEffect, useState } from "react";
+import "swiper/css";
 
-export default function Inspirace() {
+export default function Inspirace({ className = "" }: { className?: string }) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const [selected, setSelected] = useState<
@@ -43,42 +45,46 @@ export default function Inspirace() {
   }
 
   return (
-    <Container>
-      <div className="flex flex-row items-center justify-between">
-        <Heading as="h1" size="lg">
-          Inspirace na vaření
-        </Heading>
-        <HideButton className="ml-auto flex" />
-      </div>
-      <div className={`${!isVisible && "hidden"}`}>
-        <div className="flex w-full items-center justify-between pt-5 md:pt-20">
-          <Tabs
-            defaultValue={selected}
-            className="w-full"
-            onValueChange={(value: string) => setSelected(value)}
-          >
-            <div className="flex w-full flex-row justify-between">
-              <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
-                <TabsTrigger value="recommended" className="w-full">
-                  Doporučené pro vás
-                </TabsTrigger>
-                <TabsTrigger value="favorites" className="w-full">
-                  Oblíbené
-                </TabsTrigger>
-                <TabsTrigger value="new" className="w-full">
-                  Nové recepty
-                </TabsTrigger>
-              </TabsList>
-            </div>
-          </Tabs>
+    <div className={cn(className)}>
+      <Container>
+        <div className="flex flex-row items-center justify-between">
+          <Heading as="h1" size="lg">
+            Inspirace na vaření
+          </Heading>
+          <HideButton className="ml-auto flex" />
         </div>
+        <div className={`${!isVisible && "hidden"}`}>
+          <div className="flex w-full items-center justify-between pt-5 md:pt-20">
+            <Tabs
+              defaultValue={selected}
+              className="w-full"
+              onValueChange={(value: string) => setSelected(value)}
+            >
+              <div className="flex w-full flex-row justify-between">
+                <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
+                  <TabsTrigger value="recommended" className="w-full">
+                    Doporučené pro vás
+                  </TabsTrigger>
+                  <TabsTrigger value="favorites" className="w-full">
+                    Oblíbené
+                  </TabsTrigger>
+                  <TabsTrigger value="new" className="w-full">
+                    Nové recepty
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </Tabs>
+          </div>
+        </div>
+      </Container>
+      <Container className="pr-0">
         <RecipeCardsGrid
           length={15}
           gridView
           assertCard
-          className="flex flex-row"
+          className="flex flex-row overflow-visible"
         />
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 }

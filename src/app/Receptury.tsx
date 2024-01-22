@@ -15,6 +15,7 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { cn } from "@/utils/cn";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -187,37 +188,54 @@ export default function Receptury({
   }
 
   function ToggleGridButton({ className }: { className: string }) {
+    const variants = {
+      grid: { x: 0 }, // Position for grid view
+      row: { x: "100%" }, // Position for row view, adjust as needed
+    };
+
     return (
       <ToggleGroup.Root
         className={cn(
           className,
-          "ToggleGroup relative space-x-2 rounded-2xl border-black bg-primary-100 px-1.5 pt-1.5"
+          "ToggleGroup relative space-x-2 rounded-2xl border-2 border-primary-100 px-2 pt-2"
         )}
         type="single"
         defaultValue="grid"
         aria-label="View"
       >
+        <AnimatePresence>
+          <motion.div
+            className="absolute inset-0 m-2 w-1/2 rounded-xl bg-primary-100"
+            variants={variants}
+            animate={gridView ? "grid" : "row"}
+            transition={{ type: "tween", duration: 0.3 }}
+          />
+        </AnimatePresence>
         <ToggleGroup.Item
-          className={cn(
-            "ToggleGroupItem rounded-xl",
-            !gridView && "bg-primary-300/60 transition duration-100"
-          )}
-          value="row"
-          aria-label="Row view"
-          onClick={() => setGridView(false)}
-        >
-          <ListIcon size={32} className="m-1" />
-        </ToggleGroup.Item>
-        <ToggleGroup.Item
-          className={cn(
-            "ToggleGroupItem rounded-xl",
-            gridView && "bg-primary-300/60 transition duration-100"
-          )}
+          className={cn("ToggleGroupItem rounded-xl")}
           value="grid"
           aria-label="Grid view"
           onClick={() => setGridView(true)}
         >
-          <CalendarViewMontsIcon size={32} className="m-1" />
+          <div className="relative">
+            {/* {gridView && (
+              <motion.div className="absolute inset-0 z-10 rounded-xl bg-primary-100 mix-blend-multiply" />
+            )} */}
+            <CalendarViewMontsIcon size={32} className="m-1.5" />
+          </div>
+        </ToggleGroup.Item>
+        <ToggleGroup.Item
+          className={cn("ToggleGroupItem rounded-xl")}
+          value="row"
+          aria-label="Row view"
+          onClick={() => setGridView(false)}
+        >
+          <div className="relative">
+            {/* {!gridView && (
+              <motion.div className="absolute inset-0 z-10 rounded-xl bg-primary-100 mix-blend-multiply" />
+            )} */}
+            <ListIcon size={32} className="m-1.5" />
+          </div>
         </ToggleGroup.Item>
       </ToggleGroup.Root>
     );
@@ -390,7 +408,7 @@ export default function Receptury({
           </button>
         </div>
         {open && (
-          <ul>
+          <ul className="space-y-1">
             {options.map((o: any, oIndex: number) => (
               <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
                 <Checkbox

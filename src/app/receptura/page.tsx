@@ -117,6 +117,7 @@ export default function Home() {
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
+        img="/public/images/food.jpeg"
       />
     </div>
   );
@@ -432,11 +433,19 @@ function Informations({
     </Container>
   );
 }
-export function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
+export function Partner({
+  jmeno,
+  heslo,
+  img,
+}: {
+  jmeno: string;
+  heslo: string;
+  img: any;
+}) {
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] max-h-[450px] w-full rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent px-3 py-5 md:aspect-[3/1] md:max-h-full md:items-center md:bg-gradient-to-r md:p-10">
-        <div className="flex flex-col gap-y-5">
+      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent md:aspect-[3/1] md:max-h-full md:flex-row md:items-center md:bg-gradient-to-r">
+        <div className="my-5 flex flex-col gap-y-5 pl-5 md:pl-10">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
           </span>
@@ -444,7 +453,14 @@ export function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
           <p className="font-semibold text-white">{heslo}</p>
           <Button className="w-min">Více o nás</Button>
         </div>
-        <span className="absolute right-5 top-5 text-xs text-secondary-900">
+        <div className="z-10 flex h-full w-full justify-end">
+          <Image
+            src={img}
+            className="h-full w-full object-cover md:w-8/12"
+            alt=""
+          />
+        </div>
+        <span className="absolute right-5 top-5 z-20 text-xs text-secondary-900">
           Inspirační foto
         </span>
       </div>
