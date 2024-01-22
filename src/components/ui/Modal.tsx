@@ -1,9 +1,10 @@
+"use client";
 import Container from "@/components/ui/Container";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import type { MutableRefObject } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeftAltIcon } from "../icons";
 import CloseButton from "./CloseButton";
 
@@ -23,7 +24,7 @@ type ModalProps = {
 };
 
 const componentVariants = {
-  root: "top-[12%] tablet:top-[15%] left-1/2 -translate-x-1/2 w-[92%] max-h-[76%] tablet:max-h-[70%] h-auto overflow-y-auto z-modal-above bg-surface-100 rounded-2xl origin-top",
+  root: "top-[12%] md:top-[15%] left-1/2 -translate-x-1/2 w-[92%] max-h-[76%] md:max-h-[70%] h-auto overflow-y-auto z-modal-above bg-surface-100 rounded-2xl origin-top",
   width: {
     sm: "max-w-lg",
     md: "max-w-2xl",
@@ -46,7 +47,6 @@ export default function Modal({
   setCity,
   cancelAnimations,
 }: ModalProps) {
-  // Manage initial focus manually -> different from headlessui approach, where they cover this for us
   useEffect(() => {
     if (isOpen && initialFocus) {
       const timer = setTimeout(() => {
@@ -160,12 +160,22 @@ export default function Modal({
                   </DialogPrimitive.Close>
                 </Container>
 
-                <Container>{children}</Container>
+                <Container className="bg-white">{children}</Container>
               </DialogPrimitive.Content>
             </motion.div>
           </DialogPrimitive.Portal>
         )}
       </AnimatePresence>
     </DialogPrimitive.Root>
+  );
+}
+
+export function ModalTester() {
+  const [open, setOpen] = useState<boolean>(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>ukaž modal</button>
+      <Modal isOpen={open} setIsOpen={setOpen}></Modal>
+    </>
   );
 }

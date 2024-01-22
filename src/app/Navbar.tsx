@@ -18,20 +18,20 @@ const menuRoutes = [
     href: "/",
   },
   {
+    label: "Receptura",
+    href: "/receptura",
+  },
+  {
+    label: "Partner",
+    href: "/partner",
+  },
+  {
+    label: "Uživatel",
+    href: "/uzivatel",
+  },
+  {
     label: "Komponenty",
     href: "/components",
-  },
-  {
-    label: "Testing",
-    href: "/testing",
-  },
-  {
-    label: "Partner 1",
-    href: "/partner-1",
-  },
-  {
-    label: "Partner 2",
-    href: "/partner-2",
   },
   {
     label: "Kontakt",
@@ -98,6 +98,28 @@ function BurgerButton({
         )}
       />
     </button>
+  );
+}
+
+function DropdownMenu({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}) {
+  return (
+    <>
+      {isOpen && (
+        <div className="absolute left-0 mt-60 rounded-2xl border-2 border-primary-200 bg-white">
+          <ul className="space-y-2 p-4">
+            <StyledLink>Osobní informace</StyledLink>
+            <StyledLink>Oblíbené recepty</StyledLink>
+            <StyledLink>Odhlásit se</StyledLink>
+          </ul>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -176,6 +198,9 @@ function TouchMenu({
 }
 
 export default function Navbar() {
+  // Dropdown menu state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   // Menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -237,12 +262,23 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden w-56 items-center justify-start gap-2 lg:flex">
+        <div
+          className="relative hidden w-56 cursor-pointer items-center justify-start gap-2 lg:flex"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          // onMouseEnter={() => setIsDropdownOpen(!isDropdownOpen)}
+          // onMouseLeave={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
           <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
           <span className="mr-auto block font-semibold leading-tight">
             Jméno Příjmení
           </span>
-          <ExpandMoreIcon className="shrink-0" />
+          <ExpandMoreIcon
+            className={cn(
+              "animate shrink-0 duration-100",
+              isDropdownOpen && "animate rotate-180 duration-100"
+            )}
+          />
+          <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />
         </div>
 
         <BurgerButton
