@@ -50,6 +50,7 @@ function ActiveNavLink({
 }) {
   const pathname = usePathname();
   const isActive = pathname === props.href;
+
   return (
     <StyledLink
       asChild
