@@ -17,7 +17,7 @@ export default function Paginator({
 }: Props) {
   // set by ElipssisButton - on click sets +/- 5, showing currenently selected page + offset <DayButton>s
   const [offset, setOffset] = useState<number>(0);
-  const iconSize = "h-9 w-9";
+  const iconSize = "h-8 w-8 sm:h-9 sm:w-9";
   const isTablet = useMediaQuery("(min-width: 768px)");
   const pagesOffset = isTablet ? 5 : 3;
 

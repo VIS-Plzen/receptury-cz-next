@@ -18,7 +18,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
   useEffect(() => {
     if (!window) return;
     const localVisible =
-      window.localStorage.getItem("inspiraceVisible") === "true";
+      window.localStorage.getItem("inspiraceVisible") !== "false";
     setIsVisible(localVisible);
   });
 
@@ -77,7 +77,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           </div>
         </div>
       </Container>
-      <Container className="pr-0">
+      <Container className="md:pr pr-0">
         <RecipeCardsGrid
           length={15}
           gridView

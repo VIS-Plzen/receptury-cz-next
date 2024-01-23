@@ -42,7 +42,7 @@ function RecipeCardsGrid({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center gap-4 overflow-visible py-6 md:overflow-x-hidden",
+        "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
         gridView &&
           !cardsInGrid &&
           "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
@@ -62,17 +62,37 @@ function RecipeCardsGrid({
             />
           ))
         : length && (
-            <Swiper
-              spaceBetween={25}
-              slidesPerView={2}
-              modules={[Pagination]}
-              pagination={{ clickable: false }}
-              style={{
-                "--swiper-pagination-color": "#DE5A02",
-              }}
-            >
-              {Array.from({ length: length }, (_, index) => (
-                <SwiperSlide key={index} className="py-10">
+            <>
+              <Swiper
+                spaceBetween={25}
+                slidesPerView={2}
+                modules={[Pagination]}
+                pagination={{ clickable: false }}
+                style={{
+                  "--swiper-pagination-color": "#DE5A02",
+                }}
+                className="block md:hidden"
+              >
+                {Array.from({ length: length }, (_, index) => (
+                  <SwiperSlide key={index} className="block py-10 md:hidden">
+                    <RecipeCard
+                      key={index}
+                      isGridView={gridView}
+                      isLoading={isLoading}
+                      label={label1}
+                      badges={badgesArray}
+                      assertCard={assertCard}
+                      className="block md:hidden"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <div
+                className={cn(
+                  "hidden gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                )}
+              >
+                {Array.from({ length: length }, (_, index) => (
                   <RecipeCard
                     key={index}
                     isGridView={gridView}
@@ -80,11 +100,10 @@ function RecipeCardsGrid({
                     label={label1}
                     badges={badgesArray}
                     assertCard={assertCard}
-                    className="overflow-visible"
                   />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+                ))}
+              </div>
+            </>
           )}
     </div>
   );

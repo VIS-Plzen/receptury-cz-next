@@ -215,11 +215,11 @@ function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 flex gap-x-3">
+        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1 gap-y-3 sm:grid-cols-6">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
-              className={`flex w-min flex-col items-center text-center`}
+              className={`flex flex-col items-center text-center`}
             >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
               <span className="text-sm font-bold">{icon.label}</span>
@@ -231,7 +231,7 @@ function Informations({
   }
   function Hmotnost() {
     return (
-      <div className="flex flex-row justify-between rounded-3xl border-2 border-primary-300/60 bg-white p-5">
+      <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
         <span className="my-auto font-bold">Hmotnost</span>
         <div className="flex flex-row gap-x-3">
           <div className="flex flex-col items-center">
@@ -257,7 +257,7 @@ function Informations({
     return (
       <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 md:w-min">
         <Heading size="sm">Kalkulačka surovin</Heading>
-        <div className="flex flex-row gap-x-5 border-b-2 border-primary-300/60 py-3">
+        <div className="flex flex-col gap-5 border-b-2 border-primary-300/60 py-3 sm:flex-row">
           <div className="flex gap-x-1.5">
             <label
               htmlFor="pocet"
@@ -457,6 +457,7 @@ export function Partner({
           <Image
             src={img}
             className="h-full w-full object-cover md:w-8/12"
+            fill
             alt=""
           />
         </div>
