@@ -15,7 +15,7 @@ function ToggleGridButton({
   return (
     <ToggleGroup.Root
       className={cn(
-        "h-[52px] rounded-2xl border-2 border-primary-200 px-1.5 py-1.5",
+        "h-[52px] space-x-1 rounded-2xl border-2 border-primary-200 px-1.5 py-1.5",
         className
       )}
       type="single"

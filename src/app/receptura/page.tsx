@@ -117,7 +117,7 @@ export default function Home() {
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
-        img="/public/images/food.jpeg"
+        img={image1}
       />
     </div>
   );
@@ -457,7 +457,6 @@ export function Partner({
           <Image
             src={img}
             className="h-full w-full object-cover md:w-8/12"
-            fill
             alt=""
           />
         </div>

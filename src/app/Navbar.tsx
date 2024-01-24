@@ -6,6 +6,7 @@ import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
+import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import Link from "next/link";
@@ -37,6 +38,17 @@ const menuRoutes = [
     label: "Kontakt",
     href: "/kontakt",
   },
+];
+
+type DropdownItem = {
+  label: string;
+  href: string;
+};
+
+const dropdownData: DropdownItem[] = [
+  { label: "Osobní informace", href: "/" },
+  { label: "Oblíbené recepty", href: "/" },
+  { label: "Odhlásit se", href: "/" },
 ];
 
 // Hihlights link with href matching current url
@@ -102,25 +114,46 @@ function BurgerButton({
   );
 }
 
-function DropdownMenu({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}) {
+function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   return (
-    <>
-      {isOpen && (
-        <div className="absolute left-0 mt-60 rounded-2xl border-2 border-primary-200 bg-white">
-          <ul className="space-y-2 p-4">
-            <StyledLink>Osobní informace</StyledLink>
-            <StyledLink>Oblíbené recepty</StyledLink>
-            <StyledLink>Odhlásit se</StyledLink>
-          </ul>
-        </div>
-      )}
-    </>
+    <div className="">
+      <Menu as="div" className="relative text-left">
+        <Menu.Button>
+          <div className="hidden w-56 cursor-pointer items-center justify-start gap-2 lg:flex">
+            <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+            <span className="mr-auto block font-semibold leading-tight">
+              Jméno Příjmení
+            </span>
+            <ExpandMoreIcon className={cn("shrink-0")} />
+          </div>
+        </Menu.Button>
+        <Transition
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-primary-200 bg-white shadow-xl md:border-2">
+            <div className="flex flex-col p-1">
+              {dropdownData.map((item: DropdownItem) => (
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      className={`${active && "bg-primary-100"} rounded-xl p-2`}
+                      href={item.href}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </Menu.Item>
+              ))}
+            </div>
+          </Menu.Items>
+        </Transition>
+      </Menu>
+    </div>
   );
 }
 
@@ -190,6 +223,22 @@ function TouchMenu({
                   </li>
                 ))}
               </motion.ul>
+
+              <div className="mt-10 flex flex-col">
+                <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
+                  <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+                  <span className="mr-auto block font-semibold leading-tight">
+                    Jméno Příjmení
+                  </span>
+                </div>
+                {dropdownData.map((item, index) => (
+                  <ul className="pl-9 pt-2">
+                    <a href={item.href} key={index}>
+                      {item.label}
+                    </a>
+                  </ul>
+                ))}
+              </div>
             </Container>
           </motion.div>
         </>
@@ -263,24 +312,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div
-          className="relative hidden w-56 cursor-pointer items-center justify-start gap-2 lg:flex"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          // onMouseEnter={() => setIsDropdownOpen(!isDropdownOpen)}
-          // onMouseLeave={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
-          <span className="mr-auto block font-semibold leading-tight">
-            Jméno Příjmení
-          </span>
-          <ExpandMoreIcon
-            className={cn(
-              "animate shrink-0 duration-100",
-              isDropdownOpen && "animate rotate-180 duration-100"
-            )}
-          />
-          <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />
-        </div>
+        <DropdownMenu dropdownItems={dropdownData} />
 
         <BurgerButton
           isOpen={isMenuOpen}
