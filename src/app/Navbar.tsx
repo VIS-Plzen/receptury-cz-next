@@ -137,8 +137,8 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
         >
           <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-primary-200 bg-white shadow-xl md:border-2">
             <div className="flex flex-col p-1">
-              {dropdownData.map((item: DropdownItem) => (
-                <Menu.Item>
+              {dropdownData.map((item: DropdownItem, index) => (
+                <Menu.Item key={index}>
                   {({ active }) => (
                     <a
                       className={`${active && "bg-primary-100"} rounded-xl p-2`}
@@ -231,13 +231,13 @@ function TouchMenu({
                     Jméno Příjmení
                   </span>
                 </div>
-                {dropdownData.map((item, index) => (
-                  <ul className="pl-9 pt-2">
+                <ul className="pl-9 pt-2">
+                  {dropdownData.map((item, index) => (
                     <a href={item.href} key={index}>
                       {item.label}
                     </a>
-                  </ul>
-                ))}
+                  ))}
+                </ul>
               </div>
             </Container>
           </motion.div>
