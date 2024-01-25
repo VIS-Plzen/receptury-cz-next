@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -71,8 +71,8 @@ function GridCardLayout({
         )}
       >
         {img ? (
-          <div className={cn(isLoading && "hidden")}>
-            <Image alt="" src={img} className="h-full w-full" />
+          <div className={cn(isLoading && "hidden", "h-full")}>
+            <Image alt="" src={img} className="h-full w-full object-cover" />
           </div>
         ) : (
           <div className={cn("flex scale-125 justify-center pt-11")}>

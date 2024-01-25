@@ -1,6 +1,6 @@
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import img1 from "/public/images/food.jpeg";
 
 export default function VolitelnyObsah({
@@ -23,7 +23,11 @@ export default function VolitelnyObsah({
           <Heading hasMarginBottom>{title}</Heading>
           <p>{text}</p>
         </div>
-        <Image src={img1} className="rounded-2xl object-cover" />
+        <Image
+          src={img1}
+          alt=""
+          className="rounded-2xl object-cover md:w-1/2"
+        />
       </div>
     </Container>
   );

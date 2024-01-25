@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/utils/cn";
+import image1 from "public/images/food.jpeg";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -58,7 +59,7 @@ function RecipeCardsGrid({
               isLoading={isLoading}
               label={card.title}
               badges={card.badges}
-              img={card.img}
+              img={image1}
             />
           ))
         : length && (
