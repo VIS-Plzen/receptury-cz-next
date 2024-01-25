@@ -1,5 +1,7 @@
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import Image from "next/image";
+import img1 from "/public/images/food.jpeg";
 
 export default function VolitelnyObsah({
   title,
@@ -21,7 +23,11 @@ export default function VolitelnyObsah({
           <Heading hasMarginBottom>{title}</Heading>
           <p>{text}</p>
         </div>
-        <div className="mx-auto mb-6 flex h-[200px] w-[300px] flex-shrink-0 rounded-2xl bg-secondary-700 md:mx-0 md:mb-auto md:h-[275px] md:w-[275px] lg:h-[350px] lg:w-[350px]"></div>
+        <Image
+          src={img1}
+          alt=""
+          className="rounded-2xl object-cover md:w-1/2"
+        />
       </div>
     </Container>
   );

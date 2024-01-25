@@ -4,14 +4,37 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { useEffect, useState } from "react";
+import { cn } from "@/utils/cn";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import "swiper/css";
 
-export default function Inspirace() {
+export default function Inspirace({ className = "" }: { className?: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
+  const defaultTab = useMemo(
+    () => searchParams.get("tab") || "doporucene",
+    [searchParams.get("tab")]
+  );
   const [selected, setSelected] = useState<
-    "recommended" | "favorites" | "new" | string
-  >("recommended");
+    "doporucene" | "oblibene" | "nove" | string
+  >(defaultTab);
+
+  // useEffect(() => {
+  //   const newSearchParams = new URLSearchParams();
+  //   newSearchParams.set("tab", selected);
+  //   router.push(`${pathname}?${newSearchParams.toString()}`);
+  // }, [selected, router]);
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && tabParam !== selected) {
+      setSelected(tabParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!window) return;
@@ -43,42 +66,46 @@ export default function Inspirace() {
   }
 
   return (
-    <Container>
-      <div className="flex flex-row items-center justify-between">
-        <Heading as="h1" size="lg">
-          Inspirace na vaření
-        </Heading>
-        <HideButton className="ml-auto flex" />
-      </div>
-      <div className={`${!isVisible && "hidden"}`}>
-        <div className="flex w-full items-center justify-between pt-5 md:pt-20">
-          <Tabs
-            defaultValue={selected}
-            className="w-full"
-            onValueChange={(value: string) => setSelected(value)}
-          >
-            <div className="flex w-full flex-row justify-between">
-              <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
-                <TabsTrigger value="recommended" className="w-full">
-                  Doporučené pro vás
-                </TabsTrigger>
-                <TabsTrigger value="favorites" className="w-full">
-                  Oblíbené
-                </TabsTrigger>
-                <TabsTrigger value="new" className="w-full">
-                  Nové recepty
-                </TabsTrigger>
-              </TabsList>
-            </div>
-          </Tabs>
+    <div className={cn(className)}>
+      <Container>
+        <div className="flex flex-row items-center justify-between">
+          <Heading as="h1" size="lg">
+            Inspirace na vaření
+          </Heading>
+          <HideButton className="ml-auto flex" />
         </div>
+        <div className={`${!isVisible && "hidden"}`}>
+          <div className="flex w-full items-center justify-between pt-5 md:pt-20">
+            <Tabs
+              defaultValue={selected}
+              className="w-full"
+              onValueChange={(value: string) => setSelected(value)}
+            >
+              <div className="flex w-full flex-row justify-between">
+                <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
+                  <TabsTrigger value="doporucene" className="w-full">
+                    Doporučené pro vás
+                  </TabsTrigger>
+                  <TabsTrigger value="oblibene" className="w-full">
+                    Oblíbené
+                  </TabsTrigger>
+                  <TabsTrigger value="nove" className="w-full">
+                    Nové recepty
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </Tabs>
+          </div>
+        </div>
+      </Container>
+      <Container className="md:pr pr-0">
         <RecipeCardsGrid
           length={15}
           gridView
           assertCard
-          className="flex flex-row"
+          className="flex flex-row overflow-visible"
         />
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 }

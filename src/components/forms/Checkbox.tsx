@@ -12,7 +12,7 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
   const generatedId = useId();
 
   return (
-    <div className={cn("flex cursor-pointer items-center gap-x-1", className)}>
+    <div className={cn("flex cursor-pointer items-start gap-x-1", className)}>
       <input
         id={generatedId}
         type="checkbox"
@@ -40,7 +40,7 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       />
 
       {label && (
-        <label htmlFor={generatedId} className="cursor-pointer pt-0.5">
+        <label htmlFor={generatedId} className="cursor-pointer leading-tight">
           {label}
         </label>
       )}

@@ -7,6 +7,7 @@ import StyledLink from "@/components/ui/StyledLink";
 import Image from "next/image";
 import Receptury from "../Receptury";
 import { Partner } from "../receptura/page";
+import image1 from "/public/images/food.jpeg";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
+        img={image1}
       />
       <Produkty
         produkty={[
@@ -46,6 +48,7 @@ export default function Home() {
         text={
           "Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         }
+        img={image1}
       />
       <Receptury />
     </div>
@@ -74,10 +77,15 @@ export default function Home() {
               <a
                 key={"kfppm" + index}
                 href={produkt.href}
-                className="mb-10 flex h-[300px] w-[200px] flex-shrink-0 flex-col gap-y-3 overflow-hidden rounded-xl md:w-[calc(25%-30px)]"
+                className="mb-10 flex h-[300px] w-[200px] flex-shrink-0 flex-col gap-y-3 overflow-hidden md:w-[calc(25%-30px)]"
               >
                 <div className="relative h-4/5">
-                  <Image src={produkt.img} alt={""} fill />
+                  <Image
+                    src={produkt.img}
+                    alt={""}
+                    fill
+                    className="rounded-xl"
+                  />
                 </div>
                 <span className="mt-auto text-sm font-bold text-black">
                   {produkt.title}
@@ -131,7 +139,7 @@ export default function Home() {
   }: {
     title: string;
     text: string;
-    img?: string;
+    img?: any;
     className?: string;
   }) {
     return (
@@ -146,7 +154,9 @@ export default function Home() {
               <a href="">Zobrazit více</a>
             </Button>
           </div>
-          <div className="mx-auto mb-6 flex h-[200px] w-[300px] flex-shrink-0 rounded-2xl bg-secondary-700 md:mx-0 md:mb-auto md:h-[275px] md:w-[275px] lg:h-[350px] lg:w-[350px]"></div>
+          <div className="mx-auto flex h-[200px] flex-shrink-0 rounded-2xl md:mx-0 md:mb-auto md:h-[275px] md:w-2/6 lg:h-[350px] lg:w-3/6">
+            <Image src={image1} alt="" className=" rounded-2xl object-cover" />
+          </div>
         </div>
       </Container>
     );

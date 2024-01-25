@@ -13,6 +13,7 @@ export default function Logo({ width = 157, height = 40, ...props }: Props) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
+      aria-label="Domů"
     >
       <path
         fillRule="evenodd"

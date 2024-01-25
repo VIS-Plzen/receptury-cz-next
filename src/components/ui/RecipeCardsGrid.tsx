@@ -1,6 +1,12 @@
 "use client";
 
 import { cn } from "@/utils/cn";
+import image1 from "public/images/food.jpeg";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
@@ -37,13 +43,12 @@ function RecipeCardsGrid({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center gap-4 overflow-x-auto py-6 md:overflow-x-hidden",
+        "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
         gridView &&
           !cardsInGrid &&
           "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
         // cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
-        className,
-        assertCard && "snap-x"
+        className
       )}
     >
       {data
@@ -51,26 +56,53 @@ function RecipeCardsGrid({
             <RecipeCard
               key={index}
               isGridView={gridView}
-              isLoading={true}
+              isLoading={isLoading}
               label={card.title}
               badges={card.badges}
-              img={card.img}
-              assertCard={assertCard}
-              className={cn(assertCard && "snap-center")}
+              img={image1}
             />
           ))
-        : length &&
-          Array.from({ length: length }, (_, index) => (
-            <RecipeCard
-              key={index}
-              isGridView={gridView}
-              isLoading={isLoading}
-              label={label1}
-              badges={badgesArray}
-              assertCard={assertCard}
-              className={cn(assertCard && "snap-center")}
-            />
-          ))}
+        : length && (
+            <>
+              <Swiper
+                spaceBetween={25}
+                slidesPerView={2}
+                modules={[Pagination]}
+                pagination={{ clickable: false }}
+                className="block [--swiper-pagination-color:theme(colors.primary.600)] md:hidden"
+              >
+                {Array.from({ length: length }, (_, index) => (
+                  <SwiperSlide key={index} className="block py-10 md:hidden">
+                    <RecipeCard
+                      key={index}
+                      isGridView={gridView}
+                      isLoading={isLoading}
+                      label={label1}
+                      badges={badgesArray}
+                      assertCard={assertCard}
+                      className="block md:hidden"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <div
+                className={cn(
+                  "hidden gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                )}
+              >
+                {Array.from({ length: length }, (_, index) => (
+                  <RecipeCard
+                    key={index}
+                    isGridView={gridView}
+                    isLoading={isLoading}
+                    label={label1}
+                    badges={badgesArray}
+                    assertCard={assertCard}
+                  />
+                ))}
+              </div>
+            </>
+          )}
     </div>
   );
 }
