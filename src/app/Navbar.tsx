@@ -137,7 +137,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
         >
           <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-primary-200 bg-white shadow-xl md:border-2">
             <div className="flex flex-col p-1">
-              {dropdownData.map((item: DropdownItem, index) => (
+              {dropdownItems.map((item: DropdownItem, index) => (
                 <Menu.Item key={index}>
                   {({ active }) => (
                     <a
@@ -210,7 +210,7 @@ function TouchMenu({
             className="fixed inset-0 z-offcanvas min-h-screen w-screen bg-white"
           >
             <Container className="pt-28">
-              <motion.ul className="flex flex-col gap-6">
+              <motion.ul className="flex flex-col gap-4">
                 {menuRoutes.map((route) => (
                   <li key={route.href}>
                     <ActiveNavLink
@@ -224,14 +224,13 @@ function TouchMenu({
                 ))}
               </motion.ul>
 
-              <div className="mt-10 flex flex-col">
+              <div className="mt-8 flex flex-col">
                 <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
-                  <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
-                  <span className="mr-auto block font-semibold leading-tight">
+                  <span className="mr-auto block font-bold leading-tight">
                     Jméno Příjmení
                   </span>
                 </div>
-                <ul className="flex flex-col space-y-2 pl-9 pt-2">
+                <ul className="flex flex-col gap-2 pt-4">
                   {dropdownData.map((item, index) => (
                     <a href={item.href} key={index}>
                       {item.label}
