@@ -77,10 +77,15 @@ export default function Home() {
               <a
                 key={"kfppm" + index}
                 href={produkt.href}
-                className="mb-10 flex h-[300px] w-[200px] flex-shrink-0 flex-col gap-y-3 overflow-hidden rounded-xl md:w-[calc(25%-30px)]"
+                className="mb-10 flex h-[300px] w-[200px] flex-shrink-0 flex-col gap-y-3 overflow-hidden md:w-[calc(25%-30px)]"
               >
                 <div className="relative h-4/5">
-                  <Image src={produkt.img} alt={""} fill />
+                  <Image
+                    src={produkt.img}
+                    alt={""}
+                    fill
+                    className="rounded-xl"
+                  />
                 </div>
                 <span className="mt-auto text-sm font-bold text-black">
                   {produkt.title}
