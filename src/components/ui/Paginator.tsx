@@ -1,5 +1,6 @@
 "use client";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { cn } from "@/utils/cn";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 
@@ -16,7 +17,7 @@ export default function Paginator({
 }: Props) {
   // set by ElipssisButton - on click sets +/- 5, showing currenently selected page + offset <DayButton>s
   const [offset, setOffset] = useState<number>(0);
-  const iconSize = "h-9 w-9";
+  const iconSize = "h-8 w-8 sm:h-9 sm:w-9";
   const isTablet = useMediaQuery("(min-width: 768px)");
   const pagesOffset = isTablet ? 5 : 3;
 
@@ -102,7 +103,7 @@ export default function Paginator({
           back ? changePage(currentPage - 1) : changePage(currentPage + 1);
         }}
         tabIndex={isDisabled ? -1 : undefined}
-        className={`rounded-full bg-white text-black duration-300
+        className={`rounded-full border-2 border-primary-200 bg-white p-1 text-black duration-300 hover:border-primary
         ${
           isDisabled
             ? "cursor-default opacity-30 ring-0"
@@ -116,17 +117,23 @@ export default function Paginator({
         }`}
       >
         {back ? (
-          <ChevronLeftIcon className={iconSize} />
+          <ChevronLeftIcon
+            className={cn(iconSize, "pr-0.5")}
+            aria-label="Předchozí stránka"
+          />
         ) : (
-          <ChevronRightIcon className={iconSize} />
+          <ChevronRightIcon
+            className={cn(iconSize, "pl-0.5")}
+            aria-label="Další stránka"
+          />
         )}
       </button>
     );
   }
   return (
-    <div className="my-7 flex w-full flex-row justify-center gap-x-2">
+    <div className="my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2">
       <ChevronButton back />
-      <div className="flex flex-row items-center justify-around gap-x-1 rounded-full bg-white text-black md:px-3">
+      <div className="flex flex-row items-center justify-around rounded-full border-2 border-primary-200 bg-white p-1 text-black md:gap-x-1">
         <DayButton page={1} />
         {currentPage + offset <= pagesOffset ? (
           <>

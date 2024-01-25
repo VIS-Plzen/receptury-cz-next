@@ -1,6 +1,12 @@
 "use client";
 
 import { cn } from "@/utils/cn";
+import image1 from "public/images/food.jpeg";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
@@ -10,6 +16,7 @@ type Props = {
   length?: number;
   className?: string;
   cardsInGrid?: number;
+  assertCard?: boolean;
 };
 
 function RecipeCardsGrid({
@@ -19,6 +26,7 @@ function RecipeCardsGrid({
   length,
   className = "",
   cardsInGrid,
+  assertCard,
 }: Props) {
   const label1 = "Fusilli s mediteránskou omáčkou a smaženým sumečkem";
   const badgesArray = ["Ryby a mořské plody", "Bezmléčná dieta"];
@@ -35,9 +43,11 @@ function RecipeCardsGrid({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center gap-4 overflow-x-auto py-6 md:overflow-x-hidden",
-        gridView && !cardsInGrid && "md:grid md:grid-cols-5 lg:grid-cols-6",
-        cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
+        "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
+        gridView &&
+          !cardsInGrid &&
+          "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+        // cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
         className
       )}
     >
@@ -49,19 +59,50 @@ function RecipeCardsGrid({
               isLoading={isLoading}
               label={card.title}
               badges={card.badges}
-              img={card.img}
+              img={image1}
             />
           ))
-        : length &&
-          Array.from({ length: length }, (_, index) => (
-            <RecipeCard
-              key={index}
-              isGridView={gridView}
-              isLoading={isLoading}
-              label={label1}
-              badges={badgesArray}
-            />
-          ))}
+        : length && (
+            <>
+              <Swiper
+                spaceBetween={25}
+                slidesPerView={2}
+                modules={[Pagination]}
+                pagination={{ clickable: false }}
+                className="block [--swiper-pagination-color:theme(colors.primary.600)] md:hidden"
+              >
+                {Array.from({ length: length }, (_, index) => (
+                  <SwiperSlide key={index} className="block py-10 md:hidden">
+                    <RecipeCard
+                      key={index}
+                      isGridView={gridView}
+                      isLoading={isLoading}
+                      label={label1}
+                      badges={badgesArray}
+                      assertCard={assertCard}
+                      className="block md:hidden"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <div
+                className={cn(
+                  "hidden gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                )}
+              >
+                {Array.from({ length: length }, (_, index) => (
+                  <RecipeCard
+                    key={index}
+                    isGridView={gridView}
+                    isLoading={isLoading}
+                    label={label1}
+                    badges={badgesArray}
+                    assertCard={assertCard}
+                  />
+                ))}
+              </div>
+            </>
+          )}
     </div>
   );
 }

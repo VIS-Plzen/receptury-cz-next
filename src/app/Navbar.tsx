@@ -6,6 +6,7 @@ import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
+import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import Link from "next/link";
@@ -39,6 +40,17 @@ const menuRoutes = [
   },
 ];
 
+type DropdownItem = {
+  label: string;
+  href: string;
+};
+
+const dropdownData: DropdownItem[] = [
+  { label: "Osobní informace", href: "/" },
+  { label: "Oblíbené recepty", href: "/" },
+  { label: "Odhlásit se", href: "/" },
+];
+
 // Hihlights link with href matching current url
 function ActiveNavLink({
   activeClassName = "",
@@ -50,6 +62,7 @@ function ActiveNavLink({
 }) {
   const pathname = usePathname();
   const isActive = pathname === props.href;
+
   return (
     <StyledLink
       asChild
@@ -98,6 +111,49 @@ function BurgerButton({
         )}
       />
     </button>
+  );
+}
+
+function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
+  return (
+    <div className="">
+      <Menu as="div" className="relative text-left">
+        <Menu.Button>
+          <div className="hidden w-56 cursor-pointer items-center justify-start gap-2 lg:flex">
+            <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+            <span className="mr-auto block font-semibold leading-tight">
+              Jméno Příjmení
+            </span>
+            <ExpandMoreIcon className={cn("shrink-0")} />
+          </div>
+        </Menu.Button>
+        <Transition
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-primary-200 bg-white shadow-xl md:border-2">
+            <div className="flex flex-col p-1">
+              {dropdownItems.map((item: DropdownItem, index) => (
+                <Menu.Item key={index}>
+                  {({ active }) => (
+                    <a
+                      className={`${active && "bg-primary-100"} rounded-xl p-2`}
+                      href={item.href}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </Menu.Item>
+              ))}
+            </div>
+          </Menu.Items>
+        </Transition>
+      </Menu>
+    </div>
   );
 }
 
@@ -154,7 +210,7 @@ function TouchMenu({
             className="fixed inset-0 z-offcanvas min-h-screen w-screen bg-white"
           >
             <Container className="pt-28">
-              <motion.ul className="flex flex-col gap-6">
+              <motion.ul className="flex flex-col gap-4">
                 {menuRoutes.map((route) => (
                   <li key={route.href}>
                     <ActiveNavLink
@@ -167,6 +223,21 @@ function TouchMenu({
                   </li>
                 ))}
               </motion.ul>
+
+              <div className="mt-8 flex flex-col">
+                <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
+                  <span className="mr-auto block font-bold leading-tight">
+                    Jméno Příjmení
+                  </span>
+                </div>
+                <ul className="flex flex-col gap-2 pt-4">
+                  {dropdownData.map((item, index) => (
+                    <a href={item.href} key={index}>
+                      {item.label}
+                    </a>
+                  ))}
+                </ul>
+              </div>
             </Container>
           </motion.div>
         </>
@@ -176,6 +247,9 @@ function TouchMenu({
 }
 
 export default function Navbar() {
+  // Dropdown menu state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   // Menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -237,13 +311,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden w-56 items-center justify-start gap-2 lg:flex">
-          <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
-          <span className="mr-auto block font-semibold leading-tight">
-            Jméno Příjmení
-          </span>
-          <ExpandMoreIcon className="shrink-0" />
-        </div>
+        <DropdownMenu dropdownItems={dropdownData} />
 
         <BurgerButton
           isOpen={isMenuOpen}

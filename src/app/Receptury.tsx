@@ -1,16 +1,13 @@
 "use client";
+import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import {
-  ArrowDownwardAltIcon,
-  CalendarViewMontsIcon,
-  CancelIcon,
-  TuneIcon,
-} from "@/components/icons";
+import { ArrowDownwardAltIcon, CancelIcon, TuneIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -270,6 +267,7 @@ export default function Receptury({
             options={combo.options}
             selectedOption={combo.value}
             onChange={(value: string) => updateCombobox(index, value)}
+            aria-label={"Vyhledat " + combo.title}
           />
         ))}
       </div>
@@ -285,22 +283,12 @@ export default function Receptury({
             Našli jsme pro vás {data.length} receptů
           </p>
         </div>
-        <Comboboxes className="hidden flex-row gap-x-5 md:flex" />
-
-        <button
-          className="hidden w-[150px] items-center gap-x-1 font-bold md:flex"
-          onClick={() => setGridView(!gridView)}
-        >
-          {gridView ? (
-            <>
-              zobrazit řádky <CalendarViewMontsIcon />
-            </>
-          ) : (
-            <>
-              zobrazit mřízku <CalendarViewMontsIcon />
-            </>
-          )}
-        </button>
+        <Comboboxes className="hidden flex-row gap-x-1 md:flex lg:gap-x-5" />
+        <ToggleGridButton
+          className="hidden md:block"
+          gridView={gridView}
+          setGridView={setGridView}
+        />
         <Button
           variant="black"
           className="h-min md:hidden"
@@ -354,19 +342,22 @@ export default function Receptury({
           <Heading as="h3" size="xs">
             {title}
           </Heading>
-          <button onClick={() => setOpen(!open)}>
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label={!open ? "Zobrazit" : "Skrýt"}
+          >
             <ArrowDownwardAltIcon className={`${!open && "rotate-180"}`} />
           </button>
         </div>
         {open && (
           <ul>
             {options.map((o: any, oIndex: number) => (
-              <li
-                key={"sbbo" + oIndex}
-                className={`cursor-pointer ${o.checked && "bg-primary"}`}
-                onClick={() => updateSideBarValue(bIndex, oIndex, !o.checked)}
-              >
-                {o.title}
+              <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+                <Checkbox
+                  defaultChecked={o.checked}
+                  label={o.title}
+                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                />
               </li>
             ))}
           </ul>
@@ -397,7 +388,7 @@ export default function Receptury({
         <SideBar />
         <RecipeCardsGrid
           className="col-span-5 pt-0"
-          cardsInGrid={gridView ? 5 : 0}
+          // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
           isLoading={isLoading}
           data={data}
