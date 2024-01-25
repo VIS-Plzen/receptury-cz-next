@@ -5,15 +5,36 @@ import Heading from "@/components/ui/Heading";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import "swiper/css";
 
 export default function Inspirace({ className = "" }: { className?: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
+  const defaultTab = useMemo(
+    () => searchParams.get("tab") || "doporucene",
+    [searchParams.get("tab")]
+  );
   const [selected, setSelected] = useState<
-    "recommended" | "favorites" | "new" | string
-  >("recommended");
+    "doporucene" | "oblibene" | "nove" | string
+  >(defaultTab);
+
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set("tab", selected);
+    router.push(`${pathname}?${newSearchParams.toString()}`);
+  }, [selected, router]);
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && tabParam !== selected) {
+      setSelected(tabParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!window) return;
@@ -62,13 +83,13 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             >
               <div className="flex w-full flex-row justify-between">
                 <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
-                  <TabsTrigger value="recommended" className="w-full">
+                  <TabsTrigger value="doporucene" className="w-full">
                     Doporučené pro vás
                   </TabsTrigger>
-                  <TabsTrigger value="favorites" className="w-full">
+                  <TabsTrigger value="oblibene" className="w-full">
                     Oblíbené
                   </TabsTrigger>
-                  <TabsTrigger value="new" className="w-full">
+                  <TabsTrigger value="nove" className="w-full">
                     Nové recepty
                   </TabsTrigger>
                 </TabsList>
