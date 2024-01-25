@@ -68,10 +68,7 @@ function RecipeCardsGrid({
                 slidesPerView={2}
                 modules={[Pagination]}
                 pagination={{ clickable: false }}
-                style={{
-                  "--swiper-pagination-color": "#DE5A02",
-                }}
-                className="block md:hidden"
+                className="block [--swiper-pagination-color:theme(colors.primary.600)] md:hidden"
               >
                 {Array.from({ length: length }, (_, index) => (
                   <SwiperSlide key={index} className="block py-10 md:hidden">
