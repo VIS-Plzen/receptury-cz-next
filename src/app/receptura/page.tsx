@@ -118,6 +118,7 @@ export default function Home() {
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
         img={image1}
+        hasButton
       />
     </div>
   );
@@ -166,7 +167,7 @@ function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10 ">
+          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -174,7 +175,7 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } w-min flex-col items-center text-center`}
+                } flex-col items-center text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
@@ -437,10 +438,12 @@ export function Partner({
   jmeno,
   heslo,
   img,
+  hasButton
 }: {
   jmeno: string;
   heslo: string;
   img: any;
+  hasButton?: boolean;
 }) {
   return (
     <Container>
@@ -451,7 +454,7 @@ export function Partner({
           </span>
           <Heading className="text-white">{jmeno}</Heading>
           <p className="font-semibold text-white">{heslo}</p>
-          <Button className="w-min">Více o nás</Button>
+          {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
         <div className="z-10 flex h-full w-full justify-end">
           <Image
