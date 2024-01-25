@@ -231,7 +231,7 @@ function TouchMenu({
                     Jméno Příjmení
                   </span>
                 </div>
-                <ul className="pl-9 pt-2">
+                <ul className="flex flex-col space-y-2 pl-9 pt-2">
                   {dropdownData.map((item, index) => (
                     <a href={item.href} key={index}>
                       {item.label}
