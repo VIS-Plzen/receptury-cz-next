@@ -23,11 +23,11 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     "doporucene" | "oblibene" | "nove" | string
   >(defaultTab);
 
-  useEffect(() => {
-    const newSearchParams = new URLSearchParams();
-    newSearchParams.set("tab", selected);
-    router.push(`${pathname}?${newSearchParams.toString()}`);
-  }, [selected, router]);
+  // useEffect(() => {
+  //   const newSearchParams = new URLSearchParams();
+  //   newSearchParams.set("tab", selected);
+  //   router.push(`${pathname}?${newSearchParams.toString()}`);
+  // }, [selected, router]);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
