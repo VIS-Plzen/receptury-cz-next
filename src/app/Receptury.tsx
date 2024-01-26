@@ -1,7 +1,7 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import { ArrowDownwardAltIcon, CancelIcon, TuneIcon } from "@/components/icons";
+import { CancelIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -338,19 +338,22 @@ export default function Receptury({
     const [open, setOpen] = useState(true);
     return (
       <div className="border-t border-primary-200 py-2">
-        <div className="flex flex-row justify-between">
-          <Heading as="h3" size="xs">
+        <div className="flex flex-row items-center justify-between">
+          <Heading as="h3" size="inherit" className="mb-4">
             {title}
           </Heading>
           <button
             onClick={() => setOpen(!open)}
             aria-label={!open ? "Zobrazit" : "Skrýt"}
+            className="mb-4"
           >
-            <ArrowDownwardAltIcon className={`${!open && "rotate-180"}`} />
+            <ExpandMoreIcon
+              className={`${!open && "translate rotate-180 duration-100"}`}
+            />
           </button>
         </div>
         {open && (
-          <ul>
+          <ul className="space-y-1.5">
             {options.map((o: any, oIndex: number) => (
               <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
                 <Checkbox
