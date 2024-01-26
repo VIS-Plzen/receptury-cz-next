@@ -142,7 +142,7 @@ function Hero({
           <Image
             src={image1}
             alt=""
-            className="h-full"
+            className="h-full bg-gray-300"
             style={{ objectFit: "cover" }}
           />
         </div>
@@ -456,7 +456,7 @@ export function Partner({
         <div className="z-10 flex h-full w-full justify-end">
           <Image
             src={img}
-            className="h-full w-full object-cover md:w-8/12"
+            className="h-full w-full bg-gray-300 object-cover md:w-8/12"
             alt=""
           />
         </div>
@@ -565,7 +565,7 @@ function Galerie({
           alt={""}
           src={image}
           fill
-          className={`aspect-video rounded-2xl object-cover ${className} select-none`}
+          className={`aspect-video rounded-2xl bg-gray-300 object-cover ${className} select-none`}
         ></Image>
       </button>
     );
@@ -578,7 +578,7 @@ function Galerie({
           src={image}
           alt={""}
           fill
-          className={`select-none object-contain ${
+          className={`select-none bg-gray-300 object-contain ${
             fullImageMode ? "p-1" : "mx-auto mt-10 max-h-[70%]"
           }`}
         />
@@ -617,7 +617,7 @@ function Galerie({
               alt={""}
               fill
               className={clsx(
-                "h-full w-full select-none rounded-lg object-fill transition duration-150 ease-in-out hover:shadow-lg hover:shadow-primary-300",
+                "h-full w-full select-none rounded-lg bg-gray-300 object-fill transition duration-150 ease-in-out hover:shadow-lg hover:shadow-primary-300",
                 (index === 0 || index === miniImages - 1) &&
                   "scale-50 hover:scale-[0.6]",
                 (index === 1 || index === miniImages - 2) &&

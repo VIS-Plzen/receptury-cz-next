@@ -26,7 +26,7 @@ export default function VolitelnyObsah({
         <Image
           src={img1}
           alt=""
-          className="rounded-2xl object-cover md:w-1/2"
+          className="rounded-2xl bg-gray-300 object-cover md:w-1/2"
         />
       </div>
     </Container>

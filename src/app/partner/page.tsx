@@ -155,7 +155,11 @@ export default function Home() {
             </Button>
           </div>
           <div className="mx-auto flex h-[200px] flex-shrink-0 rounded-2xl md:mx-0 md:mb-auto md:h-[275px] md:w-2/6 lg:h-[350px] lg:w-3/6">
-            <Image src={image1} alt="" className=" rounded-2xl object-cover" />
+            <Image
+              src={image1}
+              alt=""
+              className=" rounded-2xl bg-gray-300 object-cover"
+            />
           </div>
         </div>
       </Container>
