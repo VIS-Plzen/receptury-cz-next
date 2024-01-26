@@ -2,12 +2,14 @@
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import RecipeCard from "@/components/ui/RecipeCard";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import "swiper/css";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Inspirace({ className = "" }: { className?: string }) {
   const router = useRouter();
@@ -96,15 +98,51 @@ export default function Inspirace({ className = "" }: { className?: string }) {
               </div>
             </Tabs>
           </div>
+          <div
+            className={cn(
+              "hidden gap-4 pt-6 lg:grid lg:grid-cols-4 xl:grid-cols-5"
+            )}
+          >
+            {Array.from({ length: 10 }, (_, index) => (
+              <RecipeCard
+                key={index}
+                isGridView={true}
+                isLoading={false}
+                label="Smažené kuřecí řízečky, bramborové placičky"
+                badges={["Dieta", "Brambor"]}
+                assertCard={true}
+              />
+            ))}
+          </div>
+          <Swiper
+            spaceBetween={25}
+            breakpoints={{
+              370: {
+                slidesPerView: 2,
+              },
+              640: {
+                slidesPerView: 3,
+              },
+            }}
+            modules={[Pagination]}
+            pagination={{ clickable: false }}
+            className="block [--swiper-pagination-color:theme(colors.primary.600)] lg:hidden"
+          >
+            {Array.from({ length: 10 }, (_, index) => (
+              <SwiperSlide key={index} className="block py-10 lg:hidden">
+                <RecipeCard
+                  key={index}
+                  isGridView={true}
+                  isLoading={false}
+                  label={"Smažené kuřecí řízečky, bramborové placičky"}
+                  badges={["Dieta", "Brambor"]}
+                  assertCard={true}
+                  className="block lg:hidden"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-      </Container>
-      <Container className="md:pr pr-0">
-        <RecipeCardsGrid
-          length={15}
-          gridView
-          assertCard
-          className="flex flex-row overflow-visible"
-        />
       </Container>
     </div>
   );
