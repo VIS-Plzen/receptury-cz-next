@@ -7,7 +7,6 @@ import StyledLink from "@/components/ui/StyledLink";
 import Image from "next/image";
 import Receptury from "../Receptury";
 import { Partner } from "../receptura/page";
-import image1 from "/public/images/food.jpeg";
 
 export default function Home() {
   return (
@@ -15,7 +14,7 @@ export default function Home() {
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
-        img={image1}
+        img={"/public/images/food.jpeg"}
       />
       <Produkty
         produkty={[
@@ -48,7 +47,7 @@ export default function Home() {
         text={
           "Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         }
-        img={image1}
+        img={"/images/food.jpeg"}
       />
       <Receptury />
     </div>
@@ -156,8 +155,10 @@ export default function Home() {
           </div>
           <div className="mx-auto flex h-[200px] flex-shrink-0 rounded-2xl md:mx-0 md:mb-auto md:h-[275px] md:w-2/6 lg:h-[350px] lg:w-3/6">
             <Image
-              src={image1}
+              src={img}
               alt=""
+              width={1000}
+              height={500}
               className=" rounded-2xl bg-gray-300 object-cover"
             />
           </div>

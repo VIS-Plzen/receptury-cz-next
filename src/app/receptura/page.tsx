@@ -12,7 +12,6 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import clsx from "clsx";
 import Image from "next/image";
-import image1 from "public/images/food.jpeg";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import VolitelnyObsah from "../VolitelnyObsah";
 
@@ -113,11 +112,12 @@ export default function Home() {
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+        img="/images/food.jpeg"
       />
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
-        img={image1}
+        img="/images/food.jpeg"
       />
     </div>
   );
@@ -137,16 +137,13 @@ function Hero({
   return (
     <Container>
       <div className="relative flex flex-col overflow-hidden rounded-3xl bg-white md:flex-row-reverse md:justify-between md:pr-0">
-        {/* <div className="mx-auto flex h-[300px] w-full rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:max-w-[650px] lg:h-[400px] lg:max-w-[750px]"></div> */}
-        <div>
-          <Image
-            src={image1}
-            alt=""
-            className="h-full bg-gray-300"
-            style={{ objectFit: "cover" }}
-          />
-        </div>
-
+        <Image
+          src="/images/food.jpeg"
+          alt=""
+          className="w-full object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
+          width={500}
+          height={200}
+        />
         <div className="flex flex-col gap-y-5 rounded-b-3xl border-2 border-t-0 border-primary-300/60 p-5 md:rounded-e-none md:rounded-l-3xl md:border-2 md:border-r-0 md:px-0">
           <div className="flex gap-x-2 md:mt-auto md:px-10">
             <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
@@ -455,9 +452,11 @@ export function Partner({
         </div>
         <div className="z-10 flex h-full w-full justify-end">
           <Image
-            src={img}
-            className="h-full w-full bg-gray-300 object-cover md:w-8/12"
+            src="/images/food.jpeg"
+            className="w-full bg-gray-300 object-cover md:w-8/12"
             alt=""
+            width={200}
+            height={400}
           />
         </div>
         <span className="absolute right-5 top-5 z-20 text-xs text-secondary-900">
