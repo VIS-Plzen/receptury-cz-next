@@ -12,7 +12,6 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import clsx from "clsx";
 import Image from "next/image";
-import image1 from "public/images/food.jpeg";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import VolitelnyObsah from "../VolitelnyObsah";
 
@@ -113,10 +112,13 @@ export default function Home() {
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+        img="/images/food.jpeg"
       />
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
+        img="/images/food.jpeg"
+        hasButton
       />
     </div>
   );
@@ -136,22 +138,24 @@ function Hero({
   return (
     <Container>
       <div className="relative flex flex-col overflow-hidden rounded-3xl bg-white md:flex-row-reverse md:justify-between md:pr-0">
-        {/* <div className="mx-auto flex h-[300px] w-full rounded-2xl bg-secondary-700 md:mx-0 md:my-auto md:mb-auto md:h-[350px] md:max-w-[650px] lg:h-[400px] lg:max-w-[750px]"></div> */}
-        <div>
-          <Image src={image1} alt="" width={1000} />
-        </div>
-
+        <Image
+          src="/images/food.jpeg"
+          alt=""
+          className="w-full object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
+          width={500}
+          height={200}
+        />
         <div className="flex flex-col gap-y-5 rounded-b-3xl border-2 border-t-0 border-primary-300/60 p-5 md:rounded-e-none md:rounded-l-3xl md:border-2 md:border-r-0 md:px-0">
           <div className="flex gap-x-2 md:mt-auto md:px-10">
             <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
               Logo
             </span>
-            <span className="line-clamp-1">
+            <span className="line-clamp-2">
               Tento recept pro vás připravila společnost {jmeno}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">
-            <Heading className="line-clamp-3 w-5/6" as="h1">
+            <Heading className="line-clamp-4 w-5/6" as="h1">
               {title}
             </Heading>
           </div>
@@ -160,7 +164,7 @@ function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10 ">
+          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -168,7 +172,7 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } w-min flex-col items-center text-center`}
+                } flex-col items-center text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
@@ -209,11 +213,11 @@ function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 flex gap-x-3">
+        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1 gap-y-3 sm:grid-cols-6">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
-              className={`flex w-min flex-col items-center text-center`}
+              className={`flex flex-col items-center text-center`}
             >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
               <span className="text-sm font-bold">{icon.label}</span>
@@ -225,7 +229,7 @@ function Informations({
   }
   function Hmotnost() {
     return (
-      <div className="flex flex-row justify-between rounded-3xl border-2 border-primary-300/60 bg-white p-5">
+      <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
         <span className="my-auto font-bold">Hmotnost</span>
         <div className="flex flex-row gap-x-3">
           <div className="flex flex-col items-center">
@@ -251,7 +255,7 @@ function Informations({
     return (
       <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 md:w-min">
         <Heading size="sm">Kalkulačka surovin</Heading>
-        <div className="flex flex-row gap-x-5 border-b-2 border-primary-300/60 py-3">
+        <div className="flex flex-col gap-5 border-b-2 border-primary-300/60 py-3 sm:flex-row">
           <div className="flex gap-x-1.5">
             <label
               htmlFor="pocet"
@@ -417,7 +421,7 @@ function Informations({
         </div>
         <div className="flex flex-col gap-5">
           <Postup />
-          <div className="flex flex-col gap-5 md:flex-row">
+          <div className="flex flex-col gap-5 xl:flex-row">
             <Alergeny />
             <Skladba />
           </div>
@@ -427,19 +431,40 @@ function Informations({
     </Container>
   );
 }
-export function Partner({ jmeno, heslo }: { jmeno: string; heslo: string }) {
+export function Partner({
+  jmeno,
+  heslo,
+  img,
+  hasButton,
+}: {
+  jmeno: string;
+  heslo: string;
+  img: any;
+  hasButton?: boolean;
+}) {
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] max-h-[450px] w-full rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent px-3 py-5 md:aspect-[3/1] md:max-h-full md:items-center md:bg-gradient-to-r md:p-10">
-        <div className="flex flex-col gap-y-5">
+      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center">
+        {/* gradient*/}
+        <div className="absolute inset-0 z-[1] h-full bg-gradient-to-b from-secondary-700 from-55% via-secondary/30 via-70% to-transparent md:bg-gradient-to-r md:from-60%"></div>
+        <div className="z-[2] my-5 flex flex-col gap-y-5 pl-5 md:pl-10">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
           </span>
           <Heading className="text-white">{jmeno}</Heading>
           <p className="font-semibold text-white">{heslo}</p>
-          <Button className="w-min">Více o nás</Button>
+          {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
-        <span className="absolute right-5 top-5 text-xs text-secondary-900">
+        <div className="z-0 flex h-full w-full justify-end">
+          <Image
+            src="/images/food.jpeg"
+            className="w-full bg-gray-300 object-cover md:w-8/12"
+            alt=""
+            width={200}
+            height={400}
+          />
+        </div>
+        <span className="absolute right-5 top-1/2 z-20 text-xs text-secondary-900 md:top-5">
           Inspirační foto
         </span>
       </div>
@@ -544,7 +569,7 @@ function Galerie({
           alt={""}
           src={image}
           fill
-          className={`aspect-video rounded-2xl object-cover ${className} select-none`}
+          className={`aspect-video rounded-2xl bg-gray-300 object-cover ${className} select-none`}
         ></Image>
       </button>
     );
@@ -557,7 +582,7 @@ function Galerie({
           src={image}
           alt={""}
           fill
-          className={`select-none object-contain ${
+          className={`select-none bg-gray-300 object-contain ${
             fullImageMode ? "p-1" : "mx-auto mt-10 max-h-[70%]"
           }`}
         />
@@ -596,7 +621,7 @@ function Galerie({
               alt={""}
               fill
               className={clsx(
-                "h-full w-full select-none rounded-lg object-fill transition duration-150 ease-in-out hover:shadow-lg hover:shadow-primary-300",
+                "h-full w-full select-none rounded-lg bg-gray-300 object-fill transition duration-150 ease-in-out hover:shadow-lg hover:shadow-primary-300",
                 (index === 0 || index === miniImages - 1) &&
                   "scale-50 hover:scale-[0.6]",
                 (index === 1 || index === miniImages - 2) &&

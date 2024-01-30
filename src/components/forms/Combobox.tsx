@@ -67,6 +67,7 @@ export default function MyCombobox({
           {selectedValue}
           {label && (
             <label
+              aria-label={`Vyhledávat ${label}`}
               htmlFor={id}
               className={clsx(
                 "text-default pointer-events-none absolute block h-full origin-top-left text-base font-medium",

@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -11,6 +11,7 @@ type RecipeCardProps = {
   img?: any;
   badges: string[];
   assertCard?: boolean;
+  className?: string;
 };
 
 type BadgesProps = {
@@ -51,9 +52,15 @@ function BadgeRenderer({ badges }: BadgesProps) {
 }
 
 // Card for grid layout
-function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function GridCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-full min-w-[180px]")}>
+    <div className={cn("h-80 w-full min-w-[180px]", className)}>
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
@@ -64,8 +71,13 @@ function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
         )}
       >
         {img ? (
-          <div className={cn(isLoading && "hidden")}>
-            <Image alt="" src={img} className="h-full w-full" />
+          <div className={cn(isLoading && "hidden", "h-full")}>
+            <Image
+              alt=""
+              src={img}
+              className="h-full w-full object-cover"
+              fill
+            />
           </div>
         ) : (
           <div className={cn("flex scale-125 justify-center pt-11")}>
@@ -91,9 +103,9 @@ function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
           <p className={cn(isLoading && "hidden")}>{label}</p>
           {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
-            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
-            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-500"></div>
-            <div className="inline-block h-4 w-7 animate-pulse rounded-full bg-gray-500"></div>
+            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
+            <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
+            <div className="inline-block h-4 w-7 animate-pulse rounded-full bg-gray-300"></div>
           </div>
         </div>
         <div className={cn(isLoading && "hidden")}>
@@ -110,12 +122,19 @@ function GridCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
 }
 
 // Card for row layout
-function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function RowCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
     <div
       className={cn(
         "flex h-[70px] flex-row justify-between",
-        isLoading && "animate-pulse"
+        isLoading && "animate-pulse",
+        className
       )}
     >
       {img ? (
@@ -124,7 +143,7 @@ function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
             "relative h-[70px] w-[70px] overflow-hidden rounded-l-2xl"
           )}
         >
-          <Image alt="" src={img} layout="fill" objectFit="cover" />
+          <Image alt="" src={img} fill className="object-cover" />
         </div>
       ) : (
         <div
@@ -153,7 +172,7 @@ function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
           <p className={cn("block", isLoading && "hidden")}>{label}</p>
           <div
             className={cn(
-              isLoading && " h-4 w-full rounded-full bg-gray-500",
+              isLoading && " h-4 w-full rounded-full bg-gray-300",
               !isLoading && "hidden"
             )}
           ></div>
@@ -180,12 +199,19 @@ function RowCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
 }
 
 // Mobile card
-function MobileCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
+function MobileCardLayout({
+  label,
+  badges,
+  img,
+  isLoading,
+  className,
+}: RecipeCardProps) {
   return (
     <div
       className={cn(
         "flex h-[90px] items-center justify-start overflow-hidden",
-        isLoading && "animate-pulse"
+        isLoading && "animate-pulse",
+        className
       )}
     >
       {img ? (
@@ -195,7 +221,7 @@ function MobileCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
             isLoading && "hidden"
           )}
         >
-          <Image alt="" src={img} layout="fill" objectFit="cover" />
+          <Image alt="" src={img} fill className="object-cover" />
         </div>
       ) : (
         <div
@@ -233,7 +259,7 @@ function MobileCardLayout({ label, badges, img, isLoading }: RecipeCardProps) {
         </div>
         <div
           className={cn(
-            isLoading && "ml-4 h-4 w-7/12 rounded-full bg-gray-500",
+            isLoading && "ml-4 h-4 w-7/12 rounded-full bg-gray-300",
             !isLoading && "hidden"
           )}
         ></div>
@@ -249,6 +275,7 @@ function RecipeCard({
   img,
   badges,
   assertCard,
+  className,
 }: RecipeCardProps) {
   return (
     <>
@@ -260,6 +287,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           ) : (
             <MobileCardLayout
@@ -267,6 +295,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           )}
         </div>
@@ -277,6 +306,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           ) : (
             <RowCardLayout
@@ -284,6 +314,7 @@ function RecipeCard({
               badges={badges}
               img={img}
               isLoading={isLoading}
+              className={className}
             />
           )}
         </div>

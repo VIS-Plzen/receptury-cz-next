@@ -1,20 +1,13 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import {
-  ArrowDownwardAltIcon,
-  CalendarViewMontsIcon,
-  CancelIcon,
-  ListIcon,
-  TuneIcon,
-} from "@/components/icons";
+import { CancelIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
-import { cn } from "@/utils/cn";
-import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -120,7 +113,7 @@ export default function Receptury({
           { title: "Pečené", name: "pecene", checked: false },
           { title: "Zapečené", name: "zapecene", checked: false },
           { title: "Smažené", name: "smazene", checked: false },
-          { title: "ostatní", name: "ostatni", checked: false },
+          { title: "Ostatní", name: "ostatni", checked: false },
         ],
       },
     ];
@@ -184,43 +177,6 @@ export default function Receptury({
   function updateCombobox(index: number, value: string) {
     comboBoxValues[index].value = value;
     updateQuery();
-  }
-
-  function ToggleGridButton({ className }: { className: string }) {
-    return (
-      <ToggleGroup.Root
-        className={cn(
-          className,
-          "ToggleGroup relative space-x-2 rounded-2xl border-black bg-primary-100 px-1.5 pt-1.5"
-        )}
-        type="single"
-        defaultValue="grid"
-        aria-label="View"
-      >
-        <ToggleGroup.Item
-          className={cn(
-            "ToggleGroupItem rounded-xl",
-            !gridView && "bg-primary-300/60 transition duration-100"
-          )}
-          value="row"
-          aria-label="Row view"
-          onClick={() => setGridView(false)}
-        >
-          <ListIcon size={32} className="m-1" />
-        </ToggleGroup.Item>
-        <ToggleGroup.Item
-          className={cn(
-            "ToggleGroupItem rounded-xl",
-            gridView && "bg-primary-300/60 transition duration-100"
-          )}
-          value="grid"
-          aria-label="Grid view"
-          onClick={() => setGridView(true)}
-        >
-          <CalendarViewMontsIcon size={32} className="m-1" />
-        </ToggleGroup.Item>
-      </ToggleGroup.Root>
-    );
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
@@ -327,8 +283,12 @@ export default function Receptury({
             Našli jsme pro vás {data.length} receptů
           </p>
         </div>
-        <Comboboxes className="hidden flex-row gap-x-5 md:flex" />
-        <ToggleGridButton className="hidden md:block" />
+        <Comboboxes className="hidden flex-row gap-x-1 md:flex lg:gap-x-5" />
+        <ToggleGridButton
+          className="hidden md:block"
+          gridView={gridView}
+          setGridView={setGridView}
+        />
         <Button
           variant="black"
           className="h-min md:hidden"
@@ -343,7 +303,7 @@ export default function Receptury({
   function SideBar() {
     return (
       <div
-        className={`z-fixed flex flex-col p-7 md:mr-5 md:block md:pl-0 md:pr-3 ${
+        className={`z-fixed flex flex-col p-7 md:z-fixed-below md:mr-5 md:block md:pl-0 md:pr-3 ${
           sideBarOpen ? "fixed inset-0 bg-white" : "hidden"
         }`}
       >
@@ -378,19 +338,22 @@ export default function Receptury({
     const [open, setOpen] = useState(true);
     return (
       <div className="border-t border-primary-200 py-2">
-        <div className="flex flex-row justify-between">
-          <Heading as="h3" size="xs">
+        <div className="flex flex-row items-center justify-between">
+          <Heading as="h3" size="inherit" className="mb-4">
             {title}
           </Heading>
           <button
             onClick={() => setOpen(!open)}
             aria-label={!open ? "Zobrazit" : "Skrýt"}
+            className="mb-4"
           >
-            <ArrowDownwardAltIcon className={`${!open && "rotate-180"}`} />
+            <ExpandMoreIcon
+              className={`${!open && "translate rotate-180 duration-100"}`}
+            />
           </button>
         </div>
         {open && (
-          <ul>
+          <ul className="space-y-2">
             {options.map((o: any, oIndex: number) => (
               <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
                 <Checkbox

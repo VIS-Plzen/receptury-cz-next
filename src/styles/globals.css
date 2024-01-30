@@ -1,7 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "tailwindcss/variants";
+
+@import "swiper-bundle.css";
+@import "swiper.css";
 
 @layer base {
   /* Global focus styles --> should be in base so we can override them at the lower level */

@@ -1,6 +1,9 @@
 "use client";
 
 import { cn } from "@/utils/cn";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
@@ -37,37 +40,24 @@ function RecipeCardsGrid({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center gap-4 overflow-x-auto py-6 md:overflow-x-hidden",
+        "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
         gridView &&
           !cardsInGrid &&
           "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
-        // cardsInGrid && `md:grid ${gridClasses[cardsInGrid]}`,
         className
       )}
     >
-      {data
-        ? data.map((card, index) => (
-            <RecipeCard
-              key={index}
-              isGridView={gridView}
-              isLoading={isLoading}
-              label={card.title}
-              badges={card.badges}
-              img={card.img}
-              assertCard={assertCard}
-            />
-          ))
-        : length &&
-          Array.from({ length: length }, (_, index) => (
-            <RecipeCard
-              key={index}
-              isGridView={gridView}
-              isLoading={isLoading}
-              label={label1}
-              badges={badgesArray}
-              assertCard={assertCard}
-            />
-          ))}
+      {data &&
+        data.map((card, index) => (
+          <RecipeCard
+            key={index}
+            isGridView={gridView}
+            isLoading={isLoading}
+            label={card.title}
+            badges={card.badges}
+            img="/images/food.jpeg"
+          />
+        ))}
     </div>
   );
 }
