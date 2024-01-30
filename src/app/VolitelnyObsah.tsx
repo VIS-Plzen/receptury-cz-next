@@ -1,7 +1,6 @@
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Image from "next/image";
-import img1 from "/public/images/food.jpeg";
 
 export default function VolitelnyObsah({
   title,
@@ -11,7 +10,7 @@ export default function VolitelnyObsah({
 }: {
   title: string;
   text: string;
-  img?: string;
+  img?: any;
   className?: string;
 }) {
   return (
@@ -24,9 +23,11 @@ export default function VolitelnyObsah({
           <p>{text}</p>
         </div>
         <Image
-          src={img1}
+          src={img}
           alt=""
-          className="rounded-2xl object-cover md:w-1/2"
+          className="w-full rounded-2xl bg-gray-300 object-cover md:w-1/2"
+          width={400}
+          height={200}
         />
       </div>
     </Container>
