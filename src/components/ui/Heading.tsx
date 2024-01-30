@@ -16,7 +16,7 @@ const cv = {
   base: "leading-[1.15] font-sans font-bold text-gray-950",
   size: {
     xs: "text-sm md:text-xl",
-    sm: "text-base md:text-2xl",
+    sm: "text-lg md:text-2xl",
     md: "text-lg md:text-4xl",
     lg: "text-xl md:text-5xl",
     xl: "text-2xl md:text-6xl",
