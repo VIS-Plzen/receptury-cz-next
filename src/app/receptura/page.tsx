@@ -435,7 +435,7 @@ export function Partner({
   jmeno,
   heslo,
   img,
-  hasButton
+  hasButton,
 }: {
   jmeno: string;
   heslo: string;
@@ -444,8 +444,10 @@ export function Partner({
 }) {
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 bg-white bg-gradient-to-b from-secondary-700 from-40% via-secondary/50 via-70% to-transparent md:aspect-[3/1] md:max-h-full md:flex-row md:items-center md:bg-gradient-to-r">
-        <div className="my-5 flex flex-col gap-y-5 pl-5 md:pl-10">
+      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center">
+        {/* gradient*/}
+        <div className="absolute inset-0 z-[1] h-full bg-gradient-to-b from-secondary-700 from-55% via-secondary/30 via-70% to-transparent md:bg-gradient-to-r md:from-60%"></div>
+        <div className="z-[2] my-5 flex flex-col gap-y-5 pl-5 md:pl-10">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
           </span>
@@ -453,7 +455,7 @@ export function Partner({
           <p className="font-semibold text-white">{heslo}</p>
           {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
-        <div className="z-10 flex h-full w-full justify-end">
+        <div className="z-0 flex h-full w-full justify-end">
           <Image
             src="/images/food.jpeg"
             className="w-full bg-gray-300 object-cover md:w-8/12"
@@ -462,7 +464,7 @@ export function Partner({
             height={400}
           />
         </div>
-        <span className="absolute right-5 top-5 z-20 text-xs text-secondary-900">
+        <span className="absolute right-5 top-1/2 z-20 text-xs text-secondary-900 md:top-5">
           Inspirační foto
         </span>
       </div>
