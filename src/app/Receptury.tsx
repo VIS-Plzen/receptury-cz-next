@@ -283,19 +283,19 @@ export default function Receptury({
             Našli jsme pro vás {data.length} receptů
           </p>
         </div>
-        <Comboboxes className="hidden flex-row gap-x-1 md:flex lg:gap-x-5" />
-        <ToggleGridButton
-          className="hidden md:block"
-          gridView={gridView}
-          setGridView={setGridView}
-        />
+        <Comboboxes className="hidden flex-row gap-x-1 lg:flex lg:gap-x-5" />
         <Button
           variant="black"
-          className="h-min md:hidden"
+          className="h-min lg:hidden"
           onClick={() => setSideBarOpen(!sideBarOpen)}
         >
           Filtry <TuneIcon />
         </Button>
+        <ToggleGridButton
+          className="hidden lg:block"
+          gridView={gridView}
+          setGridView={setGridView}
+        />
       </div>
     );
   }
@@ -303,17 +303,24 @@ export default function Receptury({
   function SideBar() {
     return (
       <div
-        className={`z-fixed flex flex-col p-7 md:z-fixed-below md:mr-5 md:block md:pl-0 md:pr-3 ${
-          sideBarOpen ? "fixed inset-0 bg-white" : "hidden"
+        className={`z-fixed flex flex-col p-7 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
+          sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
         }`}
       >
-        <div className="flex flex-row justify-between md:hidden">
+        <div className=" flex flex-row items-center justify-between lg:hidden">
           <Heading size="xs">Co hledáte?</Heading>
-          <button onClick={() => setSideBarOpen(false)}>
-            <CancelIcon />
-          </button>
+          <div className="flex space-x-8">
+            {/* <ToggleGridButton
+              gridView={gridView}
+              setGridView={setGridView}
+              className="block lg:hidden"
+            /> */}
+            <button onClick={() => setSideBarOpen(false)}>
+              <CancelIcon />
+            </button>
+          </div>
         </div>
-        <Comboboxes className="my-8 flex flex-col gap-y-5 md:hidden" />
+        <Comboboxes className="my-8 flex flex-col gap-y-5 lg:hidden" />
         {sideBarValues.map((box, index) => (
           <SideBarBox
             key={"ffsbb" + index}
@@ -345,7 +352,7 @@ export default function Receptury({
           <button
             onClick={() => setOpen(!open)}
             aria-label={!open ? "Zobrazit" : "Skrýt"}
-            className="mb-4"
+            className="mb-4 rounded-lg"
           >
             <ExpandMoreIcon
               className={`${!open && "translate rotate-180 duration-100"}`}
@@ -387,7 +394,7 @@ export default function Receptury({
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow />
-      <div className="block md:grid md:grid-cols-6">
+      <div className="block lg:grid lg:grid-cols-6">
         <SideBar />
         <RecipeCardsGrid
           className="col-span-5 pt-0"

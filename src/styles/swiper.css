@@ -35,9 +35,9 @@
     z-index: 1;
   }
   .swiper {
+    width: auto;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 200px;
     position: relative;
     overflow: hidden;
     list-style: none;
@@ -45,16 +45,21 @@
     /* Fix of Webkit flickering */
     z-index: 1;
     display: block;
+    justify-content: center;
+    align-items: center;
   }
   .swiper-vertical > .swiper-wrapper {
     flex-direction: column;
   }
   .swiper-wrapper {
     position: relative;
-    width: 100%;
+    margin: auto;
+    width: calc(100% - 30px);
     height: 100%;
+    padding: 15px;
     z-index: 1;
     display: flex;
+    justify-content: space-around;
     transition-property: transform;
     transition-timing-function: var(
       --swiper-wrapper-transition-timing-function,

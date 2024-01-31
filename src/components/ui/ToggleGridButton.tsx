@@ -8,14 +8,14 @@ function ToggleGridButton({
   gridView,
   setGridView,
 }: {
-  className: string;
+  className?: string;
   gridView: boolean;
   setGridView: (gridView: boolean) => void;
 }) {
   return (
     <ToggleGroup.Root
       className={cn(
-        "h-[52px] space-x-1 rounded-2xl border-2 border-primary-200 px-1.5 py-1.5",
+        "relative h-[52px] space-x-1 rounded-2xl border-2 border-primary-200 px-1.5 py-1.5",
         className
       )}
       type="single"
