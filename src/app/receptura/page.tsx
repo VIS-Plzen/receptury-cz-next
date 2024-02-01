@@ -447,7 +447,9 @@ export function Partner({
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
           </span>
-          <Heading className="text-white">{jmeno}</Heading>
+          <Heading className="text-white md:text-2xl lg:text-4xl">
+            {jmeno}
+          </Heading>
           <p className="font-semibold text-white">{heslo}</p>
           <Button className="w-min">Více o nás</Button>
         </div>
