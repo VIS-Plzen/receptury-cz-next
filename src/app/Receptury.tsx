@@ -9,7 +9,7 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -48,6 +48,7 @@ export default function Receptury({
   urlPreQuery?: string;
 }) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
+  const toggleId = useId();
   const [gridView, setGridView] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -284,18 +285,21 @@ export default function Receptury({
           </p>
         </div>
         <Comboboxes className="hidden flex-row gap-x-1 lg:flex lg:gap-x-5" />
-        <Button
-          variant="black"
-          className="h-min lg:hidden"
-          onClick={() => setSideBarOpen(!sideBarOpen)}
-        >
-          Filtry <TuneIcon />
-        </Button>
-        <ToggleGridButton
-          className="hidden lg:block"
-          gridView={gridView}
-          setGridView={setGridView}
-        />
+        <div className="flex items-center gap-x-4">
+          <ToggleGridButton
+            className="hidden md:block"
+            gridView={gridView}
+            setGridView={setGridView}
+            id={toggleId}
+          />
+          <Button
+            variant="black"
+            className="h-min lg:hidden"
+            onClick={() => setSideBarOpen(!sideBarOpen)}
+          >
+            Filtry <TuneIcon />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -310,11 +314,6 @@ export default function Receptury({
         <div className=" flex flex-row items-center justify-between lg:hidden">
           <Heading size="xs">Co hledáte?</Heading>
           <div className="flex space-x-8">
-            {/* <ToggleGridButton
-              gridView={gridView}
-              setGridView={setGridView}
-              className="block lg:hidden"
-            /> */}
             <button onClick={() => setSideBarOpen(false)}>
               <CancelIcon />
             </button>

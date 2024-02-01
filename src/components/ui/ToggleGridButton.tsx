@@ -7,10 +7,12 @@ function ToggleGridButton({
   className,
   gridView,
   setGridView,
+  id,
 }: {
   className?: string;
   gridView: boolean;
   setGridView: (gridView: boolean) => void;
+  id: string;
 }) {
   return (
     <ToggleGroup.Root
@@ -31,7 +33,7 @@ function ToggleGridButton({
         <CalendarViewMontsIcon className="relative z-10 h-8 w-8" />
         {gridView && (
           <motion.span
-            layoutId="grid-view"
+            layoutId={id}
             className="absolute inset-0 -z-10 h-full w-full rounded-xl bg-primary-200"
           />
         )}
@@ -45,7 +47,7 @@ function ToggleGridButton({
         <ListIcon className="relative z-10 h-8 w-8" />
         {!gridView && (
           <motion.span
-            layoutId="grid-view"
+            layoutId={id}
             className="absolute inset-0 -z-10 h-full w-full rounded-xl bg-primary-200"
           />
         )}
