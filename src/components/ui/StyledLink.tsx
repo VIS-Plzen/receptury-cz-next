@@ -9,7 +9,7 @@ type Props = React.ComponentPropsWithoutRef<"a"> & {
 };
 
 const cv = {
-  base: "ui-styled-link relative h-max max-w-max inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer",
+  base: "ui-styled-link relative h-max max-w-max inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer rounded-lg p-1",
   hoverEffect: {
     appear:
       "ui-styled-link--appear hover:opacity-90 transition-opacity duration-200",

@@ -142,6 +142,7 @@ export default function MyCombobox({
                   e.preventDefault();
                 }
               }}
+              aria-label="Vyhledávat"
             >
               <SearchIcon
                 className="h-5 w-5 text-primary-500"

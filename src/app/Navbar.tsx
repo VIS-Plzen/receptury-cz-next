@@ -116,44 +116,42 @@ function BurgerButton({
 
 function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   return (
-    <div className="">
-      <Menu as="div" className="relative text-left">
-        <Menu.Button>
-          <div className="hidden w-56 cursor-pointer items-center justify-start gap-2 lg:flex">
-            <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
-            <span className="mr-auto block font-semibold leading-tight">
-              Jméno Příjmení
-            </span>
-            <ExpandMoreIcon className={cn("shrink-0")} />
+    <Menu as="div" className="relative hidden text-left lg:block">
+      <Menu.Button className="rounded-lg p-1">
+        <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
+          <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+          <span className="mr-auto block font-semibold leading-tight">
+            Jméno Příjmení
+          </span>
+          <ExpandMoreIcon className={cn("shrink-0")} />
+        </div>
+      </Menu.Button>
+      <Transition
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
+          <div className="flex flex-col p-1">
+            {dropdownItems.map((item: DropdownItem, index) => (
+              <Menu.Item key={index}>
+                {({ active }) => (
+                  <a
+                    className={`${active && "bg-primary-100"} rounded-xl p-2`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </Menu.Item>
+            ))}
           </div>
-        </Menu.Button>
-        <Transition
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-primary-200 bg-white shadow-xl md:border-2">
-            <div className="flex flex-col p-1">
-              {dropdownItems.map((item: DropdownItem, index) => (
-                <Menu.Item key={index}>
-                  {({ active }) => (
-                    <a
-                      className={`${active && "bg-primary-100"} rounded-xl p-2`}
-                      href={item.href}
-                    >
-                      {item.label}
-                    </a>
-                  )}
-                </Menu.Item>
-              ))}
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-    </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
   );
 }
 
@@ -293,7 +291,7 @@ export default function Navbar() {
       )}
     >
       <Container className="relative flex items-center justify-between py-3 lg:py-5">
-        <Link href="/" className="relative z-offcanvas-above">
+        <Link href="/" className="relative z-offcanvas-above rounded-lg">
           <Logo />
         </Link>
 

@@ -115,6 +115,7 @@ export default function Paginator({
               : "hover:translate-x-2"
             : ""
         }`}
+        aria-label={back ? "Předchozí stránka" : "Další stránka"}
       >
         {back ? (
           <ChevronLeftIcon
