@@ -43,7 +43,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
   return (
     <ul className="line-clamp-1 justify-start space-y-[4px] lg:line-clamp-2">
       {badges.map((badge, index) => (
-        <Badge key={index} className="mx-[2px] md:px-1.5 md:py-0.5 md:text-xs">
+        <Badge key={index} className="mx-[2px] md:px-2 md:py-0.5 md:text-xs">
           {badge}
         </Badge>
       ))}
