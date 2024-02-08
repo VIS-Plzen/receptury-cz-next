@@ -20,7 +20,7 @@ export default function Container<E extends React.ElementType = "div">({
   return (
     <Component
       className={cn(
-        "mx-auto block w-full max-w-[84rem] px-4 sm:px-6 lg:px-8",
+        "mx-auto block w-full max-w-[86rem] px-4 sm:px-6 lg:px-8",
         className
       )}
       {...props}
