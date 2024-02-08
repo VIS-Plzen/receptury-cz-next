@@ -134,7 +134,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
+        <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-2 border-primary-200 bg-white shadow-xl">
           <div className="flex flex-col p-1">
             {dropdownItems.map((item: DropdownItem, index) => (
               <Menu.Item key={index}>

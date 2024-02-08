@@ -41,11 +41,11 @@ function ActionButtons({ isGridView }: any) {
 // function to redner badges on card
 function BadgeRenderer({ badges }: BadgesProps) {
   return (
-    <ul className="line-clamp-1 justify-start space-y-[4px] lg:line-clamp-2">
+    <ul className="flex flex-wrap justify-start gap-1">
       {badges.map((badge, index) => (
-        <Badge key={index} className="mx-[2px] md:px-2 md:py-0.5 md:text-xs">
-          {badge}
-        </Badge>
+        <li key={index}>
+          <Badge className="md:px-2 md:py-0.5 md:text-xs">{badge}</Badge>
+        </li>
       ))}
     </ul>
   );

@@ -1,7 +1,7 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import { CancelIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
+import { CloseIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -313,10 +313,10 @@ export default function Receptury({
         }`}
       >
         <div className=" flex flex-row items-center justify-between lg:hidden">
-          <Heading size="xs">Co hledáte?</Heading>
+          <Heading size="sm">Co hledáte?</Heading>
           <div className="flex space-x-8">
             <button onClick={() => setSideBarOpen(false)}>
-              <CancelIcon />
+              <CloseIcon className="h-8 w-8" />
             </button>
           </div>
         </div>
@@ -419,10 +419,10 @@ export default function Receptury({
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow />
-      <div className="block lg:grid lg:grid-cols-6">
+      <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <SideBar />
         <RecipeCardsGrid
-          className="col-span-5 pt-0"
+          className="col-span-4 pt-0 xl:col-span-5"
           // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
           isLoading={isLoading}

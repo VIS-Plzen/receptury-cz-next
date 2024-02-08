@@ -56,6 +56,7 @@ function RecipeCardsGrid({
             label={card.title}
             badges={card.badges}
             img="/images/food.jpeg"
+            className="cursor-pointer transition-all hover:scale-105 hover:shadow-xl hover:shadow-gray-900/10"
           />
         ))}
     </div>

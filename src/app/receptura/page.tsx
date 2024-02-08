@@ -171,16 +171,14 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } w-min flex-col items-center text-center`}
+                } w-min flex-col items-center gap-1 text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
                   icon={icon.name}
                   className="bg-white"
                 />
-                <span className="hidden text-sm font-bold md:block">
-                  {icon.label}
-                </span>
+                <span className="hidden text-sm md:block">{icon.label}</span>
               </div>
             ))}
           </div>
@@ -212,14 +210,14 @@ function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1 gap-y-3 sm:grid-cols-6">
+        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1.5 gap-y-3 sm:grid-cols-6">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
-              className={`flex flex-col items-center text-center`}
+              className={`flex flex-col items-center gap-1 text-center`}
             >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
-              <span className="text-sm font-bold">{icon.label}</span>
+              <span className="text-sm">{icon.label}</span>
             </div>
           ))}
         </div>
@@ -229,7 +227,7 @@ function Informations({
   function Hmotnost() {
     return (
       <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
-        <span className="my-auto font-bold">Hmotnost</span>
+        <span className="my-auto font-bold lg:text-lg">Hmotnost</span>
         <div className="flex flex-row gap-x-3">
           <div className="flex flex-col items-center">
             <span className="font-bold">Porce</span>
@@ -285,14 +283,21 @@ function Informations({
             ></input>
           </div>
           <div className="flex gap-x-1.5">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-start justify-start">
               <label
                 htmlFor="koeficient"
                 className="text-sm font-bold md:text-base"
               >
                 Koeficient
               </label>
-              <button className="text-sm underline">Zjistit více</button>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopenner noreferrer"
+                className="text-sm underline"
+              >
+                Zjistit více
+              </a>
             </div>
             <input
               id="koeficient"
@@ -411,16 +416,16 @@ function Informations({
     );
   }
   return (
-    <Container className="flex flex-col gap-5">
+    <Container className="flex flex-col gap-5 sm:gap-7">
       <Title />
-      <div className="flex flex-col gap-5 md:flex-row">
-        <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 sm:gap-7 md:flex-row">
+        <div className="flex flex-col gap-5 sm:gap-7">
           <Hmotnost />
           <Kalkulacka />
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 sm:gap-7">
           <Postup />
-          <div className="flex flex-col gap-5 xl:flex-row">
+          <div className="grid gap-5 sm:gap-7 xl:grid-cols-2">
             <Alergeny />
             <Skladba />
           </div>
