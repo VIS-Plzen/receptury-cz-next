@@ -8,6 +8,7 @@ import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
@@ -342,35 +343,60 @@ export default function Receptury({
     options: any[];
   }) {
     const [open, setOpen] = useState(true);
+
+    const variants = {
+      open: {
+        opacity: 1,
+        maxHeight: 1000,
+        transition: { duration: 0.25, ease: [0.33, 1, 0.68, 1] },
+      },
+      closed: {
+        opacity: 0,
+        maxHeight: 0,
+        transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
+      },
+    };
+
     return (
       <div className="border-t border-primary-200 py-2">
-        <div className="flex flex-row items-center justify-between">
-          <Heading as="h3" size="inherit" className="mb-4">
-            {title}
-          </Heading>
+        <div>
           <button
             onClick={() => setOpen(!open)}
             aria-label={!open ? "Zobrazit" : "Skrýt"}
-            className="mb-4 rounded-lg"
+            className="mb-4 w-full rounded-lg"
           >
-            <ExpandMoreIcon
-              className={`${!open && "translate rotate-180 duration-100"}`}
-            />
+            <div className="flex w-full flex-row items-center justify-between text-center">
+              <Heading as="h3" size="inherit">
+                {title}
+              </Heading>
+              <ExpandMoreIcon
+                className={`${!open && "translate rotate-180 duration-100"}`}
+              />
+            </div>
           </button>
         </div>
-        {open && (
-          <ul className="space-y-2">
-            {options.map((o: any, oIndex: number) => (
-              <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
-                <Checkbox
-                  defaultChecked={o.checked}
-                  label={o.title}
-                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <AnimatePresence>
+          {open && (
+            <motion.ul
+              className="space-y-2"
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={variants}
+              transition={{ duration: 0.25 }}
+            >
+              {options.map((o: any, oIndex: number) => (
+                <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+                  <Checkbox
+                    defaultChecked={o.checked}
+                    label={o.title}
+                    onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                  />
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
       </div>
     );
   }

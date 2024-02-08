@@ -15,7 +15,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
   return (
     <div className={clsx("w-full space-y-4", className)}>
       <Listbox
-        value={data.value}
+        value={selected.value}
         onChange={(newValue: any) => {
           const newSelectedTab =
             data.find((tab: any) => tab.value === newValue) || data[0];
@@ -23,7 +23,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
         }}
       >
         <div className="relative">
-          <Listbox.Button className="w-full rounded-2xl border border-black bg-white">
+          <Listbox.Button className="w-full rounded-2xl border-2 border-primary-200 bg-white focus:border-primary/50 focus:ring-0">
             <div className="flex items-center justify-between p-2.5">
               <span className="block truncate">{selected.title}</span>
 
