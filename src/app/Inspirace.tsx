@@ -16,7 +16,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 export default function Inspirace({ className = "" }: { className?: string }) {
   const isDesktop = useMediaQuery("(min-width: 960px)");
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
-  const totalCards = isLargeScreen ? 10 : 8;
+  const totalCards = isLargeScreen ? 12 : 10;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,7 +42,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     },
   ];
 
-  const [selected, setSelected] = useState(TabsData[0]);
+  const [selected, setSelected] = useState(TabsData[0].value);
 
   // useEffect(() => {
   //   const newSearchParams = new URLSearchParams();
@@ -101,12 +101,12 @@ export default function Inspirace({ className = "" }: { className?: string }) {
         <div className={`${!isVisible && "hidden"}`}>
           <div className="flex w-full items-center justify-between pt-5 md:pt-20">
             <Tabs
-              value={selected.value}
+              value={selected}
               className="w-full"
               onValueChange={(value: string) => {
                 const selectedTab = TabsData.find((tab) => tab.value === value);
                 if (selectedTab) {
-                  setSelected(selectedTab);
+                  setSelected(selectedTab.value);
                 }
               }}
             >
@@ -133,7 +133,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           />
           {isDesktop ? (
             <div
-              className={cn("grid gap-4 pt-6 lg:grid-cols-4 xl:grid-cols-5")}
+              className={cn("grid gap-4 pt-6 lg:grid-cols-5 xl:grid-cols-6")}
             >
               {Array.from({ length: totalCards }, (_, index) => (
                 <RecipeCard

@@ -6,26 +6,29 @@ import { CheckIcon, ExpandLessIcon, ExpandMoreIcon } from "../icons";
 
 type Props = {
   data: any;
-  selected: any;
-  setSelected: (selected: any) => void;
+  selected: string;
+  setSelected: (selected: string) => void;
   className?: string;
 };
 
 function Selector({ data, selected, setSelected, className }: Props) {
   return (
-    <div className={clsx("w-full space-y-4", className)}>
+    <div className={clsx("relative w-full space-y-4", className)}>
       <Listbox
-        value={selected.value}
+        value={selected}
         onChange={(newValue: any) => {
-          const newSelectedTab =
-            data.find((tab: any) => tab.value === newValue) || data[0];
-          setSelected(newSelectedTab);
+          setSelected(
+            data.find((tab: any) => tab.value === newValue).value ||
+              data[0].value
+          );
         }}
       >
         <div className="relative">
           <Listbox.Button className="w-full rounded-2xl border-2 border-primary-200 bg-white focus:border-primary/50 focus:ring-0">
             <div className="flex items-center justify-between p-2.5">
-              <span className="block truncate">{selected.title}</span>
+              <span className="block truncate">
+                {data.find((tab: any) => tab.value === selected).title}
+              </span>
 
               <div>
                 <ExpandLessIcon className="-mb-2.5 opacity-50" size={18} />
@@ -38,7 +41,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="mt-2 cursor-pointer overflow-hidden rounded-2xl bg-white">
+            <Listbox.Options className="absolute z-40 mt-2 w-full cursor-pointer overflow-hidden rounded-2xl bg-white">
               {data.map((tab: any) => (
                 <Listbox.Option
                   key={tab.value}
