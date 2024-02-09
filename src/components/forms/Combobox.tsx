@@ -85,8 +85,10 @@ export default function MyCombobox({
           onChange(e);
         }}
       >
-        <div className={clsx("mt-1", isDisabled && "cursor-not-allowed")}>
-          <div className={` relative h-10 ${error && "mb-3"}`}>
+        <div
+          className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
+        >
+          <div className={`relative h-10 ${error && "mb-3"}`}>
             <Combobox.Label className="sr-only">{label}</Combobox.Label>
             <Combobox.Input
               className={clsx(
@@ -143,7 +145,7 @@ export default function MyCombobox({
             leaveTo="opacity-0"
             afterLeave={() => onChange(query)}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredValues.length === 0 && query !== "" ? (
                 <button
                   className="relative cursor-default select-none px-4 py-2 text-gray-700"

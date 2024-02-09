@@ -304,7 +304,7 @@ export default function Receptury({
             Našli jsme pro vás {data.length} receptů
           </p>
         </div>
-        <Comboboxes className="hidden flex-row gap-x-1 lg:flex lg:gap-x-5" />
+        <Comboboxes className="hidden grid-cols-2 gap-x-1 lg:grid lg:gap-x-5" />
         <div className="flex items-center gap-x-4">
           <ToggleGridButton
             className="hidden md:block"
