@@ -289,6 +289,7 @@ export default function Receptury({
             selectedOption={combo.value}
             onChange={(value: string) => updateCombobox(index, value)}
             aria-label={"Vyhledat " + combo.title}
+            z={100 - index}
           />
         ))}
       </div>

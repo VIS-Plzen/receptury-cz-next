@@ -31,7 +31,6 @@ export default function MyCombobox({
   error,
   ...rest
 }: Props) {
-  const [focused, setFocused] = useState(false);
   const [selectedValue, setSelectedValue] = useState(selectedOption);
   const [query, setQuery] = useState(selectedOption);
 
@@ -76,7 +75,7 @@ export default function MyCombobox({
   }
 
   return (
-    <div className={`z-dropbown w-full max-w-sm`} style={{ zIndex: z }}>
+    <div className={`w-full max-w-sm`} style={{ zIndex: z }}>
       <Combobox
         name={name}
         value={selectedValue ? selectedValue : ""}
@@ -115,8 +114,6 @@ export default function MyCombobox({
                 setSelectedValue(e.target.value);
                 setQuery(e.target.value);
               }}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
               autoComplete="off"
               {...rest}
             />
