@@ -447,7 +447,7 @@ export function Partner({
   return (
     <Container>
       <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center ">
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary-700 from-65% via-secondary/50 via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%" />
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary-700 from-45% via-secondary/50 via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%" />
         <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
