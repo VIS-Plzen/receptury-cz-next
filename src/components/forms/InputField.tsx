@@ -46,7 +46,9 @@ const InputField = forwardRef<HTMLInputElement, Props>(
         {label && (
           <Label
             htmlFor={generatedId}
-            className={cn(props.disabled && "pointer-events-none")}
+            className={`font-semibold ${
+              props.disabled && "pointer-events-none"
+            }`}
           >
             {label}{" "}
             {props.required && <span className="text-error-500">*</span>}
