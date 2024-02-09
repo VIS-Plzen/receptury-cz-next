@@ -470,7 +470,7 @@ export function Partner({
             height={400}
           />
         </div>
-        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5"
+        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5">
           Inspirační foto
         </span>
       </div>
