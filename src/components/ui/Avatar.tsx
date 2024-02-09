@@ -5,7 +5,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import clsx from "clsx";
 
 // Component docs: https://www.radix-ui.com/docs/primitives/components/avatar
-
+//
 type Props = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
   src?: string;
   name: string;
