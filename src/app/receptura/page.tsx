@@ -118,6 +118,7 @@ export default function Home() {
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
         img="/images/food.jpeg"
+        hasButton
       />
     </div>
   );
@@ -439,10 +440,12 @@ export function Partner({
   jmeno,
   heslo,
   img,
+  hasButton,
 }: {
   jmeno: string;
   heslo: string;
   img: any;
+  hasButton?: boolean;
 }) {
   return (
     <Container>
@@ -456,7 +459,7 @@ export function Partner({
             {jmeno}
           </Heading>
           <p className="font-semibold text-white">{heslo}</p>
-          <Button className="w-min">Více o nás</Button>
+          {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
         <div className=" flex h-full w-full justify-end">
           <Image
@@ -467,7 +470,7 @@ export function Partner({
             height={400}
           />
         </div>
-        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5">
+        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5"
           Inspirační foto
         </span>
       </div>
