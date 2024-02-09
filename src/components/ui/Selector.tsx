@@ -41,7 +41,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute z-40 mt-2 w-full cursor-pointer overflow-hidden rounded-2xl bg-white">
+            <Listbox.Options className="absolute z-40 mt-2 w-full cursor-pointer overflow-hidden rounded-2xl border-2 border-primary-200 bg-white">
               {data.map((tab: any) => (
                 <Listbox.Option
                   key={tab.value}

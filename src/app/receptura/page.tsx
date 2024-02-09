@@ -140,7 +140,7 @@ function Hero({
         <Image
           src="/images/food.jpeg"
           alt=""
-          className="w-full object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
+          className="w-full bg-gray-300 object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
           width={500}
           height={200}
         />
@@ -163,7 +163,7 @@ function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10 ">
+          <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:gap-x-2 md:px-10 ">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -171,7 +171,7 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } w-min flex-col items-center gap-1 text-center`}
+                }  flex w-min flex-col items-center gap-1 justify-self-center text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
