@@ -57,7 +57,7 @@ export default async function Home() {
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"
-        img=""
+        img="/images/food.jpeg"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
       />
     </div>

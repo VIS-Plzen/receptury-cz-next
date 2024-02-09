@@ -65,21 +65,6 @@ export default function MyCombobox({
           }}
         >
           {selectedValue}
-          {label && (
-            <label
-              aria-label={`Vyhledávat ${label}`}
-              htmlFor={id}
-              className={clsx(
-                "text-default pointer-events-none absolute block h-full origin-top-left text-base font-medium",
-                "left-5 top-3 z-10 -translate-y-1 scale-[0.8] transform-gpu opacity-90",
-                "peer-placeholder-shown:translate-y-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:opacity-60",
-                "peer-focus:-translate-y-1 peer-focus:scale-[0.8] peer-focus:opacity-90",
-                "transition duration-200 ease-out"
-              )}
-            >
-              {label}
-            </label>
-          )}
         </div>
         {error && (
           <p className="absolute bottom-[-1.125rem] left-0 block text-xs text-error">
@@ -91,7 +76,7 @@ export default function MyCombobox({
   }
 
   return (
-    <div className={`z-dropbown w-full`} style={{ zIndex: z }}>
+    <div className={`z-dropbown w-full max-w-sm`} style={{ zIndex: z }}>
       <Combobox
         name={name}
         value={selectedValue ? selectedValue : ""}
@@ -101,21 +86,22 @@ export default function MyCombobox({
         }}
       >
         <div className={clsx("mt-1", isDisabled && "cursor-not-allowed")}>
-          <div className={`relative h-16 ${error && "mb-3"}`}>
+          <div className={` relative h-10 ${error && "mb-3"}`}>
+            <Combobox.Label className="sr-only">{label}</Combobox.Label>
             <Combobox.Input
               className={clsx(
-                "flex h-full w-full items-start justify-start rounded-2xl border border-primary-400 bg-white outline-none ring-0",
+                "flex h-full w-full items-start justify-start rounded-xl border border-primary-400 bg-primary-50 outline-none ring-0",
                 "h-16 py-2.5 pl-9 pr-5",
                 "bg-gray-75 text-default dark:bg-gray-975 hover:bg-gray-100 focus:bg-gray-100",
                 "focus:outline-none focus:ring-0",
                 "transition-colors duration-200",
                 isDisabled && "cursor-not-allowed",
-                error && "ring-1 ring-error focus:ring-2",
-                label && "pt-7"
+                error && "ring-1 ring-error focus:ring-2"
               )}
               tabIndex={isDisabled ? -1 : undefined}
               name={name}
               id={id}
+              placeholder={label}
               onClick={(e) => {
                 if (isDisabled) {
                   e.preventDefault();
@@ -142,33 +128,13 @@ export default function MyCombobox({
                   e.preventDefault();
                 }
               }}
+              aria-label="Vyhledávat"
             >
               <SearchIcon
                 className="h-5 w-5 text-primary-500"
                 aria-hidden="true"
               />
             </Combobox.Button>
-            {label && (
-              <label
-                htmlFor={id}
-                className={clsx(
-                  "text-default pointer-events-none absolute block h-min origin-top-left text-center text-base font-medium",
-                  "left-10 z-10 scale-[0.8] transform-gpu opacity-90",
-                  "duration-200 ease-out",
-                  query === "" && !focused
-                    ? "top-1/2 -translate-y-1/2"
-                    : "top-3"
-                )}
-              >
-                {label}
-                {isRequired && <span className="ml-1 text-error">*</span>}
-              </label>
-            )}
-            {error && (
-              <p className="absolute bottom-[-1.125rem] left-0 block text-xs text-error">
-                {error}
-              </p>
-            )}
           </div>
           <Transition
             as={Fragment}

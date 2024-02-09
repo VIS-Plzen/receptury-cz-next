@@ -84,14 +84,14 @@ function Katalog() {
               slidesPerView: 4,
             },
           }}
-          className="mySwiper flex justify-center [--swiper-navigation-color:theme(colors.primary.600)] [--swiper-pagination-color:theme(colors.primary.600)]"
+          className="flex w-[calc(100%-64px)] justify-center !overflow-visible [--swiper-navigation-color:theme(colors.primary.600)] [--swiper-pagination-color:theme(colors.primary.600)] [&>.swiper-button-next]:-right-8 [&>.swiper-button-prev]:-left-8"
         >
           {produkty.map((produkt, index) => (
             <SwiperSlide key={index}>
               <a
                 key={index}
                 href={produkt.href}
-                className="flex h-[300px] w-[250px] flex-col gap-y-3 overflow-hidden"
+                className="flex h-[300px] flex-col gap-y-3 overflow-hidden px-5"
               >
                 <div className="relative h-4/5">
                   <Image

@@ -1,15 +1,21 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import { CancelIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
+import {
+  CancelIcon,
+  CloseIcon,
+  ExpandMoreIcon,
+  TuneIcon,
+} from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -48,6 +54,7 @@ export default function Receptury({
   urlPreQuery?: string;
 }) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
+  const toggleId = useId();
   const [gridView, setGridView] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -169,6 +176,20 @@ export default function Receptury({
     updateQuery();
   }
 
+  function resetFilters() {
+    sideBarValues.forEach((box) => {
+      box.options.forEach((option) => {
+        option.checked = false;
+      });
+    });
+
+    comboBoxValues.forEach((combo) => {
+      combo.value = "";
+    });
+
+    updateQuery();
+  }
+
   function updatePage(page: number) {
     pageValue.current = page;
     updateQuery();
@@ -283,19 +304,22 @@ export default function Receptury({
             Našli jsme pro vás {data.length} receptů
           </p>
         </div>
-        <Comboboxes className="hidden flex-row gap-x-1 md:flex lg:gap-x-5" />
-        <ToggleGridButton
-          className="hidden md:block"
-          gridView={gridView}
-          setGridView={setGridView}
-        />
-        <Button
-          variant="black"
-          className="h-min md:hidden"
-          onClick={() => setSideBarOpen(!sideBarOpen)}
-        >
-          Filtry <TuneIcon />
-        </Button>
+        <Comboboxes className="hidden flex-row gap-x-1 lg:flex lg:gap-x-5" />
+        <div className="flex items-center gap-x-4">
+          <ToggleGridButton
+            className="hidden md:block"
+            gridView={gridView}
+            setGridView={setGridView}
+            id={toggleId}
+          />
+          <Button
+            variant="black"
+            className="h-min lg:hidden"
+            onClick={() => setSideBarOpen(!sideBarOpen)}
+          >
+            Filtry <TuneIcon />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -303,17 +327,28 @@ export default function Receptury({
   function SideBar() {
     return (
       <div
-        className={`z-fixed flex flex-col p-7 md:z-fixed-below md:mr-5 md:block md:pl-0 md:pr-3 ${
-          sideBarOpen ? "fixed inset-0 bg-white" : "hidden"
+        className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
+          sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
         }`}
       >
-        <div className="flex flex-row justify-between md:hidden">
-          <Heading size="xs">Co hledáte?</Heading>
-          <button onClick={() => setSideBarOpen(false)}>
-            <CancelIcon />
-          </button>
+        <div className=" flex flex-row items-center justify-between lg:hidden">
+          <Heading size="sm">Co hledáte?</Heading>
+          <div className="flex space-x-8">
+            <button onClick={() => setSideBarOpen(false)}>
+              <CloseIcon className="h-8 w-8" />
+            </button>
+          </div>
         </div>
-        <Comboboxes className="my-8 flex flex-col gap-y-5 md:hidden" />
+        <Comboboxes className="my-8 flex flex-col gap-y-5 lg:hidden" />
+        <Button
+          className="mb-2"
+          variant="primary-outline"
+          size="sm"
+          onClick={() => resetFilters()}
+        >
+          <CancelIcon />
+          Resetovat filtry
+        </Button>
         {sideBarValues.map((box, index) => (
           <SideBarBox
             key={"ffsbb" + index}
@@ -336,35 +371,60 @@ export default function Receptury({
     options: any[];
   }) {
     const [open, setOpen] = useState(true);
+
+    const variants = {
+      open: {
+        opacity: 1,
+        maxHeight: 1000,
+        transition: { duration: 0.25, ease: [0.33, 1, 0.68, 1] },
+      },
+      closed: {
+        opacity: 0,
+        maxHeight: 0,
+        transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
+      },
+    };
+
     return (
       <div className="border-t border-primary-200 py-2">
-        <div className="flex flex-row items-center justify-between">
-          <Heading as="h3" size="inherit" className="mb-4">
-            {title}
-          </Heading>
+        <div>
           <button
             onClick={() => setOpen(!open)}
             aria-label={!open ? "Zobrazit" : "Skrýt"}
-            className="mb-4"
+            className="mb-4 w-full rounded-lg"
           >
-            <ExpandMoreIcon
-              className={`${!open && "translate rotate-180 duration-100"}`}
-            />
+            <div className="flex w-full flex-row items-center justify-between text-center">
+              <Heading as="h3" size="inherit">
+                {title}
+              </Heading>
+              <ExpandMoreIcon
+                className={`${!open && "translate rotate-180 duration-100"}`}
+              />
+            </div>
           </button>
         </div>
-        {open && (
-          <ul className="space-y-2">
-            {options.map((o: any, oIndex: number) => (
-              <li key={"sbbo" + oIndex} className={`cursor-pointer`}>
-                <Checkbox
-                  defaultChecked={o.checked}
-                  label={o.title}
-                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <AnimatePresence>
+          {open && (
+            <motion.ul
+              className="space-y-2"
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={variants}
+              transition={{ duration: 0.25 }}
+            >
+              {options.map((o: any, oIndex: number) => (
+                <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+                  <Checkbox
+                    defaultChecked={o.checked}
+                    label={o.title}
+                    onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                  />
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -387,10 +447,10 @@ export default function Receptury({
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow />
-      <div className="block md:grid md:grid-cols-6">
+      <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <SideBar />
         <RecipeCardsGrid
-          className="col-span-5 pt-0"
+          className="col-span-4 pt-0 xl:col-span-5"
           // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
           isLoading={isLoading}

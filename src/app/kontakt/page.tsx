@@ -23,10 +23,10 @@ export default function Home() {
     }) {
       return (
         <div className={`${className}`}>
-          <Heading size="sm" hasMarginBottom>
+          <Heading size="xs" hasMarginBottom>
             {title}
           </Heading>
-          <div className="flex flex-col gap-y-3 rounded-xl bg-white px-3 py-5 shadow-xl">
+          <div className="flex flex-col gap-y-3 rounded-xl border-2 border-primary-200 bg-white px-3 py-5 sm:px-4">
             {children}
           </div>
         </div>
