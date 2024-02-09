@@ -1,7 +1,12 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
-import { CloseIcon, ExpandMoreIcon, TuneIcon } from "@/components/icons";
+import {
+  CancelIcon,
+  CloseIcon,
+  ExpandMoreIcon,
+  TuneIcon,
+} from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -171,6 +176,20 @@ export default function Receptury({
     updateQuery();
   }
 
+  function resetFilters() {
+    sideBarValues.forEach((box) => {
+      box.options.forEach((option) => {
+        option.checked = false;
+      });
+    });
+
+    comboBoxValues.forEach((combo) => {
+      combo.value = "";
+    });
+
+    updateQuery();
+  }
+
   function updatePage(page: number) {
     pageValue.current = page;
     updateQuery();
@@ -308,7 +327,7 @@ export default function Receptury({
   function SideBar() {
     return (
       <div
-        className={`z-fixed flex flex-col p-7 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
+        className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
           sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
         }`}
       >
@@ -321,6 +340,15 @@ export default function Receptury({
           </div>
         </div>
         <Comboboxes className="my-8 flex flex-col gap-y-5 lg:hidden" />
+        <Button
+          className="mb-2"
+          variant="primary-outline"
+          size="sm"
+          onClick={() => resetFilters()}
+        >
+          <CancelIcon />
+          Resetovat filtry
+        </Button>
         {sideBarValues.map((box, index) => (
           <SideBarBox
             key={"ffsbb" + index}
