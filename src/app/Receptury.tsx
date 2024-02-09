@@ -466,13 +466,13 @@ function SideBar({
         updateCombobox={updateCombobox}
       />
       <Button
-        className="mb-2"
+        className="mb-2 w-full max-w-sm"
         variant="primary-outline"
         size="sm"
         onClick={() => resetFilters()}
       >
         <CancelIcon />
-        Resetovat filtry
+        Zrušit filtry
       </Button>
       {sideBarValues.map((box, index) => (
         <SideBarBox
