@@ -145,7 +145,7 @@ export default function MyCombobox({
             <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredValues.length === 0 && query !== "" ? (
                 <button
-                  className="relative cursor-default select-none px-4 py-2 text-gray-700"
+                  className="relative select-none px-4 py-2 text-gray-700"
                   onClick={() => onChange(query)}
                 >
                   Nenalezeno, přesto vyhledat.
@@ -155,7 +155,7 @@ export default function MyCombobox({
                   <Combobox.Option
                     key={key}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                         active ? "bg-primary text-white" : "text-muted"
                       }`
                     }
