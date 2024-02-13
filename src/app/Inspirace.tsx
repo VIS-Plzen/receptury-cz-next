@@ -140,11 +140,10 @@ export default function Inspirace({ className = "" }: { className?: string }) {
               {Array.from({ length: totalCards }, (_, index) => (
                 <RecipeCard
                   key={index}
-                  isGridView={true}
+                  forceGrid
                   isLoading={false}
                   label="Smažené kuřecí řízečky, bramborové placičky"
                   badges={["Dieta", "Brambor"]}
-                  assertCard={true}
                 />
               ))}
             </div>
@@ -167,11 +166,10 @@ export default function Inspirace({ className = "" }: { className?: string }) {
                 <SwiperSlide key={index} className="py-10">
                   <RecipeCard
                     key={index}
-                    isGridView={true}
                     isLoading={false}
                     label={"Smažené kuřecí řízečky, bramborové placičky"}
                     badges={["Dieta", "Brambor"]}
-                    assertCard={true}
+                    forceGrid
                   />
                 </SwiperSlide>
               ))}

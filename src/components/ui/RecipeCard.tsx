@@ -7,13 +7,13 @@ import ButtonIcon from "./ButtonIcon";
 
 type RecipeCardProps = {
   isGridView?: boolean;
+  forceGrid?: boolean;
+  forceRow?: boolean;
   isLoading?: boolean;
   label: string;
   img?: any;
   badges: string[];
-  assertCard?: boolean;
   className?: string;
-  isTablet?: boolean;
 };
 
 type BadgesProps = {
@@ -134,7 +134,7 @@ function RowCardLayout({
   return (
     <div
       className={cn(
-        "flex h-[70px] flex-row justify-between",
+        "h-[70px] flex-row justify-between",
         isLoading && "animate-pulse",
         className
       )}
@@ -184,7 +184,12 @@ function RowCardLayout({
             <BadgeRenderer badges={badges} />
           </div>
           <div className="items-center">
-            <div className={cn("flex space-x-2 p-3", isLoading && "hidden")}>
+            <div
+              className={cn(
+                "hidden space-x-2 p-3 md:flex",
+                isLoading && "hidden"
+              )}
+            >
               <ActionButtons isGridView={false} />
             </div>
             <div
@@ -200,169 +205,33 @@ function RowCardLayout({
   );
 }
 
-// Mobile card
-function MobileCardLayout({
-  label,
-  badges,
-  img,
-  isLoading,
-  className,
-}: RecipeCardProps) {
-  return (
-    <div
-      className={cn(
-        "flex h-[90px] items-center justify-start overflow-hidden",
-        isLoading && "animate-pulse",
-        className
-      )}
-    >
-      {img ? (
-        <div
-          className={cn(
-            "relative h-[90px] w-[90px] overflow-hidden rounded-l-xl",
-            isLoading && "hidden"
-          )}
-        >
-          <Image alt="" src={img} fill className="object-cover" />
-        </div>
-      ) : (
-        <div
-          className={cn(
-            "flex aspect-square h-full items-center justify-center overflow-hidden rounded-l-xl bg-primary-300/30",
-            isLoading && "hidden"
-          )}
-        >
-          <MealSymbol />
-        </div>
-      )}
-      <div
-        className={cn(
-          "hidden",
-          isLoading &&
-            "block aspect-square h-full overflow-hidden rounded-l-xl bg-gray-200"
-        )}
-      ></div>
-      <div
-        className={cn(
-          "flex h-full w-full flex-col items-start justify-center overflow-hidden rounded-r-xl border-2 border-l-0 border-primary-300/30 bg-white",
-          isLoading && "border-gray-200"
-        )}
-      >
-        <div className="line-clamp-2 px-4 text-sm font-bold">
-          <p className={cn("block", isLoading && "hidden")}>{label}</p>
-        </div>
-        <div
-          className={cn(
-            "flex flex-row  items-center px-4",
-            isLoading && "hidden"
-          )}
-        >
-          <BadgeRenderer badges={badges} />
-        </div>
-        <div
-          className={cn(
-            isLoading && "ml-4 h-4 w-7/12 rounded-full bg-gray-300",
-            !isLoading && "hidden"
-          )}
-        ></div>
-      </div>
-    </div>
-  );
-}
-
 function RecipeCard({
   isGridView,
-  isLoading,
+  forceGrid,
+  forceRow,
   label,
-  img,
   badges,
-  assertCard,
   className,
-  isTablet,
 }: RecipeCardProps) {
   return (
     <>
-      {/* <>
-        <div className="block md:hidden">
-          {assertCard ? (
-            <GridCardLayout
-              label={label}
-              badges={badges}
-              img={img}
-              isLoading={isLoading}
-              className={className}
-            />
-          ) : (
-            <MobileCardLayout
-              label={label}
-              badges={badges}
-              img={img}
-              isLoading={isLoading}
-              className={className}
-            />
-          )}
-        </div>
-        <div className="hidden md:block">
-          <Suspense
-            fallback={
-              <>
-                {isGridView ? (
-                  <GridCardLayout
-                    label={label}
-                    badges={badges}
-                    img={img}
-                    isLoading={true}
-                    className={className}
-                  />
-                ) : (
-                  <RowCardLayout
-                    label={label}
-                    badges={badges}
-                    img={img}
-                    isLoading={true}
-                    className={className}
-                  />
-                )}
-              </>
-            }
-          >
-            {isGridView ? (
-              <GridCardLayout
-                label={label}
-                badges={badges}
-                img={img}
-                isLoading={false}
-                className={className}
-              />
-            ) : (
-              <RowCardLayout
-                label={label}
-                badges={badges}
-                img={img}
-                isLoading={false}
-                className={className}
-              />
-            )}
-          </Suspense>
-        </div>
-      </> */}
       <Suspense
         fallback={
           <ReturnedLayout
             card={{ label: label, badges: badges, className: className }}
             loading={true}
-            assertCard={assertCard}
             isGridView={isGridView}
-            isTablet={isTablet}
+            forceGrid={forceGrid}
+            forceRow={forceRow}
           />
         }
       >
         <ReturnedLayout
           card={{ label: label, badges: badges, className: className }}
           loading={false}
-          assertCard={assertCard}
           isGridView={isGridView}
-          isTablet={isTablet}
+          forceGrid={forceGrid}
+          forceRow={forceRow}
         />
       </Suspense>
     </>
@@ -370,61 +239,52 @@ function RecipeCard({
 }
 
 function ReturnedLayout({
-  isTablet,
   isGridView,
+  forceGrid,
+  forceRow,
   card,
   loading,
-  assertCard,
 }: {
   isGridView: boolean | undefined;
+  forceGrid?: boolean;
+  forceRow?: boolean;
   card: RecipeCardProps;
   loading: boolean;
-  assertCard: boolean | undefined;
-  isTablet: boolean | undefined;
 }) {
-  if (!isTablet) {
-    if (assertCard) {
-      return (
-        <GridCardLayout
-          label={card.label}
-          badges={card.badges}
-          img={card.img}
-          isLoading={loading}
-          className={card.className}
-        />
-      );
-    }
-    return (
-      <MobileCardLayout
+  return (
+    <>
+      <GridCardLayout
         label={card.label}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={card.className}
+        className={`${
+          forceGrid
+            ? "block"
+            : forceRow
+              ? "hidden"
+              : isGridView
+                ? "hidden md:block"
+                : "hidden"
+        }`}
       />
-    );
-  } else {
-    if (isGridView) {
-      return (
-        <GridCardLayout
-          label={card.label}
-          badges={card.badges}
-          img={card.img}
-          isLoading={loading}
-          className={card.className}
-        />
-      );
-    }
-    return (
       <RowCardLayout
         label={card.label}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={card.className}
+        className={` ${
+          forceRow
+            ? "flex"
+            : forceGrid
+              ? "hidden"
+              : isGridView
+                ? "flex md:hidden"
+                : "flex"
+        }`}
       />
-    );
-  }
+    </>
+  );
 }
 
 export default RecipeCard;

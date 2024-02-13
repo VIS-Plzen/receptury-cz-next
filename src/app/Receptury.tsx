@@ -13,11 +13,10 @@ import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -55,50 +54,29 @@ export default function Receptury({
   className?: string;
   urlPreQuery?: string;
 }) {
+  const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
   const [refresh, setRefresh] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 864px)");
+  const router = useRouter();
   const paramsHook = useSearchParams();
   const urlParams = decodeURIComponent(
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
-  const router = useRouter();
 
-  function returnPage() {
-    const urlParam = paramsHook.get("stranka");
-    if (urlParam) return parseInt(urlParam);
-    return 1;
-  }
-
-  function splitUrlParams(param: string) {
-    const [key, prevalues] = param.split("=");
-    const values = prevalues ? prevalues.split(",") : "";
-    return [key, values, prevalues];
-  }
-
-  useEffect(() => {
-    if (sideBarOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [sideBarOpen]);
-
-  const sideBarValues = useMemo(() => {
-    // Základní filtry
+  const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
       {
         title: "Obecné",
         name: "obecne",
         options: [
-          { title: "Moje oblíbené recepty", name: "moje", checked: false },
+          { title: "Moje oblíbené", name: "moje", checked: false },
           { title: "Nutričně ověřeno", name: "nutricni", checked: false },
           { title: "Stáhnout do skladu", name: "sklad", checked: false },
           {
-            title: "Zobrazit videorecepty",
+            title: "Videorecepty",
             name: "videorecepty",
             checked: false,
           },
@@ -141,7 +119,34 @@ export default function Receptury({
     });
 
     return holder;
-  }, [urlParamsSplitted]);
+  });
+  const [pageState, setPageState] = useState<number>(
+    (() => {
+      const urlParam = paramsHook.get("stranka");
+      if (urlParam) return parseInt(urlParam);
+      return 1;
+    })()
+  );
+
+  function updateSideBarValue(
+    boxIndex: number,
+    checkboxIndex: number,
+    checked: boolean
+  ) {
+    setSideBarValues((prev: any) => {
+      let objHolder = prev;
+      objHolder[boxIndex].options[checkboxIndex].checked = checked;
+      return objHolder;
+    });
+    setRefresh(!refresh);
+  }
+
+  function splitUrlParams(param: string) {
+    const [key, prevalues] = param.split("=");
+    const values = prevalues ? prevalues.split(",") : "";
+    return [key, values, prevalues];
+  }
+
   const comboBoxValues = useMemo(() => {
     const holder = [
       {
@@ -167,16 +172,6 @@ export default function Receptury({
     });
     return holder;
   }, [urlParamsSplitted]);
-  let pageValue = useRef(returnPage());
-
-  function updateSideBarValue(
-    boxIndex: number,
-    checkboxIndex: number,
-    checked: boolean
-  ) {
-    sideBarValues[boxIndex].options[checkboxIndex].checked = checked;
-    updateQuery();
-  }
 
   function resetFilters() {
     sideBarValues.forEach((box) => {
@@ -188,22 +183,14 @@ export default function Receptury({
     comboBoxValues.forEach((combo) => {
       combo.value = "";
     });
-
-    updateQuery();
-  }
-
-  function updatePage(page: number) {
-    pageValue.current = page;
-    updateQuery();
   }
 
   function updateCombobox(index: number, value: string) {
     comboBoxValues[index].value = value;
-    updateQuery();
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
-  function updateQuery() {
+  async function getDataAndSetQuery(page: number) {
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -239,65 +226,45 @@ export default function Receptury({
       });
     });
 
-    if (pageValue.current !== 1) {
+    if (page !== 1) {
       if (query === "") {
-        query = "stranka=" + pageValue.current;
+        query = "stranka=" + page;
       } else {
-        query += "&stranka=" + pageValue.current;
+        query += "&stranka=" + page;
       }
     }
 
-    setRefresh(!refresh);
-
-    router.replace("?" + query, { scroll: false });
-  }
-
-  function returnSelectedValues() {
-    const allValues: any = { comboBoxes: {}, sideBar: {} };
-    const allComboValues: any = {};
-    const allSelectedBoxes: string[] = [];
-    comboBoxValues.forEach((combo) => {
-      allComboValues[combo.name] = combo.value;
-      if (combo.value !== "") {
-        allValues.comboBoxes[combo.name] = combo;
-      }
-    });
-    sideBarValues.forEach((box) =>
-      box.options.map((option) => {
-        if (option.checked) {
-          allSelectedBoxes.push(option.name);
-          if (!allValues.sideBar[box.name]) {
-            allValues.sideBar[box.name] = [option.name];
-          } else {
-            allValues.sideBar[box.name].push(option.name);
-          }
-        }
+    const result = await (
+      await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
+        method: "POST",
+        body: JSON.stringify({
+          sid: "12345VIS",
+          funkce: "ObecnyDotaz",
+          parametry: {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Limit: 15,
+            Offset: (page - 1) * 15,
+          },
+        }),
       })
-    );
-    return [allValues, allComboValues, allSelectedBoxes];
+    ).json();
+    setData(result);
+    router.replace("?" + query, { scroll: false });
+
+    return setRefresh(!refresh);
   }
 
-  const easyReturned = returnSelectedValues();
-
-  const data = useMemo(() => {
-    const updatedData = [
-      {
-        title: `${Object.values(easyReturned[1])
-          .map((combo, index) => `C${index + 1}: ${combo}`)
-          .join(" | ")} | Page: ${pageValue.current}`,
-        badges: easyReturned[2].slice(0, 2),
-      },
-      ...initialData,
-    ];
-
-    return updatedData;
-  }, [easyReturned, pageValue, initialData]);
+  function changePage(page: number) {
+    setPageState(page);
+    getDataAndSetQuery(page);
+  }
 
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
-        data={data}
+        data={initialData}
         gridView={gridView}
         setGridView={setGridView}
         setSideBarOpen={setSideBarOpen}
@@ -315,20 +282,19 @@ export default function Receptury({
           sideBarValues={sideBarValues}
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
-          isDesktop={isDesktop}
+          getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
         />
         <RecipeCardsGrid
           className="col-span-4 pt-0 xl:col-span-5"
-          // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
           isLoading={false}
           data={data}
         />
       </div>
       <Paginator
-        currentPage={pageValue.current}
+        currentPage={pageState}
         totalPages={25}
-        changePage={(page) => updatePage(page)}
+        changePage={(page) => changePage(page)}
       />
     </Container>
   );
@@ -432,7 +398,7 @@ function MobileFilters({
   comboBoxValues,
   updateCombobox,
   updateSideBarValue,
-  isDesktop,
+  getDataAndSetQuery,
 }: {
   sideBarOpen: boolean;
   setSideBarOpen: (open: boolean) => void;
@@ -444,63 +410,65 @@ function MobileFilters({
     options: any[];
     value: string;
   }[];
-  isDesktop: boolean;
   updateCombobox: (index: number, value: string) => void;
   updateSideBarValue: (
     boxIndex: number,
     optionIndex: number,
     value: boolean
   ) => void;
+  getDataAndSetQuery: () => void;
 }) {
-  if (!isDesktop) {
-    return (
-      <>
-        <Dialog.Root
-          open={sideBarOpen}
-          onOpenChange={() => setSideBarOpen(!sideBarOpen)}
-        >
-          <Dialog.Portal>
-            <Dialog.Overlay className="DialogOverlay" />
-            <Dialog.Content className="DialogContent">
-              <SideBar
-                comboBoxValues={comboBoxValues}
-                resetFilters={resetFilters}
-                setSideBarOpen={setSideBarOpen}
-                sideBarOpen={sideBarOpen}
-                sideBarValues={sideBarValues}
-                updateCombobox={updateCombobox}
-                updateSideBarValue={updateSideBarValue}
-              />
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
-      </>
-    );
-  } else {
-    return (
-      <SideBar
-        comboBoxValues={comboBoxValues}
-        resetFilters={resetFilters}
-        setSideBarOpen={setSideBarOpen}
-        sideBarOpen={sideBarOpen}
-        sideBarValues={sideBarValues}
-        updateCombobox={updateCombobox}
-        updateSideBarValue={updateSideBarValue}
-      />
-    );
-  }
+  return (
+    <>
+      <Dialog.Root
+        defaultOpen={false}
+        open={sideBarOpen}
+        onOpenChange={() => setSideBarOpen(false)}
+        modal
+      >
+        <Dialog.Portal>
+          {sideBarOpen && (
+            <div className="lg:hidden">
+              <Dialog.Overlay className="DialogOverlay" />
+              <Dialog.Content className="DialogContent">
+                <SideBar
+                  comboBoxValues={comboBoxValues}
+                  resetFilters={resetFilters}
+                  setSideBarOpen={setSideBarOpen}
+                  sideBarValues={sideBarValues}
+                  updateCombobox={updateCombobox}
+                  updateSideBarValue={updateSideBarValue}
+                  getDataAndSetQuery={getDataAndSetQuery}
+                />
+              </Dialog.Content>
+            </div>
+          )}
+        </Dialog.Portal>
+      </Dialog.Root>
+      <div className="hidden lg:block">
+        <SideBar
+          comboBoxValues={comboBoxValues}
+          resetFilters={resetFilters}
+          setSideBarOpen={setSideBarOpen}
+          sideBarValues={sideBarValues}
+          updateCombobox={updateCombobox}
+          updateSideBarValue={updateSideBarValue}
+          getDataAndSetQuery={getDataAndSetQuery}
+        />
+      </div>
+    </>
+  );
 }
 
 function SideBar({
-  sideBarOpen,
   setSideBarOpen,
   resetFilters,
   sideBarValues,
   comboBoxValues,
   updateCombobox,
   updateSideBarValue,
+  getDataAndSetQuery,
 }: {
-  sideBarOpen: boolean;
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
   sideBarValues: { title: string; options: any[] }[];
@@ -516,10 +484,11 @@ function SideBar({
     optionIndex: number,
     value: boolean
   ) => void;
+  getDataAndSetQuery: () => void;
 }) {
   return (
     <div
-      className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${"fixed inset-0 overflow-y-auto bg-white lg:static"}`}
+      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
     >
       <div className=" flex flex-row items-center justify-between lg:hidden">
         <Heading size="sm">Co hledáte?</Heading>
@@ -534,15 +503,26 @@ function SideBar({
         comboBoxValues={comboBoxValues}
         updateCombobox={updateCombobox}
       />
-      <Button
-        className="mb-2 w-full max-w-sm"
-        variant="primary-outline"
-        size="sm"
-        onClick={() => resetFilters()}
-      >
-        <CancelIcon />
-        Zrušit filtry
-      </Button>
+      <div className="">
+        <Button
+          className="mb-2 w-full max-w-sm"
+          variant="primary"
+          size="sm"
+          onClick={() => getDataAndSetQuery()}
+        >
+          <CancelIcon />
+          Potvrdit
+        </Button>
+        <Button
+          className="mb-2 w-full max-w-sm"
+          variant="primary-outline"
+          size="sm"
+          onClick={() => resetFilters()}
+        >
+          <CancelIcon />
+          Zrušit
+        </Button>
+      </div>
       {sideBarValues.map((box, index) => (
         <SideBarBox
           key={"ffsbb" + index}
@@ -576,12 +556,12 @@ function SideBarBox({
   const variants = {
     open: {
       opacity: 1,
-      maxHeight: 1000,
+      height: "auto",
       transition: { duration: 0.25, ease: [0.33, 1, 0.68, 1] },
     },
     closed: {
       opacity: 0,
-      maxHeight: 0,
+      height: 0,
       transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
     },
   };
@@ -604,7 +584,7 @@ function SideBarBox({
           </div>
         </button>
       </div>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {open && (
           <motion.ul
             className="space-y-2"

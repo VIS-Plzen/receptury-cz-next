@@ -6,13 +6,8 @@ import VolitelnyObsah from "./VolitelnyObsah";
 export default async function Home() {
   // základní fetch kterej chce dodělat
 
-  if (false) {
-    let data;
-    const result = await readSome();
-    if (result.Result.Status === true) {
-      data = result.Vety;
-    }
-  }
+  let data = await readSome();
+
   async function createNew() {
     return await (
       await fetch("/api", {
@@ -36,7 +31,7 @@ export default async function Home() {
   }
   async function readSome() {
     return await (
-      await fetch(process.env.URL + "/api", {
+      await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
         method: "POST",
         body: JSON.stringify({
           sid: "12345VIS",
@@ -44,6 +39,7 @@ export default async function Home() {
           parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
+            Limit: 15,
           },
         }),
       })
@@ -53,7 +49,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
-      <Receptury className="border-y-2 border-primary-200" />
+      <Receptury className="border-y-2 border-primary-200" initialData={data} />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"

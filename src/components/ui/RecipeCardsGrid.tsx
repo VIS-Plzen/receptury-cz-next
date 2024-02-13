@@ -25,18 +25,6 @@ function RecipeCardsGrid({
   cardsInGrid,
   assertCard,
 }: Props) {
-  const label1 = "Fusilli s mediteránskou omáčkou a smaženým sumečkem";
-  const badgesArray = ["Ryby a mořské plody", "Bezmléčná dieta"];
-  const gridClasses = [
-    "",
-    "grid-cols-1",
-    "grid-cols-2",
-    "grid-cols-3",
-    "grid-cols-4",
-    "grid-cols-5",
-    "grid-cols-6",
-  ];
-
   return (
     <div
       className={cn(
@@ -48,13 +36,13 @@ function RecipeCardsGrid({
       )}
     >
       {data &&
-        data.map((card, index) => (
+        data.map((card: any, index) => (
           <RecipeCard
             key={index}
             isGridView={gridView}
             isLoading={isLoading}
-            label={card.title}
-            badges={card.badges}
+            label={card.Vlastnosti.Nazev}
+            badges={[]}
             img="/images/food.jpeg"
           />
         ))}

@@ -1,7 +1,7 @@
 "use";
 import { Combobox, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { CheckIcon, SearchIcon } from "../icons";
 
 type Props = {
@@ -33,6 +33,8 @@ export default function MyCombobox({
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(selectedOption);
   const [query, setQuery] = useState(selectedOption);
+
+  const ref: any = useRef(null);
 
   const filteredValues =
     query === ""
@@ -103,6 +105,7 @@ export default function MyCombobox({
               name={name}
               id={id}
               placeholder={label}
+              ref={ref}
               onClick={(e) => {
                 if (isDisabled) {
                   e.preventDefault();
@@ -163,14 +166,14 @@ export default function MyCombobox({
                   >
                     {({ selected, active }) => (
                       <>
-                        <span
+                        <button
                           className={`block truncate ${
                             selected ? "font-medium" : "font-normal"
                           }`}
-                          onClick={() => onChange && onChange(value)}
+                          onClick={() => onChange(value)}
                         >
                           {value}
-                        </span>
+                        </button>
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
