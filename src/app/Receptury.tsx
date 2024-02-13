@@ -22,28 +22,40 @@ export default function Receptury({
   title = "Receptury",
   initialData = [
     {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
+      Vlastnosti: {
+        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
     {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
+      Vlastnosti: {
+        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
     {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
+      Vlastnosti: {
+        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
     {
-      title: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-      badges: ["Dieta", "Ryba a mořské plody"],
+      Vlastnosti: {
+        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
     {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Smažené", "Oblíbené"],
+      Vlastnosti: {
+        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
     {
-      title: "Smažené kuřecí řízečky, bramborové placičky",
-      badges: ["Dieta", "Ryba a mořské plody"],
+      Vlastnosti: {
+        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
+        badges: ["Dieta", "Ryba a mořské plody"],
+      },
     },
   ],
   className = "",
@@ -235,7 +247,7 @@ export default function Receptury({
     }
 
     const result = await (
-      await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
+      await fetch("/api", {
         method: "POST",
         body: JSON.stringify({
           sid: "12345VIS",

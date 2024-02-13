@@ -30,26 +30,40 @@ export default async function Home() {
     ).json();
   }
   async function readSome() {
-    return await (
-      await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
+    const result = await (
+      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sid: "12345VIS",
-          funkce: "ObecnyDotaz",
-          parametry: {
-            Tabulka: "Receptury",
-            Operace: "Read",
-            Limit: 15,
-          },
+          Uzivatel: process.env.BE_USER,
+          Heslo: process.env.BE_PASSWORD,
+          SID: "12345VIS",
+          Funkce: "ObecnyDotaz",
+          Parametry: [
+            {
+              Tabulka: "Receptury",
+              Operace: "Read",
+              Limit: 15,
+            },
+          ],
         }),
       })
     ).json();
+
+    if (result.Result.Status === false) {
+      return null;
+    }
+
+    return result.Vety;
   }
 
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
-      <Receptury className="border-y-2 border-primary-200" initialData={data} />
+      <Receptury
+        className="border-y-2 border-primary-200"
+        initialData={data ? data : undefined}
+      />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"
