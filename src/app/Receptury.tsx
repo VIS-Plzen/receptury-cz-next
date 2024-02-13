@@ -13,6 +13,8 @@ import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -57,6 +59,7 @@ export default function Receptury({
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
   const [refresh, setRefresh] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 864px)");
   const paramsHook = useSearchParams();
   const urlParams = decodeURIComponent(
     paramsHook.toString().replaceAll("+", " ")
@@ -304,7 +307,7 @@ export default function Receptury({
         updateCombobox={updateCombobox}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
-        <SideBar
+        <MobileFilters
           comboBoxValues={comboBoxValues}
           resetFilters={resetFilters}
           setSideBarOpen={setSideBarOpen}
@@ -312,6 +315,7 @@ export default function Receptury({
           sideBarValues={sideBarValues}
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
+          isDesktop={isDesktop}
         />
         <RecipeCardsGrid
           className="col-span-4 pt-0 xl:col-span-5"
@@ -420,6 +424,73 @@ function TopRow({
   );
 }
 
+function MobileFilters({
+  sideBarOpen,
+  setSideBarOpen,
+  resetFilters,
+  sideBarValues,
+  comboBoxValues,
+  updateCombobox,
+  updateSideBarValue,
+  isDesktop,
+}: {
+  sideBarOpen: boolean;
+  setSideBarOpen: (open: boolean) => void;
+  resetFilters: () => void;
+  sideBarValues: { title: string; options: any[] }[];
+  comboBoxValues: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  isDesktop: boolean;
+  updateCombobox: (index: number, value: string) => void;
+  updateSideBarValue: (
+    boxIndex: number,
+    optionIndex: number,
+    value: boolean
+  ) => void;
+}) {
+  if (!isDesktop) {
+    return (
+      <>
+        <Dialog.Root
+          open={sideBarOpen}
+          onOpenChange={() => setSideBarOpen(!sideBarOpen)}
+        >
+          <Dialog.Portal>
+            <Dialog.Overlay className="DialogOverlay" />
+            <Dialog.Content className="DialogContent">
+              <SideBar
+                comboBoxValues={comboBoxValues}
+                resetFilters={resetFilters}
+                setSideBarOpen={setSideBarOpen}
+                sideBarOpen={sideBarOpen}
+                sideBarValues={sideBarValues}
+                updateCombobox={updateCombobox}
+                updateSideBarValue={updateSideBarValue}
+              />
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+      </>
+    );
+  } else {
+    return (
+      <SideBar
+        comboBoxValues={comboBoxValues}
+        resetFilters={resetFilters}
+        setSideBarOpen={setSideBarOpen}
+        sideBarOpen={sideBarOpen}
+        sideBarValues={sideBarValues}
+        updateCombobox={updateCombobox}
+        updateSideBarValue={updateSideBarValue}
+      />
+    );
+  }
+}
+
 function SideBar({
   sideBarOpen,
   setSideBarOpen,
@@ -448,9 +519,7 @@ function SideBar({
 }) {
   return (
     <div
-      className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
-        sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
-      }`}
+      className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${"fixed inset-0 overflow-y-auto bg-white lg:static"}`}
     >
       <div className=" flex flex-row items-center justify-between lg:hidden">
         <Heading size="sm">Co hledáte?</Heading>

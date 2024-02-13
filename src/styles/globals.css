@@ -9,6 +9,12 @@
 /* @layer base {
 } */
 
+@layer base {
+  img {
+    @apply bg-gray-200;
+  }
+}
+
 @layer components {
   /* StyledLink component - hoverEffect prop - slide-back option */
   .ui-styled-link.ui-styled-link--slide-back::before {

@@ -75,7 +75,7 @@ function GridCardLayout({
             <Image
               alt=""
               src={img}
-              className="h-full w-full object-cover"
+              className="h-full w-full bg-gray-200 object-cover"
               fill
             />
           </div>
@@ -143,7 +143,7 @@ function RowCardLayout({
             "relative h-[70px] w-[70px] overflow-hidden rounded-l-2xl"
           )}
         >
-          <Image alt="" src={img} fill className="object-cover" />
+          <Image alt="" src={img} fill className="bg-gray-200 object-cover" />
         </div>
       ) : (
         <div
@@ -221,7 +221,7 @@ function MobileCardLayout({
             isLoading && "hidden"
           )}
         >
-          <Image alt="" src={img} fill className="object-cover" />
+          <Image alt="" src={img} fill className="bg-gray-200 object-cover" />
         </div>
       ) : (
         <div
