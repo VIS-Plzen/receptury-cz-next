@@ -56,7 +56,6 @@ export default function Receptury({
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const paramsHook = useSearchParams();
   const urlParams = decodeURIComponent(
@@ -277,158 +276,6 @@ export default function Receptury({
 
   const easyReturned = returnSelectedValues();
 
-  function Comboboxes({ className = "" }: { className: string }) {
-    return (
-      <div className={`${className}`}>
-        {comboBoxValues.map((combo, index) => (
-          <MyCombobox
-            key={"cbvmy" + index}
-            label={combo.title}
-            name={combo.name}
-            options={combo.options}
-            selectedOption={combo.value}
-            onChange={(value: string) => updateCombobox(index, value)}
-            aria-label={"Vyhledat " + combo.title}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  function TopRow() {
-    return (
-      <div className="flex flex-row items-center justify-between py-7">
-        <div className="flex flex-col">
-          <Heading>{title}</Heading>
-          <p className="pt-3 font-bold text-black">
-            Našli jsme pro vás {data.length} receptů
-          </p>
-        </div>
-        <Comboboxes className="hidden flex-row gap-x-1 lg:flex lg:gap-x-5" />
-        <div className="flex items-center gap-x-4">
-          <ToggleGridButton
-            className="hidden md:block"
-            gridView={gridView}
-            setGridView={setGridView}
-            id={toggleId}
-          />
-          <Button
-            variant="black"
-            className="h-min lg:hidden"
-            onClick={() => setSideBarOpen(!sideBarOpen)}
-          >
-            Filtry <TuneIcon />
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  function SideBar() {
-    return (
-      <div
-        className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
-          sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
-        }`}
-      >
-        <div className=" flex flex-row items-center justify-between lg:hidden">
-          <Heading size="sm">Co hledáte?</Heading>
-          <div className="flex space-x-8">
-            <button onClick={() => setSideBarOpen(false)}>
-              <CloseIcon className="h-8 w-8" />
-            </button>
-          </div>
-        </div>
-        <Comboboxes className="my-8 flex flex-col gap-y-5 lg:hidden" />
-        <Button
-          className="mb-2"
-          variant="primary-outline"
-          size="sm"
-          onClick={() => resetFilters()}
-        >
-          <CancelIcon />
-          Resetovat filtry
-        </Button>
-        {sideBarValues.map((box, index) => (
-          <SideBarBox
-            key={"ffsbb" + index}
-            title={box.title}
-            options={box.options}
-            bIndex={index}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  function SideBarBox({
-    title,
-    bIndex,
-    options,
-  }: {
-    title: string;
-    bIndex: number;
-    options: any[];
-  }) {
-    const [open, setOpen] = useState(true);
-
-    const variants = {
-      open: {
-        opacity: 1,
-        maxHeight: 1000,
-        transition: { duration: 0.25, ease: [0.33, 1, 0.68, 1] },
-      },
-      closed: {
-        opacity: 0,
-        maxHeight: 0,
-        transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
-      },
-    };
-
-    return (
-      <div className="border-t border-primary-200 py-2">
-        <div>
-          <button
-            onClick={() => setOpen(!open)}
-            aria-label={!open ? "Zobrazit" : "Skrýt"}
-            className="mb-4 w-full rounded-lg"
-          >
-            <div className="flex w-full flex-row items-center justify-between text-center">
-              <Heading as="h3" size="inherit">
-                {title}
-              </Heading>
-              <ExpandMoreIcon
-                className={`${!open && "translate rotate-180 duration-100"}`}
-              />
-            </div>
-          </button>
-        </div>
-        <AnimatePresence>
-          {open && (
-            <motion.ul
-              className="space-y-2"
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={variants}
-              transition={{ duration: 0.25 }}
-            >
-              {options.map((o: any, oIndex: number) => (
-                <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
-                  <Checkbox
-                    defaultChecked={o.checked}
-                    label={o.title}
-                    onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
-                  />
-                </motion.li>
-              ))}
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  }
-
   const data = useMemo(() => {
     const updatedData = [
       {
@@ -443,17 +290,34 @@ export default function Receptury({
     return updatedData;
   }, [easyReturned, pageValue, initialData]);
 
-  /*  */
   return (
     <Container className={`py-6 ${className}`}>
-      <TopRow />
+      <TopRow
+        comboBoxValues={comboBoxValues}
+        data={data}
+        gridView={gridView}
+        setGridView={setGridView}
+        setSideBarOpen={setSideBarOpen}
+        sideBarOpen={sideBarOpen}
+        title={title}
+        toggleId={toggleId}
+        updateCombobox={updateCombobox}
+      />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
-        <SideBar />
+        <SideBar
+          comboBoxValues={comboBoxValues}
+          resetFilters={resetFilters}
+          setSideBarOpen={setSideBarOpen}
+          sideBarOpen={sideBarOpen}
+          sideBarValues={sideBarValues}
+          updateCombobox={updateCombobox}
+          updateSideBarValue={updateSideBarValue}
+        />
         <RecipeCardsGrid
           className="col-span-4 pt-0 xl:col-span-5"
           // cardsInGrid={gridView ? 5 : 0}
           gridView={gridView}
-          isLoading={isLoading}
+          isLoading={false}
           data={data}
         />
       </div>
@@ -463,5 +327,236 @@ export default function Receptury({
         changePage={(page) => updatePage(page)}
       />
     </Container>
+  );
+}
+
+function Comboboxes({
+  className = "",
+  comboBoxValues,
+  updateCombobox,
+}: {
+  className: string;
+  comboBoxValues: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  updateCombobox: (index: number, value: string) => void;
+}) {
+  return (
+    <div className={`${className}`}>
+      {comboBoxValues.map((combo, index) => (
+        <MyCombobox
+          key={"cbvmy" + index}
+          label={combo.title}
+          name={combo.name}
+          options={combo.options}
+          selectedOption={combo.value}
+          onChange={(value: string) => updateCombobox(index, value)}
+          aria-label={"Vyhledat " + combo.title}
+          z={100 - index}
+        />
+      ))}
+    </div>
+  );
+}
+
+function TopRow({
+  title,
+  data,
+  comboBoxValues,
+  gridView,
+  setGridView,
+  toggleId,
+  sideBarOpen,
+  setSideBarOpen,
+  updateCombobox,
+}: {
+  title: string;
+  data: any;
+  comboBoxValues: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  gridView: boolean;
+  setGridView: (grid: boolean) => void;
+  toggleId: any;
+  sideBarOpen: boolean;
+  setSideBarOpen: (open: boolean) => void;
+  updateCombobox: (index: number, value: string) => void;
+}) {
+  return (
+    <div className="flex flex-row items-center justify-between py-7">
+      <div className="flex flex-col">
+        <Heading>{title}</Heading>
+        <p className="pt-3 font-bold text-black">
+          Našli jsme pro vás {data.length} receptů
+        </p>
+      </div>
+      <Comboboxes
+        className="hidden grid-cols-2 gap-x-1 lg:grid lg:gap-x-5"
+        comboBoxValues={comboBoxValues}
+        updateCombobox={updateCombobox}
+      />
+      <div className="flex items-center gap-x-4">
+        <ToggleGridButton
+          className="hidden md:block"
+          gridView={gridView}
+          setGridView={setGridView}
+          id={toggleId}
+        />
+        <Button
+          variant="black"
+          className="h-min lg:hidden"
+          onClick={() => setSideBarOpen(!sideBarOpen)}
+        >
+          Filtry <TuneIcon />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function SideBar({
+  sideBarOpen,
+  setSideBarOpen,
+  resetFilters,
+  sideBarValues,
+  comboBoxValues,
+  updateCombobox,
+  updateSideBarValue,
+}: {
+  sideBarOpen: boolean;
+  setSideBarOpen: (open: boolean) => void;
+  resetFilters: () => void;
+  sideBarValues: { title: string; options: any[] }[];
+  comboBoxValues: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  updateCombobox: (index: number, value: string) => void;
+  updateSideBarValue: (
+    boxIndex: number,
+    optionIndex: number,
+    value: boolean
+  ) => void;
+}) {
+  return (
+    <div
+      className={`z-fixed flex flex-col px-7 py-5 lg:z-fixed-below lg:mr-5 lg:block lg:pl-0 lg:pr-3 ${
+        sideBarOpen ? "fixed inset-0 overflow-y-auto bg-white" : "hidden"
+      }`}
+    >
+      <div className=" flex flex-row items-center justify-between lg:hidden">
+        <Heading size="sm">Co hledáte?</Heading>
+        <div className="flex space-x-8">
+          <button onClick={() => setSideBarOpen(false)}>
+            <CloseIcon className="h-8 w-8" />
+          </button>
+        </div>
+      </div>
+      <Comboboxes
+        className="my-8 flex flex-col gap-y-5 lg:hidden"
+        comboBoxValues={comboBoxValues}
+        updateCombobox={updateCombobox}
+      />
+      <Button
+        className="mb-2 w-full max-w-sm"
+        variant="primary-outline"
+        size="sm"
+        onClick={() => resetFilters()}
+      >
+        <CancelIcon />
+        Zrušit filtry
+      </Button>
+      {sideBarValues.map((box, index) => (
+        <SideBarBox
+          key={"ffsbb" + index}
+          title={box.title}
+          options={box.options}
+          bIndex={index}
+          updateSideBarValue={updateSideBarValue}
+        />
+      ))}
+    </div>
+  );
+}
+
+function SideBarBox({
+  title,
+  bIndex,
+  options,
+  updateSideBarValue,
+}: {
+  title: string;
+  bIndex: number;
+  options: any[];
+  updateSideBarValue: (
+    boxIndex: number,
+    optionIndex: number,
+    value: boolean
+  ) => void;
+}) {
+  const [open, setOpen] = useState(true);
+
+  const variants = {
+    open: {
+      opacity: 1,
+      maxHeight: 1000,
+      transition: { duration: 0.25, ease: [0.33, 1, 0.68, 1] },
+    },
+    closed: {
+      opacity: 0,
+      maxHeight: 0,
+      transition: { duration: 0.15, ease: [0.33, 1, 0.68, 1] },
+    },
+  };
+
+  return (
+    <div className="border-t border-primary-200 py-2">
+      <div>
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label={!open ? "Zobrazit" : "Skrýt"}
+          className="mb-4 w-full rounded-lg"
+        >
+          <div className="flex w-full flex-row items-center justify-between text-center">
+            <Heading as="h3" size="inherit">
+              {title}
+            </Heading>
+            <ExpandMoreIcon
+              className={`${!open && "translate rotate-180 duration-100"}`}
+            />
+          </div>
+        </button>
+      </div>
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            className="space-y-2"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={variants}
+            transition={{ duration: 0.25 }}
+          >
+            {options.map((o: any, oIndex: number) => (
+              <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+                <Checkbox
+                  checked={o.checked}
+                  label={o.title}
+                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                />
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

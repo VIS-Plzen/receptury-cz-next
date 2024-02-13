@@ -112,11 +112,13 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             >
               <div className="hidden w-full flex-row justify-between md:flex">
                 <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
-                  {TabsData.map((tab) => (
+                  {TabsData.map((tab, index) => (
                     <TabsTrigger
                       value={tab.value}
                       className="w-full"
                       key={tab.value}
+                      id={"TabsTriggerIndex" + index}
+                      aria-controls={"TabsTriggerIndex" + index}
                     >
                       {tab.title}
                     </TabsTrigger>
