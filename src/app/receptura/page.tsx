@@ -141,7 +141,7 @@ function Hero({
         <Image
           src="/images/food.jpeg"
           alt=""
-          className="w-full object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
+          className="w-full bg-gray-300 object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
           width={500}
           height={200}
         />
@@ -164,7 +164,7 @@ function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="absolute right-5 top-5 my-auto flex gap-x-3  md:static md:gap-x-6 md:px-10">
+          <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:gap-x-2 md:px-10 ">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -172,16 +172,14 @@ function Hero({
                   icon.name === "share" || icon.name === "favorite"
                     ? "flex"
                     : "hidden md:flex"
-                } flex-col items-center text-center`}
+                }  flex w-min flex-col items-center gap-1 justify-self-center text-center`}
               >
                 <ButtonIcon
                   onClick={icon.onClick}
                   icon={icon.name}
                   className="bg-white"
                 />
-                <span className="hidden text-sm font-bold md:block">
-                  {icon.label}
-                </span>
+                <span className="hidden text-sm md:block">{icon.label}</span>
               </div>
             ))}
           </div>
@@ -213,14 +211,14 @@ function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1 gap-y-3 sm:grid-cols-6">
+        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1.5 gap-y-3 sm:grid-cols-6">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
-              className={`flex flex-col items-center text-center`}
+              className={`flex flex-col items-center gap-1 text-center`}
             >
               <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
-              <span className="text-sm font-bold">{icon.label}</span>
+              <span className="text-sm">{icon.label}</span>
             </div>
           ))}
         </div>
@@ -230,7 +228,7 @@ function Informations({
   function Hmotnost() {
     return (
       <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
-        <span className="my-auto font-bold">Hmotnost</span>
+        <span className="my-auto font-bold lg:text-lg">Hmotnost</span>
         <div className="flex flex-row gap-x-3">
           <div className="flex flex-col items-center">
             <span className="font-bold">Porce</span>
@@ -286,14 +284,21 @@ function Informations({
             ></input>
           </div>
           <div className="flex gap-x-1.5">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-start justify-start">
               <label
                 htmlFor="koeficient"
                 className="text-sm font-bold md:text-base"
               >
                 Koeficient
               </label>
-              <button className="text-sm underline">Zjistit více</button>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopenner noreferrer"
+                className="text-sm underline"
+              >
+                Zjistit více
+              </a>
             </div>
             <input
               id="koeficient"
@@ -412,16 +417,16 @@ function Informations({
     );
   }
   return (
-    <Container className="flex flex-col gap-5">
+    <Container className="flex flex-col gap-5 sm:gap-7">
       <Title />
-      <div className="flex flex-col gap-5 md:flex-row">
-        <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 sm:gap-7 md:flex-row">
+        <div className="flex flex-col gap-5 sm:gap-7">
           <Hmotnost />
           <Kalkulacka />
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 sm:gap-7">
           <Postup />
-          <div className="flex flex-col gap-5 xl:flex-row">
+          <div className="grid gap-5 sm:gap-7 xl:grid-cols-2">
             <Alergeny />
             <Skladba />
           </div>
@@ -444,27 +449,28 @@ export function Partner({
 }) {
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center">
-        {/* gradient*/}
-        <div className="absolute inset-0 z-[1] h-full bg-gradient-to-b from-secondary-700 from-55% via-secondary/30 via-70% to-transparent md:bg-gradient-to-r md:from-60%"></div>
-        <div className="z-[2] my-5 flex flex-col gap-y-5 pl-5 md:pl-10">
+      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center ">
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary-700 from-45% via-secondary/50 via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%" />
+        <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
           <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
             Logo
           </span>
-          <Heading className="text-white">{jmeno}</Heading>
+          <Heading className="text-white md:text-2xl lg:text-4xl">
+            {jmeno}
+          </Heading>
           <p className="font-semibold text-white">{heslo}</p>
           {hasButton && <Button className="w-min">Více o nás</Button>}
         </div>
-        <div className="z-0 flex h-full w-full justify-end">
+        <div className=" flex h-full w-full justify-end">
           <Image
             src="/images/food.jpeg"
-            className="w-full bg-gray-300 object-cover md:w-8/12"
+            className=" w-full bg-gray-300 object-cover md:w-8/12"
             alt=""
             width={200}
             height={400}
           />
         </div>
-        <span className="absolute right-5 top-1/2 z-20 text-xs text-secondary-900 md:top-5">
+        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5">
           Inspirační foto
         </span>
       </div>

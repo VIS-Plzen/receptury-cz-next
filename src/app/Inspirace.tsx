@@ -3,6 +3,7 @@ import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import RecipeCard from "@/components/ui/RecipeCard";
+import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/cn";
@@ -15,7 +16,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 export default function Inspirace({ className = "" }: { className?: string }) {
   const isDesktop = useMediaQuery("(min-width: 960px)");
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
-  const totalCards = isLargeScreen ? 10 : 8;
+  const totalCards = isLargeScreen ? 12 : 10;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,9 +26,23 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     () => searchParams.get("tab") || "doporucene",
     [searchParams.get("tab")]
   );
-  const [selected, setSelected] = useState<
-    "doporucene" | "oblibene" | "nove" | string
-  >(defaultTab);
+
+  const TabsData = [
+    {
+      value: "doporucene",
+      title: "Doporučené pro vás",
+    },
+    {
+      value: "oblibene",
+      title: "Oblíbené",
+    },
+    {
+      value: "nove",
+      title: "Nové recepty",
+    },
+  ];
+
+  const [selected, setSelected] = useState(TabsData[0].value);
 
   // useEffect(() => {
   //   const newSearchParams = new URLSearchParams();
@@ -35,12 +50,15 @@ export default function Inspirace({ className = "" }: { className?: string }) {
   //   router.push(`${pathname}?${newSearchParams.toString()}`);
   // }, [selected, router]);
 
-  useEffect(() => {
-    const tabParam = searchParams.get("tab");
-    if (tabParam && tabParam !== selected) {
-      setSelected(tabParam);
-    }
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const tabParam = searchParams.get("tab");
+  //   if (tabParam && tabParam !== selected.value) {
+  //     const selectedTab = TabsData.find((tab) => tab.value === tabParam);
+  //     if (selectedTab) {
+  //       setSelected(selectedTab);
+  //     }
+  //   }
+  // }, [searchParams]);
 
   useEffect(() => {
     if (!window) return;
@@ -83,37 +101,49 @@ export default function Inspirace({ className = "" }: { className?: string }) {
         <div className={`${!isVisible && "hidden"}`}>
           <div className="flex w-full items-center justify-between pt-5 md:pt-20">
             <Tabs
-              defaultValue={selected}
+              value={selected}
               className="w-full"
-              onValueChange={(value: string) => setSelected(value)}
+              onValueChange={(value: string) => {
+                const selectedTab = TabsData.find((tab) => tab.value === value);
+                if (selectedTab) {
+                  setSelected(selectedTab.value);
+                }
+              }}
             >
-              <div className="flex w-full flex-row justify-between">
-                <TabsList className="flex w-full items-center justify-evenly md:max-w-[550px]">
-                  <TabsTrigger value="doporucene" className="w-full">
-                    Doporučené pro vás
-                  </TabsTrigger>
-                  <TabsTrigger value="oblibene" className="w-full">
-                    Oblíbené
-                  </TabsTrigger>
-                  <TabsTrigger value="nove" className="w-full">
-                    Nové recepty
-                  </TabsTrigger>
+              <div className="hidden w-full flex-row justify-between md:flex">
+                <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
+                  {TabsData.map((tab, index) => (
+                    <TabsTrigger
+                      value={tab.value}
+                      className="w-full"
+                      key={tab.value}
+                      id={"TabsTriggerIndex" + index}
+                      aria-controls={"TabsTriggerIndex" + index}
+                    >
+                      {tab.title}
+                    </TabsTrigger>
+                  ))}
                 </TabsList>
               </div>
             </Tabs>
           </div>
+          <Selector
+            data={TabsData}
+            selected={selected}
+            setSelected={setSelected}
+            className="block md:hidden"
+          />
           {isDesktop ? (
             <div
-              className={cn("grid gap-4 pt-6 lg:grid-cols-4 xl:grid-cols-5")}
+              className={cn("grid gap-4 pt-6 lg:grid-cols-5 xl:grid-cols-6")}
             >
               {Array.from({ length: totalCards }, (_, index) => (
                 <RecipeCard
                   key={index}
-                  isGridView={true}
+                  forceGrid
                   isLoading={false}
                   label="Smažené kuřecí řízečky, bramborové placičky"
                   badges={["Dieta", "Brambor"]}
-                  assertCard={true}
                 />
               ))}
             </div>
@@ -136,11 +166,10 @@ export default function Inspirace({ className = "" }: { className?: string }) {
                 <SwiperSlide key={index} className="py-10">
                   <RecipeCard
                     key={index}
-                    isGridView={true}
                     isLoading={false}
                     label={"Smažené kuřecí řízečky, bramborové placičky"}
                     badges={["Dieta", "Brambor"]}
-                    assertCard={true}
+                    forceGrid
                   />
                 </SwiperSlide>
               ))}
