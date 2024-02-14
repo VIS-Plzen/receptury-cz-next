@@ -3,6 +3,7 @@ import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
 import {
   CancelIcon,
+  CheckSmallIcon,
   CloseIcon,
   ExpandMoreIcon,
   TuneIcon,
@@ -500,7 +501,7 @@ function SideBar({
 }) {
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
+      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl border-2 border-primary-200 bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
     >
       <div className=" flex flex-row items-center justify-between lg:hidden">
         <Heading size="sm">Co hledáte?</Heading>
@@ -518,21 +519,23 @@ function SideBar({
       <div className="">
         <Button
           className="mb-2 w-full max-w-sm"
-          variant="primary"
+          variant="black"
           size="sm"
           onClick={() => getDataAndSetQuery()}
+          disabled
         >
-          <CancelIcon />
-          Potvrdit
+          <CheckSmallIcon className="shrink-0" />
+          Potvrdit výběr
         </Button>
         <Button
           className="mb-2 w-full max-w-sm"
-          variant="primary-outline"
+          variant="black"
           size="sm"
           onClick={() => resetFilters()}
+          disabled
         >
-          <CancelIcon />
-          Zrušit
+          <CancelIcon className="shrink-0" />
+          Zrušit vše
         </Button>
       </div>
       {sideBarValues.map((box, index) => (

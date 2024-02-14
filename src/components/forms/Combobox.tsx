@@ -89,13 +89,12 @@ export default function MyCombobox({
         <div
           className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
         >
-          <div className={`relative h-10 ${error && "mb-3"}`}>
+          <div className={`relative ${error && "mb-3"}`}>
             <Combobox.Label className="sr-only">{label}</Combobox.Label>
             <Combobox.Input
               className={clsx(
-                "flex h-full w-full items-start justify-start rounded-xl border border-primary-400 bg-primary-50 outline-none ring-0",
-                "h-16 py-2.5 pl-9 pr-5",
-                "bg-gray-75 text-default dark:bg-gray-975 hover:bg-gray-100 focus:bg-gray-100",
+                "flex h-full w-full items-start justify-start rounded-xl border-2 border-primary-300 bg-primary-50 outline-none ring-0",
+                "py-2.5 pl-9 pr-5",
                 "focus:outline-none focus:ring-0",
                 "transition-colors duration-200",
                 isDisabled && "cursor-not-allowed",
@@ -145,7 +144,7 @@ export default function MyCombobox({
             leaveTo="opacity-0"
             afterLeave={() => onChange(query)}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredValues.length === 0 && query !== "" ? (
                 <button
                   className="relative select-none px-4 py-2 text-gray-700"
@@ -159,7 +158,7 @@ export default function MyCombobox({
                     key={key}
                     className={({ active }) =>
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-primary text-white" : "text-muted"
+                        active && "bg-primary-200"
                       }`
                     }
                     value={value}
