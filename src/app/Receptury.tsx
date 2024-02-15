@@ -439,24 +439,32 @@ function MobileFilters({
         onOpenChange={() => setSideBarOpen(false)}
         modal
       >
-        <Dialog.Portal>
-          {sideBarOpen && (
-            <div className="lg:hidden">
-              <Dialog.Overlay className="DialogOverlay" />
-              <Dialog.Content className="DialogContent">
-                <SideBar
-                  comboBoxValues={comboBoxValues}
-                  resetFilters={resetFilters}
-                  setSideBarOpen={setSideBarOpen}
-                  sideBarValues={sideBarValues}
-                  updateCombobox={updateCombobox}
-                  updateSideBarValue={updateSideBarValue}
-                  getDataAndSetQuery={getDataAndSetQuery}
-                />
-              </Dialog.Content>
-            </div>
-          )}
-        </Dialog.Portal>
+        <AnimatePresence initial={false}>
+          <Dialog.Portal>
+            {sideBarOpen && (
+              <motion.div
+                key="modal"
+                className="lg:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Dialog.Overlay className="DialogOverlay" />
+                <Dialog.Content className="DialogContent">
+                  <SideBar
+                    comboBoxValues={comboBoxValues}
+                    resetFilters={resetFilters}
+                    setSideBarOpen={setSideBarOpen}
+                    sideBarValues={sideBarValues}
+                    updateCombobox={updateCombobox}
+                    updateSideBarValue={updateSideBarValue}
+                    getDataAndSetQuery={getDataAndSetQuery}
+                  />
+                </Dialog.Content>
+              </motion.div>
+            )}
+          </Dialog.Portal>
+        </AnimatePresence>
       </Dialog.Root>
       <div className="hidden lg:block">
         <SideBar

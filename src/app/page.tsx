@@ -29,6 +29,7 @@ export default async function Home() {
       })
     ).json();
   }
+
   async function readSome() {
     const result = await (
       await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
