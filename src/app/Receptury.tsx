@@ -251,13 +251,14 @@ export default function Receptury({
       await fetch("/api", {
         method: "POST",
         body: JSON.stringify({
-          sid: "12345VIS",
-          funkce: "ObecnyDotaz",
-          parametry: {
+          Sid: "12345VIS",
+          Funkce: "ObecnyDotaz",
+          Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
             Limit: 15,
             Offset: (page - 1) * 15,
+            Vlastnosti: ["Nazev", "Identita", "Obrazek"],
           },
         }),
       })

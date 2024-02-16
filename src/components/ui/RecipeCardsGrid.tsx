@@ -7,7 +7,18 @@ import "swiper/css/pagination";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
-  data?: { title: string; badges: string[]; img?: string }[];
+  data?: {
+    Status: boolean;
+    Chyba?: { Kod: number; Popis: string };
+    Vety?: {
+      Vlastnosti: {
+        Nazev: string;
+        Identita: string;
+        badges: string[];
+        img?: string;
+      };
+    }[];
+  };
   gridView?: boolean;
   isLoading?: boolean;
   length?: number;
@@ -35,17 +46,21 @@ function RecipeCardsGrid({
         className
       )}
     >
-      {data &&
-        data.map((card: any, index) => (
+      {data && data.Vety ? (
+        data.Vety.map((card, index) => (
           <RecipeCard
             key={index}
             isGridView={gridView}
             isLoading={isLoading}
             label={card.Vlastnosti.Nazev}
+            id={card.Vlastnosti.Identita}
             badges={[]}
             img="/images/food.jpeg"
           />
-        ))}
+        ))
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 */
 
 export async function POST(request: Request) {
-  const { sid, funkce, parametry } = await request.json();
+  const { Sid, Funkce, Parametry } = await request.json();
   try {
     const res = await fetch(
       "https://test.receptury.adelis.cz/APIFrontend.aspx",
@@ -21,16 +21,25 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
-          SID: sid,
-          Funkce: funkce,
-          Parametry: [parametry],
+          SID: Sid,
+          Funkce: Funkce,
+          Parametry: [Parametry],
         }),
       }
     );
     const data = await res.json();
-
-    return NextResponse.json(data.Vety);
+    if (data.Result) {
+      data.Result.Vety = data.Vety;
+      return NextResponse.json(data.Result);
+    }
+    return NextResponse.json({
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    });
   } catch (error) {
-    return NextResponse.json({ Chyba: error });
+    return NextResponse.json({
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    });
   }
 }

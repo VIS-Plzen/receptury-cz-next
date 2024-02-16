@@ -11,6 +11,7 @@ type RecipeCardProps = {
   forceRow?: boolean;
   isLoading?: boolean;
   label: string;
+  id?: string;
   img?: any;
   badges: string[];
   className?: string;
@@ -210,6 +211,7 @@ function RecipeCard({
   forceGrid,
   forceRow,
   label,
+  id,
   badges,
   className,
 }: RecipeCardProps) {
@@ -218,7 +220,12 @@ function RecipeCard({
       <Suspense
         fallback={
           <ReturnedLayout
-            card={{ label: label, badges: badges, className: className }}
+            card={{
+              label: label,
+              id: id,
+              badges: badges,
+              className: className,
+            }}
             loading={true}
             isGridView={isGridView}
             forceGrid={forceGrid}
@@ -227,7 +234,7 @@ function RecipeCard({
         }
       >
         <ReturnedLayout
-          card={{ label: label, badges: badges, className: className }}
+          card={{ label: label, id: id, badges: badges, className: className }}
           loading={false}
           isGridView={isGridView}
           forceGrid={forceGrid}
@@ -252,7 +259,7 @@ function ReturnedLayout({
   loading: boolean;
 }) {
   return (
-    <>
+    <a href={`/receptura/${card.id}`}>
       <GridCardLayout
         label={card.label}
         badges={card.badges}
@@ -283,7 +290,7 @@ function ReturnedLayout({
                 : "flex"
         }`}
       />
-    </>
+    </a>
   );
 }
 
