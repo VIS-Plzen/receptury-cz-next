@@ -1,6 +1,5 @@
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { Suspense } from "react";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -214,27 +213,13 @@ function RecipeCard({
   className,
 }: RecipeCardProps) {
   return (
-    <>
-      <Suspense
-        fallback={
-          <ReturnedLayout
-            card={{ label: label, badges: badges, className: className }}
-            loading={true}
-            isGridView={isGridView}
-            forceGrid={forceGrid}
-            forceRow={forceRow}
-          />
-        }
-      >
-        <ReturnedLayout
-          card={{ label: label, badges: badges, className: className }}
-          loading={false}
-          isGridView={isGridView}
-          forceGrid={forceGrid}
-          forceRow={forceRow}
-        />
-      </Suspense>
-    </>
+    <ReturnedLayout
+      card={{ label: label, badges: badges, className: className }}
+      loading={false}
+      isGridView={isGridView}
+      forceGrid={forceGrid}
+      forceRow={forceRow}
+    />
   );
 }
 
