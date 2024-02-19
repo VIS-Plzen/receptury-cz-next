@@ -19,10 +19,6 @@ const menuRoutes = [
     href: "/",
   },
   {
-    label: "Receptura",
-    href: "/receptura",
-  },
-  {
     label: "Partner",
     href: "/partner",
   },

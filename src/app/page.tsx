@@ -45,17 +45,21 @@ export default async function Home() {
               Tabulka: "Receptury",
               Operace: "Read",
               Limit: 15,
+              Vlastnosti: ["Nazev", "Identita", "Obrazek"],
             },
           ],
         }),
       })
     ).json();
 
-    if (result.Result.Status === false) {
-      return null;
+    if (result.Result) {
+      result.Result.Vety = result.Vety;
+      return result.Result;
     }
-
-    return result.Vety;
+    return {
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    };
   }
 
   return (
