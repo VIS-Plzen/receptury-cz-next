@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/utils/cn";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -22,19 +20,15 @@ type Props = {
       }
     | "loading";
   gridView?: boolean;
-  length?: number;
   className?: string;
   cardsInGrid?: number;
-  assertCard?: boolean;
 };
 
 function RecipeCardsGrid({
   data,
   gridView = false,
-  length,
   className = "",
   cardsInGrid,
-  assertCard,
 }: Props) {
   return (
     <div
