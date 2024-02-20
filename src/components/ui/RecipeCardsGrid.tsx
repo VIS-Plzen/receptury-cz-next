@@ -20,6 +20,7 @@ type Props = {
       }
     | "loading";
   gridView?: boolean;
+  length?: number;
   className?: string;
   cardsInGrid?: number;
 };
