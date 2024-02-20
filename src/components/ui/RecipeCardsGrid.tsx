@@ -7,20 +7,21 @@ import "swiper/css/pagination";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
-  data?: {
-    Status: boolean;
-    Chyba?: { Kod: number; Popis: string };
-    Vety?: {
-      Vlastnosti: {
-        Nazev: string;
-        Identita: string;
-        badges: string[];
-        img?: string;
-      };
-    }[];
-  };
+  data?:
+    | {
+        Status: boolean;
+        Chyba?: { Kod: number; Popis: string };
+        Vety?: {
+          Vlastnosti: {
+            Nazev: string;
+            Identita: string;
+            badges: string[];
+            img?: string;
+          };
+        }[];
+      }
+    | "loading";
   gridView?: boolean;
-  isLoading?: boolean;
   length?: number;
   className?: string;
   cardsInGrid?: number;
@@ -30,7 +31,6 @@ type Props = {
 function RecipeCardsGrid({
   data,
   gridView = false,
-  isLoading = false,
   length,
   className = "",
   cardsInGrid,
@@ -46,21 +46,47 @@ function RecipeCardsGrid({
         className
       )}
     >
-      {data && data.Vety ? (
-        data.Vety.map((card, index) => (
-          <RecipeCard
-            key={index}
-            isGridView={gridView}
-            isLoading={isLoading}
-            label={card.Vlastnosti.Nazev}
-            id={card.Vlastnosti.Identita}
-            badges={[]}
-            img="/images/food.jpeg"
-          />
-        ))
-      ) : (
-        <div></div>
-      )}
+      {(() => {
+        if (!data) {
+          return <div>Data se nepodařilo načíst</div>;
+        }
+        if (data === "loading") {
+          return Array(15)
+            .fill("")
+            .map((_: any, index) => (
+              <RecipeCard
+                key={index}
+                isGridView={gridView}
+                isLoading={true}
+                label={""}
+                id={"e" + index}
+                badges={[]}
+                img="/images/food.jpeg"
+              />
+            ));
+        }
+        if (!data.Status) {
+          return (
+            <div>
+              Chyba {data.Chyba?.Kod}: {data.Chyba?.Popis}
+            </div>
+          );
+        }
+        return (
+          data.Vety &&
+          data.Vety.map((card, index) => (
+            <RecipeCard
+              key={index}
+              isGridView={gridView}
+              isLoading={false}
+              label={card.Vlastnosti.Nazev}
+              id={card.Vlastnosti.Identita}
+              badges={[]}
+              img="/images/food.jpeg"
+            />
+          ))
+        );
+      })()}
     </div>
   );
 }

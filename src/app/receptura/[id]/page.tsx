@@ -45,8 +45,6 @@ export default async function Home({ params }: { params: { id: number } }) {
   }
   const card = data.Vety[0].Vlastnosti;
 
-  console.log(card);
-
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Hero

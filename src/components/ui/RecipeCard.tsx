@@ -1,6 +1,5 @@
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { Suspense } from "react";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -56,6 +55,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
 
 // Card for grid layout
 function GridCardLayout({
+  id,
   label,
   badges,
   img,
@@ -103,7 +103,9 @@ function GridCardLayout({
         )}
       >
         <div className="line-clamp-3 text-sm font-bold">
-          <p className={cn(isLoading && "hidden")}>{label}</p>
+          <a href={`/receptura/${id}`} className={cn(isLoading && "hidden")}>
+            {label}
+          </a>
           {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
@@ -127,6 +129,7 @@ function GridCardLayout({
 // Card for row layout
 function RowCardLayout({
   label,
+  id,
   badges,
   img,
   isLoading,
@@ -172,7 +175,12 @@ function RowCardLayout({
         )}
       >
         <div className="line-clamp-3 w-80 pl-[20px] pr-2 text-sm font-bold">
-          <p className={cn("block", isLoading && "hidden")}>{label}</p>
+          <a
+            href={`/receptura/${id}`}
+            className={cn("block", isLoading && "hidden")}
+          >
+            {label}
+          </a>
           <div
             className={cn(
               isLoading && " h-4 w-full rounded-full bg-gray-300",
@@ -214,25 +222,24 @@ function RecipeCard({
   id,
   badges,
   className,
+  isLoading,
 }: RecipeCardProps) {
   return (
     <>
-      <Suspense
-        fallback={
-          <ReturnedLayout
-            card={{
-              label: label,
-              id: id,
-              badges: badges,
-              className: className,
-            }}
-            loading={true}
-            isGridView={isGridView}
-            forceGrid={forceGrid}
-            forceRow={forceRow}
-          />
-        }
-      >
+      {isLoading ? (
+        <ReturnedLayout
+          card={{
+            label: label,
+            id: id,
+            badges: badges,
+            className: className,
+          }}
+          loading={true}
+          isGridView={isGridView}
+          forceGrid={forceGrid}
+          forceRow={forceRow}
+        />
+      ) : (
         <ReturnedLayout
           card={{ label: label, id: id, badges: badges, className: className }}
           loading={false}
@@ -240,7 +247,7 @@ function RecipeCard({
           forceGrid={forceGrid}
           forceRow={forceRow}
         />
-      </Suspense>
+      )}
     </>
   );
 }
@@ -259,9 +266,10 @@ function ReturnedLayout({
   loading: boolean;
 }) {
   return (
-    <a href={`/receptura/${card.id}`}>
+    <>
       <GridCardLayout
         label={card.label}
+        id={card.id}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
@@ -277,6 +285,7 @@ function ReturnedLayout({
       />
       <RowCardLayout
         label={card.label}
+        id={card.id}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
@@ -290,7 +299,7 @@ function ReturnedLayout({
                 : "flex"
         }`}
       />
-    </a>
+    </>
   );
 }
 

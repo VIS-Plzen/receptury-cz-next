@@ -204,6 +204,7 @@ export default function Receptury({
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   async function getDataAndSetQuery(page: number) {
+    setData("loading");
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -301,7 +302,6 @@ export default function Receptury({
         <RecipeCardsGrid
           className="col-span-4 pt-0 xl:col-span-5"
           gridView={gridView}
-          isLoading={false}
           data={data}
         />
       </div>
