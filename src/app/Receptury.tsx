@@ -17,7 +17,7 @@ import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useId, useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -264,9 +264,7 @@ export default function Receptury({
       })
     ).json();
 
-    setTimeout(() => {
-      setData(result);
-    }, 5000);
+    setData(result);
 
     router.replace("?" + query, { scroll: false });
 
@@ -302,14 +300,13 @@ export default function Receptury({
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
         />
-        <Suspense fallback={<h1>LOADING</h1>}>
-          <RecipeCardsGrid
-            className="col-span-4 pt-0 xl:col-span-5"
-            gridView={gridView}
-            isLoading={false}
-            data={data}
-          />
-        </Suspense>
+
+        <RecipeCardsGrid
+          className="col-span-4 pt-0 xl:col-span-5"
+          gridView={gridView}
+          isLoading={false}
+          data={data}
+        />
       </div>
       <Paginator
         currentPage={pageState}
