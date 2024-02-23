@@ -5,6 +5,7 @@ import VolitelnyObsah from "./VolitelnyObsah";
 
 export default async function Home() {
   // základní fetch kterej chce dodělat
+  //
 
   let data = await readSome();
 
