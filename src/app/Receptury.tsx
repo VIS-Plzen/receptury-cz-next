@@ -13,11 +13,12 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -511,6 +512,224 @@ function SideBar({
   ) => void;
   getDataAndSetQuery: () => void;
 }) {
+  const ListboxData = [
+    {
+      value: "bezmase_sladke",
+      title: "Bezmasé sladké pokrmy",
+      options: [
+        { value: "pecene", title: "Pečené a smažené" },
+        { value: "varene", title: "Vařené" },
+        { value: "kase", title: "Kaše" },
+      ],
+    },
+    {
+      value: "bezmase_slane",
+      title: "Bezmasé slané pokrmy",
+      options: [
+        {
+          value: "zeleninove",
+          title: "Zeleninové",
+        },
+        {
+          value: "lusteniny",
+          title: "Luštěninové",
+        },
+        {
+          value: "moucne",
+          title: "Moučné a obilninové",
+        },
+        { value: "testovinove", title: "Těstovinové" },
+        { value: "bramborove", title: "Bramborové" },
+        { value: "houbove", title: "Houbové" },
+        { value: "salaty", title: "Saláty" },
+        { value: "ostatni", title: "Ostatní" },
+      ],
+    },
+    {
+      value: "doplnky",
+      title: "Doplňky",
+      options: [
+        {
+          value: "salaty_zeleninove",
+          title: "Saláty zeleninové",
+        },
+        {
+          value: "salaty_ovocne",
+          title: "Saláty ovocné",
+        },
+        {
+          value: "kompoty",
+          title: "Kompoty",
+        },
+        {
+          value: "moucniky",
+          title: "Moučníky",
+        },
+        {
+          value: "mlecne_dezerty",
+          title: "Mléčné dezerty",
+        },
+        {
+          value: "zelenina_cerstva",
+          title: "Zelenina čerstvá",
+        },
+        {
+          value: "ovoce_cerstve",
+          title: "Ovoce čerstvé",
+        },
+        {
+          value: "ostatni",
+          title: "Ostatní",
+        },
+      ],
+    },
+    {
+      value: "masite",
+      title: "Masité pokrmy",
+      options: [
+        { value: "veprove", title: "Vepřové" },
+        { value: "kureci", title: "Kuřecí" },
+        { value: "kruti", title: "Krůtí" },
+        { value: "kralici", title: "Králičí" },
+        { value: "hovezi", title: "Hovězí" },
+        { value: "zverina", title: "Zvěřina" },
+        { value: "teleci", title: "Telecí" },
+        { value: "vnitrnosti", title: "Vnitřnosti" },
+        { value: "husi_a_kachni", title: "Husí a kachní" },
+        { value: "ostatni", title: "Ostatní" },
+        {
+          value: "mleta_masa_a_masove_smesi",
+          title: "Mletá masa a masové směsi",
+        },
+      ],
+    },
+    {
+      value: "napoje",
+      title: "Nápoje",
+      options: [],
+    },
+    { value: "nezadano", title: "Nezadáno", options: [] },
+    {
+      value: "polevky",
+      title: "Polévky",
+      options: [
+        {
+          value: "zeleninove",
+          title: "Zeleninové",
+        },
+        {
+          value: "lusteninove",
+          title: "Luštěninové",
+        },
+        {
+          value: "masove_a_rybi",
+          title: "Masové a rybí",
+        },
+        {
+          value: "obilninove",
+          title: "Obilninové",
+        },
+        { value: "bramborove", title: "Bramborové" },
+        { value: "vyvary", title: "Vývary" },
+        { value: "houbove", title: "Houbové" },
+        {
+          value: "ostatni",
+          title: "Ostatní",
+        },
+      ],
+    },
+    {
+      value: "prilohy_a_prikrmy",
+      title: "Přílohy a příkrmy",
+      options: [
+        { value: "bramborove", title: "Bramborové" },
+        { value: "testovinove", title: "Těstovinové" },
+        { value: "obilninove", title: "Obilninové" },
+        { value: "knedliky", title: "Knedlíky" },
+        { value: "zelenina", title: "Zelenina" },
+        { value: "omacky", title: "Omáčky" },
+        { value: "pecivo", title: "Pečivo" },
+        { value: "ostatni", title: "Ostatní" },
+        { value: "lusteninove", title: "Luštěninové" },
+      ],
+    },
+    {
+      value: "rybi_pokrmy",
+      title: "Rybí pokrmy",
+      options: [],
+    },
+    {
+      value: "svaciny",
+      title: "Svačiny",
+      options: [
+        {
+          value: "pomazanky_syrove_a_tvarohove",
+          title: "Pomazánky sýrové a tvarohové",
+        },
+        {
+          value: "pomazanky_masove",
+          title: "Pomazánky masové",
+        },
+        {
+          value: "pomazanky_vajecne",
+          title: "Pomazánky vaječné",
+        },
+        {
+          value: "pomazanky_rybi",
+          title: "Pomazánky rybí",
+        },
+        {
+          value: "mlecne_vyrobky",
+          title: "Mléčné výrobky",
+        },
+        {
+          value: "kase",
+          title: "Kaše",
+        },
+        {
+          value: "pecivo",
+          title: "Pečivo",
+        },
+        {
+          value: "moucniky",
+          title: "Moučníky",
+        },
+        {
+          value: "ostatni",
+          title: "Ostatní",
+        },
+        {
+          value: "pomazanky_zeleninove/ovocne",
+          title: "Pomazánky zeleninové/ovocné",
+        },
+        {
+          value: "pomazanky_lusteninove",
+          title: "Pomazánky luštěninové",
+        },
+        {
+          value: "pomazanky_ostatni",
+          title: "Pomazánky ostatní",
+        },
+      ],
+    },
+    {
+      value: "zavarky",
+      title: "Zavářky",
+      options: [],
+    },
+  ];
+  const [selected1, setSelected1] = useState(ListboxData[0].value);
+  const [selected2, setSelected2] = useState(ListboxData[0].options[0].value);
+
+  useEffect(() => {
+    const foundItem = ListboxData.find((item) => item.value === selected1);
+    if (foundItem) {
+      setSelected2(foundItem.options[0]?.value);
+    } else {
+      setSelected2("");
+    }
+  }, [selected1]);
+
   return (
     <div
       className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl border-2 border-primary-200 bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
@@ -549,6 +768,20 @@ function SideBar({
           <CancelIcon className="shrink-0" />
           Zrušit vše
         </Button>
+      </div>
+      <div className="space-y-2 border-t border-primary-200 py-2">
+        <p className="font-bold">Skupina</p>
+        <Selector
+          data={ListboxData}
+          selected={selected1}
+          setSelected={setSelected1}
+        />
+        <p className="font-bold">Podskupina</p>
+        <Selector
+          data={ListboxData.find((item) => item.value === selected1)?.options}
+          selected={selected2}
+          setSelected={setSelected2}
+        />
       </div>
       {sideBarValues.map((box, index) => (
         <SideBarBox

@@ -6,8 +6,8 @@ import { CheckIcon, ExpandLessIcon, ExpandMoreIcon } from "../icons";
 
 type Props = {
   data: any;
-  selected: string;
-  setSelected: (selected: string) => void;
+  selected: any;
+  setSelected: (selected: any) => void;
   className?: string;
 };
 
@@ -27,7 +27,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
           <Listbox.Button className="w-full rounded-2xl border-2 border-primary-200 bg-white focus:border-primary/50 focus:ring-0">
             <div className="flex items-center justify-between p-2.5">
               <span className="block truncate">
-                {data.find((tab: any) => tab.value === selected).title}
+                {data.find((tab: any) => tab.value === selected)?.title}
               </span>
 
               <div>
