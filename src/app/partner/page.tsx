@@ -11,7 +11,7 @@ import { Partner } from "../receptura/[id]/page";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
       <Partner
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"

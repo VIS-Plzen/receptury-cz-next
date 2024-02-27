@@ -48,7 +48,7 @@ export default async function Home({ params }: { params: { id: number } }) {
   console.log(card);
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}

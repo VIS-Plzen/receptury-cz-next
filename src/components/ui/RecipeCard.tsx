@@ -29,13 +29,22 @@ function ActionButtons({ isGridView }: any) {
         <ButtonIcon
           icon="favorite"
           aria-label="Přidat recepturu do oblíbených"
+          onClick={(e) => e.preventDefault()}
         />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon icon="share" aria-label="Sdílet recepturu" />
+        <ButtonIcon
+          icon="share"
+          aria-label="Sdílet recepturu"
+          onClick={(e) => e.preventDefault()}
+        />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon icon="archive" aria-label="Uložit recepturu" />
+        <ButtonIcon
+          icon="archive"
+          aria-label="Uložit recepturu"
+          onClick={(e) => e.preventDefault()}
+        />
       </div>
     </div>
   );
