@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+const defaultTheme = require("tailwindcss/defaultTheme");
 // import default tailwind colors
 import colors from "tailwindcss/colors";
 
@@ -57,7 +57,7 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ["var(--font-nunito)", "sans-serif"],
+      sans: ["var(--font-nunito)", ...defaultTheme.fontFamily.sans],
     },
 
     // Extending theme

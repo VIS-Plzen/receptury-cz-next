@@ -60,11 +60,14 @@ export default function Receptury({
       },
     },
   ],
+
   className = "",
   urlPreQuery = "",
+  groupsData,
 }: {
   title?: string;
   initialData?: any;
+  groupsData?: any;
   className?: string;
   urlPreQuery?: string;
 }) {
@@ -79,6 +82,10 @@ export default function Receptury({
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
+  const [selectedGroup, setSelectedGroup] = useState(groupsData[0].value);
+  const [selectedSubgroup, setSelectedSubgroup] = useState(
+    groupsData[0].options[0].value
+  );
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -248,6 +255,11 @@ export default function Receptury({
       }
     }
 
+    const group = groupsData.find((item: any) => item.value === selectedGroup);
+    const subGroup = group.options.find(
+      (item: any) => item.value === selectedSubgroup
+    );
+
     const result = await (
       await fetch("/api", {
         method: "POST",
@@ -257,6 +269,7 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
+            Podminka: `Druh = "${group.title + " " + subGroup.title}"`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -264,6 +277,8 @@ export default function Receptury({
         }),
       })
     ).json();
+
+    console.log(group.title + " " + subGroup.title);
 
     setData(result);
 
@@ -300,6 +315,11 @@ export default function Receptury({
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
+          groupsData={groupsData}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+          selectedSubgroup={selectedSubgroup}
+          setSelectedSubgroup={setSelectedSubgroup}
         />
 
         <RecipeCardsGrid
@@ -414,11 +434,21 @@ function MobileFilters({
   resetFilters,
   sideBarValues,
   comboBoxValues,
+  groupsData,
   updateCombobox,
   updateSideBarValue,
   getDataAndSetQuery,
+  selectedGroup,
+  setSelectedGroup,
+  selectedSubgroup,
+  setSelectedSubgroup,
 }: {
   sideBarOpen: boolean;
+  groupsData: any;
+  selectedGroup: any;
+  setSelectedGroup: (selectedGroup: any) => void;
+  selectedSubgroup: any;
+  setSelectedSubgroup: (selectedSubgroup: any) => void;
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
   sideBarValues: { title: string; options: any[] }[];
@@ -464,6 +494,11 @@ function MobileFilters({
                     updateCombobox={updateCombobox}
                     updateSideBarValue={updateSideBarValue}
                     getDataAndSetQuery={getDataAndSetQuery}
+                    groupsData={groupsData}
+                    selectedGroup={selectedGroup}
+                    setSelectedGroup={setSelectedGroup}
+                    selectedSubgroup={selectedSubgroup}
+                    setSelectedSubgroup={setSelectedSubgroup}
                   />
                 </Dialog.Content>
               </motion.div>
@@ -480,6 +515,11 @@ function MobileFilters({
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={getDataAndSetQuery}
+          groupsData={groupsData}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+          selectedSubgroup={selectedSubgroup}
+          setSelectedSubgroup={setSelectedSubgroup}
         />
       </div>
     </>
@@ -490,13 +530,23 @@ function SideBar({
   setSideBarOpen,
   resetFilters,
   sideBarValues,
+  groupsData,
   comboBoxValues,
   updateCombobox,
+  selectedGroup,
+  setSelectedGroup,
+  selectedSubgroup,
+  setSelectedSubgroup,
   updateSideBarValue,
   getDataAndSetQuery,
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
+  selectedGroup: any;
+  setSelectedGroup: (selectedGroup: any) => void;
+  selectedSubgroup: any;
+  setSelectedSubgroup: (selectedSubgroup: any) => void;
+  groupsData: any;
   sideBarValues: { title: string; options: any[] }[];
   comboBoxValues: {
     title: string;
@@ -512,223 +562,16 @@ function SideBar({
   ) => void;
   getDataAndSetQuery: () => void;
 }) {
-  const ListboxData = [
-    {
-      value: "bezmase_sladke",
-      title: "Bezmasé sladké pokrmy",
-      options: [
-        { value: "pecene", title: "Pečené a smažené" },
-        { value: "varene", title: "Vařené" },
-        { value: "kase", title: "Kaše" },
-      ],
-    },
-    {
-      value: "bezmase_slane",
-      title: "Bezmasé slané pokrmy",
-      options: [
-        {
-          value: "zeleninove",
-          title: "Zeleninové",
-        },
-        {
-          value: "lusteniny",
-          title: "Luštěninové",
-        },
-        {
-          value: "moucne",
-          title: "Moučné a obilninové",
-        },
-        { value: "testovinove", title: "Těstovinové" },
-        { value: "bramborove", title: "Bramborové" },
-        { value: "houbove", title: "Houbové" },
-        { value: "salaty", title: "Saláty" },
-        { value: "ostatni", title: "Ostatní" },
-      ],
-    },
-    {
-      value: "doplnky",
-      title: "Doplňky",
-      options: [
-        {
-          value: "salaty_zeleninove",
-          title: "Saláty zeleninové",
-        },
-        {
-          value: "salaty_ovocne",
-          title: "Saláty ovocné",
-        },
-        {
-          value: "kompoty",
-          title: "Kompoty",
-        },
-        {
-          value: "moucniky",
-          title: "Moučníky",
-        },
-        {
-          value: "mlecne_dezerty",
-          title: "Mléčné dezerty",
-        },
-        {
-          value: "zelenina_cerstva",
-          title: "Zelenina čerstvá",
-        },
-        {
-          value: "ovoce_cerstve",
-          title: "Ovoce čerstvé",
-        },
-        {
-          value: "ostatni",
-          title: "Ostatní",
-        },
-      ],
-    },
-    {
-      value: "masite",
-      title: "Masité pokrmy",
-      options: [
-        { value: "veprove", title: "Vepřové" },
-        { value: "kureci", title: "Kuřecí" },
-        { value: "kruti", title: "Krůtí" },
-        { value: "kralici", title: "Králičí" },
-        { value: "hovezi", title: "Hovězí" },
-        { value: "zverina", title: "Zvěřina" },
-        { value: "teleci", title: "Telecí" },
-        { value: "vnitrnosti", title: "Vnitřnosti" },
-        { value: "husi_a_kachni", title: "Husí a kachní" },
-        { value: "ostatni", title: "Ostatní" },
-        {
-          value: "mleta_masa_a_masove_smesi",
-          title: "Mletá masa a masové směsi",
-        },
-      ],
-    },
-    {
-      value: "napoje",
-      title: "Nápoje",
-      options: [],
-    },
-    { value: "nezadano", title: "Nezadáno", options: [] },
-    {
-      value: "polevky",
-      title: "Polévky",
-      options: [
-        {
-          value: "zeleninove",
-          title: "Zeleninové",
-        },
-        {
-          value: "lusteninove",
-          title: "Luštěninové",
-        },
-        {
-          value: "masove_a_rybi",
-          title: "Masové a rybí",
-        },
-        {
-          value: "obilninove",
-          title: "Obilninové",
-        },
-        { value: "bramborove", title: "Bramborové" },
-        { value: "vyvary", title: "Vývary" },
-        { value: "houbove", title: "Houbové" },
-        {
-          value: "ostatni",
-          title: "Ostatní",
-        },
-      ],
-    },
-    {
-      value: "prilohy_a_prikrmy",
-      title: "Přílohy a příkrmy",
-      options: [
-        { value: "bramborove", title: "Bramborové" },
-        { value: "testovinove", title: "Těstovinové" },
-        { value: "obilninove", title: "Obilninové" },
-        { value: "knedliky", title: "Knedlíky" },
-        { value: "zelenina", title: "Zelenina" },
-        { value: "omacky", title: "Omáčky" },
-        { value: "pecivo", title: "Pečivo" },
-        { value: "ostatni", title: "Ostatní" },
-        { value: "lusteninove", title: "Luštěninové" },
-      ],
-    },
-    {
-      value: "rybi_pokrmy",
-      title: "Rybí pokrmy",
-      options: [],
-    },
-    {
-      value: "svaciny",
-      title: "Svačiny",
-      options: [
-        {
-          value: "pomazanky_syrove_a_tvarohove",
-          title: "Pomazánky sýrové a tvarohové",
-        },
-        {
-          value: "pomazanky_masove",
-          title: "Pomazánky masové",
-        },
-        {
-          value: "pomazanky_vajecne",
-          title: "Pomazánky vaječné",
-        },
-        {
-          value: "pomazanky_rybi",
-          title: "Pomazánky rybí",
-        },
-        {
-          value: "mlecne_vyrobky",
-          title: "Mléčné výrobky",
-        },
-        {
-          value: "kase",
-          title: "Kaše",
-        },
-        {
-          value: "pecivo",
-          title: "Pečivo",
-        },
-        {
-          value: "moucniky",
-          title: "Moučníky",
-        },
-        {
-          value: "ostatni",
-          title: "Ostatní",
-        },
-        {
-          value: "pomazanky_zeleninove/ovocne",
-          title: "Pomazánky zeleninové/ovocné",
-        },
-        {
-          value: "pomazanky_lusteninove",
-          title: "Pomazánky luštěninové",
-        },
-        {
-          value: "pomazanky_ostatni",
-          title: "Pomazánky ostatní",
-        },
-      ],
-    },
-    {
-      value: "zavarky",
-      title: "Zavářky",
-      options: [],
-    },
-  ];
-  const [selected1, setSelected1] = useState(ListboxData[0].value);
-  const [selected2, setSelected2] = useState(ListboxData[0].options[0].value);
-
   useEffect(() => {
-    const foundItem = ListboxData.find((item) => item.value === selected1);
+    const foundItem = groupsData.find(
+      (item: any) => item.value === selectedGroup
+    );
     if (foundItem) {
-      setSelected2(foundItem.options[0]?.value);
+      setSelectedSubgroup(foundItem.options[0]?.value);
     } else {
-      setSelected2("");
+      setSelectedSubgroup("");
     }
-  }, [selected1]);
+  }, [selectedGroup]);
 
   return (
     <div
@@ -772,15 +615,18 @@ function SideBar({
       <div className="space-y-2 border-t border-primary-200 py-2">
         <p className="font-bold">Skupina</p>
         <Selector
-          data={ListboxData}
-          selected={selected1}
-          setSelected={setSelected1}
+          data={groupsData}
+          selected={selectedGroup}
+          setSelected={setSelectedGroup}
         />
         <p className="font-bold">Podskupina</p>
         <Selector
-          data={ListboxData.find((item) => item.value === selected1)?.options}
-          selected={selected2}
-          setSelected={setSelected2}
+          data={
+            groupsData.find((item: any) => item.value === selectedGroup)
+              ?.options
+          }
+          selected={selectedSubgroup}
+          setSelected={setSelectedSubgroup}
         />
       </div>
       {sideBarValues.map((box, index) => (
