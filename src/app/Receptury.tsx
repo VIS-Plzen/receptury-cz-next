@@ -269,7 +269,7 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            Podminka: `Druh = "${group.title + " " + subGroup.title}"`,
+            // Podminka: `Druh = "${group.title + " " + subGroup?.title}"`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -277,8 +277,6 @@ export default function Receptury({
         }),
       })
     ).json();
-
-    console.log(group.title + " " + subGroup.title);
 
     setData(result);
 
@@ -617,7 +615,9 @@ function SideBar({
         <Selector
           data={groupsData}
           selected={selectedGroup}
-          setSelected={setSelectedGroup}
+          setSelected={(item: any) => {
+            setSelectedGroup(item);
+          }}
         />
         <p className="font-bold">Podskupina</p>
         <Selector
@@ -626,7 +626,9 @@ function SideBar({
               ?.options
           }
           selected={selectedSubgroup}
-          setSelected={setSelectedSubgroup}
+          setSelected={(item: any) => {
+            setSelectedSubgroup(item);
+          }}
         />
       </div>
       {sideBarValues.map((box, index) => (

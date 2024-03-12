@@ -9,9 +9,16 @@ type Props = {
   selected: any;
   setSelected: (selected: any) => void;
   className?: string;
+  updateFunction?: any;
 };
 
-function Selector({ data, selected, setSelected, className }: Props) {
+function Selector({
+  data,
+  selected,
+  setSelected,
+  className,
+  updateFunction,
+}: Props) {
   return (
     <div className={clsx("relative w-full space-y-4", className)}>
       <Listbox
