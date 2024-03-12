@@ -72,7 +72,10 @@ function GridCardLayout({
   className,
 }: RecipeCardProps) {
   return (
-    <div className={cn("h-80 w-full min-w-[180px]", className)}>
+    <a
+      href={`/receptura/${id}`}
+      className={cn("h-80 w-full min-w-[180px]", className)}
+    >
       <div
         className={cn(
           "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
@@ -112,9 +115,7 @@ function GridCardLayout({
         )}
       >
         <div className="line-clamp-3 text-sm font-bold">
-          <a href={`/receptura/${id}`} className={cn(isLoading && "hidden")}>
-            {label}
-          </a>
+          <p className={cn(isLoading && "hidden")}>{label}</p>
           {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
@@ -131,7 +132,7 @@ function GridCardLayout({
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -145,7 +146,8 @@ function RowCardLayout({
   className,
 }: RecipeCardProps) {
   return (
-    <div
+    <a
+      href={`/receptura/${id}`}
       className={cn(
         "h-[70px] flex-row justify-between",
         isLoading && "animate-pulse",
@@ -184,12 +186,7 @@ function RowCardLayout({
         )}
       >
         <div className="line-clamp-3 w-80 pl-[20px] pr-2 text-sm font-bold">
-          <a
-            href={`/receptura/${id}`}
-            className={cn("block", isLoading && "hidden")}
-          >
-            {label}
-          </a>
+          <p className={cn("block", isLoading && "hidden")}>{label}</p>
           <div
             className={cn(
               isLoading && " h-4 w-full rounded-full bg-gray-300",
@@ -219,7 +216,7 @@ function RowCardLayout({
           </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 
