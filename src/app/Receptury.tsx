@@ -504,6 +504,7 @@ function MobileFilters({
           </Dialog.Portal>
         </AnimatePresence>
       </Dialog.Root>
+
       <div className="hidden lg:block">
         <SideBar
           comboBoxValues={comboBoxValues}
@@ -573,73 +574,75 @@ function SideBar({
 
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl border-2 border-primary-200 bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
+      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white py-5 md:bg-transparent lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3`}
     >
-      <div className=" flex flex-row items-center justify-between lg:hidden">
-        <Heading size="sm">Co hledáte?</Heading>
-        <div className="flex space-x-8">
-          <button onClick={() => setSideBarOpen(false)}>
-            <CloseIcon className="h-8 w-8" />
-          </button>
+      <Container className="md:!px-0">
+        <div className=" flex flex-row items-center justify-between lg:hidden">
+          <Heading size="sm">Co hledáte?</Heading>
+          <div className="flex space-x-8">
+            <button onClick={() => setSideBarOpen(false)}>
+              <CloseIcon className="h-8 w-8" />
+            </button>
+          </div>
         </div>
-      </div>
-      <Comboboxes
-        className="my-8 flex flex-col gap-y-5 lg:hidden"
-        comboBoxValues={comboBoxValues}
-        updateCombobox={updateCombobox}
-      />
-      <div className="">
-        <Button
-          className="mb-2 w-full max-w-sm"
-          variant="black"
-          size="sm"
-          onClick={() => getDataAndSetQuery()}
-          disabled
-        >
-          <CheckSmallIcon className="shrink-0" />
-          Potvrdit výběr
-        </Button>
-        <Button
-          className="mb-2 w-full max-w-sm"
-          variant="black"
-          size="sm"
-          onClick={() => resetFilters()}
-          disabled
-        >
-          <CancelIcon className="shrink-0" />
-          Zrušit vše
-        </Button>
-      </div>
-      <div className="space-y-2 border-t border-primary-200 py-2">
-        <p className="font-bold">Skupina</p>
-        <Selector
-          data={groupsData}
-          selected={selectedGroup}
-          setSelected={(item: any) => {
-            setSelectedGroup(item);
-          }}
+        <Comboboxes
+          className="my-8 flex flex-col gap-y-5 lg:hidden"
+          comboBoxValues={comboBoxValues}
+          updateCombobox={updateCombobox}
         />
-        <p className="font-bold">Podskupina</p>
-        <Selector
-          data={
-            groupsData.find((item: any) => item.value === selectedGroup)
-              ?.options
-          }
-          selected={selectedSubgroup}
-          setSelected={(item: any) => {
-            setSelectedSubgroup(item);
-          }}
-        />
-      </div>
-      {sideBarValues.map((box, index) => (
-        <SideBarBox
-          key={"ffsbb" + index}
-          title={box.title}
-          options={box.options}
-          bIndex={index}
-          updateSideBarValue={updateSideBarValue}
-        />
-      ))}
+        <div className="">
+          <Button
+            className="mb-2 w-full max-w-sm"
+            variant="black"
+            size="sm"
+            onClick={() => getDataAndSetQuery()}
+            disabled
+          >
+            <CheckSmallIcon className="shrink-0" />
+            Potvrdit výběr
+          </Button>
+          <Button
+            className="mb-2 w-full max-w-sm"
+            variant="black"
+            size="sm"
+            onClick={() => resetFilters()}
+            disabled
+          >
+            <CancelIcon className="shrink-0" />
+            Zrušit vše
+          </Button>
+        </div>
+        <div className="space-y-2 border-t border-primary-200 py-2">
+          <p className="font-bold">Skupina</p>
+          <Selector
+            data={groupsData}
+            selected={selectedGroup}
+            setSelected={(item: any) => {
+              setSelectedGroup(item);
+            }}
+          />
+          <p className="font-bold">Podskupina</p>
+          <Selector
+            data={
+              groupsData.find((item: any) => item.value === selectedGroup)
+                ?.options
+            }
+            selected={selectedSubgroup}
+            setSelected={(item: any) => {
+              setSelectedSubgroup(item);
+            }}
+          />
+        </div>
+        {sideBarValues.map((box, index) => (
+          <SideBarBox
+            key={"ffsbb" + index}
+            title={box.title}
+            options={box.options}
+            bIndex={index}
+            updateSideBarValue={updateSideBarValue}
+          />
+        ))}
+      </Container>
     </div>
   );
 }
@@ -675,27 +678,26 @@ function SideBarBox({
   };
 
   return (
-    <div className="border-t border-primary-200 py-2">
-      <div>
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label={!open ? "Zobrazit" : "Skrýt"}
-          className="mb-4 w-full rounded-lg"
-        >
-          <div className="flex w-full flex-row items-center justify-between text-center">
-            <Heading as="h3" size="inherit">
-              {title}
-            </Heading>
-            <ExpandMoreIcon
-              className={`${!open && "translate rotate-180 duration-100"}`}
-            />
-          </div>
-        </button>
-      </div>
+    <div className="border-t border-primary-200 py-4">
+      <button
+        onClick={() => setOpen(!open)}
+        aria-label={!open ? "Zobrazit" : "Skrýt"}
+        className="w-full rounded-lg"
+      >
+        <div className="flex w-full flex-row items-center justify-between text-center">
+          <Heading as="h3" size="inherit">
+            {title}
+          </Heading>
+          <ExpandMoreIcon
+            className={`${!open && "translate rotate-180 duration-100"}`}
+          />
+        </div>
+      </button>
+
       <AnimatePresence initial={false}>
         {open && (
           <motion.ul
-            className="space-y-2"
+            className="mt-2 space-y-2"
             initial="closed"
             animate="open"
             exit="closed"

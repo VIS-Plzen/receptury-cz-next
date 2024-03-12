@@ -42,7 +42,7 @@ function RecipeCardsGrid({
         "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
         gridView &&
           !cardsInGrid &&
-          "md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+          "md:grid md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5",
         className
       )}
     >
