@@ -13,11 +13,12 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
+import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 export default function Receptury({
   title = "Receptury",
@@ -59,11 +60,14 @@ export default function Receptury({
       },
     },
   ],
+
   className = "",
   urlPreQuery = "",
+  groupsData,
 }: {
   title?: string;
   initialData?: any;
+  groupsData?: any;
   className?: string;
   urlPreQuery?: string;
 }) {
@@ -78,6 +82,10 @@ export default function Receptury({
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
+  const [selectedGroup, setSelectedGroup] = useState(groupsData[0].value);
+  const [selectedSubgroup, setSelectedSubgroup] = useState(
+    groupsData[0].options[0].value
+  );
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -248,6 +256,11 @@ export default function Receptury({
       }
     }
 
+    const group = groupsData.find((item: any) => item.value === selectedGroup);
+    const subGroup = group.options.find(
+      (item: any) => item.value === selectedSubgroup
+    );
+
     const result = await (
       await fetch("/api", {
         method: "POST",
@@ -257,6 +270,7 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
+            // Podminka: `Druh = "${group.title + " " + subGroup?.title}"`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -264,7 +278,9 @@ export default function Receptury({
         }),
       })
     ).json();
+
     setData(result);
+
     router.replace("?" + query, { scroll: false });
 
     return setRefresh(!refresh);
@@ -298,7 +314,13 @@ export default function Receptury({
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
+          groupsData={groupsData}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+          selectedSubgroup={selectedSubgroup}
+          setSelectedSubgroup={setSelectedSubgroup}
         />
+
         <RecipeCardsGrid
           className="col-span-4 pt-0 xl:col-span-5"
           gridView={gridView}
@@ -410,11 +432,21 @@ function MobileFilters({
   resetFilters,
   sideBarValues,
   comboBoxValues,
+  groupsData,
   updateCombobox,
   updateSideBarValue,
   getDataAndSetQuery,
+  selectedGroup,
+  setSelectedGroup,
+  selectedSubgroup,
+  setSelectedSubgroup,
 }: {
   sideBarOpen: boolean;
+  groupsData: any;
+  selectedGroup: any;
+  setSelectedGroup: (selectedGroup: any) => void;
+  selectedSubgroup: any;
+  setSelectedSubgroup: (selectedSubgroup: any) => void;
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
   sideBarValues: { title: string; options: any[] }[];
@@ -440,24 +472,37 @@ function MobileFilters({
         onOpenChange={() => setSideBarOpen(false)}
         modal
       >
-        <Dialog.Portal>
-          {sideBarOpen && (
-            <div className="lg:hidden">
-              <Dialog.Overlay className="DialogOverlay" />
-              <Dialog.Content className="DialogContent">
-                <SideBar
-                  comboBoxValues={comboBoxValues}
-                  resetFilters={resetFilters}
-                  setSideBarOpen={setSideBarOpen}
-                  sideBarValues={sideBarValues}
-                  updateCombobox={updateCombobox}
-                  updateSideBarValue={updateSideBarValue}
-                  getDataAndSetQuery={getDataAndSetQuery}
-                />
-              </Dialog.Content>
-            </div>
-          )}
-        </Dialog.Portal>
+        <AnimatePresence initial={false}>
+          <Dialog.Portal>
+            {sideBarOpen && (
+              <motion.div
+                key="modal"
+                className="lg:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Dialog.Overlay className="DialogOverlay" />
+                <Dialog.Content className="DialogContent">
+                  <SideBar
+                    comboBoxValues={comboBoxValues}
+                    resetFilters={resetFilters}
+                    setSideBarOpen={setSideBarOpen}
+                    sideBarValues={sideBarValues}
+                    updateCombobox={updateCombobox}
+                    updateSideBarValue={updateSideBarValue}
+                    getDataAndSetQuery={getDataAndSetQuery}
+                    groupsData={groupsData}
+                    selectedGroup={selectedGroup}
+                    setSelectedGroup={setSelectedGroup}
+                    selectedSubgroup={selectedSubgroup}
+                    setSelectedSubgroup={setSelectedSubgroup}
+                  />
+                </Dialog.Content>
+              </motion.div>
+            )}
+          </Dialog.Portal>
+        </AnimatePresence>
       </Dialog.Root>
       <div className="hidden lg:block">
         <SideBar
@@ -468,6 +513,11 @@ function MobileFilters({
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={getDataAndSetQuery}
+          groupsData={groupsData}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+          selectedSubgroup={selectedSubgroup}
+          setSelectedSubgroup={setSelectedSubgroup}
         />
       </div>
     </>
@@ -478,13 +528,23 @@ function SideBar({
   setSideBarOpen,
   resetFilters,
   sideBarValues,
+  groupsData,
   comboBoxValues,
   updateCombobox,
+  selectedGroup,
+  setSelectedGroup,
+  selectedSubgroup,
+  setSelectedSubgroup,
   updateSideBarValue,
   getDataAndSetQuery,
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
+  selectedGroup: any;
+  setSelectedGroup: (selectedGroup: any) => void;
+  selectedSubgroup: any;
+  setSelectedSubgroup: (selectedSubgroup: any) => void;
+  groupsData: any;
   sideBarValues: { title: string; options: any[] }[];
   comboBoxValues: {
     title: string;
@@ -500,6 +560,17 @@ function SideBar({
   ) => void;
   getDataAndSetQuery: () => void;
 }) {
+  useEffect(() => {
+    const foundItem = groupsData.find(
+      (item: any) => item.value === selectedGroup
+    );
+    if (foundItem) {
+      setSelectedSubgroup(foundItem.options[0]?.value);
+    } else {
+      setSelectedSubgroup("");
+    }
+  }, [selectedGroup]);
+
   return (
     <div
       className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl border-2 border-primary-200 bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
@@ -538,6 +609,27 @@ function SideBar({
           <CancelIcon className="shrink-0" />
           Zrušit vše
         </Button>
+      </div>
+      <div className="space-y-2 border-t border-primary-200 py-2">
+        <p className="font-bold">Skupina</p>
+        <Selector
+          data={groupsData}
+          selected={selectedGroup}
+          setSelected={(item: any) => {
+            setSelectedGroup(item);
+          }}
+        />
+        <p className="font-bold">Podskupina</p>
+        <Selector
+          data={
+            groupsData.find((item: any) => item.value === selectedGroup)
+              ?.options
+          }
+          selected={selectedSubgroup}
+          setSelected={(item: any) => {
+            setSelectedSubgroup(item);
+          }}
+        />
       </div>
       {sideBarValues.map((box, index) => (
         <SideBarBox

@@ -46,15 +46,19 @@ export default async function Home({ params }: { params: { id: number } }) {
   const card = data.Vety[0].Vlastnosti;
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
       <Hero
         title={card.Nazev}
-        jmeno={"Jméno partnera"}
+        jmeno={card.Autor}
         badges={["Ryby a mořské plody", "Bezmléčná dieta"]}
       />
       <Informations
         title={card.Nazev}
-        hmotnost={{ porce: "280", masa: "115", omacky: "70" }}
+        hmotnost={{
+          porce: card.HmotnostPorceDospeli,
+          masa: "115",
+          omacky: "70",
+        }}
         kalkulacka={{
           porci: 25,
           koeficient: "0.8",
@@ -70,7 +74,10 @@ export default async function Home({ params }: { params: { id: number } }) {
           text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
         }}
         terapeut={{
-          text: "Rybích pokrmů není nikdy málo, tento navíc využívá velmi kvalitní rybí maso, které se na trhu prodává bez kostí a kůže. Lehkce stravitelné a šťavnaté rybí maso je doplněné zeleninou, zajímavou chuť pokrmu navíc přidá mletý koriandr v kombinaci s oreganem (dobromyslí).",
+          text:
+            card.VyjadreniNT === ""
+              ? "Není vyplněno - VyjadreniNT"
+              : card.VyjadreniNT,
           badges: ["Ryby a mořské plody", "Smažené", "Bezlepkové"],
         }}
         skladba={{

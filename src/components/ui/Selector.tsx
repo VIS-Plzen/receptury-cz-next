@@ -6,12 +6,19 @@ import { CheckIcon, ExpandLessIcon, ExpandMoreIcon } from "../icons";
 
 type Props = {
   data: any;
-  selected: string;
-  setSelected: (selected: string) => void;
+  selected: any;
+  setSelected: (selected: any) => void;
   className?: string;
+  updateFunction?: any;
 };
 
-function Selector({ data, selected, setSelected, className }: Props) {
+function Selector({
+  data,
+  selected,
+  setSelected,
+  className,
+  updateFunction,
+}: Props) {
   return (
     <div className={clsx("relative w-full space-y-4", className)}>
       <Listbox
@@ -27,7 +34,7 @@ function Selector({ data, selected, setSelected, className }: Props) {
           <Listbox.Button className="w-full rounded-2xl border-2 border-primary-200 bg-white focus:border-primary/50 focus:ring-0">
             <div className="flex items-center justify-between p-2.5">
               <span className="block truncate">
-                {data.find((tab: any) => tab.value === selected).title}
+                {data.find((tab: any) => tab.value === selected)?.title}
               </span>
 
               <div>
