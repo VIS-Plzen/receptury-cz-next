@@ -5,7 +5,6 @@ import Heading from "@/components/ui/Heading";
 import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/cn";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -14,9 +13,6 @@ import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Inspirace({ className = "" }: { className?: string }) {
-  const isDesktop = useMediaQuery("(min-width: 960px)");
-  const isLargeScreen = useMediaQuery("(min-width: 1280px)");
-  const totalCards = isLargeScreen ? 12 : 10;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -99,7 +95,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           <HideButton className="ml-auto flex" />
         </div>
         <div className={`${!isVisible && "hidden"}`}>
-          <div className="flex w-full items-center justify-between pt-5 md:pt-20">
+          <div className="flex w-full items-center justify-between pt-5 md:pt-10">
             <Tabs
               value={selected}
               className="w-full"
@@ -133,48 +129,45 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             setSelected={setSelected}
             className="block md:hidden"
           />
-          {isDesktop ? (
-            <div
-              className={cn("grid gap-4 pt-6 lg:grid-cols-5 xl:grid-cols-6")}
-            >
-              {Array.from({ length: totalCards }, (_, index) => (
+
+          <Swiper
+            spaceBetween={25}
+            breakpoints={{
+              370: {
+                slidesPerView: 2,
+              },
+              640: {
+                slidesPerView: 3,
+              },
+              768: {
+                slidesPerView: 4,
+              },
+              1024: {
+                slidesPerView: 5,
+              },
+              1280: {
+                slidesPerView: 6,
+              },
+              1536: {
+                slidesPerView: 7,
+              },
+            }}
+            modules={[Pagination]}
+            pagination={{ clickable: false }}
+            className=" [--swiper-pagination-color:theme(colors.primary.600)]"
+          >
+            {Array.from({ length: 10 }, (_, index) => (
+              <SwiperSlide key={index} className="py-10">
                 <RecipeCard
                   key={index}
-                  forceGrid
                   isLoading={false}
-                  label="Smažené kuřecí řízečky, bramborové placičky"
+                  label={"Smažené kuřecí řízečky, bramborové placičky"}
                   badges={["Dieta", "Brambor"]}
+                  forceGrid
                 />
-              ))}
-            </div>
-          ) : (
-            <Swiper
-              spaceBetween={25}
-              breakpoints={{
-                370: {
-                  slidesPerView: 2,
-                },
-                640: {
-                  slidesPerView: 3,
-                },
-              }}
-              modules={[Pagination]}
-              pagination={{ clickable: false }}
-              className=" [--swiper-pagination-color:theme(colors.primary.600)]"
-            >
-              {Array.from({ length: 10 }, (_, index) => (
-                <SwiperSlide key={index} className="py-10">
-                  <RecipeCard
-                    key={index}
-                    isLoading={false}
-                    label={"Smažené kuřecí řízečky, bramborové placičky"}
-                    badges={["Dieta", "Brambor"]}
-                    forceGrid
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </Container>
     </div>
