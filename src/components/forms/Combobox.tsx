@@ -77,7 +77,7 @@ export default function MyCombobox({
   }
 
   return (
-    <div className={`w-full max-w-sm`} style={{ zIndex: z }}>
+    <div className={`w-full`} style={{ zIndex: z }}>
       <Combobox
         name={name}
         value={selectedValue ? selectedValue : ""}

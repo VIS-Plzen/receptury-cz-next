@@ -574,9 +574,9 @@ function SideBar({
 
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white py-5 md:bg-transparent lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
     >
-      <Container className="md:!px-0">
+      <Container className="lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
           <Heading size="sm">Co hledáte?</Heading>
           <div className="flex space-x-8">
@@ -586,13 +586,13 @@ function SideBar({
           </div>
         </div>
         <Comboboxes
-          className="my-8 flex flex-col gap-y-5 lg:hidden"
+          className="my-8 flex flex-col justify-center gap-y-5 sm:flex-row sm:space-x-2 lg:hidden"
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
         />
-        <div className="">
+        <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:flex-col">
           <Button
-            className="mb-2 w-full max-w-sm"
+            className="mb-2 w-full"
             variant="black"
             size="sm"
             onClick={() => getDataAndSetQuery()}
@@ -602,7 +602,7 @@ function SideBar({
             Potvrdit výběr
           </Button>
           <Button
-            className="mb-2 w-full max-w-sm"
+            className="mb-2 w-full"
             variant="black"
             size="sm"
             onClick={() => resetFilters()}
