@@ -112,11 +112,13 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             >
               <div className="hidden w-full flex-row justify-between md:flex">
                 <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
-                  {TabsData.map((tab) => (
+                  {TabsData.map((tab, index) => (
                     <TabsTrigger
                       value={tab.value}
                       className="w-full"
                       key={tab.value}
+                      id={"TabsTriggerIndex" + index}
+                      aria-controls={"TabsTriggerIndex" + index}
                     >
                       {tab.title}
                     </TabsTrigger>
@@ -138,11 +140,10 @@ export default function Inspirace({ className = "" }: { className?: string }) {
               {Array.from({ length: totalCards }, (_, index) => (
                 <RecipeCard
                   key={index}
-                  isGridView={true}
+                  forceGrid
                   isLoading={false}
                   label="Smažené kuřecí řízečky, bramborové placičky"
                   badges={["Dieta", "Brambor"]}
-                  assertCard={true}
                 />
               ))}
             </div>
@@ -165,11 +166,10 @@ export default function Inspirace({ className = "" }: { className?: string }) {
                 <SwiperSlide key={index} className="py-10">
                   <RecipeCard
                     key={index}
-                    isGridView={true}
                     isLoading={false}
                     label={"Smažené kuřecí řízečky, bramborové placičky"}
                     badges={["Dieta", "Brambor"]}
-                    assertCard={true}
+                    forceGrid
                   />
                 </SwiperSlide>
               ))}

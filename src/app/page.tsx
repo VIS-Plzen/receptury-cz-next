@@ -6,13 +6,8 @@ import VolitelnyObsah from "./VolitelnyObsah";
 export default async function Home() {
   // základní fetch kterej chce dodělat
 
-  if (false) {
-    let data;
-    const result = await readSome();
-    if (result.Result.Status === true) {
-      data = result.Vety;
-    }
-  }
+  let data = await readSome();
+
   async function createNew() {
     return await (
       await fetch("/api", {
@@ -35,25 +30,44 @@ export default async function Home() {
     ).json();
   }
   async function readSome() {
-    return await (
-      await fetch(process.env.URL + "/api", {
+    const result = await (
+      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sid: "12345VIS",
-          funkce: "ObecnyDotaz",
-          parametry: {
-            Tabulka: "Receptury",
-            Operace: "Read",
-          },
+          Uzivatel: process.env.BE_USER,
+          Heslo: process.env.BE_PASSWORD,
+          SID: "12345VIS",
+          Funkce: "ObecnyDotaz",
+          Parametry: [
+            {
+              Tabulka: "Receptury",
+              Operace: "Read",
+              Limit: 15,
+              Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+            },
+          ],
         }),
       })
     ).json();
+
+    if (result.Result) {
+      result.Result.Vety = result.Vety;
+      return result.Result;
+    }
+    return {
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    };
   }
 
   return (
     <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
       <Inspirace />
-      <Receptury className="border-y-2 border-primary-200" />
+      <Receptury
+        className="border-y-2 border-primary-200"
+        initialData={data ? data : undefined}
+      />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"

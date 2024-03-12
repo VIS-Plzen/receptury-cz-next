@@ -25,7 +25,7 @@ export default function VolitelnyObsah({
         <Image
           src={img}
           alt=""
-          className="w-full rounded-2xl bg-gray-300 object-cover md:w-1/2"
+          className="w-full rounded-2xl bg-gray-200 object-cover md:w-1/2"
           width={400}
           height={200}
         />

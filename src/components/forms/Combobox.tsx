@@ -1,7 +1,7 @@
 "use";
 import { Combobox, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { CheckIcon, SearchIcon } from "../icons";
 
 type Props = {
@@ -31,9 +31,10 @@ export default function MyCombobox({
   error,
   ...rest
 }: Props) {
-  const [focused, setFocused] = useState(false);
   const [selectedValue, setSelectedValue] = useState(selectedOption);
   const [query, setQuery] = useState(selectedOption);
+
+  const ref: any = useRef(null);
 
   const filteredValues =
     query === ""
@@ -76,7 +77,7 @@ export default function MyCombobox({
   }
 
   return (
-    <div className={`z-dropbown w-full max-w-sm`} style={{ zIndex: z }}>
+    <div className={`w-full max-w-sm`} style={{ zIndex: z }}>
       <Combobox
         name={name}
         value={selectedValue ? selectedValue : ""}
@@ -85,14 +86,15 @@ export default function MyCombobox({
           onChange(e);
         }}
       >
-        <div className={clsx("mt-1", isDisabled && "cursor-not-allowed")}>
-          <div className={` relative h-10 ${error && "mb-3"}`}>
+        <div
+          className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
+        >
+          <div className={`relative ${error && "mb-3"}`}>
             <Combobox.Label className="sr-only">{label}</Combobox.Label>
             <Combobox.Input
               className={clsx(
-                "flex h-full w-full items-start justify-start rounded-xl border border-primary-400 bg-primary-50 outline-none ring-0",
-                "h-16 py-2.5 pl-9 pr-5",
-                "bg-gray-75 text-default dark:bg-gray-975 hover:bg-gray-100 focus:bg-gray-100",
+                "flex h-full w-full items-start justify-start rounded-xl border-2 border-primary-300 bg-primary-50 outline-none ring-0",
+                "py-2.5 pl-9 pr-5",
                 "focus:outline-none focus:ring-0",
                 "transition-colors duration-200",
                 isDisabled && "cursor-not-allowed",
@@ -102,6 +104,7 @@ export default function MyCombobox({
               name={name}
               id={id}
               placeholder={label}
+              ref={ref}
               onClick={(e) => {
                 if (isDisabled) {
                   e.preventDefault();
@@ -113,8 +116,6 @@ export default function MyCombobox({
                 setSelectedValue(e.target.value);
                 setQuery(e.target.value);
               }}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
               autoComplete="off"
               {...rest}
             />
@@ -143,10 +144,10 @@ export default function MyCombobox({
             leaveTo="opacity-0"
             afterLeave={() => onChange(query)}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredValues.length === 0 && query !== "" ? (
                 <button
-                  className="relative cursor-default select-none px-4 py-2 text-gray-700"
+                  className="relative select-none px-4 py-2 text-gray-700"
                   onClick={() => onChange(query)}
                 >
                   Nenalezeno, přesto vyhledat.
@@ -156,22 +157,22 @@ export default function MyCombobox({
                   <Combobox.Option
                     key={key}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-primary text-white" : "text-muted"
+                      `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+                        active && "bg-primary-200"
                       }`
                     }
                     value={value}
                   >
                     {({ selected, active }) => (
                       <>
-                        <span
+                        <button
                           className={`block truncate ${
                             selected ? "font-medium" : "font-normal"
                           }`}
-                          onClick={() => onChange && onChange(value)}
+                          onClick={() => onChange(value)}
                         >
                           {value}
-                        </span>
+                        </button>
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
