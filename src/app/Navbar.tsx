@@ -62,7 +62,7 @@ function ActiveNavLink({
   return (
     <StyledLink
       asChild
-      hoverEffect="appear"
+      hoverEffect="color"
       className={cn(className, isActive && activeClassName)}
     >
       <Link {...props} />

@@ -148,9 +148,6 @@ export default function Inspirace({ className = "" }: { className?: string }) {
               1280: {
                 slidesPerView: 6,
               },
-              // 1536: {
-              //   slidesPerView: 6,
-              // },
             }}
             modules={[Pagination]}
             pagination={{ clickable: false }}

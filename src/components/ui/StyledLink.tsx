@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 
 type Props = React.ComponentPropsWithoutRef<"a"> & {
   asChild?: boolean;
-  hoverEffect?: "appear" | "slide-back" | "static" | "none";
+  hoverEffect?: "appear" | "slide-back" | "static" | "none" | "color";
   className?: string;
 };
 
@@ -16,6 +16,7 @@ const cv = {
     "slide-back": "ui-styled-link--slide-back",
     static: "ui-styled-link--static",
     none: "",
+    color: "hover:text-primary transition-colors duration-100 ease-linear",
   },
 };
 
