@@ -61,7 +61,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <Inspirace />
       <Receptury
         className="border-y-2 border-primary-200"

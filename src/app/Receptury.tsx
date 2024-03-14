@@ -795,7 +795,7 @@ function SideBar({
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
         />
-        <div className="flex flex-col-reverse md:flex-col">
+        <div className="flex flex-col-reverse lg:flex-col">
           <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:flex-col">
             <Button
               className="mb-2 w-full"
