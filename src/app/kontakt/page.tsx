@@ -1,4 +1,5 @@
 "use client";
+import Collapse from "@/components/ui/Collapse";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
@@ -216,38 +217,40 @@ export default function Home() {
           FAQ
         </Heading>
         <div className="grid gap-x-5 md:grid-cols-2">
-          <div className="w-full space-y-2">
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-          </div>
-          <div className="w-full space-y-2">
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-          </div>
+          <Collapse.Group>
+            <div className="w-full space-y-2">
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+            </div>
+            <div className="w-full space-y-2">
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+            </div>
+          </Collapse.Group>
         </div>
       </Container>
     );
