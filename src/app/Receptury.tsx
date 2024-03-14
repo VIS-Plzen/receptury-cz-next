@@ -795,58 +795,62 @@ function SideBar({
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
         />
-        <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:flex-col">
-          <Button
-            className="mb-2 w-full"
-            variant="black"
-            size="sm"
-            onClick={() => getDataAndSetQuery()}
-            disabled
-          >
-            <CheckSmallIcon className="shrink-0" />
-            Potvrdit výběr
-          </Button>
-          <Button
-            className="mb-2 w-full"
-            variant="black"
-            size="sm"
-            onClick={() => resetFilters()}
-            disabled
-          >
-            <CancelIcon className="shrink-0" />
-            Zrušit vše
-          </Button>
+        <div className="flex flex-col-reverse md:flex-col">
+          <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:flex-col">
+            <Button
+              className="mb-2 w-full"
+              variant="black"
+              size="sm"
+              onClick={() => getDataAndSetQuery()}
+              disabled
+            >
+              <CheckSmallIcon className="shrink-0" />
+              Potvrdit výběr
+            </Button>
+            <Button
+              className="mb-2 w-full"
+              variant="black"
+              size="sm"
+              onClick={() => resetFilters()}
+              disabled
+            >
+              <CancelIcon className="shrink-0" />
+              Zrušit vše
+            </Button>
+          </div>
+          <div>
+            <div className="space-y-2 border-t border-primary-200 py-2">
+              <p className="font-bold">Skupina</p>
+              <Selector
+                data={groupsData}
+                selected={selectedGroup}
+                setSelected={(item: any) => {
+                  setSelectedGroup(item);
+                }}
+              />
+              <p className="font-bold">Podskupina</p>
+              <Selector
+                data={
+                  groupsData.find((item: any) => item.value === selectedGroup)
+                    ?.options
+                }
+                selected={selectedSubgroup}
+                setSelected={(item: any) => {
+                  setSelectedSubgroup(item);
+                }}
+              />
+            </div>
+            {sideBarValues.map((box, index) => (
+              <SideBarBox
+                key={"ffsbb" + index}
+                title={box.title}
+                options={box.options}
+                bIndex={index}
+                updateSideBarValue={updateSideBarValue}
+              />
+            ))}
+          </div>
         </div>
-        <div className="space-y-2 border-t border-primary-200 py-2">
-          <p className="font-bold">Skupina</p>
-          <Selector
-            data={groupsData}
-            selected={selectedGroup}
-            setSelected={(item: any) => {
-              setSelectedGroup(item);
-            }}
-          />
-          <p className="font-bold">Podskupina</p>
-          <Selector
-            data={
-              groupsData.find((item: any) => item.value === selectedGroup)
-                ?.options
-            }
-            selected={selectedSubgroup}
-            setSelected={(item: any) => {
-              setSelectedSubgroup(item);
-            }}
-          />
-        </div>
-        {sideBarValues.map((box, index) => (
-          <SideBarBox
-            key={"ffsbb" + index}
-            title={box.title}
-            options={box.options}
-            bIndex={index}
-            updateSideBarValue={updateSideBarValue}
-          />
-        ))}
       </Container>
     </div>
   );
