@@ -20,6 +20,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useState } from "react";
 
+const GRID_VIEW_KEY = "gridView";
 const groupsData = [
   {
     value: "bezmase_sladke",
@@ -279,6 +280,10 @@ export default function Receptury({
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
+  // const [gridView, setGridView] = useState<boolean>(() => {
+  //   const storedGridView = localStorage.getItem(GRID_VIEW_KEY);
+  //   return storedGridView ? JSON.parse(storedGridView) : false;
+  // });
   const [gridView, setGridView] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
@@ -291,6 +296,10 @@ export default function Receptury({
   const [selectedSubgroup, setSelectedSubgroup] = useState(
     groupsData[0].options[0].value
   );
+
+  // useEffect(() => {
+  //   localStorage.setItem(GRID_VIEW_KEY, JSON.stringify(gridView));
+  // }, [gridView]);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -327,6 +336,14 @@ export default function Receptury({
           { title: "Zapečené", name: "zapecene", checked: false },
           { title: "Smažené", name: "smazene", checked: false },
           { title: "Ostatní", name: "ostatni", checked: false },
+        ],
+      },
+      {
+        title: "Partner",
+        name: "partner",
+        options: [
+          { title: "Bidfood", name: "bidfood", checked: false },
+          { title: "Bonduelle", name: "bonduelle", checked: false },
         ],
       },
     ];
@@ -592,8 +609,8 @@ function TopRow({
     options: any[];
     value: string;
   }[];
-  gridView: boolean;
-  setGridView: (grid: boolean) => void;
+  gridView: any;
+  setGridView: (grid: any) => void;
   toggleId: any;
   sideBarOpen: boolean;
   setSideBarOpen: (open: boolean) => void;
@@ -779,9 +796,9 @@ function SideBar({
 
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl bg-white py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col overflow-visible overflow-y-auto rounded-xl bg-white py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
     >
-      <Container className="lg:!px-0">
+      <Container className="overflow-x-visible lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
           <Heading size="sm">Co hledáte?</Heading>
           <div className="flex space-x-8">
@@ -795,14 +812,13 @@ function SideBar({
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
         />
-        <div className="flex flex-col-reverse lg:flex-col">
-          <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:flex-col">
+        <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
+          <div className="flex w-full flex-col-reverse items-center justify-center gap-2 sm:flex-row-reverse lg:flex-col">
             <Button
               className="mb-2 w-full"
               variant="black"
               size="sm"
               onClick={() => getDataAndSetQuery()}
-              disabled
             >
               <CheckSmallIcon className="shrink-0" />
               Potvrdit výběr
@@ -812,13 +828,12 @@ function SideBar({
               variant="black"
               size="sm"
               onClick={() => resetFilters()}
-              disabled
             >
               <CancelIcon className="shrink-0" />
               Zrušit vše
             </Button>
           </div>
-          <div>
+          <div className="overflow-x-visible">
             <div className="space-y-2 border-t border-primary-200 py-2">
               <p className="font-bold">Skupina</p>
               <Selector
@@ -840,6 +855,7 @@ function SideBar({
                 }}
               />
             </div>
+
             {sideBarValues.map((box, index) => (
               <SideBarBox
                 key={"ffsbb" + index}
@@ -887,7 +903,7 @@ function SideBarBox({
   };
 
   return (
-    <div className="border-t border-primary-200 py-4">
+    <div className="overflow-x-visible border-t border-primary-200 py-4">
       <button
         onClick={() => setOpen(!open)}
         aria-label={!open ? "Zobrazit" : "Skrýt"}
@@ -906,7 +922,7 @@ function SideBarBox({
       <AnimatePresence initial={false}>
         {open && (
           <motion.ul
-            className="mt-2 space-y-2"
+            className="mt-2 space-y-2 overflow-x-visible"
             initial="closed"
             animate="open"
             exit="closed"
@@ -914,7 +930,10 @@ function SideBarBox({
             transition={{ duration: 0.25 }}
           >
             {options.map((o: any, oIndex: number) => (
-              <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+              <motion.li
+                key={"sbbo" + oIndex}
+                className={`cursor-pointer overflow-x-visible`}
+              >
                 <Checkbox
                   checked={o.checked}
                   label={o.title}

@@ -228,10 +228,11 @@ export function Hero({
           src="/images/food.jpeg"
           alt=""
           className="w-full bg-gray-300 object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
+          height={300}
           width={500}
-          height={200}
         />
-        <div className="flex flex-col gap-y-5  p-5 md:px-0">
+
+        <div className="flex flex-col  gap-y-5 p-5 md:px-0">
           <div className="flex gap-x-2 md:mt-auto md:px-10">
             <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
               Logo
@@ -300,7 +301,7 @@ export function Informations({
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 grid min-w-max max-w-md grid-cols-3 gap-x-1.5 gap-y-3 sm:grid-cols-6">
+        <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 md:max-w-md md:gap-x-5">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}

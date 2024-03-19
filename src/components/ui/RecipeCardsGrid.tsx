@@ -19,7 +19,7 @@ type Props = {
       };
     }[];
   };
-  gridView?: boolean;
+  gridView?: any;
   isLoading?: boolean;
   length?: number;
   className?: string;
@@ -39,7 +39,7 @@ function RecipeCardsGrid({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center gap-4 py-6 md:overflow-x-hidden",
+        "flex flex-col justify-center gap-4 py-6 md:overflow-visible",
         gridView &&
           !cardsInGrid &&
           "md:grid md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5",
