@@ -598,7 +598,7 @@ export default function Receptury({
               className={`absolute left-1/2 top-16 z-10 -translate-x-1/2`}
             />
           </div>
-        ) : !data || data.Vety.length === 0 ? (
+        ) : !data || !data.Vety || data.Vety.length === 0 ? (
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"

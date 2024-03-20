@@ -138,9 +138,9 @@ export function Partner({
   color: "default" | "bidfood" | "bonduelle";
 }) {
   const outterDivClasses = {
-    default: "border-secondary-700",
-    bidfood: "border-bidfood-700",
-    bonduelle: "border-bonduelle-700",
+    default: "border-secondary-700 bg-secondary-700",
+    bidfood: "border-bidfood-700 bg-bidfood-700",
+    bonduelle: "border-bonduelle-700 bg-bonduelle-700",
   };
 
   const innerDivClasses = {

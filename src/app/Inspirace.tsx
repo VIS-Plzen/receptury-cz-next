@@ -131,7 +131,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           />
 
           <Swiper
-            spaceBetween={10}
+            spaceBetween={16}
             breakpoints={{
               370: {
                 slidesPerView: 2,
