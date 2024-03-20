@@ -31,11 +31,12 @@ function RecipeCardsGrid({
   data,
   gridView = false,
   isLoading = false,
-  length,
+  length = 15,
   className = "",
   cardsInGrid,
   assertCard,
 }: Props) {
+  console.log();
   return (
     <div
       className={cn(
@@ -46,7 +47,8 @@ function RecipeCardsGrid({
         className
       )}
     >
-      {data && data.Vety ? (
+      {data &&
+        data.Vety &&
         data.Vety.map((card, index) => (
           <RecipeCard
             key={index}
@@ -57,10 +59,7 @@ function RecipeCardsGrid({
             badges={[]}
             img="/images/food.jpeg"
           />
-        ))
-      ) : (
-        <div></div>
-      )}
+        ))}
     </div>
   );
 }

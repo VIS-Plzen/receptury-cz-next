@@ -1,6 +1,5 @@
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { Suspense } from "react";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
 import ButtonIcon from "./ButtonIcon";
@@ -216,34 +215,16 @@ function RecipeCard({
   id,
   badges,
   className,
+  isLoading,
 }: RecipeCardProps) {
   return (
-    <>
-      <Suspense
-        fallback={
-          <ReturnedLayout
-            card={{
-              label: label,
-              id: id,
-              badges: badges,
-              className: className,
-            }}
-            loading={true}
-            isGridView={isGridView}
-            forceGrid={forceGrid}
-            forceRow={forceRow}
-          />
-        }
-      >
-        <ReturnedLayout
-          card={{ label: label, id: id, badges: badges, className: className }}
-          loading={false}
-          isGridView={isGridView}
-          forceGrid={forceGrid}
-          forceRow={forceRow}
-        />
-      </Suspense>
-    </>
+    <ReturnedLayout
+      card={{ label: label, id: id, badges: badges, className: className }}
+      loading={isLoading}
+      isGridView={isGridView}
+      forceGrid={forceGrid}
+      forceRow={forceRow}
+    />
   );
 }
 
@@ -258,7 +239,7 @@ function ReturnedLayout({
   forceGrid?: boolean;
   forceRow?: boolean;
   card: RecipeCardProps;
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <a href={`/receptura/${card.id}`}>

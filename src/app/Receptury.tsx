@@ -11,6 +11,7 @@ import {
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
@@ -18,9 +19,8 @@ import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
-const GRID_VIEW_KEY = "gridView";
 const groupsData = [
   {
     value: "bezmase_sladke",
@@ -280,10 +280,6 @@ export default function Receptury({
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
-  // const [gridView, setGridView] = useState<boolean>(() => {
-  //   const storedGridView = localStorage.getItem(GRID_VIEW_KEY);
-  //   return storedGridView ? JSON.parse(storedGridView) : false;
-  // });
   const [gridView, setGridView] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
@@ -292,14 +288,23 @@ export default function Receptury({
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
-  const [selectedGroup, setSelectedGroup] = useState(groupsData[0].value);
-  const [selectedSubgroup, setSelectedSubgroup] = useState(
-    groupsData[0].options[0].value
-  );
+  const [selectedGroup, setSelectedGroup] = useState("nezadano");
+  const [selectedSubgroup, setSelectedSubgroup] = useState("");
 
-  // useEffect(() => {
-  //   localStorage.setItem(GRID_VIEW_KEY, JSON.stringify(gridView));
-  // }, [gridView]);
+  const [saveDisabled, setSaveDisabled] = useState(true);
+  const [cancelDisabled, setCancelDisabled] = useState(true);
+
+  // loading tlačítek a karet
+  const [loading, setLoading] = useState(false);
+
+  // initial load pro výběr gridu z local storage
+  const [initialLoad, setInitialLoad] = useState(true);
+
+  useEffect(() => {
+    const local = localStorage.getItem("gridView");
+    setGridView(local === "true");
+    setInitialLoad(false);
+  }, []);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -371,6 +376,17 @@ export default function Receptury({
     })()
   );
 
+  useEffect(() => {
+    const foundItem = groupsData.find(
+      (item: any) => item.value === selectedGroup
+    );
+    if (foundItem && foundItem.options.length !== 0) {
+      setSelectedSubgroup(foundItem.options[0].value);
+    } else {
+      setSelectedSubgroup("");
+    }
+  }, [selectedGroup]);
+
   function updateSideBarValue(
     boxIndex: number,
     checkboxIndex: number,
@@ -381,6 +397,8 @@ export default function Receptury({
       objHolder[boxIndex].options[checkboxIndex].checked = checked;
       return objHolder;
     });
+    setSaveDisabled(false);
+    setCancelDisabled(false);
     setRefresh(!refresh);
   }
 
@@ -390,7 +408,7 @@ export default function Receptury({
     return [key, values, prevalues];
   }
 
-  const comboBoxValues = useMemo(() => {
+  const [comboBoxValues, setComboBoxValues] = useState(() => {
     const holder = [
       {
         title: "Dle receptury",
@@ -414,7 +432,7 @@ export default function Receptury({
       }
     });
     return holder;
-  }, [urlParamsSplitted]);
+  });
 
   function resetFilters() {
     sideBarValues.forEach((box) => {
@@ -423,20 +441,36 @@ export default function Receptury({
       });
     });
 
-    comboBoxValues.forEach((combo) => {
-      combo.value = "";
+    setComboBoxValues((prev) => {
+      prev.forEach((combo) => (combo.value = ""));
+      return prev;
     });
+
+    setSelectedGroup("nezadano");
+    setSelectedSubgroup("");
+
+    setCancelDisabled(true);
+    setSaveDisabled(false);
+    setRefresh(!refresh);
   }
 
   function updateCombobox(index: number, value: string) {
-    comboBoxValues[index].value = value;
+    setComboBoxValues((prev) => {
+      prev[index].value = value;
+      return prev;
+    });
+    setCancelDisabled(false);
+    setSaveDisabled(false);
+    setRefresh(!refresh);
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   async function getDataAndSetQuery(page: number) {
+    setLoading(true);
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
+      console.log(combo.value);
       if (combo.value === "") return;
       if (query === "") query += combo.name + "=" + combo.value;
       else query += "&" + combo.name + "=" + combo.value;
@@ -491,7 +525,10 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            // Podminka: `Druh = "${group.title + " " + subGroup?.title}"`,
+            Podminka:
+              group?.value === "nezadano"
+                ? ""
+                : `Druh="${group?.title + " " + subGroup?.title}"`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -499,17 +536,13 @@ export default function Receptury({
         }),
       })
     ).json();
-
     setData(result);
 
     router.replace("?" + query, { scroll: false });
 
+    setSaveDisabled(true);
+    setLoading(false);
     return setRefresh(!refresh);
-  }
-
-  function changePage(page: number) {
-    setPageState(page);
-    getDataAndSetQuery(page);
   }
 
   return (
@@ -517,13 +550,17 @@ export default function Receptury({
       <TopRow
         comboBoxValues={comboBoxValues}
         data={initialData}
-        gridView={gridView}
-        setGridView={setGridView}
+        gridView={initialLoad === true ? undefined : gridView}
+        setGridView={(grid: boolean) => {
+          setGridView(grid);
+          localStorage.setItem("gridView", grid.toString());
+        }}
         setSideBarOpen={setSideBarOpen}
         sideBarOpen={sideBarOpen}
         title={title}
         toggleId={toggleId}
         updateCombobox={updateCombobox}
+        refresh={refresh}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <MobileFilters
@@ -537,22 +574,51 @@ export default function Receptury({
           getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
+          setSelectedGroup={(val: string) => {
+            setSelectedGroup(val);
+            setCancelDisabled(false);
+            setSaveDisabled(false);
+          }}
           selectedSubgroup={selectedSubgroup}
-          setSelectedSubgroup={setSelectedSubgroup}
+          setSelectedSubgroup={(val: string) => {
+            setSelectedSubgroup(val);
+            setCancelDisabled(false);
+            setSaveDisabled(false);
+          }}
+          saveDisabled={saveDisabled}
+          cancelDisabled={cancelDisabled}
+          loading={loading}
+          refresh={refresh}
         />
 
-        <RecipeCardsGrid
-          className="col-span-4 pt-0 xl:col-span-5"
-          gridView={gridView}
-          isLoading={false}
-          data={data}
-        />
+        {initialLoad ? (
+          <div className="relative col-span-4 h-full">
+            <LoadingSpinner
+              className={`absolute left-1/2 top-16 z-10 -translate-x-1/2 scale-[5]`}
+            />
+          </div>
+        ) : !data || data.Vety.length === 0 ? (
+          <p className="col-span-4 mx-auto mt-16">
+            {!data
+              ? "Nepodařilo se připojit na backend receptur"
+              : "Nepodařilo se najít žádné recepty na základě vyplněných filtrů"}
+          </p>
+        ) : (
+          <RecipeCardsGrid
+            className="col-span-4 pt-0 xl:col-span-5"
+            gridView={gridView}
+            isLoading={loading}
+            data={data}
+          />
+        )}
       </div>
       <Paginator
         currentPage={pageState}
         totalPages={25}
-        changePage={(page) => changePage(page)}
+        changePage={(page) => {
+          setPageState(page);
+          getDataAndSetQuery(page);
+        }}
       />
     </Container>
   );
@@ -562,6 +628,7 @@ function Comboboxes({
   className = "",
   comboBoxValues,
   updateCombobox,
+  refresh,
 }: {
   className: string;
   comboBoxValues: {
@@ -571,12 +638,13 @@ function Comboboxes({
     value: string;
   }[];
   updateCombobox: (index: number, value: string) => void;
+  refresh: boolean;
 }) {
   return (
     <div className={`${className}`}>
       {comboBoxValues.map((combo, index) => (
         <MyCombobox
-          key={"cbvmy" + index}
+          key={"cbvmy" + index + refresh}
           label={combo.title}
           name={combo.name}
           options={combo.options}
@@ -600,6 +668,7 @@ function TopRow({
   sideBarOpen,
   setSideBarOpen,
   updateCombobox,
+  refresh,
 }: {
   title: string;
   data: any;
@@ -615,6 +684,7 @@ function TopRow({
   sideBarOpen: boolean;
   setSideBarOpen: (open: boolean) => void;
   updateCombobox: (index: number, value: string) => void;
+  refresh: boolean;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
@@ -628,6 +698,7 @@ function TopRow({
         className="hidden grid-cols-2 gap-x-1 lg:grid lg:gap-x-5"
         comboBoxValues={comboBoxValues}
         updateCombobox={updateCombobox}
+        refresh={refresh}
       />
       <div className="flex items-center gap-x-4">
         <ToggleGridButton
@@ -662,6 +733,10 @@ function MobileFilters({
   setSelectedGroup,
   selectedSubgroup,
   setSelectedSubgroup,
+  saveDisabled,
+  cancelDisabled,
+  loading,
+  refresh,
 }: {
   sideBarOpen: boolean;
   groupsData: any;
@@ -685,6 +760,10 @@ function MobileFilters({
     value: boolean
   ) => void;
   getDataAndSetQuery: () => void;
+  saveDisabled: boolean;
+  cancelDisabled: boolean;
+  loading: boolean;
+  refresh: boolean;
 }) {
   return (
     <>
@@ -719,6 +798,10 @@ function MobileFilters({
                     setSelectedGroup={setSelectedGroup}
                     selectedSubgroup={selectedSubgroup}
                     setSelectedSubgroup={setSelectedSubgroup}
+                    saveDisabled={saveDisabled}
+                    cancelDisabled={cancelDisabled}
+                    loading={loading}
+                    refresh={refresh}
                   />
                 </Dialog.Content>
               </motion.div>
@@ -741,6 +824,10 @@ function MobileFilters({
           setSelectedGroup={setSelectedGroup}
           selectedSubgroup={selectedSubgroup}
           setSelectedSubgroup={setSelectedSubgroup}
+          saveDisabled={saveDisabled}
+          cancelDisabled={cancelDisabled}
+          loading={loading}
+          refresh={refresh}
         />
       </div>
     </>
@@ -760,6 +847,10 @@ function SideBar({
   setSelectedSubgroup,
   updateSideBarValue,
   getDataAndSetQuery,
+  saveDisabled,
+  cancelDisabled,
+  loading,
+  refresh,
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
@@ -782,21 +873,14 @@ function SideBar({
     value: boolean
   ) => void;
   getDataAndSetQuery: () => void;
+  saveDisabled: boolean;
+  cancelDisabled: boolean;
+  loading: boolean;
+  refresh: boolean;
 }) {
-  useEffect(() => {
-    const foundItem = groupsData.find(
-      (item: any) => item.value === selectedGroup
-    );
-    if (foundItem) {
-      setSelectedSubgroup(foundItem.options[0]?.value);
-    } else {
-      setSelectedSubgroup("");
-    }
-  }, [selectedGroup]);
-
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-visible overflow-y-auto rounded-xl bg-white py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-md:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
     >
       <Container className="overflow-x-visible lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
@@ -811,23 +895,32 @@ function SideBar({
           className="my-8 flex flex-col justify-center gap-y-5 sm:flex-row sm:space-x-2 lg:hidden"
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
+          refresh={refresh}
         />
         <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
           <div className="flex w-full flex-col-reverse items-center justify-center gap-2 sm:flex-row-reverse lg:flex-col">
             <Button
-              className="mb-2 w-full"
+              className="relative mb-2 w-full"
               variant="black"
               size="sm"
               onClick={() => getDataAndSetQuery()}
+              disabled={saveDisabled || loading}
             >
-              <CheckSmallIcon className="shrink-0" />
-              Potvrdit výběr
+              <LoadingSpinner
+                className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${
+                  !loading && "opacity-0"
+                }`}
+              />
+              <span className={`flex flex-row ${loading && "opacity-0"}`}>
+                <CheckSmallIcon className="shrink-0" /> Potvrdit výběr
+              </span>
             </Button>
             <Button
               className="mb-2 w-full"
               variant="black"
               size="sm"
               onClick={() => resetFilters()}
+              disabled={cancelDisabled}
             >
               <CancelIcon className="shrink-0" />
               Zrušit vše
@@ -903,7 +996,7 @@ function SideBarBox({
   };
 
   return (
-    <div className="overflow-x-visible border-t border-primary-200 py-4">
+    <div className="border-t border-primary-200 py-4">
       <button
         onClick={() => setOpen(!open)}
         aria-label={!open ? "Zobrazit" : "Skrýt"}
