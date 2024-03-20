@@ -223,16 +223,16 @@ export function Hero({
 }) {
   return (
     <Container>
-      <div className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:flex-row-reverse md:justify-between md:pr-0">
-        <Image
-          src="/images/food.jpeg"
-          alt=""
-          className="w-full bg-gray-300 object-cover md:w-1/3 lg:w-5/12 xl:w-7/12"
-          height={300}
-          width={500}
-        />
-
-        <div className="flex flex-col  gap-y-5 p-5 md:px-0">
+      <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
+        <div className="relative md:order-2">
+          <Image
+            src="/images/food.jpeg"
+            alt=""
+            className="w-full bg-gray-300 object-cover"
+            fill
+          />
+        </div>
+        <div className="flex flex-col  gap-y-6 p-5 md:px-0 md:py-14">
           <div className="flex gap-x-2 md:mt-auto md:px-10">
             <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
               Logo

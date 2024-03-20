@@ -19,16 +19,16 @@ const menuRoutes = [
     href: "/",
   },
   {
-    label: "Partner",
-    href: "/partner",
+    label: "Bidfood",
+    href: "/bidfood",
+  },
+  {
+    label: "Bonduelle",
+    href: "/bonduelle",
   },
   {
     label: "Uživatel",
     href: "/uzivatel",
-  },
-  {
-    label: "Komponenty",
-    href: "/components",
   },
   {
     label: "Kontakt",

@@ -1,16 +1,14 @@
-const partners = [
+export const partners = [
   {
     title: "Bidfood",
     logo: "",
-    slogan: "Bidfood d",
-    colour: "",
+    slogan: "Bidfoo",
     value: "",
   },
   {
     title: "Bonduelle",
     logo: "",
     slogan: "kukuricky Bonduelle",
-    colour: "",
     value: "",
   },
 ];
