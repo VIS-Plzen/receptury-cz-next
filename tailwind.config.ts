@@ -39,6 +39,14 @@ const config: Config = {
         900: "#7D2E12",
         950: "#431407",
       },
+      bonduelle: {
+        DEFAULT: colors.lime[500],
+        ...colors.lime,
+      },
+      bidfood: {
+        DEFAULT: colors.emerald[500],
+        ...colors.emerald,
+      },
       secondary: {
         DEFAULT: colors.sky[500],
         ...colors.sky,

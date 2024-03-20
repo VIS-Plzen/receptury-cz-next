@@ -112,31 +112,67 @@ export default async function Home({ params }: { params: { id: number } }) {
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
         img="/images/food.jpeg"
+        color="default"
         hasButton
       />
     </div>
   );
 }
 
+const cv = {
+  base: "border-secondary",
+};
+
 export function Partner({
   jmeno,
   heslo,
   img,
   hasButton,
+  logo = "/",
+  color = "default",
 }: {
   jmeno: string;
   heslo: string;
   img: any;
   hasButton?: boolean;
+  logo?: string;
+  color: "default" | "bidfood" | "bonduelle";
 }) {
+  const outterDivClasses = {
+    default: "border-secondary-700",
+    bidfood: "border-bidfood-700",
+    bonduelle: "border-bonduelle-700",
+  };
+
+  const innerDivClasses = {
+    default: "from-secondary-700 via-secondary/50",
+    bidfood: "from-bidfood-700 via-bidfood/50",
+    bonduelle: "from-bonduelle-700 via-bonduelle/50",
+  };
+
+  const textColor = {
+    default: "text-secondary-900",
+    bidfood: "text-bidfood-900",
+    bonduelle: "text-bonduelle-900",
+  };
+
   return (
     <Container>
-      <div className="relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 border-secondary-700 md:aspect-[3/1] md:max-h-full md:flex-row md:items-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary-700 from-45% via-secondary/50 via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%" />
+      <div
+        className={`relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 ${outterDivClasses[color]} md:aspect-[3/1] md:max-h-full md:flex-row md:items-center`}
+      >
+        <div
+          className={`absolute inset-0 bg-gradient-to-b ${innerDivClasses[color]} from-45% via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%`}
+        />
         <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
-          <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
-            Logo
-          </span>
+          <Image
+            src={logo}
+            className="bg-transparent object-cover mix-blend-screen"
+            alt=""
+            height={50}
+            width={100}
+          />
+
           <Heading className="text-white md:text-2xl lg:text-4xl">
             {jmeno}
           </Heading>
@@ -145,14 +181,16 @@ export function Partner({
         </div>
         <div className=" flex h-full w-full justify-end">
           <Image
-            src="/images/food.jpeg"
-            className=" w-full bg-gray-300 object-cover md:w-8/12"
+            src={img}
+            className="w-full bg-gray-300 object-cover"
             alt=""
-            width={200}
-            height={400}
+            width={400}
+            height={200}
           />
         </div>
-        <span className="absolute bottom-5 right-5 z-20 text-xs text-secondary-900 md:top-5">
+        <span
+          className={`absolute bottom-5 right-5 z-20 text-xs ${textColor[color]} md:top-5`}
+        >
           Inspirační foto
         </span>
       </div>

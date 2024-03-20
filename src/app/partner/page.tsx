@@ -16,6 +16,7 @@ export default function Home() {
         jmeno="Jméno partnera"
         heslo="Heslo partnera, nebo krátký popis jejich služeb"
         img={"/public/images/food.jpeg"}
+        color="default"
       />
       <Katalog />
       <Kontakt telefon="+420 774 956 123" email="jmeno.prijmeno@parner.cz" />
