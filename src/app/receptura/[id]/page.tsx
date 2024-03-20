@@ -1,9 +1,10 @@
 import VolitelnyObsah from "@/app/VolitelnyObsah";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
+import Galerie from "@/components/ui/Galery";
 import Heading from "@/components/ui/Heading";
 import Image from "next/image";
-import { Galerie, Hero, Informations } from "../Client";
+import { Hero, Informations } from "../Client";
 
 export default async function Home({ params }: { params: { id: number } }) {
   const images = [
@@ -55,8 +56,6 @@ export default async function Home({ params }: { params: { id: number } }) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
   const card = data.Vety[0].Vlastnosti;
-
-  console.log(card);
 
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">

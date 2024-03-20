@@ -42,16 +42,6 @@ const icons: {
     label: "MSklad",
     onClick: () => console.log("MSklad"),
   },
-  // {
-  //   name: "downloading",
-  //   label: ".PDF",
-  //   onClick: () => console.log(".PDF"),
-  // },
-  // {
-  //   name: "downloading",
-  //   label: ".XLS",
-  //   onClick: () => console.log(".XLS"),
-  // },
 ];
 
 export function Kalkulacka({

@@ -592,9 +592,10 @@ export default function Receptury({
         />
 
         {initialLoad ? (
-          <div className="relative col-span-4 h-full">
+          <div className="relative col-span-4 h-full py-20">
             <LoadingSpinner
-              className={`absolute left-1/2 top-16 z-10 -translate-x-1/2 scale-[5]`}
+              size="xl"
+              className={`absolute left-1/2 top-16 z-10 -translate-x-1/2`}
             />
           </div>
         ) : !data || data.Vety.length === 0 ? (
@@ -880,7 +881,7 @@ function SideBar({
 }) {
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-md:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
     >
       <Container className="overflow-x-visible lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
@@ -898,7 +899,7 @@ function SideBar({
           refresh={refresh}
         />
         <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
-          <div className="flex w-full flex-col-reverse items-center justify-center gap-2 sm:flex-row-reverse lg:flex-col">
+          <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">
             <Button
               className="relative mb-2 w-full"
               variant="black"
@@ -927,7 +928,7 @@ function SideBar({
             </Button>
           </div>
           <div className="overflow-x-visible">
-            <div className="space-y-2 border-t border-primary-200 py-2">
+            <div className="space-y-2 border-t border-primary-200 pb-4 pt-2">
               <p className="font-bold">Skupina</p>
               <Selector
                 data={groupsData}
