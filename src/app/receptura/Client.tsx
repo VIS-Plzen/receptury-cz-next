@@ -176,21 +176,28 @@ export function Kalkulacka({
 }
 
 export function Galerie({ images }: { images: string[] }) {
+  const picsCount = images.length / 3;
+
   return (
     <Container>
       <Heading className="pb-4">Galerie</Heading>
-      <li className="flex flex-wrap justify-between gap-4">
+      <div className="grids-cols-3 grid">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <li className="flex flex-wrap justify-between gap-6">
         <Image
           src={images[0]}
           alt=""
-          width={650}
+          width={670}
           height={300}
           className="rounded-2xl"
         />
         <Image
           src={images[1]}
           alt=""
-          width={650}
+          width={670}
           height={300}
           className="rounded-2xl"
         />
@@ -198,7 +205,7 @@ export function Galerie({ images }: { images: string[] }) {
           <ul key={index} className="">
             <Image
               src={image}
-              width={400}
+              width={435}
               height={300}
               alt=""
               className="aspect-video rounded-2xl bg-gray-300 object-cover"

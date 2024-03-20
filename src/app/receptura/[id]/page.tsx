@@ -128,7 +128,7 @@ export function Partner({
   heslo,
   img,
   hasButton,
-  logo = "/",
+  logo = "",
   color = "default",
 }: {
   jmeno: string;
@@ -165,14 +165,19 @@ export function Partner({
           className={`absolute inset-0 bg-gradient-to-b ${innerDivClasses[color]} from-45% via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%`}
         />
         <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
-          <Image
-            src={logo}
-            className="bg-transparent object-cover mix-blend-screen"
-            alt=""
-            height={50}
-            width={100}
-          />
-
+          {logo ? (
+            <Image
+              src={logo}
+              className="bg-transparent object-cover mix-blend-screen"
+              alt=""
+              height={50}
+              width={100}
+            />
+          ) : (
+            <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
+              Logo
+            </span>
+          )}
           <Heading className="text-white md:text-2xl lg:text-4xl">
             {jmeno}
           </Heading>

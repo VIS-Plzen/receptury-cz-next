@@ -7,7 +7,7 @@ import { Disclosure } from "@headlessui/react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <Kontakt />
       <FAQ />
     </div>
@@ -69,7 +69,7 @@ export default function Home() {
     }
     return (
       <Container>
-        <Heading as="h1" className="mb-12">
+        <Heading as="h1" className="mb-12" size="lg">
           Kontakty a firemní údaje
         </Heading>
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
