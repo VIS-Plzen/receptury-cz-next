@@ -291,6 +291,18 @@ export default function Receptury({
   const [selectedGroup, setSelectedGroup] = useState("nezadano");
   const [selectedSubgroup, setSelectedSubgroup] = useState("");
 
+  useEffect(() => {
+    const params = Object.fromEntries(paramsHook);
+    if (params && params.skupina) {
+      setSelectedGroup(params.skupina);
+      setSelectedSubgroup(params.podskupina);
+      console.log(params.podskupina);
+    }
+    if (params && params.podskupina) {
+      setSelectedSubgroup(params.podskupina);
+    }
+  }, [paramsHook]);
+
   const [saveDisabled, setSaveDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(true);
 
@@ -475,6 +487,14 @@ export default function Receptury({
       if (query === "") query += combo.name + "=" + combo.value;
       else query += "&" + combo.name + "=" + combo.value;
     });
+
+    if (selectedGroup !== "nezadano") {
+      if (query === "")
+        query += "skupina=" + selectedGroup + "&podskupina=" + selectedSubgroup;
+      else
+        query +=
+          "&skupina=" + selectedGroup + "&podskupina=" + selectedSubgroup;
+    } else return;
 
     let hasBox = false;
     sideBarValues.forEach((box) => {

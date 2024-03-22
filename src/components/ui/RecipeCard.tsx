@@ -176,7 +176,7 @@ function RowCardLayout({
           <p className={cn("block", isLoading && "hidden")}>{label}</p>
           <div
             className={cn(
-              isLoading && " h-4 w-full rounded-full bg-gray-300",
+              isLoading && "h-4 w-full rounded-full bg-gray-300",
               !isLoading && "hidden"
             )}
           ></div>
@@ -186,13 +186,10 @@ function RowCardLayout({
             <BadgeRenderer badges={badges} />
           </div>
           <div className="items-center">
-            <div
-              className={cn(
-                "hidden space-x-2 p-3 md:flex",
-                isLoading && "hidden"
-              )}
-            >
-              <ActionButtons isGridView={false} />
+            <div className={cn(isLoading && "hidden")}>
+              <div className={cn("hidden items-center space-x-2 p-3 md:flex")}>
+                <ActionButtons isGridView={false} />
+              </div>
             </div>
             <div
               className={cn("hidden", isLoading && "flex flex-row gap-2 pr-10")}
