@@ -293,13 +293,17 @@ export default function Receptury({
 
   useEffect(() => {
     const params = Object.fromEntries(paramsHook);
-    if (params && params.skupina) {
+    if (
+      params &&
+      params.skupina &&
+      groupsData.some((group) => group.value === params.skupina)
+    ) {
       setSelectedGroup(params.skupina);
-      setSelectedSubgroup(params.podskupina);
-      console.log(params.podskupina);
-    }
-    if (params && params.podskupina) {
-      setSelectedSubgroup(params.podskupina);
+      if (params.podskupina) {
+        setSelectedSubgroup(params.podskupina);
+      }
+    } else if (params.skupina) {
+      alert("Spatna skupina nebo podskupina v URL");
     }
   }, [paramsHook]);
 
