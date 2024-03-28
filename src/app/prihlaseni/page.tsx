@@ -6,7 +6,7 @@ import StyledLink from "@/components/ui/StyledLink";
 
 function page() {
   return (
-    <Container className="flex justify-center py-20 pt-24 text-black">
+    <Container className="my-16 flex justify-center py-20 pt-24 text-black sm:my-32 xl:my-64">
       <div className="w-full space-y-4 rounded-2xl border-2 border-primary-200 bg-white p-8 sm:w-2/3 xl:w-1/3">
         <Heading size="md">Přihlášení</Heading>
         <InputField type="email" placeholder="Email@email.com"></InputField>
