@@ -291,22 +291,6 @@ export default function Receptury({
   const [selectedGroup, setSelectedGroup] = useState("nezadano");
   const [selectedSubgroup, setSelectedSubgroup] = useState("");
 
-  useEffect(() => {
-    const params = Object.fromEntries(paramsHook);
-    if (
-      params &&
-      params.skupina &&
-      groupsData.some((group) => group.value === params.skupina)
-    ) {
-      setSelectedGroup(params.skupina);
-      if (params.podskupina) {
-        setSelectedSubgroup(params.podskupina);
-      }
-    } else if (params.skupina) {
-      alert("Spatna skupina nebo podskupina v URL");
-    }
-  }, [paramsHook]);
-
   const [saveDisabled, setSaveDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(true);
 
@@ -321,6 +305,24 @@ export default function Receptury({
     setGridView(local === "true");
     setInitialLoad(false);
   }, []);
+
+  useEffect(() => {
+    const params = Object.fromEntries(paramsHook);
+    if (params && params.skupina) {
+      const group = groupsData.find((group) => group.value === params.skupina);
+      if (!group) return;
+      setSelectedGroup(group.value);
+
+      if (
+        params.podskupina &&
+        group.options.some((subgroup) => subgroup.value === params.podskupina)
+      ) {
+        setSelectedSubgroup(params.podskupina);
+      } else if (group.options.length !== 0) {
+        setSelectedSubgroup(group.options[0].value);
+      }
+    }
+  }, [paramsHook]);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -486,19 +488,16 @@ export default function Receptury({
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
-      console.log(combo.value);
       if (combo.value === "") return;
       if (query === "") query += combo.name + "=" + combo.value;
       else query += "&" + combo.name + "=" + combo.value;
     });
 
     if (selectedGroup !== "nezadano") {
-      if (query === "")
-        query += "skupina=" + selectedGroup + "&podskupina=" + selectedSubgroup;
-      else
-        query +=
-          "&skupina=" + selectedGroup + "&podskupina=" + selectedSubgroup;
-    } else return;
+      if (query === "") query += "skupina=" + selectedGroup;
+      else query += "&skupina=" + selectedGroup;
+      if (selectedSubgroup) query += "&podskupina=" + selectedSubgroup;
+    }
 
     let hasBox = false;
     sideBarValues.forEach((box) => {
