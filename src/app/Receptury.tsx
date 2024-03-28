@@ -551,7 +551,7 @@ export default function Receptury({
             Podminka:
               group?.value === "nezadano"
                 ? ""
-                : `Druh="${group?.title + " " + subGroup?.title}"`,
+                : `Druh='${group?.title} ${subGroup?.title}'`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
