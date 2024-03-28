@@ -75,6 +75,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           )}
           {...props}
         />
+
         {/* Error text */}
         {errorText && <ErrorText>{errorText}</ErrorText>}
       </div>
