@@ -394,17 +394,6 @@ export default function Receptury({
     })()
   );
 
-  useEffect(() => {
-    const foundItem = groupsData.find(
-      (item: any) => item.value === selectedGroup
-    );
-    if (foundItem && foundItem.options.length !== 0) {
-      setSelectedSubgroup(foundItem.options[0].value);
-    } else {
-      setSelectedSubgroup("");
-    }
-  }, [selectedGroup]);
-
   function updateSideBarValue(
     boxIndex: number,
     checkboxIndex: number,
@@ -599,6 +588,14 @@ export default function Receptury({
           selectedGroup={selectedGroup}
           setSelectedGroup={(val: string) => {
             setSelectedGroup(val);
+            const foundItem = groupsData.find(
+              (item: any) => item.value === selectedGroup
+            );
+            if (foundItem && foundItem.options.length !== 0) {
+              setSelectedSubgroup(foundItem.options[0].value);
+            } else {
+              setSelectedSubgroup("");
+            }
             setCancelDisabled(false);
             setSaveDisabled(false);
           }}
@@ -956,8 +953,16 @@ function SideBar({
               <Selector
                 data={groupsData}
                 selected={selectedGroup}
-                setSelected={(item: any) => {
-                  setSelectedGroup(item);
+                setSelected={(val: any) => {
+                  setSelectedGroup(val);
+                  const foundItem = groupsData.find(
+                    (item: any) => item.value === val
+                  );
+                  if (foundItem && foundItem.options.length !== 0) {
+                    setSelectedSubgroup(foundItem.options[0].value);
+                  } else {
+                    setSelectedSubgroup("");
+                  }
                 }}
               />
               <p className="font-bold">Podskupina</p>
