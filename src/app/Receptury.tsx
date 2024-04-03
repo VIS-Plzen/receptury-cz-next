@@ -269,7 +269,7 @@ export default function Receptury({
     );
 
   const [selectedSubgroup, setSelectedSubgroup] = useState(
-    urlSubGroup ? urlSubGroup.value : ""
+    urlSubGroup ? urlSubGroup.value : urlGroup ? urlGroup.options[0].value : ""
   );
 
   const [saveDisabled, setSaveDisabled] = useState(true);
