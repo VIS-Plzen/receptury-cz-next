@@ -4,7 +4,7 @@ import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
 
 export default async function Home() {
-  let data = await readSome();
+  /* let data = await readSome(); */
 
   async function createNew() {
     return await (
@@ -28,7 +28,7 @@ export default async function Home() {
     ).json();
   }
 
-  async function readSome() {
+  /* async function readSome() {
     const result = await (
       await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
         method: "POST",
@@ -59,13 +59,13 @@ export default async function Home() {
       Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
     };
   }
-
+ */
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <Inspirace />
       <Receptury
         className="border-y-2 border-primary-200"
-        initialData={data ? data : undefined}
+        initialData={undefined}
       />
       <Spolupracujeme />
       <VolitelnyObsah
