@@ -281,16 +281,6 @@ export default function Receptury({
   // initial load pro výběr gridu z local storage
   const [initialLoad, setInitialLoad] = useState(true);
 
-  useEffect(() => {
-    const local = localStorage.getItem("gridView");
-    setGridView(local === "true");
-
-    (async () => {
-      setData(await getData(pageState));
-      setInitialLoad(false);
-    })();
-  }, []);
-
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
       {
@@ -360,6 +350,16 @@ export default function Receptury({
       return 1;
     })()
   );
+
+  useEffect(() => {
+    const local = localStorage.getItem("gridView");
+    setGridView(local === "true");
+
+    (async () => {
+      setData(await getData(pageState));
+      setInitialLoad(false);
+    })();
+  }, []);
 
   function updateSideBarValue(
     boxIndex: number,
