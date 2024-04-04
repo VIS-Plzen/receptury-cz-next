@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-function page() {
+function Page() {
   const formValidationSchema = z.object({
     firstName: z
       .string({
@@ -141,4 +141,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
