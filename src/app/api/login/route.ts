@@ -16,15 +16,9 @@ export async function POST(request: Request) {
       }
     );
     const data = await res.json();
-    console.log(data, email, password);
-    if (data.Result) {
-      data.Result.Vety = data.Vety;
-      return NextResponse.json(data.Result);
-    }
-    return NextResponse.json({
-      Status: false,
-      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
-    });
+
+    // console.log(data);
+    return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json({
       Status: false,
