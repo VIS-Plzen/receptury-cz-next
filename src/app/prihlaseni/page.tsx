@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-function page() {
+export default function Page() {
   const formValidationSchema = z.object({
     email: z
       .string({
@@ -107,5 +107,3 @@ function page() {
     </Container>
   );
 }
-
-export default page;

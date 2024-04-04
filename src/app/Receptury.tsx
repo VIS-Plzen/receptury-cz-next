@@ -230,45 +230,6 @@ const groupsData = [
 
 export default function Receptury({
   title = "Receptury",
-  initialData = [
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-  ],
-
   className = "",
   urlPreQuery = "",
 }: {
@@ -277,7 +238,7 @@ export default function Receptury({
   className?: string;
   urlPreQuery?: string;
 }) {
-  const [data, setData] = useState<any>(initialData);
+  const [data, setData] = useState<any>("init");
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
@@ -288,8 +249,28 @@ export default function Receptury({
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
-  const [selectedGroup, setSelectedGroup] = useState("nezadano");
-  const [selectedSubgroup, setSelectedSubgroup] = useState("");
+  const paramsObjects = Object.fromEntries(paramsHook);
+
+  const urlGroup =
+    paramsObjects &&
+    paramsObjects.skupina &&
+    groupsData.find((group) => group.value === paramsObjects.skupina);
+
+  const [selectedGroup, setSelectedGroup] = useState(
+    urlGroup ? urlGroup.value : "nezadano"
+  );
+
+  const urlSubGroup =
+    paramsObjects &&
+    urlGroup &&
+    paramsObjects.podskupina &&
+    urlGroup.options.find(
+      (subgroup) => subgroup.value === paramsObjects.podskupina
+    );
+
+  const [selectedSubgroup, setSelectedSubgroup] = useState(
+    urlSubGroup ? urlSubGroup.value : urlGroup ? urlGroup.options[0].value : ""
+  );
 
   const [saveDisabled, setSaveDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(true);
@@ -299,30 +280,6 @@ export default function Receptury({
 
   // initial load pro výběr gridu z local storage
   const [initialLoad, setInitialLoad] = useState(true);
-
-  useEffect(() => {
-    const local = localStorage.getItem("gridView");
-    setGridView(local === "true");
-    setInitialLoad(false);
-  }, []);
-
-  useEffect(() => {
-    const params = Object.fromEntries(paramsHook);
-    if (params && params.skupina) {
-      const group = groupsData.find((group) => group.value === params.skupina);
-      if (!group) return;
-      setSelectedGroup(group.value);
-
-      if (
-        params.podskupina &&
-        group.options.some((subgroup) => subgroup.value === params.podskupina)
-      ) {
-        setSelectedSubgroup(params.podskupina);
-      } else if (group.options.length !== 0) {
-        setSelectedSubgroup(group.options[0].value);
-      }
-    }
-  }, [paramsHook]);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -393,6 +350,16 @@ export default function Receptury({
       return 1;
     })()
   );
+
+  useEffect(() => {
+    const local = localStorage.getItem("gridView");
+    setGridView(local === "true");
+
+    (async () => {
+      setData(await getData(pageState));
+      setInitialLoad(false);
+    })();
+  }, []);
 
   function updateSideBarValue(
     boxIndex: number,
@@ -523,6 +490,15 @@ export default function Receptury({
       }
     }
 
+    router.replace("?" + query, { scroll: false });
+    setData(await getData(page));
+
+    setSaveDisabled(true);
+    setLoading(false);
+    return setRefresh(!refresh);
+  }
+
+  async function getData(page: number) {
     const group = groupsData.find((item: any) => item.value === selectedGroup);
     const subGroup = group?.options.find(
       (item: any) => item.value === selectedSubgroup
@@ -548,20 +524,14 @@ export default function Receptury({
         }),
       })
     ).json();
-    setData(result);
-
-    router.replace("?" + query, { scroll: false });
-
-    setSaveDisabled(true);
-    setLoading(false);
-    return setRefresh(!refresh);
+    return result;
   }
 
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
-        data={initialData}
+        data={data ? data.Vety : null}
         gridView={initialLoad === true ? undefined : gridView}
         setGridView={(grid: boolean) => {
           setGridView(grid);
@@ -573,6 +543,7 @@ export default function Receptury({
         toggleId={toggleId}
         updateCombobox={updateCombobox}
         refresh={refresh}
+        initialLoad={initialLoad}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <MobileFilters
@@ -690,6 +661,7 @@ function TopRow({
   setSideBarOpen,
   updateCombobox,
   refresh,
+  initialLoad,
 }: {
   title: string;
   data: any;
@@ -706,13 +678,18 @@ function TopRow({
   setSideBarOpen: (open: boolean) => void;
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
+  initialLoad: boolean;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
       <div className="flex flex-col">
         <Heading>{title}</Heading>
         <p className="pt-3 font-bold text-black">
-          Našli jsme pro vás {data.length} receptů
+          {initialLoad
+            ? " Vyhledávám receptury"
+            : data
+              ? `Našli jsme pro vás ${data.length} receptůr`
+              : "Nenašli jsme žádná data"}
         </p>
       </div>
       <Comboboxes
