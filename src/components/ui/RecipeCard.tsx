@@ -238,8 +238,15 @@ function ReturnedLayout({
   card: RecipeCardProps;
   loading?: boolean;
 }) {
+  let href = "";
+  if (card.id != null) {
+    href = `/receptura/${card.id}`;
+  } else {
+    href = "/";
+  }
+
   return (
-    <a href={`/receptura/${card.id}`}>
+    <a href={href}>
       <GridCardLayout
         label={card.label}
         badges={card.badges}
