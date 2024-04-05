@@ -34,7 +34,7 @@ export default function Page() {
 
     password: z
       .string({
-        required_error: "Vyplňte prosím e-mail",
+        required_error: "Vyplňte prosím heslo",
         invalid_type_error: "Neplatný typ",
       })
       .min(6, "Heslo příliš krátké"),
