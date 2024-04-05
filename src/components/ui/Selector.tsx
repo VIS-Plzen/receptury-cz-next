@@ -10,6 +10,7 @@ type Props = {
   setSelected: (selected: any) => void;
   className?: string;
   updateFunction?: any;
+  disabled?: boolean;
 };
 
 function Selector({
@@ -18,11 +19,16 @@ function Selector({
   setSelected,
   className,
   updateFunction,
+  disabled,
 }: Props) {
+  if (data.length === 0) {
+    disabled = true;
+  }
   return (
     <div className={clsx("relative w-full space-y-4", className)}>
       <Listbox
         value={selected}
+        disabled={disabled}
         onChange={(newValue: any) => {
           setSelected(
             data.find((tab: any) => tab.value === newValue).value ||
@@ -31,7 +37,7 @@ function Selector({
         }}
       >
         <div className="relative">
-          <Listbox.Button className="w-full rounded-2xl border-2 border-primary-200 bg-white focus:border-primary/50 focus:ring-0">
+          <Listbox.Button className="w-full rounded-2xl border-2 border-primary-300 bg-white focus:border-primary/50 focus:ring-0 disabled:border-gray-200">
             <div className="flex items-center justify-between p-2.5">
               <span className="block truncate">
                 {data.find((tab: any) => tab.value === selected)?.title}

@@ -61,7 +61,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     const localVisible =
       window.localStorage.getItem("inspiraceVisible") !== "false";
     setIsVisible(localVisible);
-  });
+  }, []);
 
   function setLocalVisible(visible: boolean) {
     if (!window) return;
@@ -131,7 +131,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           />
 
           <Swiper
-            spaceBetween={25}
+            spaceBetween={16}
             breakpoints={{
               370: {
                 slidesPerView: 2,
@@ -147,9 +147,6 @@ export default function Inspirace({ className = "" }: { className?: string }) {
               },
               1280: {
                 slidesPerView: 6,
-              },
-              1536: {
-                slidesPerView: 7,
               },
             }}
             modules={[Pagination]}

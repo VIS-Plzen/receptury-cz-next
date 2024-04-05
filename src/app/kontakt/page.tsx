@@ -1,4 +1,5 @@
 "use client";
+import Collapse from "@/components/ui/Collapse";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
@@ -6,7 +7,7 @@ import { Disclosure } from "@headlessui/react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-stretch justify-start gap-24 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <Kontakt />
       <FAQ />
     </div>
@@ -68,7 +69,7 @@ export default function Home() {
     }
     return (
       <Container>
-        <Heading as="h1" className="mb-12">
+        <Heading as="h1" className="mb-12" size="lg">
           Kontakty a firemní údaje
         </Heading>
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
@@ -216,38 +217,40 @@ export default function Home() {
           FAQ
         </Heading>
         <div className="grid gap-x-5 md:grid-cols-2">
-          <div className="w-full space-y-2">
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-          </div>
-          <div className="w-full space-y-2">
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-            <Disclone title="Lze toto otevřít?">
-              <p>
-                Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                normálně: Headless UI keeps track of a lot of state about each
-                component, like which listbox option is currently selected.
-              </p>
-            </Disclone>
-          </div>
+          <Collapse.Group>
+            <div className="w-full space-y-2">
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+            </div>
+            <div className="w-full space-y-2">
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+              <Collapse title="Lze toto otevřít?">
+                <p>
+                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
+                  normálně: Headless UI keeps track of a lot of state about each
+                  component, like which listbox option is currently selected.
+                </p>
+              </Collapse>
+            </div>
+          </Collapse.Group>
         </div>
       </Container>
     );

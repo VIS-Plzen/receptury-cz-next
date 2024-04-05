@@ -19,16 +19,16 @@ const menuRoutes = [
     href: "/",
   },
   {
-    label: "Partner",
-    href: "/partner",
+    label: "Bidfood",
+    href: "/bidfood",
+  },
+  {
+    label: "Bonduelle",
+    href: "/bonduelle",
   },
   {
     label: "Uživatel",
     href: "/uzivatel",
-  },
-  {
-    label: "Komponenty",
-    href: "/components",
   },
   {
     label: "Kontakt",
@@ -62,7 +62,7 @@ function ActiveNavLink({
   return (
     <StyledLink
       asChild
-      hoverEffect="appear"
+      hoverEffect="color"
       className={cn(className, isActive && activeClassName)}
     >
       <Link {...props} />

@@ -83,7 +83,7 @@ export default function Footer() {
               </Heading>
               <ul className="flex flex-col justify-between">
                 {footerRoutes.map((route, i) => (
-                  <li key={i} className="py-[10px] font-bold">
+                  <li key={i} className="py-[5px] text-base font-bold">
                     <StyledLink asChild hoverEffect="appear">
                       <Link href={route.href}>{route.label}</Link>
                     </StyledLink>
@@ -109,7 +109,7 @@ export default function Footer() {
               </Heading>
               <ul className="flex flex-col justify-between ">
                 {partners.map((partner, i) => (
-                  <li key={i} className="py-[10px] font-bold">
+                  <li key={i} className="py-[5px] text-base font-bold">
                     <StyledLink asChild hoverEffect="appear">
                       <Link href={partner.href}>{partner.label}</Link>
                     </StyledLink>
@@ -125,7 +125,7 @@ export default function Footer() {
               </Heading>
               <ul className="flex flex-col ">
                 {contacts.map((contact, i) => (
-                  <li key={i} className="pt-[10px] font-bold">
+                  <li key={i} className="pt-[5px] text-base font-bold">
                     <StyledLink asChild hoverEffect="appear">
                       <Link href={contact.href}>
                         <contact.icon className="translate-x-0 translate-y-0 transform-gpu" />
@@ -143,14 +143,14 @@ export default function Footer() {
                 Vyhledávání
               </Heading>
               <ul>
-                <li className="py-[10px] text-xs">
+                <li className="py-[5px] text-xs">
                   <button
                     onClick={updateDebugModeClickCount}
                     className="mr-1 cursor-default ring-0"
-                  >
-                    &copy;
-                  </button>
-                  {currentYear} KnihovnaReceptur.cz
+                  ></button>
+                  <p className="text-base">
+                    &copy; {currentYear} KnihovnaReceptur.cz
+                  </p>
                 </li>
               </ul>
             </div>

@@ -11,6 +11,7 @@ import {
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
@@ -18,60 +19,226 @@ import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useState } from "react";
+
+const groupsData = [
+  {
+    value: "bezmase_sladke",
+    title: "Bezmasé sladké pokrmy",
+    options: [
+      { value: "pecene", title: "Pečené a smažené" },
+      { value: "varene", title: "Vařené" },
+      { value: "kase", title: "Kaše" },
+    ],
+  },
+  {
+    value: "bezmase_slane",
+    title: "Bezmasé slané pokrmy",
+    options: [
+      {
+        value: "zeleninove",
+        title: "Zeleninové",
+      },
+      {
+        value: "lusteniny",
+        title: "Luštěninové",
+      },
+      {
+        value: "moucne",
+        title: "Moučné a obilninové",
+      },
+      { value: "testovinove", title: "Těstovinové" },
+      { value: "bramborove", title: "Bramborové" },
+      { value: "houbove", title: "Houbové" },
+      { value: "salaty", title: "Saláty" },
+      { value: "ostatni", title: "Ostatní" },
+    ],
+  },
+  {
+    value: "doplnky",
+    title: "Doplňky",
+    options: [
+      {
+        value: "salaty_zeleninove",
+        title: "Saláty zeleninové",
+      },
+      {
+        value: "salaty_ovocne",
+        title: "Saláty ovocné",
+      },
+      {
+        value: "kompoty",
+        title: "Kompoty",
+      },
+      {
+        value: "moucniky",
+        title: "Moučníky",
+      },
+      {
+        value: "mlecne_dezerty",
+        title: "Mléčné dezerty",
+      },
+      {
+        value: "zelenina_cerstva",
+        title: "Zelenina čerstvá",
+      },
+      {
+        value: "ovoce_cerstve",
+        title: "Ovoce čerstvé",
+      },
+      {
+        value: "ostatni",
+        title: "Ostatní",
+      },
+    ],
+  },
+  {
+    value: "masite",
+    title: "Masité pokrmy",
+    options: [
+      { value: "veprove", title: "Vepřové" },
+      { value: "kureci", title: "Kuřecí" },
+      { value: "kruti", title: "Krůtí" },
+      { value: "kralici", title: "Králičí" },
+      { value: "hovezi", title: "Hovězí" },
+      { value: "zverina", title: "Zvěřina" },
+      { value: "teleci", title: "Telecí" },
+      { value: "vnitrnosti", title: "Vnitřnosti" },
+      { value: "husi_a_kachni", title: "Husí a kachní" },
+      { value: "ostatni", title: "Ostatní" },
+      {
+        value: "mleta_masa_a_masove_smesi",
+        title: "Mletá masa a masové směsi",
+      },
+    ],
+  },
+  {
+    value: "napoje",
+    title: "Nápoje",
+    options: [],
+  },
+  { value: "nezadano", title: "Nezadáno", options: [] },
+  {
+    value: "polevky",
+    title: "Polévky",
+    options: [
+      {
+        value: "zeleninove",
+        title: "Zeleninové",
+      },
+      {
+        value: "lusteninove",
+        title: "Luštěninové",
+      },
+      {
+        value: "masove_a_rybi",
+        title: "Masové a rybí",
+      },
+      {
+        value: "obilninove",
+        title: "Obilninové",
+      },
+      { value: "bramborove", title: "Bramborové" },
+      { value: "vyvary", title: "Vývary" },
+      { value: "houbove", title: "Houbové" },
+      {
+        value: "ostatni",
+        title: "Ostatní",
+      },
+    ],
+  },
+  {
+    value: "prilohy_a_prikrmy",
+    title: "Přílohy a příkrmy",
+    options: [
+      { value: "bramborove", title: "Bramborové" },
+      { value: "testovinove", title: "Těstovinové" },
+      { value: "obilninove", title: "Obilninové" },
+      { value: "knedliky", title: "Knedlíky" },
+      { value: "zelenina", title: "Zelenina" },
+      { value: "omacky", title: "Omáčky" },
+      { value: "pecivo", title: "Pečivo" },
+      { value: "ostatni", title: "Ostatní" },
+      { value: "lusteninove", title: "Luštěninové" },
+    ],
+  },
+  {
+    value: "rybi_pokrmy",
+    title: "Rybí pokrmy",
+    options: [],
+  },
+  {
+    value: "svaciny",
+    title: "Svačiny",
+    options: [
+      {
+        value: "pomazanky_syrove_a_tvarohove",
+        title: "Pomazánky sýrové a tvarohové",
+      },
+      {
+        value: "pomazanky_masove",
+        title: "Pomazánky masové",
+      },
+      {
+        value: "pomazanky_vajecne",
+        title: "Pomazánky vaječné",
+      },
+      {
+        value: "pomazanky_rybi",
+        title: "Pomazánky rybí",
+      },
+      {
+        value: "mlecne_vyrobky",
+        title: "Mléčné výrobky",
+      },
+      {
+        value: "kase",
+        title: "Kaše",
+      },
+      {
+        value: "pecivo",
+        title: "Pečivo",
+      },
+      {
+        value: "moucniky",
+        title: "Moučníky",
+      },
+      {
+        value: "ostatni",
+        title: "Ostatní",
+      },
+      {
+        value: "pomazanky_zeleninove/ovocne",
+        title: "Pomazánky zeleninové/ovocné",
+      },
+      {
+        value: "pomazanky_lusteninove",
+        title: "Pomazánky luštěninové",
+      },
+      {
+        value: "pomazanky_ostatni",
+        title: "Pomazánky ostatní",
+      },
+    ],
+  },
+  {
+    value: "zavarky",
+    title: "Zavářky",
+    options: [],
+  },
+];
 
 export default function Receptury({
   title = "Receptury",
-  initialData = [
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Smažené kuřecí řízečky, bramborové placičky",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-    {
-      Vlastnosti: {
-        Nazev: "Fusilli s mediteránskou omáčkou a smaženým sumečkem",
-        badges: ["Dieta", "Ryba a mořské plody"],
-      },
-    },
-  ],
-
   className = "",
   urlPreQuery = "",
-  groupsData,
 }: {
   title?: string;
   initialData?: any;
-  groupsData?: any;
   className?: string;
   urlPreQuery?: string;
 }) {
-  const [data, setData] = useState<any>(initialData);
+  const [data, setData] = useState<any>("init");
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
@@ -82,10 +249,37 @@ export default function Receptury({
     paramsHook.toString().replaceAll("+", " ")
   );
   const urlParamsSplitted = urlParams.split("&");
-  const [selectedGroup, setSelectedGroup] = useState(groupsData[0].value);
-  const [selectedSubgroup, setSelectedSubgroup] = useState(
-    groupsData[0].options[0].value
+  const paramsObjects = Object.fromEntries(paramsHook);
+
+  const urlGroup =
+    paramsObjects &&
+    paramsObjects.skupina &&
+    groupsData.find((group) => group.value === paramsObjects.skupina);
+
+  const [selectedGroup, setSelectedGroup] = useState(
+    urlGroup ? urlGroup.value : "nezadano"
   );
+
+  const urlSubGroup =
+    paramsObjects &&
+    urlGroup &&
+    paramsObjects.podskupina &&
+    urlGroup.options.find(
+      (subgroup) => subgroup.value === paramsObjects.podskupina
+    );
+
+  const [selectedSubgroup, setSelectedSubgroup] = useState(
+    urlSubGroup ? urlSubGroup.value : urlGroup ? urlGroup.options[0].value : ""
+  );
+
+  const [saveDisabled, setSaveDisabled] = useState(true);
+  const [cancelDisabled, setCancelDisabled] = useState(true);
+
+  // loading tlačítek a karet
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // initial load pro výběr gridu z local storage
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     const holder = [
@@ -124,6 +318,14 @@ export default function Receptury({
           { title: "Ostatní", name: "ostatni", checked: false },
         ],
       },
+      {
+        title: "Partner",
+        name: "partner",
+        options: [
+          { title: "Bidfood", name: "bidfood", checked: false },
+          { title: "Bonduelle", name: "bonduelle", checked: false },
+        ],
+      },
     ];
     // Načte hodnoty z URL
     urlParamsSplitted.forEach((param) => {
@@ -149,6 +351,16 @@ export default function Receptury({
     })()
   );
 
+  useEffect(() => {
+    const local = localStorage.getItem("gridView");
+    setGridView(local === "true");
+
+    (async () => {
+      setData(await getData(pageState));
+      setInitialLoad(false);
+    })();
+  }, []);
+
   function updateSideBarValue(
     boxIndex: number,
     checkboxIndex: number,
@@ -159,6 +371,8 @@ export default function Receptury({
       objHolder[boxIndex].options[checkboxIndex].checked = checked;
       return objHolder;
     });
+    setSaveDisabled(false);
+    setCancelDisabled(false);
     setRefresh(!refresh);
   }
 
@@ -168,7 +382,7 @@ export default function Receptury({
     return [key, values, prevalues];
   }
 
-  const comboBoxValues = useMemo(() => {
+  const [comboBoxValues, setComboBoxValues] = useState(() => {
     const holder = [
       {
         title: "Dle receptury",
@@ -192,7 +406,7 @@ export default function Receptury({
       }
     });
     return holder;
-  }, [urlParamsSplitted]);
+  });
 
   function resetFilters() {
     sideBarValues.forEach((box) => {
@@ -201,18 +415,33 @@ export default function Receptury({
       });
     });
 
-    comboBoxValues.forEach((combo) => {
-      combo.value = "";
+    setComboBoxValues((prev) => {
+      prev.forEach((combo) => (combo.value = ""));
+      return prev;
     });
+
+    setSelectedGroup("nezadano");
+    setSelectedSubgroup("");
+
+    setCancelDisabled(true);
+    setSaveDisabled(false);
+    setRefresh(!refresh);
   }
 
   function updateCombobox(index: number, value: string) {
-    comboBoxValues[index].value = value;
+    setComboBoxValues((prev) => {
+      prev[index].value = value;
+      return prev;
+    });
+    setCancelDisabled(false);
+    setSaveDisabled(false);
+    setRefresh(!refresh);
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   async function getDataAndSetQuery(page: number) {
-    setData("loading");
+    setLoading(true);
+
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -220,6 +449,12 @@ export default function Receptury({
       if (query === "") query += combo.name + "=" + combo.value;
       else query += "&" + combo.name + "=" + combo.value;
     });
+
+    if (selectedGroup !== "nezadano") {
+      if (query === "") query += "skupina=" + selectedGroup;
+      else query += "&skupina=" + selectedGroup;
+      if (selectedSubgroup) query += "&podskupina=" + selectedSubgroup;
+    }
 
     let hasBox = false;
     sideBarValues.forEach((box) => {
@@ -256,8 +491,17 @@ export default function Receptury({
       }
     }
 
+    router.replace("?" + query, { scroll: false });
+    setData(await getData(page));
+
+    setSaveDisabled(true);
+    setLoading(false);
+    return setRefresh(!refresh);
+  }
+
+  async function getData(page: number) {
     const group = groupsData.find((item: any) => item.value === selectedGroup);
-    const subGroup = group.options.find(
+    const subGroup = group?.options.find(
       (item: any) => item.value === selectedSubgroup
     );
 
@@ -270,7 +514,10 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            // Podminka: `Druh = "${group.title + " " + subGroup?.title}"`,
+            Podminka:
+              group?.value === "nezadano"
+                ? ""
+                : `Druh='${group?.title} ${subGroup?.title}'`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -278,31 +525,26 @@ export default function Receptury({
         }),
       })
     ).json();
-
-    setData(result);
-
-    router.replace("?" + query, { scroll: false });
-
-    return setRefresh(!refresh);
-  }
-
-  function changePage(page: number) {
-    setPageState(page);
-    getDataAndSetQuery(page);
+    return result;
   }
 
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
-        data={initialData}
-        gridView={gridView}
-        setGridView={setGridView}
+        data={data ? data.Vety : null}
+        gridView={initialLoad === true ? undefined : gridView}
+        setGridView={(grid: boolean) => {
+          setGridView(grid);
+          localStorage.setItem("gridView", grid.toString());
+        }}
         setSideBarOpen={setSideBarOpen}
         sideBarOpen={sideBarOpen}
         title={title}
         toggleId={toggleId}
         updateCombobox={updateCombobox}
+        refresh={refresh}
+        initialLoad={initialLoad}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <MobileFilters
@@ -316,21 +558,60 @@ export default function Receptury({
           getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
+          setSelectedGroup={(val: string) => {
+            setSelectedGroup(val);
+            const foundItem = groupsData.find(
+              (item: any) => item.value === selectedGroup
+            );
+            if (foundItem && foundItem.options.length !== 0) {
+              setSelectedSubgroup(foundItem.options[0].value);
+            } else {
+              setSelectedSubgroup("");
+            }
+            setCancelDisabled(false);
+            setSaveDisabled(false);
+          }}
           selectedSubgroup={selectedSubgroup}
-          setSelectedSubgroup={setSelectedSubgroup}
+          setSelectedSubgroup={(val: string) => {
+            setSelectedSubgroup(val);
+            setCancelDisabled(false);
+            setSaveDisabled(false);
+          }}
+          saveDisabled={saveDisabled}
+          cancelDisabled={cancelDisabled}
+          loading={loading}
+          refresh={refresh}
         />
 
-        <RecipeCardsGrid
-          className="col-span-4 pt-0 xl:col-span-5"
-          gridView={gridView}
-          data={data}
-        />
+        {initialLoad ? (
+          <div className="relative col-span-4 h-full py-20">
+            <LoadingSpinner
+              size="xl"
+              className={`absolute left-1/2 top-16 z-10 -translate-x-1/2`}
+            />
+          </div>
+        ) : !data || !data.Vety || data.Vety.length === 0 ? (
+          <p className="col-span-4 mx-auto mt-16">
+            {!data
+              ? "Nepodařilo se připojit na backend receptur"
+              : "Nepodařilo se najít žádné recepty na základě vyplněných filtrů"}
+          </p>
+        ) : (
+          <RecipeCardsGrid
+            className="col-span-4 pt-0 xl:col-span-5"
+            gridView={gridView}
+            isLoading={loading}
+            data={data}
+          />
+        )}
       </div>
       <Paginator
         currentPage={pageState}
         totalPages={25}
-        changePage={(page) => changePage(page)}
+        changePage={(page) => {
+          setPageState(page);
+          getDataAndSetQuery(page);
+        }}
       />
     </Container>
   );
@@ -340,6 +621,7 @@ function Comboboxes({
   className = "",
   comboBoxValues,
   updateCombobox,
+  refresh,
 }: {
   className: string;
   comboBoxValues: {
@@ -349,12 +631,13 @@ function Comboboxes({
     value: string;
   }[];
   updateCombobox: (index: number, value: string) => void;
+  refresh: boolean;
 }) {
   return (
     <div className={`${className}`}>
       {comboBoxValues.map((combo, index) => (
         <MyCombobox
-          key={"cbvmy" + index}
+          key={"cbvmy" + index + refresh}
           label={combo.title}
           name={combo.name}
           options={combo.options}
@@ -378,6 +661,8 @@ function TopRow({
   sideBarOpen,
   setSideBarOpen,
   updateCombobox,
+  refresh,
+  initialLoad,
 }: {
   title: string;
   data: any;
@@ -387,25 +672,32 @@ function TopRow({
     options: any[];
     value: string;
   }[];
-  gridView: boolean;
-  setGridView: (grid: boolean) => void;
+  gridView: any;
+  setGridView: (grid: any) => void;
   toggleId: any;
   sideBarOpen: boolean;
   setSideBarOpen: (open: boolean) => void;
   updateCombobox: (index: number, value: string) => void;
+  refresh: boolean;
+  initialLoad: boolean;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
       <div className="flex flex-col">
         <Heading>{title}</Heading>
         <p className="pt-3 font-bold text-black">
-          Našli jsme pro vás {data.length} receptů
+          {initialLoad
+            ? " Vyhledávám receptury"
+            : data
+              ? `Našli jsme pro vás ${data.length} receptůr`
+              : "Nenašli jsme žádná data"}
         </p>
       </div>
       <Comboboxes
         className="hidden grid-cols-2 gap-x-1 lg:grid lg:gap-x-5"
         comboBoxValues={comboBoxValues}
         updateCombobox={updateCombobox}
+        refresh={refresh}
       />
       <div className="flex items-center gap-x-4">
         <ToggleGridButton
@@ -440,6 +732,10 @@ function MobileFilters({
   setSelectedGroup,
   selectedSubgroup,
   setSelectedSubgroup,
+  saveDisabled,
+  cancelDisabled,
+  loading,
+  refresh,
 }: {
   sideBarOpen: boolean;
   groupsData: any;
@@ -463,6 +759,10 @@ function MobileFilters({
     value: boolean
   ) => void;
   getDataAndSetQuery: () => void;
+  saveDisabled: boolean;
+  cancelDisabled: boolean;
+  loading: boolean;
+  refresh: boolean;
 }) {
   return (
     <>
@@ -497,6 +797,10 @@ function MobileFilters({
                     setSelectedGroup={setSelectedGroup}
                     selectedSubgroup={selectedSubgroup}
                     setSelectedSubgroup={setSelectedSubgroup}
+                    saveDisabled={saveDisabled}
+                    cancelDisabled={cancelDisabled}
+                    loading={loading}
+                    refresh={refresh}
                   />
                 </Dialog.Content>
               </motion.div>
@@ -504,6 +808,7 @@ function MobileFilters({
           </Dialog.Portal>
         </AnimatePresence>
       </Dialog.Root>
+
       <div className="hidden lg:block">
         <SideBar
           comboBoxValues={comboBoxValues}
@@ -518,6 +823,10 @@ function MobileFilters({
           setSelectedGroup={setSelectedGroup}
           selectedSubgroup={selectedSubgroup}
           setSelectedSubgroup={setSelectedSubgroup}
+          saveDisabled={saveDisabled}
+          cancelDisabled={cancelDisabled}
+          loading={loading}
+          refresh={refresh}
         />
       </div>
     </>
@@ -537,6 +846,10 @@ function SideBar({
   setSelectedSubgroup,
   updateSideBarValue,
   getDataAndSetQuery,
+  saveDisabled,
+  cancelDisabled,
+  loading,
+  refresh,
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
@@ -559,87 +872,102 @@ function SideBar({
     value: boolean
   ) => void;
   getDataAndSetQuery: () => void;
+  saveDisabled: boolean;
+  cancelDisabled: boolean;
+  loading: boolean;
+  refresh: boolean;
 }) {
-  useEffect(() => {
-    const foundItem = groupsData.find(
-      (item: any) => item.value === selectedGroup
-    );
-    if (foundItem) {
-      setSelectedSubgroup(foundItem.options[0]?.value);
-    } else {
-      setSelectedSubgroup("");
-    }
-  }, [selectedGroup]);
-
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col overflow-y-auto rounded-xl border-2 border-primary-200 bg-white px-7 py-5 lg:static lg:z-fixed-below lg:mr-5 lg:block lg:py-3 lg:pl-3 lg:pr-3`}
+      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
     >
-      <div className=" flex flex-row items-center justify-between lg:hidden">
-        <Heading size="sm">Co hledáte?</Heading>
-        <div className="flex space-x-8">
-          <button onClick={() => setSideBarOpen(false)}>
-            <CloseIcon className="h-8 w-8" />
-          </button>
+      <Container className="overflow-x-visible lg:!px-0">
+        <div className=" flex flex-row items-center justify-between lg:hidden">
+          <Heading size="sm">Co hledáte?</Heading>
+          <div className="flex space-x-8">
+            <button onClick={() => setSideBarOpen(false)}>
+              <CloseIcon className="h-8 w-8" />
+            </button>
+          </div>
         </div>
-      </div>
-      <Comboboxes
-        className="my-8 flex flex-col gap-y-5 lg:hidden"
-        comboBoxValues={comboBoxValues}
-        updateCombobox={updateCombobox}
-      />
-      <div className="">
-        <Button
-          className="mb-2 w-full max-w-sm"
-          variant="black"
-          size="sm"
-          onClick={() => getDataAndSetQuery()}
-          disabled
-        >
-          <CheckSmallIcon className="shrink-0" />
-          Potvrdit výběr
-        </Button>
-        <Button
-          className="mb-2 w-full max-w-sm"
-          variant="black"
-          size="sm"
-          onClick={() => resetFilters()}
-          disabled
-        >
-          <CancelIcon className="shrink-0" />
-          Zrušit vše
-        </Button>
-      </div>
-      <div className="space-y-2 border-t border-primary-200 py-2">
-        <p className="font-bold">Skupina</p>
-        <Selector
-          data={groupsData}
-          selected={selectedGroup}
-          setSelected={(item: any) => {
-            setSelectedGroup(item);
-          }}
+        <Comboboxes
+          className="my-8 flex flex-col justify-center gap-y-5 sm:flex-row sm:space-x-2 lg:hidden"
+          comboBoxValues={comboBoxValues}
+          updateCombobox={updateCombobox}
+          refresh={refresh}
         />
-        <p className="font-bold">Podskupina</p>
-        <Selector
-          data={
-            groupsData.find((item: any) => item.value === selectedGroup)
-              ?.options
-          }
-          selected={selectedSubgroup}
-          setSelected={(item: any) => {
-            setSelectedSubgroup(item);
-          }}
-        />
-      </div>
-      {sideBarValues.map((box, index) => (
-        <SideBarBox
-          key={"ffsbb" + index}
-          title={box.title}
-          options={box.options}
-          bIndex={index}
-          updateSideBarValue={updateSideBarValue}
-        />
-      ))}
+        <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
+          <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">
+            <Button
+              className="relative mb-2 w-full"
+              variant="black"
+              size="sm"
+              onClick={() => getDataAndSetQuery()}
+              disabled={saveDisabled || loading}
+            >
+              <LoadingSpinner
+                className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${
+                  !loading && "opacity-0"
+                }`}
+              />
+              <span className={`flex flex-row ${loading && "opacity-0"}`}>
+                <CheckSmallIcon className="shrink-0" /> Potvrdit výběr
+              </span>
+            </Button>
+            <Button
+              className="mb-2 w-full"
+              variant="black"
+              size="sm"
+              onClick={() => resetFilters()}
+              disabled={cancelDisabled}
+            >
+              <CancelIcon className="shrink-0" />
+              Zrušit vše
+            </Button>
+          </div>
+          <div className="overflow-x-visible">
+            <div className="space-y-2 border-t border-primary-200 pb-4 pt-2">
+              <p className="font-bold">Skupina</p>
+              <Selector
+                data={groupsData}
+                selected={selectedGroup}
+                setSelected={(val: any) => {
+                  setSelectedGroup(val);
+                  const foundItem = groupsData.find(
+                    (item: any) => item.value === val
+                  );
+                  if (foundItem && foundItem.options.length !== 0) {
+                    setSelectedSubgroup(foundItem.options[0].value);
+                  } else {
+                    setSelectedSubgroup("");
+                  }
+                }}
+              />
+              <p className="font-bold">Podskupina</p>
+              <Selector
+                data={
+                  groupsData.find((item: any) => item.value === selectedGroup)
+                    ?.options
+                }
+                selected={selectedSubgroup}
+                setSelected={(item: any) => {
+                  setSelectedSubgroup(item);
+                }}
+              />
+            </div>
+
+            {sideBarValues.map((box, index) => (
+              <SideBarBox
+                key={"ffsbb" + index}
+                title={box.title}
+                options={box.options}
+                bIndex={index}
+                updateSideBarValue={updateSideBarValue}
+              />
+            ))}
+          </div>
+        </div>
+      </Container>
     </div>
   );
 }
@@ -675,27 +1003,26 @@ function SideBarBox({
   };
 
   return (
-    <div className="border-t border-primary-200 py-2">
-      <div>
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label={!open ? "Zobrazit" : "Skrýt"}
-          className="mb-4 w-full rounded-lg"
-        >
-          <div className="flex w-full flex-row items-center justify-between text-center">
-            <Heading as="h3" size="inherit">
-              {title}
-            </Heading>
-            <ExpandMoreIcon
-              className={`${!open && "translate rotate-180 duration-100"}`}
-            />
-          </div>
-        </button>
-      </div>
+    <div className="border-t border-primary-200 py-4">
+      <button
+        onClick={() => setOpen(!open)}
+        aria-label={!open ? "Zobrazit" : "Skrýt"}
+        className="w-full rounded-lg"
+      >
+        <div className="flex w-full flex-row items-center justify-between text-center">
+          <Heading as="h3" size="inherit">
+            {title}
+          </Heading>
+          <ExpandMoreIcon
+            className={`${!open && "translate rotate-180 duration-100"}`}
+          />
+        </div>
+      </button>
+
       <AnimatePresence initial={false}>
         {open && (
           <motion.ul
-            className="space-y-2"
+            className="mt-2 space-y-2 overflow-x-visible"
             initial="closed"
             animate="open"
             exit="closed"
@@ -703,7 +1030,10 @@ function SideBarBox({
             transition={{ duration: 0.25 }}
           >
             {options.map((o: any, oIndex: number) => (
-              <motion.li key={"sbbo" + oIndex} className={`cursor-pointer`}>
+              <motion.li
+                key={"sbbo" + oIndex}
+                className={`cursor-pointer overflow-x-visible`}
+              >
                 <Checkbox
                   checked={o.checked}
                   label={o.title}

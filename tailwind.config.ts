@@ -44,8 +44,8 @@ const config: Config = {
         ...colors.lime,
       },
       bidfood: {
-        DEFAULT: colors.green[500],
-        ...colors.green,
+        DEFAULT: colors.emerald[500],
+        ...colors.emerald,
       },
       secondary: {
         DEFAULT: colors.sky[500],

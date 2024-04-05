@@ -10,7 +10,7 @@ function ToggleGridButton({
   id,
 }: {
   className?: string;
-  gridView: boolean;
+  gridView?: boolean;
   setGridView: (gridView: boolean) => void;
   id: string;
 }) {
@@ -45,7 +45,7 @@ function ToggleGridButton({
         onClick={() => setGridView(false)}
       >
         <ListIcon className="relative z-10 h-8 w-8" />
-        {!gridView && (
+        {gridView === false && (
           <motion.span
             layoutId={id}
             className="absolute inset-0 -z-10 h-full w-full rounded-xl bg-primary-200"

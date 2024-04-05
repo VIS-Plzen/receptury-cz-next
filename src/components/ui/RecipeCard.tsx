@@ -72,17 +72,18 @@ function GridCardLayout({
   className,
 }: RecipeCardProps) {
   return (
-    <a
-      href={`/receptura/${id}`}
-      className={cn("h-80 w-full min-w-[180px]", className)}
+    <div
+      className={cn(
+        "h-80 w-full min-w-[180px] overflow-hidden rounded-2xl",
+        isLoading && "animate-pulse border-2 border-gray-200",
+        !isLoading && "border-2 border-primary-300/30",
+        className
+      )}
     >
       <div
         className={cn(
-          "relative inset-0 h-36 w-full overflow-hidden rounded-t-2xl",
-          img && !isLoading
-            ? "border-none"
-            : "border-primary-300/30 bg-primary-300/30",
-          isLoading && "animate-pulse border-2 border-gray-200 bg-gray-200"
+          "relative inset-0 h-36 w-full bg-primary-300/30",
+          isLoading && "bg-gray-200"
         )}
       >
         {img ? (
@@ -110,8 +111,7 @@ function GridCardLayout({
       </div>
       <div
         className={cn(
-          "flex h-44 flex-grow flex-col justify-between overflow-hidden rounded-b-2xl border-2 border-t-0 border-primary-300/30 bg-white p-[16px]",
-          isLoading && "border-gray-200"
+          "flex h-44 flex-grow flex-col justify-between bg-white p-[16px]"
         )}
       >
         <div className="line-clamp-3 text-sm font-bold">
@@ -132,7 +132,7 @@ function GridCardLayout({
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -149,47 +149,37 @@ function RowCardLayout({
     <a
       href={`/receptura/${id}`}
       className={cn(
-        "h-[70px] flex-row justify-between",
-        isLoading && "animate-pulse",
+        "h-[70px] flex-row justify-between overflow-hidden rounded-2xl",
+        isLoading && "animate-pulse border-2 border-gray-200",
+        !isLoading && "border-2 border-primary-300/30",
         className
       )}
     >
       {img ? (
-        <div
-          className={cn(
-            "relative h-[70px] w-[70px] overflow-hidden rounded-l-2xl"
-          )}
-        >
+        <div className={cn("relative h-[70px] w-[70px]")}>
           <Image alt="" src={img} fill className="object-cover" />
         </div>
       ) : (
-        <div
-          className={cn(
-            "overflow-hidden rounded-l-2xl bg-primary-300/30 p-3",
-            isLoading && "hidden"
-          )}
-        >
+        <div className={cn("bg-primary-300/30 p-2.5", isLoading && "hidden")}>
           <MealSymbol />
         </div>
       )}
       <div
         className={cn(
           "hidden",
-          isLoading &&
-            "block h-full w-[70px] overflow-hidden rounded-l-2xl bg-gray-200"
+          isLoading && "block h-full w-[70px] bg-gray-200"
         )}
       ></div>
       <div
         className={cn(
-          "flex flex-grow flex-row items-center justify-between overflow-hidden rounded-r-2xl border-2 border-l-0 border-primary-300/30 bg-white",
-          isLoading && "border-gray-200"
+          "flex flex-grow flex-row items-center justify-between bg-white"
         )}
       >
         <div className="line-clamp-3 w-80 pl-[20px] pr-2 text-sm font-bold">
           <p className={cn("block", isLoading && "hidden")}>{label}</p>
           <div
             className={cn(
-              isLoading && " h-4 w-full rounded-full bg-gray-300",
+              isLoading && "h-4 w-full rounded-full bg-gray-300",
               !isLoading && "hidden"
             )}
           ></div>
@@ -199,13 +189,10 @@ function RowCardLayout({
             <BadgeRenderer badges={badges} />
           </div>
           <div className="items-center">
-            <div
-              className={cn(
-                "hidden space-x-2 p-3 md:flex",
-                isLoading && "hidden"
-              )}
-            >
-              <ActionButtons isGridView={false} />
+            <div className={cn(isLoading && "hidden")}>
+              <div className={cn("hidden items-center space-x-2 p-3 md:flex")}>
+                <ActionButtons isGridView={false} />
+              </div>
             </div>
             <div
               className={cn("hidden", isLoading && "flex flex-row gap-2 pr-10")}
@@ -231,30 +218,13 @@ function RecipeCard({
   isLoading,
 }: RecipeCardProps) {
   return (
-    <>
-      {isLoading ? (
-        <ReturnedLayout
-          card={{
-            label: label,
-            id: id,
-            badges: badges,
-            className: className,
-          }}
-          loading={true}
-          isGridView={isGridView}
-          forceGrid={forceGrid}
-          forceRow={forceRow}
-        />
-      ) : (
-        <ReturnedLayout
-          card={{ label: label, id: id, badges: badges, className: className }}
-          loading={false}
-          isGridView={isGridView}
-          forceGrid={forceGrid}
-          forceRow={forceRow}
-        />
-      )}
-    </>
+    <ReturnedLayout
+      card={{ label: label, id: id, badges: badges, className: className }}
+      loading={isLoading}
+      isGridView={isGridView}
+      forceGrid={forceGrid}
+      forceRow={forceRow}
+    />
   );
 }
 
@@ -269,7 +239,7 @@ function ReturnedLayout({
   forceGrid?: boolean;
   forceRow?: boolean;
   card: RecipeCardProps;
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <>
