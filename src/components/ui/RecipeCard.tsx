@@ -64,7 +64,6 @@ function BadgeRenderer({ badges }: BadgesProps) {
 
 // Card for grid layout
 function GridCardLayout({
-  id,
   label,
   badges,
   img,
@@ -139,15 +138,13 @@ function GridCardLayout({
 // Card for row layout
 function RowCardLayout({
   label,
-  id,
   badges,
   img,
   isLoading,
   className,
 }: RecipeCardProps) {
   return (
-    <a
-      href={`/receptura/${id}`}
+    <div
       className={cn(
         "h-[70px] flex-row justify-between overflow-hidden rounded-2xl",
         isLoading && "animate-pulse border-2 border-gray-200",
@@ -203,7 +200,7 @@ function RowCardLayout({
           </div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -242,10 +239,9 @@ function ReturnedLayout({
   loading?: boolean;
 }) {
   return (
-    <>
+    <a href={`/receptura/${card.id}`}>
       <GridCardLayout
         label={card.label}
-        id={card.id}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
@@ -261,7 +257,6 @@ function ReturnedLayout({
       />
       <RowCardLayout
         label={card.label}
-        id={card.id}
         badges={card.badges}
         img={card.img}
         isLoading={loading}
@@ -275,7 +270,7 @@ function ReturnedLayout({
                 : "flex"
         }`}
       />
-    </>
+    </a>
   );
 }
 
