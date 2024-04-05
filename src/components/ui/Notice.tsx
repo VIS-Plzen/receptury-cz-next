@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { tv } from "tailwind-variants";
 import clsx from "clsx";
+import { Dispatch, SetStateAction } from "react";
 import {
   CancelIcon,
   CheckIcon,
@@ -91,9 +92,9 @@ type NoticeStyleProps = {
 type NoticeProps = React.ComponentPropsWithoutRef<"div"> &
   NoticeStyleProps & {
     children?: string;
-    title: string;
+    title: string | undefined;
     isOpen?: boolean;
-    onOpenChange?: () => void;
+    onOpenChange?: Dispatch<SetStateAction<boolean>>;
     isDismissible?: boolean;
     scrollOnMount?: boolean;
     className?: string;
@@ -134,7 +135,7 @@ export function Notice({
   // If the component is controlled, call the prop when the state changes
   function handleDismiss() {
     if (isControlled) {
-      onOpenChange?.();
+      onOpenChange!(false);
     } else {
       setIsVisible(false);
     }
@@ -149,13 +150,17 @@ export function Notice({
       className={clsx(
         noticeStyles.base,
         noticeStyles.variants.variant[variant],
-        "flex items-center justify-between"
+        "flex items-center justify-between text-center"
       )}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-x-2 text-center">
         <NoticeIcon variant={variant} />
-        <div className="flex flex-col gap-1 text-sm">
-          {title && <NoticeTitle variant={variant}>{title}</NoticeTitle>}
+        <div className="flex flex-col items-center gap-x-1 text-center text-sm">
+          {title && (
+            <NoticeTitle variant={variant} className="items-center text-center">
+              {title}
+            </NoticeTitle>
+          )}
           {children && <NoticeText>{children}</NoticeText>}
         </div>
       </div>
@@ -168,33 +173,33 @@ function NoticeIcon(props: {
   variant?: keyof typeof noticeStyles.variants.variant;
 }) {
   if (props.variant?.includes("success")) {
-    return <CheckIcon {...props} />;
+    return <CheckIcon {...props} size={24} />;
   }
 
   if (props.variant?.includes("warning")) {
-    return <CancelIcon {...props} />;
+    return <CancelIcon {...props} size={24} />;
   }
 
   if (props.variant?.includes("error")) {
-    return <ErrorIcon {...props} />;
+    return <ErrorIcon {...props} size={24} />;
   }
 
-  return <HelpIcon {...props} />;
+  return <HelpIcon {...props} size={24} />;
 }
 
 function NoticeCloseButton(
   props: Omit<React.ComponentPropsWithoutRef<typeof Button>, "children">
 ) {
   return (
-    <Button
+    <button
       {...props}
       className={clsx(
         "relative mt-1 inline-flex shrink-0 items-center justify-center",
         props.className
       )}
     >
-      <CloseIcon size={16} />
-    </Button>
+      <CloseIcon size={32} />
+    </button>
   );
 }
 
