@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { tv } from "tailwind-variants";
 import clsx from "clsx";
+import { motion } from "framer-motion";
 import { Dispatch, SetStateAction } from "react";
 import {
   CancelIcon,
@@ -12,22 +13,6 @@ import {
   HelpIcon,
 } from "../icons";
 import Button from "./Button";
-
-// const noticeStyles = tv({
-//   base: [""],
-//   variants: {
-//     variant: {
-//       info: [""],
-//       success: [""],
-//       warning: [""],
-//       error: [""],
-//       "info-solid": [""],
-//       "success-solid": [""],
-//       "warning-solid": [""],
-//       "error-solid": [""],
-//     },
-//   },
-// });
 
 const noticeStyles = {
   base: "flex items-start justify-start gap-x-3 rounded-xl px-4 py-3",
@@ -108,6 +93,7 @@ export function Notice({
   onOpenChange,
   isDismissible = true,
   scrollOnMount = false,
+  className,
   ...props
 }: NoticeProps) {
   const [isVisible, setIsVisible] = useState(isOpen);
@@ -144,28 +130,42 @@ export function Notice({
   if (!isVisible) return null;
 
   return (
-    <div
-      ref={ref}
-      {...props}
-      className={clsx(
-        noticeStyles.base,
-        noticeStyles.variants.variant[variant],
-        "flex items-center justify-between text-center"
-      )}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      transition={{ duration: 0.35, ease: "backInOut" }}
+      variants={{
+        visible: { opacity: 1, y: 0, scale: 1 },
+        hidden: { opacity: 0, y: 50, scale: 0.5 },
+      }}
+      className={className}
     >
-      <div className="flex items-center gap-x-2 text-center">
-        <NoticeIcon variant={variant} />
-        <div className="flex flex-col items-center gap-x-1 text-center text-sm">
-          {title && (
-            <NoticeTitle variant={variant} className="items-center text-center">
-              {title}
-            </NoticeTitle>
-          )}
-          {children && <NoticeText>{children}</NoticeText>}
+      <div
+        ref={ref}
+        {...props}
+        className={clsx(
+          noticeStyles.base,
+          noticeStyles.variants.variant[variant],
+          "flex items-center justify-between text-center"
+        )}
+      >
+        <div className="flex items-center gap-x-2 text-center">
+          <NoticeIcon variant={variant} />
+          <div className="flex flex-col items-center gap-x-1 text-center text-sm">
+            {title && (
+              <NoticeTitle
+                variant={variant}
+                className="items-center text-center"
+              >
+                {title}
+              </NoticeTitle>
+            )}
+            {children && <NoticeText>{children}</NoticeText>}
+          </div>
         </div>
+        {isDismissible && <NoticeCloseButton onClick={handleDismiss} />}
       </div>
-      {isDismissible && <NoticeCloseButton onClick={handleDismiss} />}
-    </div>
+    </motion.div>
   );
 }
 

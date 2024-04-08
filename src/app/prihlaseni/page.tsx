@@ -41,12 +41,11 @@ export default function Page() {
   });
 
   const formik = useFormik({
-    // Field names should match `name` prop in InputField component
     initialValues: {
       email: "",
       password: "",
     },
-    // Function to handle form submission
+
     onSubmit: async (values, actions) => {
       const res = await (
         await fetch("/api/login", {
@@ -57,17 +56,18 @@ export default function Page() {
           }),
         })
       ).json();
+      console.log(res);
+
+      // if we recieve a login token, we are succesfully logged in
       setHasNotice(
-        res.success
+        res.token
           ? { variant: "success-solid", message: "Úspěšně přihlášeno." }
           : { variant: "error-solid", message: res.message }
       );
     },
 
-    // Connect validation schema to formik
     validationSchema: toFormikValidationSchema(formValidationSchema),
 
-    // Validation behavior setup
     validateOnChange: false,
     validateOnBlur: true,
   });
@@ -76,12 +76,6 @@ export default function Page() {
 
   return (
     <Container className="my-16 flex flex-col items-center justify-center py-20 pt-24 text-black sm:my-32 xl:my-64">
-      <Notice
-        variant={hasNotice?.variant}
-        title={hasNotice?.message}
-        isOpen={hasNotice !== null}
-        onOpenChange={() => setHasNotice(null)}
-      />
       <div className="w-full space-y-4 rounded-2xl border-2 border-primary-200 bg-white p-8 sm:w-2/3 xl:w-1/3">
         <Heading size="md">Přihlášení</Heading>
         <form onSubmit={formik.handleSubmit}>
@@ -110,6 +104,7 @@ export default function Page() {
             onBlur={formik.handleBlur}
           ></InputField>
           <div className="flex items-start justify-between border-b border-primary-200">
+            {/* redirect to jidelny.cz for password reset*/}
             <StyledLink href="https://jidelny.cz/profil/zapomenute-heslo/?redirectAfter=https://receptury.cz/password-reset-complete">
               Zapomenuté heslo?
             </StyledLink>
@@ -129,6 +124,14 @@ export default function Page() {
           </StyledLink>
         </div>
       </div>
+
+      <Notice
+        variant={hasNotice?.variant}
+        title={hasNotice?.message}
+        isOpen={hasNotice !== null}
+        onOpenChange={() => setHasNotice(null)}
+        className="my-4"
+      />
     </Container>
   );
 }

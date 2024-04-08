@@ -17,6 +17,7 @@ import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import * as Dialog from "@radix-ui/react-dialog";
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState } from "react";
@@ -688,7 +689,7 @@ function TopRow({
           {initialLoad
             ? " Vyhledávám receptury"
             : data
-              ? `Našli jsme pro vás ${data.length} receptůr`
+              ? `Našli jsme pro vás ${data.length} receptur`
               : "Nenašli jsme žádná data"}
         </p>
       </div>
@@ -1002,11 +1003,11 @@ function SideBarBox({
   };
 
   return (
-    <div className="border-t border-primary-200 py-4">
+    <div className="border-t border-primary-200 py-2">
       <button
         onClick={() => setOpen(!open)}
         aria-label={!open ? "Zobrazit" : "Skrýt"}
-        className="w-full rounded-lg"
+        className={clsx(open && "mb-2", "w-full rounded-lg")}
       >
         <div className="flex w-full flex-row items-center justify-between text-center">
           <Heading as="h3" size="inherit">
@@ -1021,12 +1022,12 @@ function SideBarBox({
       <AnimatePresence initial={false}>
         {open && (
           <motion.ul
-            className="mt-2 space-y-2 overflow-x-visible"
+            className="space-y-2 overflow-x-visible"
             initial="closed"
             animate="open"
             exit="closed"
             variants={variants}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.15 }}
           >
             {options.map((o: any, oIndex: number) => (
               <motion.li
