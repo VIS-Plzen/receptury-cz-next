@@ -7,7 +7,9 @@ import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -24,6 +26,7 @@ export default function Page() {
       | "error-solid";
     message: string;
   }>(null);
+  const router = useRouter();
   const formValidationSchema = z.object({
     email: z
       .string({
@@ -39,6 +42,7 @@ export default function Page() {
       })
       .min(6, "Heslo příliš krátké"),
   });
+  const cookies = new Cookies();
 
   const formik = useFormik({
     initialValues: {
@@ -56,14 +60,15 @@ export default function Page() {
           }),
         })
       ).json();
-      console.log(res);
+
+      if (res.token) {
+        console.log(res);
+        cookies.set("token", res.token /* {expires: } */);
+        return router.push("/");
+      }
 
       // if we recieve a login token, we are succesfully logged in
-      setHasNotice(
-        res.token
-          ? { variant: "success-solid", message: "Úspěšně přihlášeno." }
-          : { variant: "error-solid", message: res.message }
-      );
+      setHasNotice({ variant: "error-solid", message: res.message });
     },
 
     validationSchema: toFormikValidationSchema(formValidationSchema),
