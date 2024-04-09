@@ -10,8 +10,9 @@ import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 
 const menuRoutes = [
   {
@@ -27,10 +28,6 @@ const menuRoutes = [
     href: "/bonduelle",
   },
   {
-    label: "Uživatel",
-    href: "/uzivatel",
-  },
-  {
     label: "Kontakt",
     href: "/kontakt",
   },
@@ -44,7 +41,6 @@ type DropdownItem = {
 const dropdownData: DropdownItem[] = [
   { label: "Osobní informace", href: "/" },
   { label: "Oblíbené recepty", href: "/" },
-  { label: "Odhlásit se", href: "/" },
 ];
 
 // Hihlights link with href matching current url
@@ -111,6 +107,8 @@ function BurgerButton({
 }
 
 function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
+  const cookies = new Cookies();
+  const router = useRouter();
   return (
     <Menu as="div" className="relative hidden text-left lg:block">
       <Menu.Button className="rounded-lg p-1">
@@ -144,6 +142,21 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                 )}
               </Menu.Item>
             ))}
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active && "bg-primary-100"
+                  } rounded-xl p-2 text-left`}
+                  onClick={() => {
+                    cookies.remove("token");
+                    router.push("/prihlaseni");
+                  }}
+                >
+                  Odhlásit se
+                </button>
+              )}
+            </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>
@@ -182,6 +195,8 @@ function TouchMenu({
   // (depends on the url)
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const cookies = new Cookies();
+  const router = useRouter();
 
   useEffect(() => {
     setIsOpen(false);
@@ -226,10 +241,22 @@ function TouchMenu({
                 </div>
                 <ul className="flex flex-col gap-2 pt-4">
                   {dropdownData.map((item, index) => (
-                    <a href={item.href} key={index}>
-                      {item.label}
-                    </a>
+                    <li>
+                      <a href={item.href} key={index}>
+                        {item.label}
+                      </a>
+                    </li>
                   ))}
+                  <li>
+                    <button
+                      onClick={() => {
+                        cookies.remove("token");
+                        router.push("/prihlaseni");
+                      }}
+                    >
+                      Odhlásit se
+                    </button>
+                  </li>
                 </ul>
               </div>
             </Container>

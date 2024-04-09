@@ -31,20 +31,12 @@ const footerRoutes = [
 
 const partners = [
   {
-    label: "Partner 1",
-    href: "/",
+    label: "Bidfood",
+    href: "/bidfood",
   },
   {
-    label: "Partner 2",
-    href: "/",
-  },
-  {
-    label: "Partner 3",
-    href: "/",
-  },
-  {
-    label: "Partner 4",
-    href: "/",
+    label: "Bonduelle",
+    href: "/bonduelle",
   },
 ];
 
