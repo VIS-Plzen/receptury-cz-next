@@ -233,11 +233,13 @@ export default function Receptury({
   title = "Receptury",
   className = "",
   urlPreQuery = "",
+  hideBoxes,
 }: {
   title?: string;
   initialData?: any;
   className?: string;
   urlPreQuery?: string;
+  hideBoxes?: string[];
 }) {
   const [data, setData] = useState<any>("init");
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -270,7 +272,13 @@ export default function Receptury({
     );
 
   const [selectedSubgroup, setSelectedSubgroup] = useState(
-    urlSubGroup ? urlSubGroup.value : urlGroup ? urlGroup.options[0].value : ""
+    urlSubGroup
+      ? urlSubGroup.value
+      : urlGroup
+        ? urlGroup.options.length !== 0
+          ? urlGroup.options[0].value
+          : ""
+        : ""
   );
 
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -517,7 +525,9 @@ export default function Receptury({
             Podminka:
               group?.value === "nezadano"
                 ? ""
-                : `Druh='${group?.title} ${subGroup?.title}'`,
+                : `Druh='${group?.title}${
+                    subGroup ? " " + subGroup?.title : ""
+                  }'`,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
@@ -581,6 +591,7 @@ export default function Receptury({
           cancelDisabled={cancelDisabled}
           loading={loading}
           refresh={refresh}
+          hideBoxes={hideBoxes}
         />
 
         {initialLoad ? (
@@ -736,6 +747,7 @@ function MobileFilters({
   cancelDisabled,
   loading,
   refresh,
+  hideBoxes,
 }: {
   sideBarOpen: boolean;
   groupsData: any;
@@ -745,7 +757,7 @@ function MobileFilters({
   setSelectedSubgroup: (selectedSubgroup: any) => void;
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
-  sideBarValues: { title: string; options: any[] }[];
+  sideBarValues: { title: string; name: string; options: any[] }[];
   comboBoxValues: {
     title: string;
     name: string;
@@ -763,6 +775,7 @@ function MobileFilters({
   cancelDisabled: boolean;
   loading: boolean;
   refresh: boolean;
+  hideBoxes?: string[];
 }) {
   return (
     <>
@@ -801,6 +814,7 @@ function MobileFilters({
                     cancelDisabled={cancelDisabled}
                     loading={loading}
                     refresh={refresh}
+                    hideBoxes={hideBoxes}
                   />
                 </Dialog.Content>
               </motion.div>
@@ -827,6 +841,7 @@ function MobileFilters({
           cancelDisabled={cancelDisabled}
           loading={loading}
           refresh={refresh}
+          hideBoxes={hideBoxes}
         />
       </div>
     </>
@@ -850,6 +865,7 @@ function SideBar({
   cancelDisabled,
   loading,
   refresh,
+  hideBoxes = [],
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
@@ -858,7 +874,7 @@ function SideBar({
   selectedSubgroup: any;
   setSelectedSubgroup: (selectedSubgroup: any) => void;
   groupsData: any;
-  sideBarValues: { title: string; options: any[] }[];
+  sideBarValues: { title: string; name: string; options: any[] }[];
   comboBoxValues: {
     title: string;
     name: string;
@@ -876,6 +892,7 @@ function SideBar({
   cancelDisabled: boolean;
   loading: boolean;
   refresh: boolean;
+  hideBoxes?: string[];
 }) {
   return (
     <div
@@ -955,16 +972,18 @@ function SideBar({
                 }}
               />
             </div>
-
-            {sideBarValues.map((box, index) => (
-              <SideBarBox
-                key={"ffsbb" + index}
-                title={box.title}
-                options={box.options}
-                bIndex={index}
-                updateSideBarValue={updateSideBarValue}
-              />
-            ))}
+            {sideBarValues.map(
+              (box, index) =>
+                !hideBoxes.includes(box.name) && (
+                  <SideBarBox
+                    key={"ffsbb" + index}
+                    title={box.title}
+                    options={box.options}
+                    bIndex={index}
+                    updateSideBarValue={updateSideBarValue}
+                  />
+                )
+            )}
           </div>
         </div>
       </Container>

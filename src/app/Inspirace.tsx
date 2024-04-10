@@ -6,22 +6,27 @@ import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-export default function Inspirace({ className = "" }: { className?: string }) {
-  const router = useRouter();
+export default function Inspirace({
+  initialData,
+  className = "",
+}: {
+  initialData?: any;
+  className?: string;
+}) {
+  /* const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams();*/
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
-  const defaultTab = useMemo(
+  /*  const defaultTab = useMemo(
     () => searchParams.get("tab") || "doporucene",
     [searchParams.get("tab")]
-  );
+  ); */
 
   const TabsData = [
     {
@@ -39,6 +44,11 @@ export default function Inspirace({ className = "" }: { className?: string }) {
   ];
 
   const [selected, setSelected] = useState(TabsData[0].value);
+
+  const [data, setData] = useState<any>(
+    initialData && initialData.Status ? initialData.Vety : null
+  );
+  const [loading, setLoading] = useState<any>(data ? false : true);
 
   // useEffect(() => {
   //   const newSearchParams = new URLSearchParams();
@@ -85,6 +95,37 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     );
   }
 
+  async function getNewData(newSelected: string) {
+    setLoading(true);
+    const podminka =
+      newSelected === "doporucene"
+        ? ""
+        : newSelected === "oblibene"
+          ? "Druh='Bezmasé sladké pokrmy Kaše'"
+          : "Druh='Polévky Luštěninové'";
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: "12345VIS",
+          Funkce: "ObecnyDotaz",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Podminka: podminka,
+            Limit: 10,
+            Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+          },
+        }),
+      })
+    ).json();
+    if (result.Status) {
+      setData(result.Vety);
+    }
+    setLoading(false);
+    setSelected(newSelected);
+  }
+
   return (
     <div className={cn(className)}>
       <Container>
@@ -99,12 +140,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             <Tabs
               value={selected}
               className="w-full"
-              onValueChange={(value: string) => {
-                const selectedTab = TabsData.find((tab) => tab.value === value);
-                if (selectedTab) {
-                  setSelected(selectedTab.value);
-                }
-              }}
+              onValueChange={getNewData}
             >
               <div className="hidden w-full flex-row justify-between md:flex">
                 <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
@@ -126,7 +162,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           <Selector
             data={TabsData}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={getNewData}
             className="block md:hidden"
           />
 
@@ -153,12 +189,12 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             pagination={{ clickable: false }}
             className=" [--swiper-pagination-color:theme(colors.primary.600)]"
           >
-            {Array.from({ length: 10 }, (_, index) => (
+            {data.map((card: any, index: number) => (
               <SwiperSlide key={index} className="py-10">
                 <RecipeCard
                   key={index}
-                  isLoading={false}
-                  label={"Smažené kuřecí řízečky, bramborové placičky"}
+                  isLoading={loading}
+                  label={card.Vlastnosti.Nazev}
                   badges={["Dieta", "Brambor"]}
                   forceGrid
                 />

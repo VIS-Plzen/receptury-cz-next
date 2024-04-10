@@ -62,8 +62,9 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        console.log(res);
         cookies.set("token", res.token /* {expires: } */);
+        cookies.set("name", res.firstName + " " + res.lastName);
+        localStorage.setItem("userInfo", JSON.stringify(res));
         return router.push("/");
       }
 

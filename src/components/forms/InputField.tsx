@@ -1,5 +1,6 @@
 import { cn } from "@/utils/cn";
 import { forwardRef, useId } from "react";
+import LoadingSpinner from "../ui/LoadingSpinner";
 import ErrorText from "./ErrorText";
 import HelperText from "./HelperText";
 import Label from "./Label";
@@ -18,6 +19,7 @@ type Props = React.ComponentPropsWithoutRef<"input"> & {
   helperText?: string | boolean | undefined | null;
   errorText?: string | boolean | undefined | null;
   className?: string;
+  isLoading?: boolean;
   [key: string]: any;
 };
 const InputField = forwardRef<HTMLInputElement, Props>(
@@ -29,6 +31,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
       helperText,
       errorText,
       className = "",
+      isLoading = false,
       ...props
     },
     forwardedRef
@@ -37,7 +40,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
     return (
       <div
         className={cn(
-          "flex w-full flex-col items-start justify-start gap-1 py-1",
+          "relative flex w-full flex-col items-start justify-start gap-1 py-1",
           props.disabled && "cursor-not-allowed opacity-70",
           className
         )}
@@ -75,6 +78,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           )}
           {...props}
         />
+        {isLoading && <LoadingSpinner className="absolute left-2.5 top-1/2" />}
 
         {/* Error text */}
         {errorText && <ErrorText>{errorText}</ErrorText>}

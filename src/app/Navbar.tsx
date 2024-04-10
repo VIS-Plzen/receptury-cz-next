@@ -39,8 +39,8 @@ type DropdownItem = {
 };
 
 const dropdownData: DropdownItem[] = [
-  { label: "Osobní informace", href: "/" },
-  { label: "Oblíbené recepty", href: "/" },
+  { label: "Osobní informace", href: "/uzivatel?obsah=informace" },
+  { label: "Oblíbené recepty", href: "/uzivatel?obsah=recepty" },
 ];
 
 // Hihlights link with href matching current url
@@ -109,13 +109,22 @@ function BurgerButton({
 function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   const cookies = new Cookies();
   const router = useRouter();
+  const name = cookies.get("name");
+  return null;
+  if (!cookies.get("token"))
+    return (
+      <StyledLink asChild hoverEffect="color">
+        <Link href={"/prihlaseni"}>Přihlásit se</Link>
+      </StyledLink>
+    );
+
   return (
     <Menu as="div" className="relative hidden text-left lg:block">
       <Menu.Button className="rounded-lg p-1">
         <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
-          <Avatar size="sm" loading="eager" name="Jméno Příjmení" />
+          <Avatar size="sm" loading="eager" name={name} />
           <span className="mr-auto block font-semibold leading-tight">
-            Jméno Příjmení
+            {name}
           </span>
           <ExpandMoreIcon className={cn("shrink-0")} />
         </div>
@@ -150,6 +159,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                   } rounded-xl p-2 text-left`}
                   onClick={() => {
                     cookies.remove("token");
+                    cookies.remove("name");
                     router.push("/prihlaseni");
                   }}
                 >
@@ -197,6 +207,7 @@ function TouchMenu({
   const searchParams = useSearchParams();
   const cookies = new Cookies();
   const router = useRouter();
+  const name = cookies.get("name");
 
   useEffect(() => {
     setIsOpen(false);
@@ -233,32 +244,40 @@ function TouchMenu({
                 ))}
               </motion.ul>
 
-              <div className="mt-8 flex flex-col">
-                <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
-                  <span className="mr-auto block font-bold leading-tight">
-                    Jméno Příjmení
-                  </span>
-                </div>
-                <ul className="flex flex-col gap-2 pt-4">
-                  {dropdownData.map((item, index) => (
+              {cookies.get("token") ? (
+                <div className="mt-8 flex flex-col">
+                  <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
+                    <span className="mr-auto block font-bold leading-tight">
+                      {name}
+                    </span>
+                  </div>
+                  <ul className="flex flex-col gap-2 pt-4">
+                    {dropdownData.map((item, index) => (
+                      <li key={index}>
+                        <a href={item.href}>{item.label}</a>
+                      </li>
+                    ))}
                     <li>
-                      <a href={item.href} key={index}>
-                        {item.label}
-                      </a>
+                      <button
+                        onClick={() => {
+                          cookies.remove("token");
+                          cookies.remove("name");
+                          router.push("/prihlaseni");
+                        }}
+                      >
+                        Odhlásit se
+                      </button>
                     </li>
-                  ))}
-                  <li>
-                    <button
-                      onClick={() => {
-                        cookies.remove("token");
-                        router.push("/prihlaseni");
-                      }}
-                    >
-                      Odhlásit se
-                    </button>
-                  </li>
-                </ul>
-              </div>
+                  </ul>
+                </div>
+              ) : (
+                <a
+                  href="/prihlaseni"
+                  className="mr-auto mt-8 block font-bold leading-tight"
+                >
+                  Přihlásit se
+                </a>
+              )}
             </Container>
           </motion.div>
         </>
