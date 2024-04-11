@@ -30,7 +30,13 @@ export default function Home() {
         }
         img={"/images/food.jpeg"}
       />
-      <Receptury hideBoxes={["partner"]} />
+      <Receptury
+        boxSettings={{
+          initialTrue: ["bidfood"],
+          disabledValues: ["bonduelle", "bidfood"],
+          hiddenBoxes: ["partner"],
+        }}
+      />
     </div>
   );
 

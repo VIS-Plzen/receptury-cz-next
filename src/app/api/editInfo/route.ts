@@ -13,7 +13,6 @@ export async function POST(request: Request) {
       }
     );
     const data = await res.json();
-    console.log(data);
 
     return NextResponse.json(data);
   } catch (error) {

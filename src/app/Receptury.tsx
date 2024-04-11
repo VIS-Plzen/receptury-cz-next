@@ -233,13 +233,17 @@ export default function Receptury({
   title = "Receptury",
   className = "",
   urlPreQuery = "",
-  hideBoxes,
+  boxSettings,
 }: {
   title?: string;
   initialData?: any;
   className?: string;
   urlPreQuery?: string;
-  hideBoxes?: string[];
+  boxSettings?: {
+    hiddenBoxes?: string[];
+    disabledValues?: string[];
+    initialTrue?: string[];
+  };
 }) {
   const [data, setData] = useState<any>("init");
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -291,7 +295,16 @@ export default function Receptury({
   const [initialLoad, setInitialLoad] = useState(true);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
-    const holder = [
+    let holder: {
+      title: string;
+      name: string;
+      options: {
+        title: string;
+        name: string;
+        checked: boolean;
+        disabled?: boolean;
+      }[];
+    }[] = [
       {
         title: "Obecné",
         name: "obecne",
@@ -350,6 +363,17 @@ export default function Receptury({
       }
     });
 
+    if (boxSettings) {
+      holder.forEach((box) =>
+        box.options.forEach((boxValue) => {
+          const valueName = boxValue.name;
+          if (boxSettings.initialTrue?.includes(valueName))
+            boxValue.checked = true;
+          if (boxSettings.disabledValues?.includes(valueName))
+            boxValue.disabled = true;
+        })
+      );
+    }
     return holder;
   });
   const [pageState, setPageState] = useState<number>(
@@ -420,7 +444,11 @@ export default function Receptury({
   function resetFilters() {
     sideBarValues.forEach((box) => {
       box.options.forEach((option) => {
-        option.checked = false;
+        if (
+          !boxSettings?.initialTrue?.includes(option.name) ||
+          !boxSettings?.disabledValues?.includes(option.name)
+        )
+          option.checked = false;
       });
     });
 
@@ -591,7 +619,7 @@ export default function Receptury({
           cancelDisabled={cancelDisabled}
           loading={loading}
           refresh={refresh}
-          hideBoxes={hideBoxes}
+          hideBoxes={boxSettings?.hiddenBoxes}
         />
 
         {initialLoad ? (
@@ -1056,6 +1084,7 @@ function SideBarBox({
                 <Checkbox
                   checked={o.checked}
                   label={o.title}
+                  disabled={o.disabled}
                   onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
                 />
               </motion.li>

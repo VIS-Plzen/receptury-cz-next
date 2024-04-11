@@ -77,7 +77,11 @@ export default function ContentSelector() {
       </Container>
       {content === "informace" && <Form />}
       {content === "recepty" && (
-        <Receptury title="Oblíbené" urlPreQuery={`obsah=${content}`} />
+        <Receptury
+          title="Oblíbené"
+          urlPreQuery={`obsah=${content}`}
+          boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
+        />
       )}
       {content === null && (
         <LoadingSpinner size="2xl" className="mx-auto my-20" />
