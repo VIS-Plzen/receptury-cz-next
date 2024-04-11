@@ -107,11 +107,18 @@ function BurgerButton({
 }
 
 function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
-  const cookies = new Cookies();
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
+  const cookies = new Cookies();
   const name = cookies.get("name");
-  return null;
-  if (!cookies.get("token"))
+  const token = cookies.get("token");
+
+  if (!token)
     return (
       <StyledLink asChild hoverEffect="color">
         <Link href={"/prihlaseni"}>Přihlásit se</Link>
