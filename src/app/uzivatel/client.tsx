@@ -1,5 +1,6 @@
 "use client";
 
+import Checkbox from "@/components/forms/Checkbox";
 import {
   default as InputField,
   default as TextInput,
@@ -121,7 +122,7 @@ function Form() {
       );
     }
   }
-  const formValidationSchema = z.object({
+  const formValidationSchema: any = z.object({
     firstName: z
       .string({
         required_error: "Vyplňte prosím jméno",
@@ -142,28 +143,30 @@ function Form() {
         invalid_type_error: "Neplatný typ",
       })
       .email("Neplatný e-mail"),
-    IC: z
+    phone: z
+      .string({
+        invalid_type_error: "Neplatný typ",
+      })
+      .min(9, "Adresa musí mít alespoň 9 znaků")
+      .max(20, "Adresa může mít maximálně 20 znaků")
+      .optional(),
+    //Firma
+    invoiceIsCompany: z.boolean(),
+    invoiceCompanyId: z
       .string({
         required_error: "Vyplňte prosím IČ",
         invalid_type_error: "Neplatný typ",
       })
       .min(8, "IČ musí mít přesně 8 znaků")
       .max(8, "IČ musí mít přesně 8 znaků")
-      .optional(),
-    DIC: z
+      .refine((schema: any) => schema.invoiceIsCompany),
+    invoiceCompanyVatId: z
       .string({
         required_error: "Vyplňte prosím DIČ",
         invalid_type_error: "Neplatný typ",
       })
       .min(10, "DIČ musí mít alespoň 10 znaků")
       .max(12, "DIČ může mít maximálně 12 znaků")
-      .optional(),
-    invoiceIsCompany: z
-      .string({
-        invalid_type_error: "Neplatný typ",
-      })
-      .min(2, "Firma musí mít alespoň 2 znaky")
-      .max(50, "Firma může mít maximálně 50 znaků")
       .optional(),
     invoiceStreet: z
       .string({
@@ -172,7 +175,7 @@ function Form() {
       })
       .min(2, "Ulice a číslo popisné musí mít alespoň 2 znaky")
       .max(50, "Ulice a číslo popisné může mít maximálně 50 znaků"),
-    mesto: z
+    invoiceCity: z
       .string({
         required_error: "Vyplňte prosím město",
         invalid_type_error: "Neplatný typ",
@@ -186,20 +189,29 @@ function Form() {
       })
       .min(5, "PSČ musí mít alespoň 5 znaků")
       .max(6, "PSČ může mít maximálně 6 znaků"),
-    adresa: z
+    //Dodací adresa
+    deliveryIsDifferent: z.boolean(),
+    deliveryStreet: z
       .string({
+        required_error: "Vyplňte prosím Ulici a číslo popisné",
         invalid_type_error: "Neplatný typ",
       })
-      .min(2, "Adresa musí mít alespoň 2 znaky")
-      .max(50, "Adresa může mít maximálně 50 znaků")
-      .optional(),
-    phone: z
+      .min(2, "Ulice a číslo popisné musí mít alespoň 2 znaky")
+      .max(50, "Ulice a číslo popisné může mít maximálně 50 znaků"),
+    deliveryCity: z
       .string({
+        required_error: "Vyplňte prosím město",
         invalid_type_error: "Neplatný typ",
       })
-      .min(9, "Adresa musí mít alespoň 9 znaků")
-      .max(20, "Adresa může mít maximálně 20 znaků")
-      .optional(),
+      .min(2, "Město musí mít alespoň 2 znaky")
+      .max(50, "Město může mít maximálně 50 znaků"),
+    deliveryZip: z
+      .string({
+        required_error: "Vyplňte prosím PSČ",
+        invalid_type_error: "Neplatný typ",
+      })
+      .min(5, "PSČ musí mít alespoň 5 znaků")
+      .max(6, "PSČ může mít maximálně 6 znaků"),
     poznamka: z
       .string({
         invalid_type_error: "Neplatný typ",
@@ -214,15 +226,22 @@ function Form() {
       firstName: info ? info.firstName : "",
       lastName: info ? info.lastName : "",
       email: info ? info.email : "",
-      IC: "",
-      DIC: "",
-      firma: "",
-      invoiceStreet: info ? info.invoiceStreet : "",
-      mesto: "",
-      invoiceZip: info ? info.invoiceZip : "",
-      adresa: "",
       phone: info ? info.phone : "",
-      poznamka: "",
+      //Fakturační údaje
+      invoiceCompanyId: info ? info.invoiceCompanyId : "",
+      invoiceCompanyVatId: info ? info.invoiceCompanyVatId : "",
+      invoiceIsCompany: info ? info.invoiceIsCompany : false,
+      invoiceCompanyName: info ? info.invoiceCompanyName : "",
+      invoiceStreet: info ? info.invoiceStreet : "",
+      invoiceCity: info ? info.invoiceCity : "",
+      invoiceZip: info ? info.invoiceZip : "",
+      //Dodací adresa
+      deliveryIsDifferent: info ? info.deliveryIsDifferent : "",
+      deliveryStreet: info ? info.deliveryStreet : "",
+      deliveryCity: info ? info.deliveryCity : "",
+      deliveryZip: info ? info.deliveryZip : "",
+      //Poznámka?
+      poznamka: info ? info.invoiceStreet : "",
     },
     onSubmit: (values, actions) => {
       console.log("tu");
@@ -285,44 +304,78 @@ function Form() {
               value={formik.values.email}
               isLoading={!hasData}
             />
+            <InputField
+              name="phone"
+              label="Telefonní číslo"
+              errorText={
+                formWasTouched && formik.touched.phone && formik.errors.phone
+              }
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phone}
+              isLoading={!hasData}
+            />
           </div>
           <div>
             <Heading size="sm" hasMarginBottom>
               Fakturační údaje
             </Heading>
-            <TextInput
-              name="IC"
-              label="IČ"
-              errorText={
-                formWasTouched && formik.touched.IC && formik.errors.IC
+            <Checkbox
+              className="my-5"
+              name="invoiceIsCompany"
+              label="Nakupuji na firmu"
+              type="checkbox"
+              onChange={(value) =>
+                formik.setFieldValue("invoiceIsCompany", value)
               }
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.IC}
-              isLoading={!hasData}
+              value={formik.values.invoiceIsCompany}
             />
-            <InputField
-              name="DIC"
-              label="DIČ"
-              errorText={
-                formWasTouched && formik.touched.DIC && formik.errors.DIC
-              }
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.DIC}
-              isLoading={!hasData}
-            />
-            <InputField
-              name="firma"
-              label="Firma"
-              errorText={
-                formWasTouched && formik.touched.firma && formik.errors.firma
-              }
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.firma}
-              isLoading={!hasData}
-            />
+            {formik.values.invoiceIsCompany && (
+              <>
+                <TextInput
+                  name="invoiceCompanyId"
+                  label="IČ"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.invoiceCompanyId &&
+                    formik.errors.invoiceCompanyId
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.invoiceCompanyId}
+                  isLoading={!hasData}
+                  required
+                />
+                <InputField
+                  name="invoiceCompanyVatId"
+                  label="DIČ"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.invoiceCompanyVatId &&
+                    formik.errors.invoiceCompanyVatId
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.invoiceCompanyVatId}
+                  isLoading={!hasData}
+                  required
+                />
+                <InputField
+                  name="invoiceCompanyName"
+                  label="Název firmy"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.invoiceCompanyName &&
+                    formik.errors.invoiceCompanyName
+                  }
+                  required
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.invoiceCompanyName}
+                  isLoading={!hasData}
+                />
+              </>
+            )}
             <InputField
               name="invoiceStreet"
               label="Ulice a číslo popisné"
@@ -338,15 +391,17 @@ function Form() {
               isLoading={!hasData}
             />
             <InputField
-              name="mesto"
+              name="invoiceCity"
               label="Město"
               errorText={
-                formWasTouched && formik.touched.mesto && formik.errors.mesto
+                formWasTouched &&
+                formik.touched.invoiceCity &&
+                formik.errors.invoiceCity
               }
               required
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.mesto}
+              value={formik.values.invoiceCity}
               isLoading={!hasData}
             />
             <InputField
@@ -363,28 +418,67 @@ function Form() {
               value={formik.values.invoiceZip}
               isLoading={!hasData}
             />
-            <InputField
-              name="adresa"
-              label="Upřesnění adresy"
-              errorText={
-                formWasTouched && formik.touched.adresa && formik.errors.adresa
+          </div>
+          <div>
+            <Heading size="sm" hasMarginBottom>
+              Dodací adresa
+            </Heading>
+            <Checkbox
+              className="my-5"
+              name="deliveryIsDifferent"
+              label="Dodací adresa se liší od fakturační"
+              type="checkbox"
+              onChange={(value) =>
+                formik.setFieldValue("deliveryIsDifferent", value)
               }
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.adresa}
-              isLoading={!hasData}
+              value={formik.values.deliveryIsDifferent}
             />
-            <InputField
-              name="phone"
-              label="Telefonní číslo"
-              errorText={
-                formWasTouched && formik.touched.phone && formik.errors.phone
-              }
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.phone}
-              isLoading={!hasData}
-            />
+            {formik.values.deliveryIsDifferent && (
+              <>
+                <InputField
+                  name="deliveryStreet"
+                  label="Ulice a číslo popisné"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.deliveryStreet &&
+                    formik.errors.deliveryStreet
+                  }
+                  required
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.deliveryStreet}
+                  isLoading={!hasData}
+                />
+                <InputField
+                  name="deliveryCity"
+                  label="Město"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.deliveryCity &&
+                    formik.errors.deliveryCity
+                  }
+                  required
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.deliveryCity}
+                  isLoading={!hasData}
+                />
+                <InputField
+                  name="deliveryZip"
+                  label="PSČ"
+                  errorText={
+                    formWasTouched &&
+                    formik.touched.deliveryZip &&
+                    formik.errors.deliveryZip
+                  }
+                  required
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.deliveryZip}
+                  isLoading={!hasData}
+                />
+              </>
+            )}
             <TextArea
               name="poznamka"
               label="Poznámka pro dodavatele"
@@ -396,7 +490,6 @@ function Form() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.poznamka}
-              isLoading={!hasData}
             />
           </div>
           <Button
