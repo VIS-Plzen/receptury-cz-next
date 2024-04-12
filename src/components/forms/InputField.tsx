@@ -66,7 +66,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           type={type}
           name={name}
           className={cn(
-            "block w-full appearance-none px-3 py-2.5",
+            "mb-4 block w-full appearance-none px-3 py-2.5",
             "rounded-lg border-2 border-primary-200",
             "bg-white text-base text-gray-900",
             "placeholder:text-gray-700/60",
@@ -81,7 +81,9 @@ const InputField = forwardRef<HTMLInputElement, Props>(
         {isLoading && <LoadingSpinner className="absolute left-2.5 top-1/2" />}
 
         {/* Error text */}
-        {errorText && <ErrorText>{errorText}</ErrorText>}
+        {errorText && (
+          <ErrorText className="absolute bottom-[5px]">{errorText}</ErrorText>
+        )}
       </div>
     );
   }
