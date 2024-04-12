@@ -120,9 +120,24 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
 
   if (!token)
     return (
-      <StyledLink asChild hoverEffect="color">
-        <Link href={"/prihlaseni"}>Přihlásit se</Link>
-      </StyledLink>
+      <ul className="hidden lg:flex">
+        <li>
+          <ActiveNavLink
+            href={"/prihlaseni"}
+            className="text-sm font-semibold 2xl:text-base"
+            activeClassName="text-primary"
+          >
+            Přihlásit se
+          </ActiveNavLink>
+          <ActiveNavLink
+            href={"/registrace"}
+            className="text-sm font-semibold 2xl:text-base"
+            activeClassName="text-primary"
+          >
+            Registrovat
+          </ActiveNavLink>
+        </li>
+      </ul>
     );
 
   return (
@@ -278,12 +293,24 @@ function TouchMenu({
                   </ul>
                 </div>
               ) : (
-                <a
-                  href="/prihlaseni"
-                  className="mr-auto mt-8 block font-bold leading-tight"
-                >
-                  Přihlásit se
-                </a>
+                <ul>
+                  <li>
+                    <a
+                      href="/prihlaseni"
+                      className="mr-auto mt-8 block font-bold leading-tight"
+                    >
+                      Přihlásit se
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/registrace"
+                      className="mr-auto mt-4 block font-bold leading-tight"
+                    >
+                      Registrovat
+                    </a>
+                  </li>
+                </ul>
               )}
             </Container>
           </motion.div>
