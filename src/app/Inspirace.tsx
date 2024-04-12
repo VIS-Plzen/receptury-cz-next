@@ -194,8 +194,9 @@ export default function Inspirace({
                 <RecipeCard
                   key={index}
                   isLoading={loading}
+                  id={card.Vlastnosti.Identita}
                   label={card.Vlastnosti.Nazev}
-                  badges={["Dieta", "Brambor"]}
+                  badges={card.Stitky}
                   forceGrid
                 />
               </SwiperSlide>

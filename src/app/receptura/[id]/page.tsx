@@ -7,17 +7,6 @@ import Image from "next/image";
 import { Hero, Informations } from "../Client";
 
 export default async function Home({ params }: { params: { id: number } }) {
-  const images = [
-    "/images/1.jpg",
-    "/images/2.jpg",
-    "/images/1.jpg",
-    "/images/2.jpg",
-    "/images/1.jpg",
-    "/images/2.jpg",
-    "/images/1.jpg",
-    "/images/2.jpg",
-  ];
-
   const data = await readSome(params.id);
 
   async function readSome(id: number) {
@@ -62,7 +51,8 @@ export default async function Home({ params }: { params: { id: number } }) {
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}
-        badges={["Ryby a mořské plody", "Bezmléčná dieta"]}
+        badges={data.Vety[0].Stitky}
+        image={card.Obrazek}
       />
       <Informations
         title={card.Nazev}
@@ -99,7 +89,7 @@ export default async function Home({ params }: { params: { id: number } }) {
         }}
       />
 
-      <Galerie images={images} />
+      <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} />
 
       <VolitelnyObsah
         className="bg-white"
@@ -107,13 +97,15 @@ export default async function Home({ params }: { params: { id: number } }) {
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         img="/images/food.jpeg"
       />
-      <Partner
-        jmeno="Jméno partnera"
-        heslo="Heslo partnera, nebo krátký popis jejich služeb"
-        img="/images/food.jpeg"
-        color="default"
-        hasButton
-      />
+      {card.Autor !== "" && (
+        <Partner
+          jmeno={card.Autor}
+          heslo="Heslo partnera, nebo krátký popis jejich služeb"
+          img="/images/food.jpeg"
+          color="default"
+          hasButton
+        />
+      )}
     </div>
   );
 }

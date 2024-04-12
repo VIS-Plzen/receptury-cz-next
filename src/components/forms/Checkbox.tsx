@@ -19,7 +19,6 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
         onChange={(e) =>
           !props.disabled && onChange && onChange(e.target.checked)
         }
-        disabled
         {...props}
         className={cn(
           "peer flex-none cursor-pointer appearance-none",

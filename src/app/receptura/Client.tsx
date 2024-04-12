@@ -5,7 +5,7 @@ import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const icons: {
   name:
@@ -213,23 +213,48 @@ export function Hero({
   title,
   jmeno,
   badges,
+  image,
 }: {
   logo?: string;
   title: string;
   jmeno: string;
   badges: string[];
+  image?: string;
 }) {
+  const [isValidImage, setIsValidImage] = useState(false);
+
+  useEffect(() => {
+    if (!image) return;
+    const checkImage = async () => {
+      try {
+        const response = await fetch(image);
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.startsWith("image")) {
+          setIsValidImage(false);
+        }
+      } catch (error) {
+        setIsValidImage(false);
+        console.error("Error checking image:", error);
+      }
+    };
+
+    checkImage();
+  }, [image]);
+
   return (
     <Container>
       <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
         <div className="relative flex items-center justify-center bg-primary-300/30 md:order-2">
-          {/* <Image
-            src="/images/food.jpeg"
-            alt=""
-            className="w-full bg-gray-300 object-cover"
-            fill
-          /> */}
-          <MealSymbol size={48} className="scale-150" />
+          {isValidImage ? (
+            <Image
+              src="/images/food.jpeg"
+              alt=""
+              className="w-full bg-gray-300 object-cover"
+              fill
+            />
+          ) : (
+            <MealSymbol size={48} className="scale-150" />
+          )}
         </div>
         <div className="flex flex-col  gap-y-6 p-5 md:px-0 md:py-14">
           <div className="flex gap-x-2 md:mt-auto md:px-10">

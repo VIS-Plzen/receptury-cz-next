@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Inspirace from "./Inspirace";
 import Receptury from "./Receptury";
 import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
+
+export const metadata: Metadata = {
+  title: "Stránka | Receptury",
+  description: "Desc",
+};
 
 export default async function Home() {
   let data = await readSome();

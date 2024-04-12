@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/utils/cn";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -17,6 +15,7 @@ type Props = {
         badges: string[];
         img?: string;
       };
+      Stitky: string[];
     }[];
   };
   gridView?: any;
@@ -56,7 +55,7 @@ function RecipeCardsGrid({
             isLoading={isLoading}
             label={card.Vlastnosti.Nazev}
             id={card.Vlastnosti.Identita}
-            badges={[]}
+            badges={card.Stitky}
             img="/images/food.jpeg"
           />
         ))}

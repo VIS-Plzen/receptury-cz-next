@@ -1,8 +1,6 @@
 "use client";
-import clsx from "clsx";
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowLeftAltIcon, ArrowRightAltIcon, CancelIcon } from "../icons";
+import { useEffect, useState } from "react";
 import Container from "./Container";
 import Heading from "./Heading";
 
@@ -15,7 +13,7 @@ export default function Galerie({
   miniImages?: number;
   looped?: boolean;
 }) {
-  const [imageOpen, setImageOpen] = useState<false | number>(false);
+  /*   const [imageOpen, setImageOpen] = useState<false | number>(false);
   const imagesLength = useMemo(() => {
     if (!images) return 0;
     return images.length;
@@ -82,9 +80,15 @@ export default function Galerie({
     return () => {
       window.removeEventListener("keydown", keyboardHandler);
     };
-  }, [imageOpen, onArrowClick]);
+  }, [imageOpen, onArrowClick]); */
 
-  if (!images) return null;
+  if (
+    !images ||
+    ((images[0] === "" || images[0] === "test.receptury.adelis.cz/") &&
+      (images[1] === "" || images[1] === "test.receptury.adelis.cz/") &&
+      (images[2] === "" || images[2] === "test.receptury.adelis.cz/"))
+  )
+    return null;
 
   function ClosedImage({
     image,
@@ -95,6 +99,26 @@ export default function Galerie({
     index: number;
     className?: string;
   }) {
+    const [isValidImage, setIsValidImage] = useState(false);
+
+    useEffect(() => {
+      const checkImage = async () => {
+        try {
+          const response = await fetch(image);
+          const contentType = response.headers.get("content-type");
+          if (!contentType || !contentType.startsWith("image")) {
+            setIsValidImage(false);
+          }
+        } catch (error) {
+          setIsValidImage(false);
+          console.error("Error checking image:", error);
+        }
+      };
+
+      checkImage();
+    }, [image]);
+    if (!isValidImage) return null;
+
     return (
       <div
         className="relative aspect-video w-full"
@@ -105,11 +129,12 @@ export default function Galerie({
           src={image}
           fill
           className={`aspect-video rounded-2xl bg-gray-300 object-cover ${className} select-none`}
-        ></Image>
+          onError={(e) => console.log("crash")}
+        />
       </div>
     );
   }
-
+  /* 
   function MainImage({ image }: { image: string }) {
     return (
       <div className="relative h-full w-full overflow-hidden rounded-xl">
@@ -123,9 +148,9 @@ export default function Galerie({
         />
       </div>
     );
-  }
+  }*/
 
-  function MiniImageRow() {
+  /*function MiniImageRow() {
     if (!miniImages || !images || imageOpen === false) return null;
 
     function returnStart() {
@@ -148,7 +173,7 @@ export default function Galerie({
         {images.slice(start, start + miniImages).map((image, index) => (
           <div
             key={"gifmi" + index}
-            /* onClick={() => setImageOpen(start + index)} */
+            onClick={() => setImageOpen(start + index)}
             className="relative h-full w-full"
           >
             <Image
@@ -170,25 +195,25 @@ export default function Galerie({
         ))}
       </div>
     );
-  }
+  } */
 
   return (
     <Container>
       <div className="flex flex-col gap-5">
-        <Heading>Galerie</Heading>
+        <Heading>Další fotky</Heading>
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-5 md:flex-row">
             <ClosedImage image={images[1]} index={0} />
             <ClosedImage image={images[2]} index={1} />
           </div>
 
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+          {/* <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
             {images.slice(2, 6).map((image, index) => (
               <ClosedImage key={"kfici" + index} image={image} index={index} />
             ))}
-          </div>
+          </div> */}
         </div>
-        {imageOpen !== false && (
+        {/* {imageOpen !== false && (
           <div
             className={`fixed inset-0 z-fixed flex gap-y-16 bg-black/90 text-white md:flex-col ${
               fullImageMode && "!p-0"
@@ -228,7 +253,7 @@ export default function Galerie({
               />
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </Container>
   );
