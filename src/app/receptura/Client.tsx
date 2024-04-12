@@ -250,7 +250,7 @@ export function Hero({
               <Badge key={"bmbi" + index}>{badge}</Badge>
             ))}
           </div>
-          <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:gap-x-2 md:px-10 ">
+          <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:mt-20 md:gap-x-2 md:px-10">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -340,7 +340,9 @@ export function Informations({
     return (
       <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
         <Heading size="sm">Postup</Heading>
-        <p>{postup}</p>
+        <p>
+          {postup && postup.replace("&lt;p&gt;", "").replace("&lt;/p&gt;", "")}
+        </p>
       </div>
     );
   }
