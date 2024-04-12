@@ -1,4 +1,3 @@
-import VolitelnyObsah from "@/app/VolitelnyObsah";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Galerie from "@/components/ui/Galery";
@@ -91,12 +90,12 @@ export default async function Home({ params }: { params: { id: number } }) {
 
       <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} />
 
-      <VolitelnyObsah
+      {/* <VolitelnyObsah
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         img="/images/food.jpeg"
-      />
+      /> */}
       {card.Autor !== "" && (
         <Partner
           jmeno={card.Autor}
