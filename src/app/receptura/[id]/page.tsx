@@ -48,7 +48,7 @@ export default async function Home({ params }: { params: { id: number } }) {
   const card = data.Vety[0].Vlastnosti;
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}

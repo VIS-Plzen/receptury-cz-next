@@ -360,7 +360,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed inset-x-0 top-0 z-fixed w-full transition duration-500",
+        "fixed inset-x-0 top-0 z-fixed w-full transition duration-500 print:hidden",
         "border-b-2 border-primary-200",
         isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white",
         !isVisible && "-translate-y-full"

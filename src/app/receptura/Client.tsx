@@ -36,7 +36,7 @@ const icons: {
   {
     name: "print",
     label: "tisk",
-    onClick: () => console.log("tisk"),
+    onClick: () => window.print(),
   },
   {
     name: "archive",
@@ -242,7 +242,7 @@ export function Hero({
   }, [image]);
 
   return (
-    <Container>
+    <Container className="print:hidden">
       <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
         <div className="relative flex items-center justify-center bg-primary-300/30 md:order-2">
           {isValidImage ? (
@@ -324,8 +324,8 @@ export function Informations({
   function Title() {
     return (
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
-        <Heading className="max-w-3xl">{title}</Heading>
-        <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 md:max-w-md md:gap-x-5">
+        <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
+        <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
           {icons.map((icon, index) => (
             <div
               key={"kfii" + index}
@@ -410,7 +410,7 @@ export function Informations({
   }
   function Terapeut() {
     return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
         <Heading size="sm">Nutriční terapeut</Heading>
         <p>{terapeut.text}</p>
         <div className="flex flex-row gap-1.5">
@@ -424,7 +424,7 @@ export function Informations({
   return (
     <Container className="flex flex-col gap-5 sm:gap-7">
       <Title />
-      <div className="flex flex-col gap-5 sm:gap-7 md:flex-row">
+      <div className="flex flex-col gap-5 print:flex-row sm:gap-7 md:flex-row">
         <div className="flex flex-col gap-5 sm:gap-7">
           <Hmotnost />
           <Kalkulacka kalkulacka={kalkulacka} />
