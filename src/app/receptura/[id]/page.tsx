@@ -43,6 +43,8 @@ export default async function Home({ params }: { params: { id: number } }) {
   if (!data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
+
+  if (!data.Vety[0]) return null;
   const card = data.Vety[0].Vlastnosti;
 
   return (

@@ -536,10 +536,27 @@ export default function Receptury({
   }
 
   async function getData(page: number) {
+    //Filtrování
+    let podminka = "";
+
+    //Skupina podskupina
     const group = groupsData.find((item: any) => item.value === selectedGroup);
-    const subGroup = group?.options.find(
-      (item: any) => item.value === selectedSubgroup
-    );
+    if (group && group.value !== "nezadano") {
+      podminka += `DruhSkupina='${group.title}'`;
+
+      const subGroup = group.options.find(
+        (item: any) => item.value === selectedSubgroup
+      );
+      if (subGroup) {
+        podminka += ` AND DruhPodskupina='${subGroup.title}'`;
+      }
+    }
+
+    //Comboboxy
+    if (comboBoxValues[0].value !== "") {
+      if (podminka !== "") podminka += " AND ";
+      podminka += `Nazev LIKE '%${comboBoxValues[0].value}%'`;
+    }
 
     const result = await (
       await fetch("/api", {
@@ -550,12 +567,7 @@ export default function Receptury({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            Podminka:
-              group?.value === "nezadano"
-                ? ""
-                : `Druh='${group?.title}${
-                    subGroup ? " " + subGroup?.title : ""
-                  }'`,
+            Podminka: podminka,
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: ["Nazev", "Identita", "Obrazek"],
