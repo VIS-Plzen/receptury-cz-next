@@ -12,12 +12,12 @@ type RecipeCardProps = {
   label: string;
   id?: string;
   img?: any;
-  badges: string[];
+  badges: (string | false)[];
   className?: string;
 };
 
 type BadgesProps = {
-  badges: string[];
+  badges: (string | false)[];
 };
 
 //function to render action buttons on card
@@ -51,13 +51,18 @@ function ActionButtons({ isGridView }: any) {
 
 // function to redner badges on card
 function BadgeRenderer({ badges }: BadgesProps) {
+  let badgeCounter = 0;
   return (
     <ul className="flex flex-wrap justify-start gap-1">
-      {badges.map((badge, index) => (
-        <li key={index}>
-          <Badge className="md:px-2 md:py-0.5 md:text-xs">{badge}</Badge>
-        </li>
-      ))}
+      {badges.map((badge, index) => {
+        if (!badge || badgeCounter >= 4) return;
+        badgeCounter++;
+        return (
+          <li key={index}>
+            <Badge className="md:px-2 md:py-0.5 md:text-xs">{badge}</Badge>
+          </li>
+        );
+      })}
     </ul>
   );
 }

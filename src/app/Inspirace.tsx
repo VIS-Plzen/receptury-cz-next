@@ -114,7 +114,17 @@ export default function Inspirace({
             Operace: "Read",
             Podminka: podminka,
             Limit: 10,
-            Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+            Vlastnosti: [
+              "Nazev",
+              "Identita",
+              "Obrazek",
+              "DruhSkupina",
+              "DruhPodskupina",
+              "Dieta1",
+              "Dieta2",
+              "Dieta3",
+              "TepelnaUprava",
+            ],
           },
         }),
       })
@@ -196,7 +206,14 @@ export default function Inspirace({
                   isLoading={loading}
                   id={card.Vlastnosti.Identita}
                   label={card.Vlastnosti.Nazev}
-                  badges={card.Stitky}
+                  badges={[
+                    card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                    card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                    card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                    card.Vlastnosti.TepelnaUprava,
+                    card.Vlastnosti.DruhSkupina,
+                    card.Vlastnosti.DruhPodskupina,
+                  ]}
                   forceGrid
                 />
               </SwiperSlide>

@@ -52,7 +52,14 @@ export default async function Home({ params }: { params: { id: number } }) {
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}
-        badges={data.Vety[0].Stitky}
+        badges={[
+          card.Dieta1 === "Ano" && "Bezlepková",
+          card.Dieta2 === "Ano" && "Bezmléčná",
+          card.Dieta3 === "Ano" && "Šetřící",
+          card.TepelnaUprava,
+          card.DruhSkupina,
+          card.DruhPodskupina,
+        ]}
         image={card.Obrazek}
       />
       <Informations

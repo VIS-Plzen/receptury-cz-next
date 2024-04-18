@@ -655,8 +655,6 @@ export default function Receptury({
       }
     });
 
-    console.log(podminka);
-
     const result = await (
       await fetch("/api", {
         method: "POST",
@@ -669,7 +667,17 @@ export default function Receptury({
             Podminka: podminka,
             Limit: 15,
             Offset: (page - 1) * 15,
-            Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+            Vlastnosti: [
+              "Nazev",
+              "Identita",
+              "Obrazek",
+              "DruhSkupina",
+              "DruhPodskupina",
+              "Dieta1",
+              "Dieta2",
+              "Dieta3",
+              "TepelnaUprava",
+            ],
           },
         }),
       })
@@ -682,7 +690,7 @@ export default function Receptury({
     <Container className={`py-6 ${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
-        data={data ? data.Vety : null}
+        pocet={data && data.CelkovyPocet}
         gridView={initialLoad === true ? undefined : gridView}
         setGridView={(grid: boolean) => {
           setGridView(grid);
@@ -758,7 +766,7 @@ export default function Receptury({
       </div>
       <Paginator
         currentPage={pageState}
-        totalPages={25}
+        totalPages={data ? Math.ceil(data.CelkovyPocet / 15) : 0}
         changePage={(page) => {
           setPageState(page);
           getDataAndSetQuery(page);
@@ -804,7 +812,7 @@ function Comboboxes({
 
 function TopRow({
   title,
-  data,
+  pocet,
   comboBoxValues,
   gridView,
   setGridView,
@@ -816,7 +824,7 @@ function TopRow({
   initialLoad,
 }: {
   title: string;
-  data: any;
+  pocet: number;
   comboBoxValues: {
     title: string;
     name: string;
@@ -839,8 +847,8 @@ function TopRow({
         <p className="pt-3 font-bold text-black">
           {initialLoad
             ? " Vyhledávám receptury"
-            : data
-              ? `Našli jsme pro vás ${data.length} receptur`
+            : pocet !== 0
+              ? `Našli jsme pro vás ${pocet} receptur`
               : "Nenašli jsme žádná data"}
         </p>
       </div>

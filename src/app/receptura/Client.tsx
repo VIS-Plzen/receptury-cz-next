@@ -222,6 +222,7 @@ export function Hero({
   image?: string;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
+  let badgeCounter = 0;
 
   useEffect(() => {
     if (!image) return;
@@ -271,9 +272,11 @@ export function Hero({
             </Heading>
           </div>
           <div className="flex gap-x-1.5 md:px-10">
-            {badges.map((badge, index) => (
-              <Badge key={"bmbi" + index}>{badge}</Badge>
-            ))}
+            {badges.map((badge, index) => {
+              if (!badge || badgeCounter >= 4) return null;
+              badgeCounter++;
+              return <Badge key={"bmbi" + index}>{badge}</Badge>;
+            })}
           </div>
           <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:mt-20 md:gap-x-2 md:px-10">
             {icons.map((icon, index) => (
