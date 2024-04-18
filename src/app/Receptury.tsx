@@ -764,14 +764,16 @@ export default function Receptury({
           />
         )}
       </div>
-      <Paginator
-        currentPage={pageState}
-        totalPages={data ? Math.ceil(data.CelkovyPocet / 15) : 0}
-        changePage={(page) => {
-          setPageState(page);
-          getDataAndSetQuery(page);
-        }}
-      />
+      {data.CelkovyPocet > 15 && (
+        <Paginator
+          currentPage={pageState}
+          totalPages={Math.ceil(data.CelkovyPocet / 15)}
+          changePage={(page) => {
+            setPageState(page);
+            getDataAndSetQuery(page);
+          }}
+        />
+      )}
     </Container>
   );
 }
