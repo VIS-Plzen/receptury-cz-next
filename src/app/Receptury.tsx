@@ -298,16 +298,19 @@ export default function Receptury({
     let holder: {
       title: string;
       name: string;
+      backend: string;
       options: {
         title: string;
         name: string;
         checked: boolean;
         disabled?: boolean;
+        backend?: string;
       }[];
     }[] = [
       {
         title: "Obecné",
         name: "obecne",
+        backend: "Obecne",
         options: [
           { title: "Moje oblíbené", name: "moje", checked: false },
           { title: "Nutričně ověřeno", name: "nutricni", checked: false },
@@ -322,30 +325,88 @@ export default function Receptury({
       {
         title: "Speciální strava",
         name: "special",
+        backend: "Dieta",
         options: [
-          { title: "Bezlepková", name: "bezlepkova", checked: false },
-          { title: "Bezmléčná", name: "bezmlecna", checked: false },
-          { title: "Šetřící", name: "setrici", checked: false },
+          {
+            title: "Bezlepková",
+            name: "bezlepkova",
+            backend: "Dieta1",
+            checked: false,
+          },
+          {
+            title: "Bezmléčná",
+            name: "bezmlecna",
+            backend: "Dieta2",
+            checked: false,
+          },
+          {
+            title: "Šetřící",
+            name: "setrici",
+            backend: "Dieta3",
+            checked: false,
+          },
         ],
       },
       {
         title: "Způsob přípravy",
         name: "priprava",
+        backend: "TepelnaUprava",
         options: [
-          { title: "Vařené", name: "varene", checked: false },
-          { title: "Dušené", name: "dusene", checked: false },
-          { title: "Pečené", name: "pecene", checked: false },
-          { title: "Zapečené", name: "zapecene", checked: false },
-          { title: "Smažené", name: "smazene", checked: false },
-          { title: "Ostatní", name: "ostatni", checked: false },
+          {
+            title: "Vařené",
+            name: "varene",
+            backend: "Vařené",
+            checked: false,
+          },
+          {
+            title: "Dušené",
+            name: "dusene",
+            backend: "Dušené",
+            checked: false,
+          },
+          {
+            title: "Pečené",
+            name: "pecene",
+            backend: "Pečené",
+            checked: false,
+          },
+          {
+            title: "Zapečené",
+            name: "zapecene",
+            backend: "Zapečené",
+            checked: false,
+          },
+          {
+            title: "Smažené",
+            name: "smazene",
+            backend: "Smažené",
+            checked: false,
+          },
+          {
+            title: "Ostatní",
+            name: "ostatni",
+            backend: "Ostatní",
+            checked: false,
+          },
         ],
       },
       {
         title: "Partner",
         name: "partner",
+        backend: "Autor",
         options: [
-          { title: "Bidfood", name: "bidfood", checked: false },
-          { title: "Bonduelle", name: "bonduelle", checked: false },
+          {
+            title: "Bidfood",
+            name: "bidfood",
+            backend: "Bidfood",
+            checked: false,
+          },
+          {
+            title: "Bonduelle",
+            name: "bonduelle",
+            backend: "Bonduelle",
+            checked: false,
+          },
         ],
       },
     ];
@@ -557,6 +618,32 @@ export default function Receptury({
       if (podminka !== "") podminka += " AND ";
       podminka += `Nazev LIKE '%${comboBoxValues[0].value}%'`;
     }
+
+    //Boxiky
+    sideBarValues.forEach((box) => {
+      let boxPodminka = "";
+      box.options.forEach((option) => {
+        if (option.checked) {
+          switch (box.name) {
+            case "partner":
+            case "priprava":
+              if (boxPodminka !== "") boxPodminka += " OR ";
+              boxPodminka += `${box.backend}='${option.backend}'`;
+              break;
+            case "special":
+              if (boxPodminka !== "") boxPodminka += " AND ";
+              boxPodminka += `${option.backend}='Ano'`;
+          }
+        }
+      });
+      if (boxPodminka !== "") {
+        if (podminka !== "") podminka += ` AND `;
+        podminka += `(${boxPodminka})`;
+        boxPodminka = "";
+      }
+    });
+
+    console.log(podminka);
 
     const result = await (
       await fetch("/api", {
