@@ -27,6 +27,7 @@ const groupsData = [
     value: "bezmase_sladke",
     title: "Bezmasé sladké pokrmy",
     options: [
+      { value: "vse", title: "Vše" },
       { value: "pecene", title: "Pečené a smažené" },
       { value: "varene", title: "Vařené" },
       { value: "kase", title: "Kaše" },
@@ -36,6 +37,7 @@ const groupsData = [
     value: "bezmase_slane",
     title: "Bezmasé slané pokrmy",
     options: [
+      { value: "vse", title: "Vše" },
       {
         value: "zeleninove",
         title: "Zeleninové",
@@ -59,6 +61,7 @@ const groupsData = [
     value: "doplnky",
     title: "Doplňky",
     options: [
+      { value: "vse", title: "Vše" },
       {
         value: "salaty_zeleninove",
         title: "Saláty zeleninové",
@@ -97,6 +100,7 @@ const groupsData = [
     value: "masite",
     title: "Masité pokrmy",
     options: [
+      { value: "vse", title: "Vše" },
       { value: "veprove", title: "Vepřové" },
       { value: "kureci", title: "Kuřecí" },
       { value: "kruti", title: "Krůtí" },
@@ -116,13 +120,18 @@ const groupsData = [
   {
     value: "napoje",
     title: "Nápoje",
-    options: [],
+    options: [{ value: "vse", title: "Vše" }],
   },
-  { value: "nezadano", title: "Nezadáno", options: [] },
+  {
+    value: "nezadano",
+    title: "Nezadáno",
+    options: [{ value: "vse", title: "Vše" }],
+  },
   {
     value: "polevky",
     title: "Polévky",
     options: [
+      { value: "vse", title: "Vše" },
       {
         value: "zeleninove",
         title: "Zeleninové",
@@ -152,6 +161,7 @@ const groupsData = [
     value: "prilohy_a_prikrmy",
     title: "Přílohy a příkrmy",
     options: [
+      { value: "vse", title: "Vše" },
       { value: "bramborove", title: "Bramborové" },
       { value: "testovinove", title: "Těstovinové" },
       { value: "obilninove", title: "Obilninové" },
@@ -166,12 +176,13 @@ const groupsData = [
   {
     value: "rybi_pokrmy",
     title: "Rybí pokrmy",
-    options: [],
+    options: [{ value: "vse", title: "Vše" }],
   },
   {
     value: "svaciny",
     title: "Svačiny",
     options: [
+      { value: "vse", title: "Vše" },
       {
         value: "pomazanky_syrove_a_tvarohove",
         title: "Pomazánky sýrové a tvarohové",
@@ -225,7 +236,7 @@ const groupsData = [
   {
     value: "zavarky",
     title: "Zavářky",
-    options: [],
+    options: [{ value: "vse", title: "Vše" }],
   },
 ];
 
@@ -550,7 +561,8 @@ export default function Receptury({
     if (selectedGroup !== "nezadano") {
       if (query === "") query += "skupina=" + selectedGroup;
       else query += "&skupina=" + selectedGroup;
-      if (selectedSubgroup) query += "&podskupina=" + selectedSubgroup;
+      if (selectedSubgroup && selectedSubgroup !== "vse")
+        query += "&podskupina=" + selectedSubgroup;
     }
 
     let hasBox = false;
@@ -608,7 +620,7 @@ export default function Receptury({
       const subGroup = group.options.find(
         (item: any) => item.value === selectedSubgroup
       );
-      if (subGroup) {
+      if (subGroup && subGroup.value !== "vse") {
         podminka += ` AND DruhPodskupina='${subGroup.title}'`;
       }
     }
@@ -623,7 +635,7 @@ export default function Receptury({
     sideBarValues.forEach((box) => {
       let boxPodminka = "";
       box.options.forEach((option) => {
-        if (option.checked) {
+        if (option.checked && option.backend) {
           switch (box.name) {
             case "partner":
             case "priprava":
@@ -1098,6 +1110,10 @@ function SideBar({
                 setSelected={(item: any) => {
                   setSelectedSubgroup(item);
                 }}
+                disabled={
+                  groupsData.find((item: any) => item.value === selectedGroup)
+                    ?.options?.length <= 1
+                }
               />
             </div>
             {sideBarValues.map(
