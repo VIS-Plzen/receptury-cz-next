@@ -106,16 +106,12 @@ function Form() {
   async function getUserInfo() {
     const token = cookies.get("token");
     if (!token) return;
-    const res = await fetch(
-      "https://jidelny.cz/wp-json/receptury/v1/user/profile",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: token,
-        }),
-      }
-    );
+    const res = await fetch("/api/userInfo", {
+      method: "POST",
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
     setHasData(true);
     const data = await res.json();
     if (data.firstName) {
@@ -124,6 +120,25 @@ function Form() {
         (key) =>
           formik.getFieldProps("key") && formik.setFieldValue(key, data[key])
       );
+    }
+  }
+
+  async function saveUserInfo(data: any) {
+    const token = cookies.get("token");
+    if (!token) return;
+
+    data.token = token;
+
+    const res = await (
+      await fetch("/api/editInfo", {
+        method: "POST",
+        body: JSON.stringify({ body: data }),
+      })
+    ).json();
+
+    if (res.success) {
+      delete data.token;
+      localStorage.setItem("userInfo", JSON.stringify(data));
     }
   }
   const formValidationSchema: any = z.object({
@@ -163,7 +178,7 @@ function Form() {
       })
       .min(8, "IČ musí mít přesně 8 znaků")
       .max(8, "IČ musí mít přesně 8 znaků")
-      .refine((schema: any) => schema.invoiceIsCompany),
+      .optional(),
     invoiceCompanyVatId: z
       .string({
         required_error: "Vyplňte prosím DIČ",
@@ -171,6 +186,14 @@ function Form() {
       })
       .min(10, "DIČ musí mít alespoň 10 znaků")
       .max(12, "DIČ může mít maximálně 12 znaků")
+      .optional(),
+    invoiceCompanyName: z
+      .string({
+        required_error: "Vyplňte prosím název firmy",
+        invalid_type_error: "Neplatný typ",
+      })
+      .min(2, "Název firmy musí mít alespoň 2 znaky")
+      .max(50, "Název firmy může mít maximálně 50 znaků")
       .optional(),
     invoiceStreet: z
       .string({
@@ -201,21 +224,24 @@ function Form() {
         invalid_type_error: "Neplatný typ",
       })
       .min(2, "Ulice a číslo popisné musí mít alespoň 2 znaky")
-      .max(50, "Ulice a číslo popisné může mít maximálně 50 znaků"),
+      .max(50, "Ulice a číslo popisné může mít maximálně 50 znaků")
+      .optional(),
     deliveryCity: z
       .string({
         required_error: "Vyplňte prosím město",
         invalid_type_error: "Neplatný typ",
       })
       .min(2, "Město musí mít alespoň 2 znaky")
-      .max(50, "Město může mít maximálně 50 znaků"),
+      .max(50, "Město může mít maximálně 50 znaků")
+      .optional(),
     deliveryZip: z
       .string({
         required_error: "Vyplňte prosím PSČ",
         invalid_type_error: "Neplatný typ",
       })
       .min(5, "PSČ musí mít alespoň 5 znaků")
-      .max(6, "PSČ může mít maximálně 6 znaků"),
+      .max(6, "PSČ může mít maximálně 6 znaků")
+      .optional(),
     poznamka: z
       .string({
         invalid_type_error: "Neplatný typ",
@@ -245,11 +271,10 @@ function Form() {
       deliveryCity: info ? info.deliveryCity : "",
       deliveryZip: info ? info.deliveryZip : "",
       //Poznámka?
-      poznamka: info ? info.invoiceStreet : "",
+      poznamka: /* info ? info.invoiceStreet : */ "",
     },
     onSubmit: (values, actions) => {
-      console.log("tu");
-      console.log(values);
+      saveUserInfo(values);
       actions.setSubmitting(false);
     },
     validationSchema: toFormikValidationSchema(formValidationSchema),

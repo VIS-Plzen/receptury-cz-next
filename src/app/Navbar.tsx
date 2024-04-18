@@ -120,7 +120,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
 
   if (!token)
     return (
-      <ul className="hidden lg:flex">
+      <ul className="hidden gap-x-4 lg:flex">
         <li>
           <ActiveNavLink
             href={"/prihlaseni"}
@@ -129,6 +129,8 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
           >
             Přihlásit se
           </ActiveNavLink>
+        </li>
+        <li>
           <ActiveNavLink
             href={"/registrace"}
             className="text-sm font-semibold 2xl:text-base"

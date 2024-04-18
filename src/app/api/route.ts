@@ -12,6 +12,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { Sid, Funkce, Parametry } = await request.json();
+
   try {
     const res = await fetch(
       "https://test.receptury.adelis.cz/APIFrontend.aspx",
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
         }),
       }
     );
+
     const data = await res.json();
     if (data.Result) {
       data.Result.Vety = data.Vety;
