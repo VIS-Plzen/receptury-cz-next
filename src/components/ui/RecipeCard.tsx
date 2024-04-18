@@ -55,7 +55,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
   return (
     <ul className="flex flex-wrap justify-start gap-1">
       {badges.map((badge, index) => {
-        if (!badge || badgeCounter >= 4) return;
+        if (!badge || badgeCounter >= 4) return null;
         badgeCounter++;
         return (
           <li key={index}>
