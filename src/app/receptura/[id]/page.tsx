@@ -17,7 +17,7 @@ export default async function Home({ params }: { params: { id: number } }) {
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
           SID: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          Funkce: "Receptury",
           Parametry: [
             {
               Tabulka: "Receptury",
@@ -30,7 +30,6 @@ export default async function Home({ params }: { params: { id: number } }) {
         }),
       })
     ).json();
-
     if (result.Result) {
       result.Result.Vety = result.Vety;
       return result.Result;
@@ -45,7 +44,8 @@ export default async function Home({ params }: { params: { id: number } }) {
   }
 
   if (!data.Vety[0]) return null;
-  const card = data.Vety[0].Vlastnosti;
+  const curr = data.Vety[0];
+  const card = curr.Vlastnosti;
 
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
@@ -80,7 +80,7 @@ export default async function Home({ params }: { params: { id: number } }) {
         }}
         postup={card.TechnologickyPostup}
         alergeny={{
-          alergeny: ["1", "3", "7", "13"],
+          alergeny: curr.Alergeny,
           text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
         }}
         terapeut={{

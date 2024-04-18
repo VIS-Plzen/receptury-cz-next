@@ -493,13 +493,17 @@ export default function Receptury({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: ["Receptura 1", "Receptura 2"],
+        options: [
+          "Znojemský guláš",
+          "Hovězí pečeně na celeru",
+          "Celerová pomazánka s krabím masem",
+        ],
       },
       {
         title: "Dle suroviny",
         name: "surovina",
         value: "",
-        options: ["Surovina 1", "Surovina 2"],
+        options: ["Cizrna", "Avokádo", "Med", "Rajčata"],
       },
     ];
     // Načte hodnoty z URL
@@ -660,7 +664,7 @@ export default function Receptury({
         method: "POST",
         body: JSON.stringify({
           Sid: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          Funkce: "Receptury",
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
@@ -678,6 +682,7 @@ export default function Receptury({
               "Dieta3",
               "TepelnaUprava",
             ],
+            Surovina: comboBoxValues[1].value,
           },
         }),
       })
@@ -764,7 +769,7 @@ export default function Receptury({
           />
         )}
       </div>
-      {data.CelkovyPocet > 15 && (
+      {data && data.CelkovyPocet > 15 && (
         <Paginator
           currentPage={pageState}
           totalPages={Math.ceil(data.CelkovyPocet / 15)}

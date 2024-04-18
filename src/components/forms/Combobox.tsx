@@ -78,14 +78,7 @@ export default function MyCombobox({
 
   return (
     <div className={`w-full`} style={{ zIndex: z }}>
-      <Combobox
-        name={name}
-        value={selectedValue ? selectedValue : ""}
-        onChange={(e: any) => {
-          setSelectedValue(e);
-          onChange(e);
-        }}
-      >
+      <Combobox name={name} value={selectedValue ? selectedValue : ""}>
         <div
           className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
         >
