@@ -275,7 +275,14 @@ export function Hero({
             {badges.map((badge, index) => {
               if (!badge || badgeCounter >= 4) return null;
               badgeCounter++;
-              return <Badge key={"bmbi" + index}>{badge}</Badge>;
+              return (
+                <Badge
+                  key={"bmbi" + index}
+                  variant={index >= 2 ? "healthy" : undefined}
+                >
+                  {badge}
+                </Badge>
+              );
             })}
           </div>
           <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:mt-20 md:gap-x-2 md:px-10">

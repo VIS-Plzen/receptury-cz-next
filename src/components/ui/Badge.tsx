@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   asChild?: boolean;
-  variant?: "subtle" | "text";
+  variant?: "subtle" | "text" | "healthy";
   className?: string;
 };
 
@@ -14,6 +14,7 @@ const cv = {
   variant: {
     subtle: "py-0.5 sm:py-1 px-1.5 sm:px-2.5 rounded-full bg-primary-300/30",
     text: "",
+    healthy: "text-healthy-600 bg-healthy-200",
   },
 };
 
