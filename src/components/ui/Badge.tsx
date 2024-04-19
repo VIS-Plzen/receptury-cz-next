@@ -14,7 +14,8 @@ const cv = {
   variant: {
     subtle: "py-0.5 sm:py-1 px-1.5 sm:px-2.5 rounded-full bg-primary-300/30",
     text: "",
-    healthy: "text-healthy-600 bg-healthy-200",
+    healthy:
+      "py-0.5 sm:py-1 px-1.5 sm:px-2.5 rounded-full text-healthy-600 bg-healthy-200",
   },
 };
 

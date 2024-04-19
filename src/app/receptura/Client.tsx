@@ -278,7 +278,7 @@ export function Hero({
               return (
                 <Badge
                   key={"bmbi" + index}
-                  variant={index >= 2 ? "healthy" : undefined}
+                  variant={index <= 2 ? "healthy" : undefined}
                 >
                   {badge}
                 </Badge>
