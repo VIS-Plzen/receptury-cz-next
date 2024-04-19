@@ -401,7 +401,7 @@ export default function Components() {
             <TabsList>
               <TabsTrigger value="recommended">Doporučené pro vás</TabsTrigger>
               <TabsTrigger value="favorites">Oblíbené</TabsTrigger>
-              <TabsTrigger value="new">Nové recepty</TabsTrigger>
+              <TabsTrigger value="new">Nové receptury</TabsTrigger>
             </TabsList>
             <TabsContent value="recommended">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
@@ -428,7 +428,7 @@ export default function Components() {
                 Oblíbené
               </TabsTrigger>
               <TabsTrigger value="new" className="w-full">
-                Nové recepty
+                Nové receptury
               </TabsTrigger>
             </TabsList>
             <TabsContent value="recommended">

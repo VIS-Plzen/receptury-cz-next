@@ -35,7 +35,7 @@ export default function Inspirace({
     },
     {
       value: "nove",
-      title: "Nové recepty",
+      title: "Nové receptury",
     },
   ];
 

@@ -263,7 +263,7 @@ export function Hero({
               Logo
             </span>
             <span className="line-clamp-2">
-              Tento recept pro vás připravila společnost {jmeno}
+              Tuto recepturu pro vás připravila společnost {jmeno}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">

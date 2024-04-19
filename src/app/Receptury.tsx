@@ -327,8 +327,8 @@ export default function Receptury({
           { title: "Nutričně ověřeno", name: "nutricni", checked: false },
           { title: "Stáhnout do skladu", name: "sklad", checked: false },
           {
-            title: "Videorecepty",
-            name: "videorecepty",
+            title: "Videoreceptury",
+            name: "videoreceptury",
             checked: false,
           },
         ],
@@ -758,7 +758,7 @@ export default function Receptury({
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"
-              : "Nepodařilo se najít žádné recepty na základě vyplněných filtrů"}
+              : "Nepodařilo se najít žádné receptury na základě vyplněných filtrů"}
           </p>
         ) : (
           <RecipeCardsGrid

@@ -40,7 +40,7 @@ type DropdownItem = {
 
 const dropdownData: DropdownItem[] = [
   { label: "Osobní informace", href: "/uzivatel?obsah=informace" },
-  { label: "Oblíbené recepty", href: "/uzivatel?obsah=recepty" },
+  { label: "Oblíbené receptury", href: "/uzivatel?obsah=receptury" },
 ];
 
 // Hihlights link with href matching current url

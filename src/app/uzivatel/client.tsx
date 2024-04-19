@@ -20,10 +20,12 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import Receptury from "../Receptury";
 
 export default function ContentSelector() {
-  const [content, setContent] = useState<"informace" | "recepty" | null>(null);
-  const contents: { key: "informace" | "recepty"; title: string }[] = [
+  const [content, setContent] = useState<"informace" | "receptury" | null>(
+    null
+  );
+  const contents: { key: "informace" | "receptury"; title: string }[] = [
     { key: "informace", title: "Osobní informace" },
-    { key: "recepty", title: "Oblíbené recepty" },
+    { key: "receptury", title: "Oblíbené receptury" },
   ];
   const paramsHook = useSearchParams();
   const urlParams = decodeURIComponent(
@@ -32,17 +34,17 @@ export default function ContentSelector() {
   const router = useRouter();
 
   useEffect(() => {
-    const regexMatch = urlParams.match(/obsah=(informace|recepty)/);
+    const regexMatch = urlParams.match(/obsah=(informace|receptury)/);
     if (!regexMatch) return setContent("informace");
     let cont = regexMatch[1];
-    if (cont !== "informace" && cont !== "recepty")
+    if (cont !== "informace" && cont !== "receptury")
       return setContent("informace");
     setContent(cont);
   }, []);
 
-  function updateContent(cont: "informace" | "recepty") {
+  function updateContent(cont: "informace" | "receptury") {
     let query = urlParams;
-    const regexMatch = query.match(/obsah=(informace|recepty)/);
+    const regexMatch = query.match(/obsah=(informace|receptury)/);
     if (regexMatch) {
       query = query.replace(regexMatch[1], cont);
     } else {
@@ -76,7 +78,7 @@ export default function ContentSelector() {
         </div>
       </Container>
       {content === "informace" && <Form />}
-      {content === "recepty" && (
+      {content === "receptury" && (
         <Receptury
           title="Oblíbené"
           urlPreQuery={`obsah=${content}`}
