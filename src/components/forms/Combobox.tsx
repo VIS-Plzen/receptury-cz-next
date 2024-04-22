@@ -155,6 +155,7 @@ export default function MyCombobox({
                       }`
                     }
                     value={value}
+                    onClick={() => onChange(value)}
                   >
                     {({ selected, active }) => (
                       <>
@@ -162,11 +163,10 @@ export default function MyCombobox({
                           className={`block truncate ${
                             selected ? "font-medium" : "font-normal"
                           }`}
-                          onClick={() => onChange(value)}
                         >
                           {value}
                         </button>
-                        {selected ? (
+                        {selected && (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                               active ? "text-white" : "text-teal-600"
@@ -174,7 +174,7 @@ export default function MyCombobox({
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </span>
-                        ) : null}
+                        )}
                       </>
                     )}
                   </Combobox.Option>

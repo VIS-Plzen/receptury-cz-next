@@ -682,7 +682,7 @@ export default function Receptury({
               "Dieta3",
               "TepelnaUprava",
             ],
-            Surovina: comboBoxValues[1].value,
+            Surovina: comboBoxValues[1].value.toLowerCase(),
           },
         }),
       })
