@@ -49,6 +49,7 @@ export default async function Home() {
               Tabulka: "Receptury",
               Operace: "Read",
               Limit: 10,
+              OrderBy: "DatumAktualizace",
               Vlastnosti: [
                 "Nazev",
                 "Identita",

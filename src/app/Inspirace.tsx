@@ -30,12 +30,12 @@ export default function Inspirace({
 
   const TabsData = [
     {
-      value: "oblibene",
-      title: "Oblíbené",
-    },
-    {
       value: "nove",
       title: "Nové receptury",
+    },
+    {
+      value: "oblibene",
+      title: "Oblíbené",
     },
   ];
 
