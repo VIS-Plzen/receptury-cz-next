@@ -451,3 +451,8 @@ export function Informations({
     </Container>
   );
 }
+
+export function LogMe({ msg }: { msg: any }) {
+  console.log(msg);
+  return null;
+}

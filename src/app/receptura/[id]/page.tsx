@@ -3,7 +3,7 @@ import Container from "@/components/ui/Container";
 import Galerie from "@/components/ui/Galery";
 import Heading from "@/components/ui/Heading";
 import Image from "next/image";
-import { Hero, Informations } from "../Client";
+import { Hero, Informations, LogMe } from "../Client";
 
 export default async function Home({ params }: { params: { id: number } }) {
   const data = await readSome(params.id);
@@ -44,7 +44,7 @@ export default async function Home({ params }: { params: { id: number } }) {
   }
 
   console.log(data);
-  if (!data.Vety[0]) return null;
+  if (!data.Vety[0]) return <LogMe msg={data} />;
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
   console.log(curr);
