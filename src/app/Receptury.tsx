@@ -323,7 +323,12 @@ export default function Receptury({
         name: "obecne",
         backend: "Obecne",
         options: [
-          { title: "Moje oblíbené", name: "moje", checked: false },
+          {
+            title: "Moje oblíbené",
+            name: "moje",
+            backend: "Oblíbené",
+            checked: false,
+          },
           { title: "Nutričně ověřeno", name: "nutricni", checked: false },
           { title: "Stáhnout do skladu", name: "sklad", checked: false },
           {
@@ -615,6 +620,7 @@ export default function Receptury({
   async function getData(page: number) {
     //Filtrování
     let podminka = "";
+    let stitek = "";
 
     //Skupina podskupina
     const group = groupsData.find((item: any) => item.value === selectedGroup);
@@ -639,6 +645,7 @@ export default function Receptury({
     sideBarValues.forEach((box) => {
       let boxPodminka = "";
       box.options.forEach((option) => {
+        console.log(box.name);
         if (option.checked && option.backend) {
           switch (box.name) {
             case "partner":
@@ -649,6 +656,11 @@ export default function Receptury({
             case "special":
               if (boxPodminka !== "") boxPodminka += " AND ";
               boxPodminka += `${option.backend}='Ano'`;
+              break;
+            case "obecne":
+              if (option.name === "moje") {
+                stitek = option.backend;
+              }
           }
         }
       });
@@ -682,6 +694,7 @@ export default function Receptury({
               "Dieta3",
               "TepelnaUprava",
             ],
+            Stitek: stitek,
             Surovina: comboBoxValues[1].value.toLowerCase(),
           },
         }),

@@ -43,7 +43,7 @@ export default async function Home() {
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
           SID: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          Funkce: "Receptury",
           Parametry: [
             {
               Tabulka: "Receptury",

@@ -93,12 +93,6 @@ export default function Inspirace({
 
   async function getNewData(newSelected: string) {
     setLoading(true);
-    const podminka =
-      newSelected === "doporucene"
-        ? ""
-        : newSelected === "oblibene"
-          ? "Druh='Bezmasé sladké pokrmy Kaše'"
-          : "Druh='Polévky Luštěninové'";
     const result = await (
       await fetch("/api", {
         method: "POST",
@@ -108,8 +102,9 @@ export default function Inspirace({
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            Podminka: podminka,
+            Stitek: newSelected === "oblibene" ? "Oblíbené" : "",
             Limit: 10,
+            OrderBy: newSelected === "nove" ? "DatumAktualizace" : "",
             Vlastnosti: [
               "Nazev",
               "Identita",
@@ -195,25 +190,31 @@ export default function Inspirace({
             pagination={{ clickable: false }}
             className=" [--swiper-pagination-color:theme(colors.primary.600)]"
           >
-            {data.map((card: any, index: number) => (
-              <SwiperSlide key={index} className="py-10">
-                <RecipeCard
-                  key={index}
-                  isLoading={loading}
-                  id={card.Vlastnosti.Identita}
-                  label={card.Vlastnosti.Nazev}
-                  badges={[
-                    card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
-                    card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
-                    card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
-                    card.Vlastnosti.TepelnaUprava,
-                    card.Vlastnosti.DruhSkupina,
-                    card.Vlastnosti.DruhPodskupina,
-                  ]}
-                  forceGrid
-                />
-              </SwiperSlide>
-            ))}
+            {data && data.length > 0 ? (
+              data.map((card: any, index: number) => (
+                <SwiperSlide key={index} className="py-10">
+                  <RecipeCard
+                    key={index}
+                    isLoading={loading}
+                    id={card.Vlastnosti.Identita}
+                    label={card.Vlastnosti.Nazev}
+                    badges={[
+                      card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                      card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                      card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                      card.Vlastnosti.TepelnaUprava,
+                      card.Vlastnosti.DruhSkupina,
+                      card.Vlastnosti.DruhPodskupina,
+                    ]}
+                    forceGrid
+                  />
+                </SwiperSlide>
+              ))
+            ) : (
+              <div className="flex h-[400px] items-center px-10">
+                <p>Data se nepodařilo najít</p>
+              </div>
+            )}
           </Swiper>
         </div>
       </Container>

@@ -46,6 +46,7 @@ export default async function Home({ params }: { params: { id: number } }) {
   if (!data.Vety[0]) return null;
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
+  console.log(curr);
 
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
