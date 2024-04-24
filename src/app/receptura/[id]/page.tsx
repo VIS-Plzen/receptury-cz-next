@@ -43,6 +43,7 @@ export default async function Home({ params }: { params: { id: number } }) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
 
+  console.log(data);
   if (!data.Vety[0]) return null;
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
