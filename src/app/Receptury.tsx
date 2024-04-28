@@ -645,7 +645,6 @@ export default function Receptury({
     sideBarValues.forEach((box) => {
       let boxPodminka = "";
       box.options.forEach((option) => {
-        console.log(box.name);
         if (option.checked && option.backend) {
           switch (box.name) {
             case "partner":

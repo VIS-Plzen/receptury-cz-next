@@ -98,7 +98,7 @@ export default function Inspirace({
         method: "POST",
         body: JSON.stringify({
           Sid: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          Funkce: "Receptury",
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",

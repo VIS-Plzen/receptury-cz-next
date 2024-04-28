@@ -5,10 +5,10 @@ import Heading from "@/components/ui/Heading";
 import Image from "next/image";
 import { Hero, Informations, LogMe } from "../Client";
 
-export default async function Home({ params }: { params: { id: number } }) {
+export default async function Home({ params }: { params: { id: string } }) {
   const data = await readSome(params.id);
 
-  async function readSome(id: number) {
+  async function readSome(id: string) {
     const result = await (
       await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
         method: "POST",
@@ -43,7 +43,7 @@ export default async function Home({ params }: { params: { id: number } }) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
 
-  if (!data.Vety[0]) return <LogMe msg={[data, params.id]} />;
+  if (!data.Vety[0]) return <LogMe msg={data} />;
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
