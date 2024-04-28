@@ -5,45 +5,47 @@ import Heading from "@/components/ui/Heading";
 import Image from "next/image";
 import { Hero, Informations, LogMe } from "../Client";
 
-export default async function Home({ params }: { params: { id: string } }) {
-  const data = await readSome(params.id);
-
-  async function readSome(id: string) {
-    const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          Uzivatel: process.env.BE_USER,
-          Heslo: process.env.BE_PASSWORD,
-          SID: "12345VIS",
-          Funkce: "Receptury",
-          Parametry: [
-            {
-              Tabulka: "Receptury",
-              Operace: "Read",
-              Podminka: `Identita='${id}'`,
-              Vlastnosti: [],
-              Limit: 1,
-            },
-          ],
-        }),
-      })
-    ).json();
-    if (result.Result) {
-      result.Result.Vety = result.Vety;
-      return result.Result;
-    }
-    return {
-      Status: false,
-      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
-    };
+async function readSome(id: string) {
+  const result = await (
+    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        Uzivatel: process.env.BE_USER,
+        Heslo: process.env.BE_PASSWORD,
+        SID: "12345VIS",
+        Funkce: "Receptury",
+        Parametry: [
+          {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Podminka: `Identita='${id}'`,
+            Limit: 1,
+          },
+        ],
+      }),
+    })
+  ).json();
+  if (result.Result) {
+    result.Result.Vety = result.Vety;
+    return result.Result;
   }
+  return {
+    Status: false,
+    Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+  };
+}
+
+export default async function Home({ params }: { params: any }) {
+  const data: any = await readSome(params.id);
+
   if (!data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
 
-  if (!data.Vety[0]) return <LogMe msg={data} />;
+  if (!data.Vety[0]) {
+    return <LogMe msg={[data, params.id]} />;
+  }
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 

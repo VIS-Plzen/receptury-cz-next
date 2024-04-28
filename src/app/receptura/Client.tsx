@@ -15,11 +15,7 @@ const icons: {
     | "favorite-fill"
     | "favorite"
     | "list"
-    | "print"
-    | "rate-review"
-    | "share"
-    | "visibility"
-    | "visibility-off";
+    | "print";
   label: string;
   onClick: () => void;
 }[] = [
@@ -27,11 +23,6 @@ const icons: {
     name: "favorite",
     label: "oblíbené",
     onClick: () => console.log("oblíbené"),
-  },
-  {
-    name: "share",
-    label: "sdílet",
-    onClick: () => console.log("sdílet"),
   },
   {
     name: "print",
@@ -44,6 +35,24 @@ const icons: {
     onClick: () => console.log("MSklad"),
   },
 ];
+
+async function zmenStitek(stitek: "Oblíbené" | "MSklad", hodnota: boolean) {
+  const result = await (
+    await fetch("/api", {
+      method: "POST",
+      body: JSON.stringify({
+        Sid: "12345VIS",
+        Funkce: "Stitek",
+        Parametry: {
+          Tabulka: "Receptury",
+          Operace: "Pridat",
+          Stitek: stitek,
+          Vety: [],
+        },
+      }),
+    })
+  ).json();
+}
 
 export function Kalkulacka({
   kalkulacka,
@@ -290,9 +299,7 @@ export function Hero({
               <div
                 key={"kfhi" + index}
                 className={`${
-                  icon.name === "share" || icon.name === "favorite"
-                    ? "flex"
-                    : "hidden md:flex"
+                  icon.name === "favorite" ? "flex" : "hidden md:flex"
                 }  flex w-min flex-col items-center gap-1 justify-self-center text-center`}
               >
                 <ButtonIcon
