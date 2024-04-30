@@ -7,7 +7,7 @@ import StyledLink from "@/components/ui/StyledLink";
 import Image from "next/image";
 import Katalog from "../Katalog";
 import Receptury from "../Receptury";
-import { Partner } from "../receptura/[id]/page";
+import { Partner } from "../receptura/[id]/Client";
 
 export default function Home() {
   return (
