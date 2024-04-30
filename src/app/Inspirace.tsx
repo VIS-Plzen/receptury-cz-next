@@ -92,6 +92,7 @@ export default function Inspirace({
   }
 
   async function getNewData(newSelected: string) {
+    setSelected(newSelected);
     setLoading(true);
     const result = await (
       await fetch("/api", {
@@ -124,7 +125,6 @@ export default function Inspirace({
       setData(result.Vety);
     }
     setLoading(false);
-    setSelected(newSelected);
   }
 
   return (

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Hero, Informations, LogMe } from "../Client";
 
 async function readSome(id: string) {
+  if (id === "test.receptury.adelis.cz") return null;
   const result = await (
     await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
       method: "POST",
@@ -39,7 +40,7 @@ async function readSome(id: string) {
 export default async function Home({ params }: { params: any }) {
   const data: any = await readSome(params.id);
 
-  if (!data.Status) {
+  if (!data || !data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;
   }
 
@@ -63,6 +64,8 @@ export default async function Home({ params }: { params: any }) {
           card.DruhPodskupina,
         ]}
         image={card.Obrazek}
+        veta={card.Identita}
+        stitky={curr.Stitky}
       />
       <Informations
         title={card.Nazev}
@@ -72,13 +75,9 @@ export default async function Home({ params }: { params: any }) {
           omacky: "70",
         }}
         kalkulacka={{
-          porci: 25,
-          koeficient: "0.8",
-          data: [
-            { vaha: "24", surovina: "Filet ze sumečka" },
-            { vaha: "1.5", surovina: "Podravka přísada do jídel Natura" },
-            { vaha: "0.3", surovina: "Citrón (ks)" },
-          ],
+          porci: 1,
+          koeficient: "1",
+          data: curr.Suroviny,
         }}
         postup={card.TechnologickyPostup}
         alergeny={{
@@ -97,6 +96,8 @@ export default async function Home({ params }: { params: any }) {
           priloha: card.DoporucenaPriloha,
           doplnek: card.DoporucenyDoplnek,
         }}
+        veta={card.Identita}
+        stitky={curr.Stitky}
       />
 
       <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} />
@@ -158,7 +159,7 @@ export function Partner({
   };
 
   return (
-    <Container>
+    <Container className="print:hidden">
       <div
         className={`relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 ${outterDivClasses[color]} md:aspect-[3/1] md:max-h-full md:flex-row md:items-center`}
       >

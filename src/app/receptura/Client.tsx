@@ -17,26 +17,26 @@ const icons: {
     | "list"
     | "print";
   label: string;
-  onClick: () => void;
 }[] = [
   {
     name: "favorite",
     label: "oblíbené",
-    onClick: () => console.log("oblíbené"),
   },
   {
     name: "print",
     label: "tisk",
-    onClick: () => window.print(),
   },
   {
     name: "archive",
     label: "MSklad",
-    onClick: () => console.log("MSklad"),
   },
 ];
 
-async function zmenStitek(stitek: "Oblíbené" | "MSklad", hodnota: boolean) {
+async function zmenStitek(
+  veta: number,
+  stitek: "Oblíbené" | "MSklad",
+  hodnota: boolean
+) {
   const result = await (
     await fetch("/api", {
       method: "POST",
@@ -45,13 +45,15 @@ async function zmenStitek(stitek: "Oblíbené" | "MSklad", hodnota: boolean) {
         Funkce: "Stitek",
         Parametry: {
           Tabulka: "Receptury",
-          Operace: "Pridat",
+          Operace: hodnota ? "Pridat" : "Smazat",
           Stitek: stitek,
-          Vety: [],
+          Vety: [veta],
         },
       }),
     })
   ).json();
+
+  console.log(result);
 }
 
 export function Kalkulacka({
@@ -60,7 +62,11 @@ export function Kalkulacka({
   kalkulacka: {
     porci: number;
     koeficient: string;
-    data: { vaha: string; surovina: string }[];
+    data: {
+      MnozstviHrubeDospeli: string;
+      NazevSuroviny: string;
+      MernaJednotka: string;
+    }[];
   };
 }) {
   const [porci, setPorci] = useState(kalkulacka.porci);
@@ -145,14 +151,15 @@ export function Kalkulacka({
       <table>
         <thead>
           <tr>
-            <td className="pb-5 font-bold">Váha (g)</td>
+            <td className="pb-5 font-bold">Váha</td>
             <td className="pb-5 font-bold">Suroviny</td>
           </tr>
         </thead>
         <tbody>
           {kalkulacka.data.map((row, index) => {
+            let mnoz = parseFloat(row.MnozstviHrubeDospeli.replace(",", "."));
             let calcResult: string = (
-              parseFloat(row.vaha) *
+              mnoz *
               porci *
               parseFloat(koeficient)
             ).toString();
@@ -164,8 +171,10 @@ export function Kalkulacka({
                 key={"kfdr" + index}
                 className="border-t border-primary-300/60"
               >
-                <td className="py-3 font-bold">{calcResult}</td>
-                <td className="py-3">{row.surovina}</td>
+                <td className="py-3 font-bold">
+                  {calcResult} {row.MernaJednotka}
+                </td>
+                <td className="py-3">{row.NazevSuroviny}</td>
               </tr>
             );
           })}
@@ -223,12 +232,16 @@ export function Hero({
   jmeno,
   badges,
   image,
+  veta,
+  stitky,
 }: {
   logo?: string;
   title: string;
   jmeno: string;
   badges: string[];
   image?: string;
+  veta: number;
+  stitky: string[];
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   let badgeCounter = 0;
@@ -300,12 +313,38 @@ export function Hero({
                 key={"kfhi" + index}
                 className={`${
                   icon.name === "favorite" ? "flex" : "hidden md:flex"
-                }  flex w-min flex-col items-center gap-1 justify-self-center text-center`}
+                } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
               >
                 <ButtonIcon
-                  onClick={icon.onClick}
+                  onClick={() => {
+                    switch (icon.name) {
+                      case "archive":
+                        return zmenStitek(
+                          veta,
+                          "MSklad",
+                          !stitky.includes("MSklad")
+                        );
+                      case "favorite":
+                        return zmenStitek(
+                          veta,
+                          "MSklad",
+                          !stitky.includes("Oblíbené")
+                        );
+                      case "print":
+                        return window.print();
+                    }
+                  }}
                   icon={icon.name}
-                  className="bg-white"
+                  className={`bg-white ${
+                    icon.name === "archive" &&
+                    stitky.includes("MSklad") &&
+                    " bg-primary-200"
+                  }
+                  ${
+                    icon.name === "favorite" &&
+                    stitky.includes("Oblíbené") &&
+                    "bg-primary-200"
+                  }`}
                 />
                 <span className="hidden text-sm md:block">{icon.label}</span>
               </div>
@@ -325,18 +364,26 @@ export function Informations({
   alergeny,
   terapeut,
   skladba,
+  veta,
+  stitky,
 }: {
   title: string;
   postup: string;
   kalkulacka: {
     porci: number;
     koeficient: string;
-    data: { vaha: string; surovina: string }[];
+    data: {
+      MnozstviHrubeDospeli: string;
+      NazevSuroviny: string;
+      MernaJednotka: string;
+    }[];
   };
   hmotnost: { porce: string; masa: string; omacky: string };
   alergeny: { alergeny: string[]; text: string };
   terapeut: { text: string; badges: string[] };
   skladba: { polevka: string; priloha: string; doplnek: string };
+  veta: number;
+  stitky: string[];
 }) {
   function Title() {
     return (
@@ -348,7 +395,37 @@ export function Informations({
               key={"kfii" + index}
               className={`flex flex-col items-center gap-1 text-center`}
             >
-              <ButtonIcon onClick={icon.onClick} icon={icon.name}></ButtonIcon>
+              <ButtonIcon
+                onClick={() => {
+                  switch (icon.name) {
+                    case "archive":
+                      return zmenStitek(
+                        veta,
+                        "MSklad",
+                        !stitky.includes("MSklad")
+                      );
+                    case "favorite":
+                      return zmenStitek(
+                        veta,
+                        "MSklad",
+                        !stitky.includes("Oblíbené")
+                      );
+                    case "print":
+                      return window.print();
+                  }
+                }}
+                icon={icon.name}
+                className={`bg-white ${
+                  icon.name === "archive" &&
+                  stitky.includes("MSklad") &&
+                  " bg-primary-200"
+                }
+                ${
+                  icon.name === "favorite" &&
+                  stitky.includes("Oblíbené") &&
+                  "bg-primary-200"
+                }`}
+              ></ButtonIcon>
               <span className="text-sm">{icon.label}</span>
             </div>
           ))}
