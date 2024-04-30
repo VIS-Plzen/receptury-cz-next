@@ -1,6 +1,7 @@
 "use client";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -32,28 +33,110 @@ const icons: {
   },
 ];
 
-async function zmenStitek(
-  veta: number,
-  stitek: "Oblíbené" | "MSklad",
-  hodnota: boolean
-) {
-  const result = await (
-    await fetch("/api", {
-      method: "POST",
-      body: JSON.stringify({
-        Sid: "12345VIS",
-        Funkce: "Stitek",
-        Parametry: {
-          Tabulka: "Receptury",
-          Operace: hodnota ? "Pridat" : "Smazat",
-          Stitek: stitek,
-          Vety: [veta],
-        },
-      }),
-    })
-  ).json();
+export function Page({ card, curr }: { card: any; curr: any }) {
+  const [refresh, setRefresh] = useState(false);
 
-  console.log(result);
+  async function zmenStitek(
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean
+  ) {
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: "12345VIS",
+          Funkce: "Stitek",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: hodnota ? "Pridat" : "Smazat",
+            Stitek: stitek,
+            Vety: [veta],
+          },
+        }),
+      })
+    ).json();
+    if (hodnota) curr.Stitky.push(stitek);
+    else {
+      var index = curr.Stitky.indexOf(stitek);
+      if (index !== -1) {
+        curr.Stitky.splice(index, 1);
+      }
+    }
+    setRefresh(!refresh);
+    console.log(result);
+  }
+  return (
+    <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
+      <Hero
+        title={card.Nazev}
+        jmeno={card.Autor}
+        badges={[
+          card.Dieta1 === "Ano" && "Bezlepková",
+          card.Dieta2 === "Ano" && "Bezmléčná",
+          card.Dieta3 === "Ano" && "Šetřící",
+          card.TepelnaUprava,
+          card.DruhSkupina,
+          card.DruhPodskupina,
+        ]}
+        image={card.Obrazek}
+        veta={card.Identita}
+        stitky={curr.Stitky}
+        zmenStitek={zmenStitek}
+      />
+      <Informations
+        title={card.Nazev}
+        hmotnost={{
+          porce: card.HmotnostPorceDospeli,
+          masa: "115",
+          omacky: "70",
+        }}
+        kalkulacka={{
+          porci: 1,
+          koeficient: "1",
+          data: curr.Suroviny,
+        }}
+        postup={card.TechnologickyPostup}
+        alergeny={{
+          alergeny: curr.Alergeny,
+          text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
+        }}
+        terapeut={{
+          text:
+            card.VyjadreniNT === ""
+              ? "Není vyplněno - VyjadreniNT"
+              : card.VyjadreniNT,
+          badges: ["Ryby a mořské plody", "Smažené", "Bezlepkové"],
+        }}
+        skladba={{
+          polevka: card.DoporucenaPolevka,
+          priloha: card.DoporucenaPriloha,
+          doplnek: card.DoporucenyDoplnek,
+        }}
+        veta={card.Identita}
+        stitky={curr.Stitky}
+        zmenStitek={zmenStitek}
+      />
+
+      {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
+
+      {/* <VolitelnyObsah
+        className="bg-white"
+        title="Volitelný obsah partnera k danému receptu"
+        text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+        img="/images/food.jpeg"
+      /> */}
+      {card.Autor !== "" && (
+        <Partner
+          jmeno={card.Autor}
+          heslo="Heslo partnera, nebo krátký popis jejich služeb"
+          img="/images/food.jpeg"
+          color="default"
+          hasButton
+        />
+      )}
+    </div>
+  );
 }
 
 export function Kalkulacka({
@@ -234,6 +317,7 @@ export function Hero({
   image,
   veta,
   stitky,
+  zmenStitek,
 }: {
   logo?: string;
   title: string;
@@ -242,6 +326,12 @@ export function Hero({
   image?: string;
   veta: number;
   stitky: string[];
+  zmenStitek: (
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean,
+    changeHodnota?: () => void
+  ) => void;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   let badgeCounter = 0;
@@ -268,9 +358,9 @@ export function Hero({
     <Container className="print:hidden">
       <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
         <div className="relative flex items-center justify-center bg-primary-300/30 md:order-2">
-          {isValidImage ? (
+          {isValidImage && image ? (
             <Image
-              src="/images/food.jpeg"
+              src={image}
               alt=""
               className="w-full bg-gray-300 object-cover"
               fill
@@ -327,7 +417,7 @@ export function Hero({
                       case "favorite":
                         return zmenStitek(
                           veta,
-                          "MSklad",
+                          "Oblíbené",
                           !stitky.includes("Oblíbené")
                         );
                       case "print":
@@ -366,6 +456,7 @@ export function Informations({
   skladba,
   veta,
   stitky,
+  zmenStitek,
 }: {
   title: string;
   postup: string;
@@ -384,6 +475,12 @@ export function Informations({
   skladba: { polevka: string; priloha: string; doplnek: string };
   veta: number;
   stitky: string[];
+  zmenStitek: (
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean,
+    changeHodnota?: () => void
+  ) => void;
 }) {
   function Title() {
     return (
@@ -407,7 +504,7 @@ export function Informations({
                     case "favorite":
                       return zmenStitek(
                         veta,
-                        "MSklad",
+                        "Oblíbené",
                         !stitky.includes("Oblíbené")
                       );
                     case "print":
@@ -531,6 +628,86 @@ export function Informations({
           </div>
           <Terapeut />
         </div>
+      </div>
+    </Container>
+  );
+}
+
+export function Partner({
+  jmeno,
+  heslo,
+  img,
+  hasButton,
+  logo = "",
+  color = "default",
+}: {
+  jmeno: string;
+  heslo: string;
+  img: any;
+  hasButton?: boolean;
+  logo?: string;
+  color: "default" | "bidfood" | "bonduelle";
+}) {
+  const outterDivClasses = {
+    default: "border-secondary-700 bg-secondary-700",
+    bidfood: "border-bidfood-700 bg-bidfood-700",
+    bonduelle: "border-bonduelle-700 bg-bonduelle-700",
+  };
+
+  const innerDivClasses = {
+    default: "from-secondary-700 via-secondary/50",
+    bidfood: "from-bidfood-700 via-bidfood/50",
+    bonduelle: "from-bonduelle-700 via-bonduelle/50",
+  };
+
+  const textColor = {
+    default: "text-secondary-900",
+    bidfood: "text-bidfood-900",
+    bonduelle: "text-bonduelle-900",
+  };
+
+  return (
+    <Container className="print:hidden">
+      <div
+        className={`relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 ${outterDivClasses[color]} md:aspect-[3/1] md:max-h-full md:flex-row md:items-center`}
+      >
+        <div
+          className={`absolute inset-0 bg-gradient-to-b ${innerDivClasses[color]} from-45% via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%`}
+        />
+        <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
+          {logo ? (
+            <Image
+              src={logo}
+              className="bg-transparent object-cover mix-blend-screen"
+              alt=""
+              height={50}
+              width={100}
+            />
+          ) : (
+            <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
+              Logo
+            </span>
+          )}
+          <Heading className="text-white md:text-2xl lg:text-4xl">
+            {jmeno}
+          </Heading>
+          <p className="font-semibold text-white">{heslo}</p>
+          {hasButton && <Button className="w-min">Více o nás</Button>}
+        </div>
+        <div className=" flex h-full w-full justify-end">
+          <Image
+            src={img}
+            className="w-full bg-gray-300 object-cover"
+            alt=""
+            width={400}
+            height={200}
+          />
+        </div>
+        <span
+          className={`absolute bottom-5 right-5 z-20 text-xs ${textColor[color]} md:top-5`}
+        >
+          Inspirační foto
+        </span>
       </div>
     </Container>
   );
