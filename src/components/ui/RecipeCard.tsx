@@ -14,9 +14,9 @@ type RecipeCardProps = {
   img?: any;
   badges: (string | false)[];
   className?: string;
-  zmenStitek: any;
-  veta: any;
-  stitky: any;
+  zmenStitek?: any;
+  veta?: any;
+  stitky?: any;
 };
 
 type BadgesProps = {

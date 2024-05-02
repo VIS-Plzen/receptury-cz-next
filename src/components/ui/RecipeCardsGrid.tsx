@@ -31,7 +31,7 @@ type Props = {
   className?: string;
   cardsInGrid?: number;
   assertCard?: boolean;
-  zmenStitek: any;
+  zmenStitek?: any;
 };
 
 function RecipeCardsGrid({
