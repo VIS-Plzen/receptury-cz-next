@@ -686,6 +686,7 @@ export default function Receptury({
             Limit: 15,
             Offset: (page - 1) * 15,
             Vlastnosti: [
+              "Veta",
               "Nazev",
               "Identita",
               "Obrazek",
@@ -704,6 +705,49 @@ export default function Receptury({
     ).json();
 
     return result;
+  }
+
+  async function zmenStitek(
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean
+  ) {
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: "12345VIS",
+          Funkce: "Stitek",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: hodnota ? "Pridat" : "Smazat",
+            Stitek: stitek,
+            Vety: [veta],
+          },
+        }),
+      })
+    ).json();
+    if (result.Status) {
+      let vetaStringed = veta.toString();
+      setData((prev: any) => {
+        let objHolder = prev;
+        const curr = objHolder.Vety.find(
+          (veta: any) => veta.Vlastnosti.Veta === vetaStringed
+        );
+
+        if (hodnota) curr.Stitky.push(stitek);
+        else {
+          var index = curr.Stitky.indexOf(stitek);
+          if (index !== -1) {
+            curr.Stitky.splice(index, 1);
+          }
+        }
+
+        return objHolder;
+      });
+
+      setRefresh(!refresh);
+    }
   }
 
   return (
@@ -784,6 +828,7 @@ export default function Receptury({
             gridView={gridView}
             isLoading={loading}
             data={data}
+            zmenStitek={zmenStitek}
           />
         )}
       </div>

@@ -10,6 +10,7 @@ type Props = {
     Chyba?: { Kod: number; Popis: string };
     Vety?: {
       Vlastnosti: {
+        Veta: number;
         Nazev: string;
         Identita: string;
         DruhSkupina: string;
@@ -30,6 +31,7 @@ type Props = {
   className?: string;
   cardsInGrid?: number;
   assertCard?: boolean;
+  zmenStitek: any;
 };
 
 function RecipeCardsGrid({
@@ -40,6 +42,7 @@ function RecipeCardsGrid({
   className = "",
   cardsInGrid,
   assertCard,
+  zmenStitek,
 }: Props) {
   return (
     <div
@@ -69,6 +72,9 @@ function RecipeCardsGrid({
               card.Vlastnosti.DruhPodskupina,
             ]}
             img="/images/food.jpeg"
+            zmenStitek={zmenStitek}
+            veta={card.Vlastnosti.Veta}
+            stitky={card.Stitky}
           />
         ))}
     </div>

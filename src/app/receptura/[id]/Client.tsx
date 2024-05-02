@@ -93,7 +93,7 @@ export function Page({
       ? partnerInfo[0]
       : card.Receptar === "2"
         ? partnerInfo[1]
-        : null;
+        : "";
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
       <Hero

@@ -14,6 +14,9 @@ type RecipeCardProps = {
   img?: any;
   badges: (string | false)[];
   className?: string;
+  zmenStitek: any;
+  veta: any;
+  stitky: any;
 };
 
 type BadgesProps = {
@@ -21,28 +24,32 @@ type BadgesProps = {
 };
 
 //function to render action buttons on card
-function ActionButtons({ isGridView }: any) {
+function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
+  if (!stitky) return null;
   return (
     <div className={cn("flex flex-row space-x-1", !isGridView && "space-x-3")}>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
           icon="favorite"
           aria-label="Přidat recepturu do oblíbených"
-          onClick={(e) => e.preventDefault()}
-        />
-      </div>
-      <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon
-          icon="share"
-          aria-label="Sdílet recepturu"
-          onClick={(e) => e.preventDefault()}
+          className={`bg-white 
+          ${stitky.includes("Oblíbené") && "bg-primary-200"}`}
+          onClick={(e) => {
+            e.preventDefault();
+            zmenStitek(veta, "Oblíbené", !stitky.includes("Oblíbené"));
+          }}
         />
       </div>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
           icon="archive"
-          aria-label="Uložit recepturu"
-          onClick={(e) => e.preventDefault()}
+          aria-label="MSklad"
+          className={`bg-white 
+          ${stitky.includes("MSklad") && "bg-primary-200"}`}
+          onClick={(e) => {
+            e.preventDefault();
+            zmenStitek(veta, "MSklad", !stitky.includes("MSklad"));
+          }}
         />
       </div>
     </div>
@@ -79,6 +86,9 @@ function GridCardLayout({
   img,
   isLoading,
   className,
+  zmenStitek,
+  stitky,
+  veta,
 }: RecipeCardProps) {
   return (
     <div
@@ -115,7 +125,12 @@ function GridCardLayout({
             isLoading && "hidden"
           )}
         >
-          <ActionButtons isGridView={true} />
+          <ActionButtons
+            isGridView={true}
+            zmenStitek={zmenStitek}
+            veta={veta}
+            stitky={stitky}
+          />
         </div>
       </div>
       <div
@@ -152,6 +167,9 @@ function RowCardLayout({
   img,
   isLoading,
   className,
+  zmenStitek,
+  veta,
+  stitky,
 }: RecipeCardProps) {
   return (
     <div
@@ -198,7 +216,12 @@ function RowCardLayout({
           <div className="items-center">
             <div className={cn(isLoading && "hidden")}>
               <div className={cn("hidden items-center space-x-2 p-3 md:flex")}>
-                <ActionButtons isGridView={false} />
+                <ActionButtons
+                  isGridView={false}
+                  zmenStitek={zmenStitek}
+                  veta={veta}
+                  stitky={stitky}
+                />
               </div>
             </div>
             <div
@@ -223,14 +246,28 @@ function RecipeCard({
   badges,
   className,
   isLoading,
+  zmenStitek,
+  stitky,
+  veta,
 }: RecipeCardProps) {
   return (
     <ReturnedLayout
-      card={{ label: label, id: id, badges: badges, className: className }}
+      card={{
+        label: label,
+        id: id,
+        badges: badges,
+        className: className,
+        zmenStitek: zmenStitek,
+        stitky: stitky,
+        veta: veta,
+      }}
       loading={isLoading}
       isGridView={isGridView}
       forceGrid={forceGrid}
       forceRow={forceRow}
+      zmenStitek={zmenStitek}
+      stitky={stitky}
+      veta={veta}
     />
   );
 }
@@ -241,12 +278,18 @@ function ReturnedLayout({
   forceRow,
   card,
   loading,
+  zmenStitek,
+  stitky,
+  veta,
 }: {
   isGridView: boolean | undefined;
   forceGrid?: boolean;
   forceRow?: boolean;
   card: RecipeCardProps;
   loading?: boolean;
+  zmenStitek: any;
+  stitky: any;
+  veta: any;
 }) {
   return (
     <a href={`/receptura/${card.id}`}>
@@ -264,6 +307,9 @@ function ReturnedLayout({
                 ? "hidden md:block"
                 : "hidden"
         }`}
+        zmenStitek={zmenStitek}
+        stitky={stitky}
+        veta={veta}
       />
       <RowCardLayout
         label={card.label}
@@ -279,6 +325,9 @@ function ReturnedLayout({
                 ? "flex md:hidden"
                 : "flex"
         }`}
+        zmenStitek={zmenStitek}
+        stitky={stitky}
+        veta={veta}
       />
     </a>
   );
