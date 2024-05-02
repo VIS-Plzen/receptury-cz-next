@@ -330,7 +330,12 @@ export default function Receptury({
             checked: false,
           },
           { title: "Nutričně ověřeno", name: "nutricni", checked: false },
-          { title: "Stáhnout do skladu", name: "sklad", checked: false },
+          {
+            title: "Stáhnout do skladu",
+            name: "sklad",
+            backend: "MSklad",
+            checked: false,
+          },
           {
             title: "Videoreceptury",
             name: "videoreceptury",
@@ -660,7 +665,7 @@ export default function Receptury({
               boxPodminka += `${option.backend}='Ano'`;
               break;
             case "obecne":
-              if (option.name === "moje") {
+              if (option.backend) {
                 stitek = option.backend;
               }
           }
