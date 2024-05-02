@@ -109,6 +109,20 @@ export default function MyCombobox({
                 setSelectedValue(e.target.value);
                 setQuery(e.target.value);
               }}
+              onKeyUp={(e: any) => {
+                if (e.key === "Enter") {
+                  const activeElement =
+                    document.activeElement as HTMLInputElement;
+                  if (activeElement && activeElement.tagName === "INPUT") {
+                    console.log(activeElement.value);
+                    const inputValue = activeElement.value;
+                    if (inputValue !== query) {
+                      setSelectedValue(inputValue);
+                      setQuery(inputValue);
+                    }
+                  }
+                }
+              }}
               autoComplete="off"
               {...rest}
             />
@@ -138,6 +152,9 @@ export default function MyCombobox({
             afterLeave={() => onChange(query)}
           >
             <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              {query !== "" && !filteredValues.includes(query) && (
+                <Option value={query} onClick={onChange} />
+              )}
               {filteredValues.length === 0 && query !== "" ? (
                 <button
                   className="relative select-none px-4 py-2 text-gray-700"
@@ -147,37 +164,7 @@ export default function MyCombobox({
                 </button>
               ) : (
                 filteredValues.map((value, key) => (
-                  <Combobox.Option
-                    key={key}
-                    className={({ active }) =>
-                      `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                        active && "bg-primary-200"
-                      }`
-                    }
-                    value={value}
-                    onClick={() => onChange(value)}
-                  >
-                    {({ selected, active }) => (
-                      <>
-                        <button
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {value}
-                        </button>
-                        {selected && (
-                          <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-white" : "text-teal-600"
-                            }`}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </Combobox.Option>
+                  <Option value={value} onClick={onChange} key={"iiik" + key} />
                 ))
               )}
             </Combobox.Options>
@@ -185,5 +172,46 @@ export default function MyCombobox({
         </div>
       </Combobox>
     </div>
+  );
+}
+
+function Option({
+  value,
+  onClick,
+}: {
+  value: string;
+  onClick: (value: string) => void;
+}) {
+  return (
+    <Combobox.Option
+      className={({ active }) =>
+        `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+          active && "bg-primary-200"
+        }`
+      }
+      value={value}
+      onClick={() => onClick(value)}
+    >
+      {({ selected, active }) => (
+        <>
+          <button
+            className={`block truncate ${
+              selected ? "font-medium" : "font-normal"
+            }`}
+          >
+            {value}
+          </button>
+          {selected && (
+            <span
+              className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                active ? "text-white" : "text-teal-600"
+              }`}
+            >
+              <CheckIcon className="h-5 w-5" aria-hidden="true" />
+            </span>
+          )}
+        </>
+      )}
+    </Combobox.Option>
   );
 }

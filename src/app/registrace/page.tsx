@@ -67,8 +67,6 @@ function Page() {
     },
 
     onSubmit: async (values, actions) => {
-      console.log(values);
-
       const res = await (
         await fetch("/api/register", {
           method: "POST",
@@ -80,7 +78,6 @@ function Page() {
           }),
         })
       ).json();
-      console.log(res);
       setHasNotice(
         res.success == true
           ? { variant: "success-solid", message: "Úspěšně registrováno." }
@@ -97,7 +94,7 @@ function Page() {
   const formWasTouched = formik.submitCount > 0;
 
   return (
-    <Container className="my-16 flex flex-col items-center justify-center py-20 pt-24 text-black sm:my-32 xl:my-64">
+    <Container className="my-16 flex flex-col items-center justify-center py-20 text-black sm:my-32 md:py-0 xl:my-64">
       <div className="w-full space-y-4 rounded-2xl border-2 border-primary-200 bg-white p-8 sm:w-2/3 xl:w-1/3">
         <Heading size="md">Registrace</Heading>
         <form onSubmit={formik.handleSubmit}>
@@ -156,7 +153,9 @@ function Page() {
             <Button
               className="my-4 items-end"
               type="submit"
-              disabled={formik.isSubmitting}
+              disabled={
+                formik.isSubmitting || hasNotice?.variant === "success-solid"
+              }
             >
               Registrovat se
             </Button>

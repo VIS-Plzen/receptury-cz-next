@@ -33,7 +33,15 @@ const icons: {
   },
 ];
 
-export function Page({ card, curr }: { card: any; curr: any }) {
+export function Page({
+  card,
+  curr,
+  partner,
+}: {
+  card: any;
+  curr: any;
+  partner?: "bidfood" | "bonduelle";
+}) {
   const [refresh, setRefresh] = useState(false);
 
   async function zmenStitek(
@@ -64,8 +72,28 @@ export function Page({ card, curr }: { card: any; curr: any }) {
       }
     }
     setRefresh(!refresh);
-    console.log(result);
   }
+  const partnerInfo: any = [
+    {
+      logo: null,
+      jmeno: "Bidfood",
+      name: "bidfood",
+      heslo: "Heslo partnera, něco o bidfood a jídle",
+    },
+    {
+      logo: null,
+      jmeno: "Bonduelle",
+      name: "bonduelle",
+      heslo: "Něco jako heslo nebo popis, tady pro Bonduelle",
+    },
+  ];
+
+  const currParner =
+    card.Receptar === "1"
+      ? partnerInfo[0]
+      : card.Receptar === "2"
+        ? partnerInfo[1]
+        : null;
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
       <Hero
@@ -83,6 +111,7 @@ export function Page({ card, curr }: { card: any; curr: any }) {
         veta={card.Identita}
         stitky={curr.Stitky}
         zmenStitek={zmenStitek}
+        currParner={currParner}
       />
       <Informations
         title={card.Nazev}
@@ -126,12 +155,12 @@ export function Page({ card, curr }: { card: any; curr: any }) {
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         img="/images/food.jpeg"
       /> */}
-      {card.Autor !== "" && (
+      {currParner && (
         <Partner
-          jmeno={card.Autor}
-          heslo="Heslo partnera, nebo krátký popis jejich služeb"
+          jmeno={currParner.jmeno}
+          heslo={currParner.heslo}
           img="/images/food.jpeg"
-          color="default"
+          color={currParner.name}
           hasButton
         />
       )}
@@ -318,6 +347,7 @@ export function Hero({
   veta,
   stitky,
   zmenStitek,
+  currParner,
 }: {
   logo?: string;
   title: string;
@@ -332,6 +362,7 @@ export function Hero({
     hodnota: boolean,
     changeHodnota?: () => void
   ) => void;
+  currParner: any;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   let badgeCounter = 0;
@@ -370,12 +401,26 @@ export function Hero({
           )}
         </div>
         <div className="flex flex-col  gap-y-6 p-5 md:px-0 md:py-14">
-          <div className="flex gap-x-2 md:mt-auto md:px-10">
-            <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
-              Logo
-            </span>
+          <div
+            className={`flex gap-x-2 md:mt-auto md:px-10 ${
+              !currParner && "opacity-0"
+            }`}
+          >
+            {currParner.logo ? (
+              <Image
+                src={currParner.logo}
+                className="bg-transparent object-cover mix-blend-screen"
+                alt=""
+                height={50}
+                width={100}
+              />
+            ) : (
+              <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
+                {currParner.jmeno}
+              </span>
+            )}
             <span className="line-clamp-2">
-              Tuto recepturu pro vás připravila společnost {jmeno}
+              Tuto recepturu pro vás připravila společnost {currParner.jmeno}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">
@@ -685,7 +730,7 @@ export function Partner({
             />
           ) : (
             <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
-              Logo
+              {jmeno}
             </span>
           )}
           <Heading className="text-white md:text-2xl lg:text-4xl">

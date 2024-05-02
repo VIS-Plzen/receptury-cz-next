@@ -409,18 +409,18 @@ export default function Receptury({
       {
         title: "Partner",
         name: "partner",
-        backend: "Autor",
+        backend: "Receptar",
         options: [
           {
             title: "Bidfood",
             name: "bidfood",
-            backend: "Bidfood",
+            backend: "1",
             checked: false,
           },
           {
             title: "Bonduelle",
             name: "bonduelle",
-            backend: "Bonduelle",
+            backend: "2",
             checked: false,
           },
         ],
@@ -648,6 +648,9 @@ export default function Receptury({
         if (option.checked && option.backend) {
           switch (box.name) {
             case "partner":
+              if (boxPodminka !== "") boxPodminka += " OR ";
+              boxPodminka += `${box.backend}='${option.backend}'`;
+              break;
             case "priprava":
               if (boxPodminka !== "") boxPodminka += " OR ";
               boxPodminka += `${box.backend}='${option.backend}'`;
@@ -730,7 +733,10 @@ export default function Receptury({
           sideBarValues={sideBarValues}
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
-          getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
+          getDataAndSetQuery={() => {
+            setSideBarOpen(false);
+            getDataAndSetQuery(pageState);
+          }}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
           setSelectedGroup={(val: string) => {

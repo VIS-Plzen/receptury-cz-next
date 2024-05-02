@@ -40,7 +40,7 @@ export default function ContentSelector() {
     if (cont !== "informace" && cont !== "receptury")
       return setContent("informace");
     setContent(cont);
-  }, []);
+  }, [urlParams]);
 
   function updateContent(cont: "informace" | "receptury") {
     let query = urlParams;
