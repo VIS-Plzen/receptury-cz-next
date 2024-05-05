@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import Receptury from "../components/ui/Receptury/Receptury";
 import Inspirace from "./Inspirace";
-import Receptury from "./Receptury";
 import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
 

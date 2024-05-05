@@ -121,8 +121,9 @@ export function Page({
           omacky: "70",
         }}
         kalkulacka={{
-          porci: 1,
+          porci: parseInt(card.PocetPorci),
           koeficient: "1",
+          porciBackend: parseInt(card.PocetPorci),
           data: curr.Suroviny,
         }}
         postup={card.TechnologickyPostup}
@@ -174,6 +175,7 @@ export function Kalkulacka({
   kalkulacka: {
     porci: number;
     koeficient: string;
+    porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
       NazevSuroviny: string;
@@ -269,7 +271,9 @@ export function Kalkulacka({
         </thead>
         <tbody>
           {kalkulacka.data.map((row, index) => {
-            let mnoz = parseFloat(row.MnozstviHrubeDospeli.replace(",", "."));
+            let mnoz =
+              parseFloat(row.MnozstviHrubeDospeli.replace(",", ".")) /
+              kalkulacka.porciBackend;
             let calcResult: string = (
               mnoz *
               porci *
@@ -508,6 +512,7 @@ export function Informations({
   kalkulacka: {
     porci: number;
     koeficient: string;
+    porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
       NazevSuroviny: string;

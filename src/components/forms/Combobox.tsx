@@ -14,6 +14,7 @@ type Props = {
   isDisabled?: boolean;
   isRequired?: boolean;
   onChange?: any;
+  onEnter?: any;
   error?: string | false;
   [x: string]: any;
 };
@@ -28,6 +29,7 @@ export default function MyCombobox({
   isDisabled = false,
   isRequired = false,
   onChange,
+  onEnter,
   error,
   ...rest
 }: Props) {
@@ -111,16 +113,9 @@ export default function MyCombobox({
               }}
               onKeyUp={(e: any) => {
                 if (e.key === "Enter") {
-                  const activeElement =
-                    document.activeElement as HTMLInputElement;
-                  if (activeElement && activeElement.tagName === "INPUT") {
-                    console.log(activeElement.value);
-                    const inputValue = activeElement.value;
-                    if (inputValue !== query) {
-                      setSelectedValue(inputValue);
-                      setQuery(inputValue);
-                    }
-                  }
+                  setQuery(e.target.value);
+                  onChange(e.target.value);
+                  onEnter && onEnter();
                 }
               }}
               autoComplete="off"

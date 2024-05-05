@@ -6,8 +6,8 @@ import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import Image from "next/image";
+import Receptury from "../../components/ui/Receptury/Receptury";
 import Katalog from "../Katalog";
-import Receptury from "../Receptury";
 import { Partner } from "../receptura/[id]/Client";
 
 export default function Home() {

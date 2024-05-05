@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Receptury from "../Receptury";
+import Receptury from "../../components/ui/Receptury/Receptury";
 
 export default function ContentSelector() {
   const [content, setContent] = useState<"informace" | "receptury" | null>(

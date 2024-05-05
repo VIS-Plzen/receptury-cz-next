@@ -329,7 +329,12 @@ export default function Receptury({
             backend: "Oblíbené",
             checked: false,
           },
-          { title: "Nutričně ověřeno", name: "nutricni", checked: false },
+          {
+            title: "Nutričně ověřeno",
+            name: "nutricni",
+            backend: "SchvalenoNT",
+            checked: false,
+          },
           {
             title: "Stáhnout do skladu",
             name: "sklad",
@@ -340,6 +345,7 @@ export default function Receptury({
             title: "Videoreceptury",
             name: "videoreceptury",
             checked: false,
+            backend: "Video",
           },
         ],
       },
@@ -562,8 +568,9 @@ export default function Receptury({
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
-  async function getDataAndSetQuery(page: number) {
+  async function getDataAndSetQuery(newPage: number | undefined) {
     setLoading(true);
+    const page = newPage ? newPage : pageState;
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -665,8 +672,12 @@ export default function Receptury({
               boxPodminka += `${option.backend}='Ano'`;
               break;
             case "obecne":
-              if (option.backend) {
+              if (option.name === "moje" || option.name === "sklad") {
                 stitek = option.backend;
+              } else {
+                if (boxPodminka !== "") boxPodminka += " AND ";
+                boxPodminka += `${option.backend}<>''`;
+                break;
               }
           }
         }
@@ -772,6 +783,7 @@ export default function Receptury({
         updateCombobox={updateCombobox}
         refresh={refresh}
         initialLoad={initialLoad}
+        getData={getDataAndSetQuery}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <MobileFilters
@@ -856,6 +868,7 @@ function Comboboxes({
   comboBoxValues,
   updateCombobox,
   refresh,
+  getData,
 }: {
   className: string;
   comboBoxValues: {
@@ -866,6 +879,7 @@ function Comboboxes({
   }[];
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
+  getData: () => void;
 }) {
   return (
     <div className={`${className}`}>
@@ -879,6 +893,7 @@ function Comboboxes({
           onChange={(value: string) => updateCombobox(index, value)}
           aria-label={"Vyhledat " + combo.title}
           z={100 - index}
+          onEnter={getData}
         />
       ))}
     </div>
@@ -897,6 +912,7 @@ function TopRow({
   updateCombobox,
   refresh,
   initialLoad,
+  getData,
 }: {
   title: string;
   pocet: number;
@@ -914,6 +930,7 @@ function TopRow({
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
   initialLoad: boolean;
+  getData: (page?: number) => void;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
@@ -932,6 +949,7 @@ function TopRow({
         comboBoxValues={comboBoxValues}
         updateCombobox={updateCombobox}
         refresh={refresh}
+        getData={() => getData()}
       />
       <div className="flex items-center gap-x-4">
         <ToggleGridButton
@@ -1014,9 +1032,9 @@ function MobileFilters({
               <motion.div
                 key="modal"
                 className="lg:hidden"
-                initial={{ opacity: 0 }}
+                /* initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0 }} */
               >
                 <Dialog.Overlay className="DialogOverlay" />
                 <Dialog.Content className="DialogContent">
@@ -1135,6 +1153,7 @@ function SideBar({
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
           refresh={refresh}
+          getData={getDataAndSetQuery}
         />
         <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
           <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">

@@ -1,5 +1,4 @@
-import Heading from "@/components/ui/Heading";
-import { LogMe, Page } from "./Client";
+type Props = {};
 
 async function readSome(id: string) {
   if (id === "test.receptury.adelis.cz") return null;
@@ -32,24 +31,7 @@ async function readSome(id: string) {
     Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
   };
 }
-
-export default async function Home({ params }: { params: any }) {
-  const data: any = await readSome(params.id);
-
-  if (!data || !data.Status) {
-    return <Heading>Nenačetl jsem.</Heading>;
-  }
-
-  if (!data.Vety[0]) {
-    return <LogMe msg={[data, params.id]} />;
-  }
-  const curr = data.Vety[0];
-  const card = curr.Vlastnosti;
-
-  console.log(card);
-  return <Page card={card} curr={curr} />;
+export default function Ssr({ params, searchParams }: any) {
+  console.log(searchParams);
+  return <div>ssr</div>;
 }
-
-const cv = {
-  base: "border-secondary",
-};
