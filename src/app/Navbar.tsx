@@ -108,9 +108,14 @@ function BurgerButton({
 
 function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   const [mounted, setMounted] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => setRefresh(!refresh), [pathname]);
 
   if (!mounted) return null;
 
