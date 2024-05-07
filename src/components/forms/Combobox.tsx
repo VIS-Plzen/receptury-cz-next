@@ -6,7 +6,6 @@ import { CheckIcon, SearchIcon } from "../icons";
 
 type Props = {
   id?: string;
-  name?: string;
   label?: string;
   options: string[];
   selectedOption?: string;
@@ -21,7 +20,6 @@ type Props = {
 
 export default function MyCombobox({
   id,
-  name,
   label,
   options,
   selectedOption = "",
@@ -45,17 +43,7 @@ export default function MyCombobox({
 
   return (
     <div className={`w-full`} style={{ zIndex: z }}>
-      <Combobox
-        name={name}
-        value={selectedValue}
-        onChange={(value) => {
-          setSelectedValue(value);
-          setQuery(value);
-          onChange(value);
-          onEnter();
-        }}
-        disabled={isDisabled}
-      >
+      <Combobox value={selectedValue} disabled={isDisabled}>
         <div
           className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
         >
@@ -76,6 +64,19 @@ export default function MyCombobox({
               placeholder={label}
               onChange={(e) => {
                 setQuery(e.target.value);
+              }}
+              onKeyDown={(e: any) => {
+                if (e.key !== "Enter") return;
+                const active = document.querySelectorAll(
+                  '[data-headlessui-state="active"]'
+                )[0];
+                if (active) {
+                  const activeValue = active.id;
+                  setQuery(activeValue);
+                  setSelectedValue(activeValue);
+                  onChange(activeValue);
+                  onEnter && onEnter();
+                }
               }}
               autoComplete="off"
               {...rest}
@@ -118,14 +119,17 @@ export default function MyCombobox({
 }
 
 function Option({
+  id,
   value,
   onClick,
 }: {
+  id?: string;
   value: string;
   onClick: (value: string) => void;
 }) {
   return (
     <Combobox.Option
+      id={value}
       className={({ active }) =>
         `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
           active && "bg-primary-200"
