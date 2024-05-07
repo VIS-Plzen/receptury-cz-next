@@ -18,6 +18,7 @@ async function readSome(id: string) {
             Operace: "Read",
             Podminka: `Identita='${id}'`,
             Limit: 1,
+            Stitek: "",
           },
         ],
       }),
@@ -46,7 +47,6 @@ export default async function Home({ params }: { params: any }) {
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
-  console.log(card);
   return <Page card={card} curr={curr} />;
 }
 
