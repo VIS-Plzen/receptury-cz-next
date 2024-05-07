@@ -31,8 +31,7 @@ export default function MyCombobox({
   error,
   ...rest
 }: Props) {
-  const [selectedValue, setSelectedValue] = useState(selectedOption);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(selectedOption);
 
   const filteredValues =
     query === ""
@@ -43,7 +42,7 @@ export default function MyCombobox({
 
   return (
     <div className={`w-full`} style={{ zIndex: z }}>
-      <Combobox value={selectedValue} disabled={isDisabled}>
+      <Combobox value={query} disabled={isDisabled}>
         <div
           className={clsx("relative mt-1", isDisabled && "cursor-not-allowed")}
         >
@@ -69,13 +68,16 @@ export default function MyCombobox({
                 const active = document.querySelectorAll(
                   '[data-headlessui-state="active"]'
                 )[0];
+                let activeValue;
                 if (active) {
-                  const activeValue = active.id;
-                  setQuery(activeValue);
-                  setSelectedValue(activeValue);
-                  onChange(activeValue);
-                  onEnter && onEnter();
+                  activeValue = active.id;
+                } else {
+                  activeValue = query;
                 }
+
+                setQuery(activeValue);
+                onChange(activeValue);
+                onEnter && onEnter();
               }}
               autoComplete="off"
               {...rest}
@@ -103,6 +105,9 @@ export default function MyCombobox({
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
+            afterLeave={() => {
+              onChange(query);
+            }}
           >
             <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {query.length > 0 && <Option value={query} onClick={onChange} />}
