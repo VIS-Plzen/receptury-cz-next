@@ -59,7 +59,6 @@ export default function MyCombobox({
                 error && "ring-1 ring-error focus:ring-2"
               )}
               tabIndex={isDisabled ? -1 : undefined}
-              name={name}
               id={id}
               placeholder={label}
               onChange={(e) => {
