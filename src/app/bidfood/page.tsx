@@ -2,15 +2,15 @@ import { ArrowRightAltIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import Ssr from "@/components/ui/Receptury/Ssr";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import Image from "next/image";
-import Receptury from "../../components/ui/Receptury/Receptury";
 import Katalog from "../Katalog";
 import { Partner } from "../receptura/[id]/Client";
 
-export default function Home() {
+export default function Home({ searchParams }: any) {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
       <Partner
@@ -30,7 +30,8 @@ export default function Home() {
         }
         img={"/images/food.jpeg"}
       />
-      <Receptury
+      <Ssr
+        searchParams={searchParams}
         boxSettings={{
           initialTrue: ["bidfood"],
           disabledValues: ["bonduelle", "bidfood"],

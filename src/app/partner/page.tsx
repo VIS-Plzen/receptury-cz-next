@@ -5,7 +5,6 @@ import Heading from "@/components/ui/Heading";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import StyledLink from "@/components/ui/StyledLink";
 import Image from "next/image";
-import Receptury from "../../components/ui/Receptury/Receptury";
 import Katalog from "../Katalog";
 import { Partner } from "../receptura/[id]/Client";
 
@@ -28,7 +27,6 @@ export default function Home() {
         }
         img={"/images/food.jpeg"}
       />
-      <Receptury />
     </div>
   );
 

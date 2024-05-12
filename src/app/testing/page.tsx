@@ -5,7 +5,8 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { ModalTester } from "@/components/ui/Modal";
 
-export default function Testing() {
+export default function Testing({ params, searchParams }: any) {
+  console.log(searchParams);
   async function createNew() {
     return await (
       await fetch("/api", {

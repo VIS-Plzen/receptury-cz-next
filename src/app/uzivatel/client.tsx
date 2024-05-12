@@ -10,6 +10,8 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Receptury from "@/components/ui/Receptury/Receptury";
+import { groupsData } from "@/components/ui/Receptury/Ssr";
 import clsx from "clsx";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,9 +19,8 @@ import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Receptury from "../../components/ui/Receptury/Receptury";
 
-export default function ContentSelector() {
+export default function ContentSelector({ searchParams }: any) {
   const [content, setContent] = useState<"informace" | "receptury" | null>(
     null
   );
@@ -83,6 +84,7 @@ export default function ContentSelector() {
           title="Oblíbené"
           urlPreQuery={`obsah=${content}`}
           boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
+          groupsData={groupsData}
         />
       )}
       {content === null && (

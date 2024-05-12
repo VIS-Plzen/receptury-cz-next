@@ -1,5 +1,5 @@
+import Ssr from "@/components/ui/Receptury/Ssr";
 import type { Metadata } from "next";
-import Receptury from "../components/ui/Receptury/Receptury";
 import Inspirace from "./Inspirace";
 import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
@@ -9,30 +9,8 @@ export const metadata: Metadata = {
   description: "Desc",
 };
 
-export default async function Home() {
+export default async function Home({ searchParams }: any) {
   let data = await readSome();
-
-  async function createNew() {
-    return await (
-      await fetch("/api", {
-        method: "POST",
-        body: JSON.stringify({
-          sid: "12345VIS",
-          funkce: "ObecnyDotaz",
-          parametry: {
-            Tabulka: "Receptury",
-            Operace: "Create",
-          },
-          Hodnoty: {
-            CisloReceptury: 421112233,
-            Druh: "Svačiny Pomazánky sýrové a tvarohové",
-            Nazev: "Jidlo",
-            Stav: "Rozpracovaná",
-          },
-        }),
-      })
-    ).json();
-  }
 
   async function readSome() {
     const result = await (
@@ -80,7 +58,10 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <Inspirace initialData={data} />
-      <Receptury className="border-y-2 border-primary-200" />
+      <Ssr
+        searchParams={searchParams}
+        className="border-y-2 border-primary-200"
+      />
       <Spolupracujeme />
       <VolitelnyObsah
         title="Volitelný obsah"
