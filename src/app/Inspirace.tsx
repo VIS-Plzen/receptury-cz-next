@@ -94,33 +94,34 @@ export default function Inspirace({
   async function getNewData(newSelected: string) {
     setSelected(newSelected);
     setLoading(true);
-    const result = await (
-      await fetch("/api", {
-        method: "POST",
-        body: JSON.stringify({
-          Sid: "12345VIS",
-          Funkce: "Receptury",
-          Parametry: {
-            Tabulka: "Receptury",
-            Operace: "Read",
-            Stitek: newSelected === "oblibene" ? "Oblíbené" : "",
-            Limit: 10,
-            OrderBy: newSelected === "nove" ? "DatumAktualizace" : "",
-            Vlastnosti: [
-              "Nazev",
-              "Identita",
-              "Obrazek",
-              "DruhSkupina",
-              "DruhPodskupina",
-              "Dieta1",
-              "Dieta2",
-              "Dieta3",
-              "TepelnaUprava",
-            ],
-          },
-        }),
-      })
-    ).json();
+    const res = await fetch("/api", {
+      method: "POST",
+      body: JSON.stringify({
+        Sid: "12345VIS",
+        Funkce: "Receptury",
+        Parametry: {
+          Tabulka: "Receptury",
+          Operace: "Read",
+          Stitek: newSelected === "oblibene" ? "Oblíbené" : "",
+          Limit: 10,
+          OrderBy: newSelected === "nove" ? "DatumAktualizace" : "",
+          Vlastnosti: [
+            "Nazev",
+            "Identita",
+            "Obrazek",
+            "DruhSkupina",
+            "DruhPodskupina",
+            "Dieta1",
+            "Dieta2",
+            "Dieta3",
+            "TepelnaUprava",
+          ],
+        },
+      }),
+    });
+    console.log(res);
+    const result = await res.json();
+
     if (result.Status) {
       setData(result.Vety);
     }
