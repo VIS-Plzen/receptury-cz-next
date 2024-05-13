@@ -3,7 +3,6 @@ import Collapse from "@/components/ui/Collapse";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
-import { Disclosure } from "@headlessui/react";
 
 export default function Home() {
   return (
@@ -189,28 +188,6 @@ export default function Home() {
     );
   }
   function FAQ() {
-    function Disclone({
-      title,
-      children,
-    }: {
-      title: string;
-      children: React.ReactNode;
-    }) {
-      return (
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between border-t-2 border-primary-600/30 py-2 text-lg font-bold text-black">
-                <span>{title}</span>
-                <span className="text-3xl">{open ? "-" : "+"}</span>
-              </Disclosure.Button>
-
-              <Disclosure.Panel>{children}</Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      );
-    }
     return (
       <Container>
         <Heading as="h1" hasMarginBottom>
@@ -218,7 +195,7 @@ export default function Home() {
         </Heading>
         <div className="grid gap-x-5 md:grid-cols-2">
           <Collapse.Group>
-            <div className="w-full space-y-2">
+            <div className="w-full space-y-2 divide-y-2 divide-primary-200">
               <Collapse title="Lze toto otevřít?">
                 <p>
                   Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
@@ -233,8 +210,6 @@ export default function Home() {
                   component, like which listbox option is currently selected.
                 </p>
               </Collapse>
-            </div>
-            <div className="w-full space-y-2">
               <Collapse title="Lze toto otevřít?">
                 <p>
                   Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
