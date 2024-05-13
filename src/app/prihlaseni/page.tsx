@@ -121,7 +121,7 @@ export default function Page() {
               disabled={formik.isSubmitting}
             >
               <LoadingSpinner
-                className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 opacity-0 ${
+                className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
                   formik.isSubmitting && "opacity-100"
                 }`}
               />
