@@ -1,5 +1,6 @@
 import AccountCircleIcon from "./AccountCircleIcon";
 import AddIcon from "./AddIcon";
+import ArchiveFillIcon from "./ArchiveFillIcon";
 import ArchiveIcon from "./ArchiveIcon";
 import ArrowDownwardAltIcon from "./ArrowDownwardAltIcon";
 import ArrowLeftAltIcon from "./ArrowLeftAltIcon";
@@ -38,6 +39,7 @@ import VisibilityOffIcon from "./VisibilityOffIcon";
 export {
   AccountCircleIcon,
   AddIcon,
+  ArchiveFillIcon,
   ArchiveIcon,
   ArrowDownwardAltIcon,
   ArrowLeftAltIcon,
