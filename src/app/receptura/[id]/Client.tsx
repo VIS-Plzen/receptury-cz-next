@@ -446,7 +446,7 @@ export function Hero({
               );
             })}
           </div>
-          <div className="min-w-20 absolute right-5 top-5 my-auto grid grid-cols-6 gap-x-3 md:static md:mt-20 md:gap-x-2 md:px-10">
+          <div className="min-w-20 absolute right-5 top-5 my-auto hidden grid-cols-6 gap-x-3 md:static md:mt-20 md:grid md:gap-x-2 md:px-10">
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
@@ -742,7 +742,19 @@ export function Partner({
             {jmeno}
           </Heading>
           <p className="font-semibold text-white">{heslo}</p>
-          {hasButton && <Button className="w-min">Více o nás</Button>}
+          {hasButton && (
+            <Button
+              className={`w-min ${
+                color === "bidfood"
+                  ? "bg-bidfood-900"
+                  : color === "bonduelle"
+                    ? "bg-bonduelle-900"
+                    : ""
+              }`}
+            >
+              Více o nás
+            </Button>
+          )}
         </div>
         <div className=" flex h-full w-full justify-end">
           <Image

@@ -4,6 +4,7 @@ import InputField from "@/components/forms/InputField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
 import { useFormik } from "formik";
@@ -115,11 +116,18 @@ export default function Page() {
               Zapomenuté heslo?
             </StyledLink>
             <Button
-              className="my-4 items-end"
+              className="relative my-4 items-end "
               type="submit"
               disabled={formik.isSubmitting}
             >
-              Přihlásit se
+              <LoadingSpinner
+                className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 opacity-0 ${
+                  formik.isSubmitting && "opacity-100"
+                }`}
+              />
+              <span className={`${formik.isSubmitting && "opacity-0"}`}>
+                Přihlásit se
+              </span>
             </Button>
           </div>
         </form>
