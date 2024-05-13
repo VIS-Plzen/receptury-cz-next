@@ -22,7 +22,6 @@ type RecipeCardProps = {
 type BadgesProps = {
   badges: (string | false)[];
 };
-
 //function to render action buttons on card
 function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
   if (!stitky) return null;
@@ -30,22 +29,23 @@ function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
     <div className={cn("flex flex-row space-x-1", !isGridView && "space-x-3")}>
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
-          icon="favorite"
+          icon={stitky.includes("Oblíbené") ? "favorite-fill" : "favorite"}
           aria-label="Přidat recepturu do oblíbených"
           className={`bg-white 
-          ${stitky.includes("Oblíbené") && "bg-primary-200"}`}
+          ${stitky.includes("Oblíbené") && "text-primary-500"}`}
           onClick={(e) => {
             e.preventDefault();
             zmenStitek(veta, "Oblíbené", !stitky.includes("Oblíbené"));
           }}
         />
       </div>
+
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
-          icon="archive"
+          icon={stitky.includes("MSklad") ? "archive-fill" : "archive"}
           aria-label="MSklad"
           className={`bg-white 
-          ${stitky.includes("MSklad") && "bg-primary-200"}`}
+          ${stitky.includes("MSklad") && "text-primary-500"}`}
           onClick={(e) => {
             e.preventDefault();
             zmenStitek(veta, "MSklad", !stitky.includes("MSklad"));
@@ -60,22 +60,21 @@ function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
 function BadgeRenderer({ badges }: BadgesProps) {
   let badgeCounter = 0;
   return (
-    <ul className="flex flex-wrap justify-start gap-1">
+    <div className="flex flex-wrap justify-start gap-1">
       {badges.map((badge, index) => {
         if (!badge || badgeCounter >= 4) return null;
         badgeCounter++;
         return (
-          <li key={index}>
-            <Badge
-              className="md:px-2 md:py-0.5 md:text-xs"
-              variant={index <= 2 ? "healthy" : undefined}
-            >
-              {badge}
-            </Badge>
-          </li>
+          <Badge
+            key={index}
+            className="md:px-2 md:py-0.5 md:text-xs"
+            variant={index <= 2 ? "healthy" : undefined}
+          >
+            {badge}
+          </Badge>
         );
       })}
-    </ul>
+    </div>
   );
 }
 
@@ -250,6 +249,7 @@ function RecipeCard({
   stitky,
   veta,
 }: RecipeCardProps) {
+  console.log(stitky);
   return (
     <ReturnedLayout
       card={{

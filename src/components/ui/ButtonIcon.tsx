@@ -1,4 +1,5 @@
 import {
+  ArchiveFillIcon,
   ArchiveIcon,
   CalendarViewMontsIcon,
   DownloadingIcon,
@@ -16,6 +17,7 @@ import { cn } from "@/utils/cn";
 type Props = React.ComponentPropsWithRef<"button"> & {
   icon?:
     | "archive"
+    | "archive-fill"
     | "calendar-view-months"
     | "downloading"
     | "favorite-fill"
@@ -43,6 +45,7 @@ export default function ButtonIcon({
 
   const Icons = {
     archive: ArchiveIcon,
+    "archive-fill": ArchiveFillIcon,
     "calendar-view-months": CalendarViewMontsIcon,
     downloading: DownloadingIcon,
     "favorite-fill": FavoriteFillIcon,
