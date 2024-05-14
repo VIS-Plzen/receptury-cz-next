@@ -175,7 +175,7 @@ function RowCardLayout({
   return (
     <div
       className={cn(
-        "min-h-[70px] flex-row items-center justify-between overflow-hidden rounded-2xl",
+        "min-h-[70px] w-full flex-row items-center justify-between overflow-hidden rounded-2xl bg-white",
         isLoading && "animate-pulse border-2 border-gray-200",
         !isLoading && "border-2 border-primary-300/30",
         className
@@ -188,7 +188,7 @@ function RowCardLayout({
       ) : (
         <div
           className={cn(
-            "h-full bg-primary-300/30 p-2.5",
+            "flex h-full items-center bg-primary-300/30 p-2.5",
             isLoading && "hidden"
           )}
         >
@@ -296,7 +296,7 @@ function ReturnedLayout({
   veta: any;
 }) {
   return (
-    <a href={`/receptura/${card.id}`}>
+    <a href={`/receptura/${card.id}`} className="flex w-full flex-grow">
       <GridCardLayout
         label={card.label}
         badges={card.badges}
