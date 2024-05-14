@@ -12,21 +12,13 @@ import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Inspirace({
-  initialData,
   className = "",
+  initData,
 }: {
-  initialData?: any;
   className?: string;
+  initData?: any;
 }) {
-  /* const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();*/
   const [isVisible, setIsVisible] = useState<boolean>(true);
-
-  /*  const defaultTab = useMemo(
-    () => searchParams.get("tab") || "doporucene",
-    [searchParams.get("tab")]
-  ); */
 
   const TabsData = [
     {
@@ -41,26 +33,8 @@ export default function Inspirace({
 
   const [selected, setSelected] = useState(TabsData[0].value);
 
-  const [data, setData] = useState<any>(
-    initialData && initialData.Status ? initialData.Vety : null
-  );
+  const [data, setData] = useState<any>(initData[selected]);
   const [loading, setLoading] = useState<any>(data ? false : true);
-
-  // useEffect(() => {
-  //   const newSearchParams = new URLSearchParams();
-  //   newSearchParams.set("tab", selected);
-  //   router.push(`${pathname}?${newSearchParams.toString()}`);
-  // }, [selected, router]);
-
-  // useEffect(() => {
-  //   const tabParam = searchParams.get("tab");
-  //   if (tabParam && tabParam !== selected.value) {
-  //     const selectedTab = TabsData.find((tab) => tab.value === tabParam);
-  //     if (selectedTab) {
-  //       setSelected(selectedTab);
-  //     }
-  //   }
-  // }, [searchParams]);
 
   useEffect(() => {
     if (!window) return;
@@ -91,40 +65,9 @@ export default function Inspirace({
     );
   }
 
-  async function getNewData(newSelected: string) {
+  function setNewSelected(newSelected: string) {
     setSelected(newSelected);
-    setLoading(true);
-    const res = await fetch("/api", {
-      method: "POST",
-      body: JSON.stringify({
-        Sid: "12345VIS",
-        Funkce: "Receptury",
-        Parametry: {
-          Tabulka: "Receptury",
-          Operace: "Read",
-          Stitek: newSelected === "oblibene" ? "Oblíbené" : "",
-          Limit: 10,
-          OrderBy: newSelected === "nove" ? "DatumAktualizace" : "",
-          Vlastnosti: [
-            "Nazev",
-            "Identita",
-            "Obrazek",
-            "DruhSkupina",
-            "DruhPodskupina",
-            "Dieta1",
-            "Dieta2",
-            "Dieta3",
-            "TepelnaUprava",
-          ],
-        },
-      }),
-    });
-    const result = await res.json();
-
-    if (result.Status) {
-      setData(result.Vety);
-    }
-    setLoading(false);
+    setData(initData[newSelected]);
   }
 
   return (
@@ -141,7 +84,7 @@ export default function Inspirace({
             <Tabs
               value={selected}
               className="w-full"
-              onValueChange={getNewData}
+              onValueChange={setNewSelected}
             >
               <div className="hidden w-full flex-row justify-between md:flex">
                 <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
@@ -163,7 +106,7 @@ export default function Inspirace({
           <Selector
             data={TabsData}
             selected={selected}
-            setSelected={getNewData}
+            setSelected={setNewSelected}
             className="block md:hidden"
           />
 
