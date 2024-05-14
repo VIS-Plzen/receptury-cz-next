@@ -187,7 +187,7 @@ export function Kalkulacka({
   const [koeficient, setKoeficient] = useState(kalkulacka.koeficient);
 
   return (
-    <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 md:w-min">
+    <div className="flex w-full min-w-fit flex-col justify-between gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-5 print:gap-y-0.5 md:w-min">
       <Heading size="sm">Kalkulačka surovin</Heading>
       <div className="flex flex-col gap-5 border-b-2 border-primary-300/60 py-3 sm:flex-row">
         <div className="flex gap-x-1.5">
@@ -265,8 +265,8 @@ export function Kalkulacka({
       <table>
         <thead>
           <tr>
-            <td className="pb-5 font-bold">Váha</td>
-            <td className="pb-5 font-bold">Suroviny</td>
+            <td className="pb-3 font-bold print:py-0.5">Váha</td>
+            <td className="pb-3 font-bold print:py-0.5">Suroviny</td>
           </tr>
         </thead>
         <tbody>
@@ -287,10 +287,10 @@ export function Kalkulacka({
                 key={"kfdr" + index}
                 className="border-t border-primary-300/60"
               >
-                <td className="py-3 font-bold">
+                <td className="py-3 font-bold print:py-0.5">
                   {calcResult} {row.MernaJednotka}
                 </td>
-                <td className="py-3">{row.NazevSuroviny}</td>
+                <td className="py-3 print:py-0.5">{row.NazevSuroviny}</td>
               </tr>
             );
           })}

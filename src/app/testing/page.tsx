@@ -6,7 +6,6 @@ import Heading from "@/components/ui/Heading";
 import { ModalTester } from "@/components/ui/Modal";
 
 export default function Testing({ params, searchParams }: any) {
-  console.log(searchParams);
   async function createNew() {
     return await (
       await fetch("/api", {
@@ -45,7 +44,6 @@ export default function Testing({ params, searchParams }: any) {
   }
   async function getData() {
     const result = await readSome();
-    console.log(result);
   }
   return (
     <div className="min-h-screen pt-40">
