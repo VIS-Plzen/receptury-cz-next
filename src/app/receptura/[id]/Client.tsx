@@ -1,5 +1,4 @@
 "use client";
-import { ActiveNavLink } from "@/app/Navbar";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -37,12 +36,10 @@ const icons: {
 export function Page({
   card,
   curr,
-  partner,
   logged,
 }: {
   card: any;
   curr: any;
-  partner?: "bidfood" | "bonduelle";
   logged: string | undefined;
 }) {
   const [refresh, setRefresh] = useState(false);
@@ -115,6 +112,7 @@ export function Page({
         stitky={curr.Stitky}
         zmenStitek={zmenStitek}
         currParner={currParner}
+        logged={logged}
       />
       {logged ? (
         <>
@@ -175,28 +173,24 @@ export function Page({
         </>
       ) : (
         <Container className="mt-10 flex flex-col items-center justify-center">
-          <p className="font-semibold">
+          <p className="text-lg font-semibold">
             Pro zobrazení více informací o receptuře je potřeba být přihlášen a
             mít aktivní předplacený profil.
           </p>
           <ul className="mt-10 flex gap-x-4">
             <li>
-              <ActiveNavLink
-                href={"/prihlaseni"}
-                className="text-sm font-semibold 2xl:text-base"
-                activeClassName="text-primary"
-              >
-                Přihlásit se
-              </ActiveNavLink>
+              <Button asChild className="my-auto w-min">
+                <a href="/prihlasit-se">Přihlásit se</a>
+              </Button>
             </li>
             <li>
-              <ActiveNavLink
-                href={"/registrace"}
-                className="text-sm font-semibold 2xl:text-base"
-                activeClassName="text-primary"
+              <Button
+                asChild
+                className="my-auto w-min"
+                variant="primary-outline"
               >
-                Registrovat
-              </ActiveNavLink>
+                <a href="/registrace">Registrovat</a>
+              </Button>
             </li>
           </ul>
         </Container>
@@ -388,6 +382,7 @@ export function Hero({
   stitky,
   zmenStitek,
   currParner,
+  logged,
 }: {
   logo?: string;
   title: string;
@@ -403,6 +398,7 @@ export function Hero({
     changeHodnota?: () => void
   ) => void;
   currParner: any;
+  logged: string | undefined;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   let badgeCounter = 0;
@@ -483,47 +479,48 @@ export function Hero({
             })}
           </div>
           <div className="min-w-20 absolute right-5 top-5 my-auto hidden grid-cols-6 gap-x-3 md:static md:mt-20 md:grid md:gap-x-2 md:px-10">
-            {icons.map((icon, index) => (
-              <div
-                key={"kfhi" + index}
-                className={`${
-                  icon.name === "favorite" ? "flex" : "hidden md:flex"
-                } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
-              >
-                <ButtonIcon
-                  onClick={() => {
-                    switch (icon.name) {
-                      case "archive":
-                        return zmenStitek(
-                          veta,
-                          "MSklad",
-                          !stitky.includes("MSklad")
-                        );
-                      case "favorite":
-                        return zmenStitek(
-                          veta,
-                          "Oblíbené",
-                          !stitky.includes("Oblíbené")
-                        );
-                      case "print":
-                        return window.print();
+            {logged &&
+              icons.map((icon, index) => (
+                <div
+                  key={"kfhi" + index}
+                  className={`${
+                    icon.name === "favorite" ? "flex" : "hidden md:flex"
+                  } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
+                >
+                  <ButtonIcon
+                    onClick={() => {
+                      switch (icon.name) {
+                        case "archive":
+                          return zmenStitek(
+                            veta,
+                            "MSklad",
+                            !stitky.includes("MSklad")
+                          );
+                        case "favorite":
+                          return zmenStitek(
+                            veta,
+                            "Oblíbené",
+                            !stitky.includes("Oblíbené")
+                          );
+                        case "print":
+                          return window.print();
+                      }
+                    }}
+                    icon={icon.name}
+                    className={`bg-white ${
+                      icon.name === "archive" &&
+                      stitky.includes("MSklad") &&
+                      " bg-primary-200"
                     }
-                  }}
-                  icon={icon.name}
-                  className={`bg-white ${
-                    icon.name === "archive" &&
-                    stitky.includes("MSklad") &&
-                    " bg-primary-200"
-                  }
                   ${
                     icon.name === "favorite" &&
                     stitky.includes("Oblíbené") &&
                     "bg-primary-200"
                   }`}
-                />
-                <span className="hidden text-sm md:block">{icon.label}</span>
-              </div>
-            ))}
+                  />
+                  <span className="hidden text-sm md:block">{icon.label}</span>
+                </div>
+              ))}
           </div>
         </div>
       </div>
