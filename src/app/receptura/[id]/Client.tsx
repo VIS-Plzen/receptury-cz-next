@@ -117,8 +117,8 @@ export function Page({
         title={card.Nazev}
         hmotnost={{
           porce: card.HmotnostPorceDospeli,
-          masa: "115",
-          omacky: "70",
+          masa: card.HmotnostMasaDospeli,
+          omacky: card.HmotnostOmackyDospeli,
         }}
         kalkulacka={{
           porci: parseInt(card.PocetPorci),
@@ -132,11 +132,12 @@ export function Page({
           text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
         }}
         terapeut={{
-          text:
-            card.VyjadreniNT === ""
-              ? "Není vyplněno - VyjadreniNT"
-              : card.VyjadreniNT,
-          badges: ["Ryby a mořské plody", "Smažené", "Bezlepkové"],
+          text: card.VyjadreniNT === "" ? "Není vyplněno" : card.VyjadreniNT,
+          badges: [
+            card.Dieta1 === "Ano" && "Bezlepková",
+            card.Dieta2 === "Ano" && "Bezmléčná",
+            card.Dieta3 === "Ano" && "Šetřící",
+          ],
         }}
         skladba={{
           polevka: card.DoporucenaPolevka,
@@ -521,7 +522,7 @@ export function Informations({
   };
   hmotnost: { porce: string; masa: string; omacky: string };
   alergeny: { alergeny: string[]; text: string };
-  terapeut: { text: string; badges: string[] };
+  terapeut: { text: string; badges: any };
   skladba: { polevka: string; priloha: string; doplnek: string };
   veta: number;
   stitky: string[];
@@ -584,19 +585,23 @@ export function Informations({
     return (
       <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
         <span className="my-auto font-bold lg:text-lg">Hmotnost</span>
-        <div className="flex flex-row gap-x-3">
-          <div className="flex flex-col items-center">
+        <div className="flex flex-row divide-x-2 divide-primary-300/60">
+          <div className="flex flex-col items-center px-2">
             <span className="font-bold">Porce</span>
             <span>{hmotnost.porce}g</span>
           </div>
-          <div className="flex flex-col items-center border-x-2 border-primary-300/60 px-3">
-            <span className="font-bold">Masa</span>
-            <span>{hmotnost.masa}g</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="font-bold">Omáčky</span>
-            <span>{hmotnost.omacky}g</span>
-          </div>
+          {hmotnost.masa !== "0" && (
+            <div className="flex flex-col items-center px-2">
+              <span className="font-bold">Masa</span>
+              <span>{hmotnost.masa}g</span>
+            </div>
+          )}
+          {hmotnost.omacky !== "0" && (
+            <div className="flex flex-col items-center pl-2">
+              <span className="font-bold">Omáčky</span>
+              <span>{hmotnost.omacky}g</span>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -650,14 +655,24 @@ export function Informations({
     );
   }
   function Terapeut() {
+    let badgeCounter = 0;
     return (
       <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
         <Heading size="sm">Nutriční terapeut</Heading>
         <p>{terapeut.text}</p>
         <div className="flex flex-row gap-1.5">
-          {terapeut.badges.map((badge, index) => (
-            <Badge key={"tbb" + index}>{badge}</Badge>
-          ))}
+          {terapeut.badges.map((badge: any, index: number) => {
+            if (!badge || badgeCounter >= 4) return null;
+            badgeCounter++;
+            return (
+              <Badge
+                key={"bmbi" + index}
+                variant={index <= 2 ? "healthy" : undefined}
+              >
+                {badge}
+              </Badge>
+            );
+          })}
         </div>
       </div>
     );
