@@ -44,7 +44,7 @@ const dropdownData: DropdownItem[] = [
 ];
 
 // Hihlights link with href matching current url
-function ActiveNavLink({
+export function ActiveNavLink({
   activeClassName = "",
   className = "",
   ...props

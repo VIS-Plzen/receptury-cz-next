@@ -1,8 +1,22 @@
 import Heading from "@/components/ui/Heading";
+import { cookies } from "next/headers";
 import { LogMe, Page } from "./Client";
 
-async function readSome(id: string) {
+async function readSome(id: string, token: string | undefined) {
   if (id === "test.receptury.adelis.cz") return null;
+  const vlastnosti = token
+    ? []
+    : [
+        "Nazev",
+        "Identita",
+        "Obrazek",
+        "DruhSkupina",
+        "DruhPodskupina",
+        "Dieta1",
+        "Dieta2",
+        "Dieta3",
+        "TepelnaUprava",
+      ];
   const result = await (
     await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
       method: "POST",
@@ -19,6 +33,7 @@ async function readSome(id: string) {
             Podminka: `Identita='${id}'`,
             Limit: 1,
             Stitek: "",
+            Vlastnosti: vlastnosti,
           },
         ],
       }),
@@ -35,7 +50,10 @@ async function readSome(id: string) {
 }
 
 export default async function Home({ params }: { params: any }) {
-  const data: any = await readSome(params.id);
+  const cookie = cookies();
+  const token = cookie.get("token")?.value;
+
+  const data: any = await readSome(params.id, token);
 
   if (!data || !data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;
@@ -47,7 +65,9 @@ export default async function Home({ params }: { params: any }) {
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
-  return <Page card={card} curr={curr} />;
+  console.log(card);
+
+  return <Page card={card} curr={curr} logged={token} />;
 }
 
 const cv = {

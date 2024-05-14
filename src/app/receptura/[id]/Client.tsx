@@ -1,4 +1,5 @@
 "use client";
+import { ActiveNavLink } from "@/app/Navbar";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -37,10 +38,12 @@ export function Page({
   card,
   curr,
   partner,
+  logged,
 }: {
   card: any;
   curr: any;
   partner?: "bidfood" | "bonduelle";
+  logged: string | undefined;
 }) {
   const [refresh, setRefresh] = useState(false);
 
@@ -113,58 +116,90 @@ export function Page({
         zmenStitek={zmenStitek}
         currParner={currParner}
       />
-      <Informations
-        title={card.Nazev}
-        hmotnost={{
-          porce: card.HmotnostPorceDospeli,
-          masa: card.HmotnostMasaDospeli,
-          omacky: card.HmotnostOmackyDospeli,
-        }}
-        kalkulacka={{
-          porci: parseInt(card.PocetPorci),
-          koeficient: "1",
-          porciBackend: parseInt(card.PocetPorci),
-          data: curr.Suroviny,
-        }}
-        postup={card.TechnologickyPostup}
-        alergeny={{
-          alergeny: curr.Alergeny,
-          text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
-        }}
-        terapeut={{
-          text: card.VyjadreniNT === "" ? "Není vyplněno" : card.VyjadreniNT,
-          badges: [
-            card.Dieta1 === "Ano" && "Bezlepková",
-            card.Dieta2 === "Ano" && "Bezmléčná",
-            card.Dieta3 === "Ano" && "Šetřící",
-          ],
-        }}
-        skladba={{
-          polevka: card.DoporucenaPolevka,
-          priloha: card.DoporucenaPriloha,
-          doplnek: card.DoporucenyDoplnek,
-        }}
-        veta={card.Identita}
-        stitky={curr.Stitky}
-        zmenStitek={zmenStitek}
-      />
+      {logged ? (
+        <>
+          <Informations
+            title={card.Nazev}
+            hmotnost={{
+              porce: card.HmotnostPorceDospeli,
+              masa: card.HmotnostMasaDospeli,
+              omacky: card.HmotnostOmackyDospeli,
+            }}
+            kalkulacka={{
+              porci: parseInt(card.PocetPorci),
+              koeficient: "1",
+              porciBackend: parseInt(card.PocetPorci),
+              data: curr.Suroviny,
+            }}
+            postup={card.TechnologickyPostup}
+            alergeny={{
+              alergeny: curr.Alergeny,
+              text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
+            }}
+            terapeut={{
+              text:
+                card.VyjadreniNT === "" ? "Není vyplněno" : card.VyjadreniNT,
+              badges: [
+                card.Dieta1 === "Ano" && "Bezlepková",
+                card.Dieta2 === "Ano" && "Bezmléčná",
+                card.Dieta3 === "Ano" && "Šetřící",
+              ],
+            }}
+            skladba={{
+              polevka: card.DoporucenaPolevka,
+              priloha: card.DoporucenaPriloha,
+              doplnek: card.DoporucenyDoplnek,
+            }}
+            veta={card.Identita}
+            stitky={curr.Stitky}
+            zmenStitek={zmenStitek}
+          />
 
-      {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
+          {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
 
-      {/* <VolitelnyObsah
+          {/* <VolitelnyObsah
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
         img="/images/food.jpeg"
       /> */}
-      {currParner && (
-        <Partner
-          jmeno={currParner.jmeno}
-          heslo={currParner.heslo}
-          img="/images/food.jpeg"
-          color={currParner.name}
-          hasButton
-        />
+          {currParner && (
+            <Partner
+              jmeno={currParner.jmeno}
+              heslo={currParner.heslo}
+              img="/images/food.jpeg"
+              color={currParner.name}
+              hasButton
+            />
+          )}
+        </>
+      ) : (
+        <Container className="mt-10 flex flex-col items-center justify-center">
+          <p className="font-semibold">
+            Pro zobrazení více informací o receptuře je potřeba být přihlášen a
+            mít aktivní předplacený profil.
+          </p>
+          <ul className="mt-10 flex gap-x-4">
+            <li>
+              <ActiveNavLink
+                href={"/prihlaseni"}
+                className="text-sm font-semibold 2xl:text-base"
+                activeClassName="text-primary"
+              >
+                Přihlásit se
+              </ActiveNavLink>
+            </li>
+            <li>
+              <ActiveNavLink
+                href={"/registrace"}
+                className="text-sm font-semibold 2xl:text-base"
+                activeClassName="text-primary"
+              >
+                Registrovat
+              </ActiveNavLink>
+            </li>
+          </ul>
+        </Container>
       )}
     </div>
   );
