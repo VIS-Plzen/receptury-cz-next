@@ -1,3 +1,4 @@
+import { ToastContainer } from "@/components/ui/ToastContainer";
 import DebugContextProvider from "@/context/Debug";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
@@ -38,6 +39,7 @@ export default function RootLayout({
           <main id="obsah">{children}</main>
           <Footer />
         </DebugContextProvider>
+        <ToastContainer />
       </body>
     </html>
   );
