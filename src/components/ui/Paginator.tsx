@@ -75,7 +75,12 @@ export default function Paginator({
             {((!isTablet && totalPages > 5) || totalPages > 8) && (
               <ElipssisButton
                 iconSize={iconSize}
-                setOffset={setOffset}
+                setOffset={(page) => {
+                  if (loading) {
+                    return;
+                  }
+                  setOffset(page);
+                }}
                 offset={offset}
                 pagesOffset={pagesOffset}
                 back
@@ -87,7 +92,12 @@ export default function Paginator({
             {((!isTablet && totalPages > 5) || totalPages > 8) && (
               <ElipssisButton
                 iconSize={iconSize}
-                setOffset={setOffset}
+                setOffset={(page) => {
+                  if (loading) {
+                    return;
+                  }
+                  setOffset(page);
+                }}
                 offset={offset}
                 pagesOffset={pagesOffset}
               />
@@ -119,7 +129,12 @@ export default function Paginator({
           <>
             <ElipssisButton
               iconSize={iconSize}
-              setOffset={setOffset}
+              setOffset={(page) => {
+                if (loading) {
+                  return;
+                }
+                setOffset(page);
+              }}
               offset={offset}
               pagesOffset={pagesOffset}
             />
@@ -146,7 +161,12 @@ export default function Paginator({
             <ElipssisButton
               back
               iconSize={iconSize}
-              setOffset={setOffset}
+              setOffset={(page) => {
+                if (loading) {
+                  return;
+                }
+                setOffset(page);
+              }}
               offset={offset}
               pagesOffset={pagesOffset}
             />
