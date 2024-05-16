@@ -16,7 +16,6 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "@/hooks/useToast";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
@@ -59,9 +58,8 @@ export default function Receptury({
 
   const cookie = new Cookies();
 
-  let [storage]: any = useLocalStorage("userInfo", "");
-
-  const logged = cookie.get("token") && storage && storage.paid;
+  const logged = cookie.get("token");
+  const paid = cookie.get("token") && cookie.get("paid") === "true";
 
   const urlGroup =
     paramsObjects &&
@@ -522,11 +520,14 @@ export default function Receptury({
     stitek: "Oblíbené" | "MSklad",
     hodnota: boolean
   ) {
-    if (!logged) {
+    if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title:
-          "Pro použití této funkce je potřeba být přihlášen a mít aktivní předplacený profil",
+        title: `Pro použití této funkce je potřeba ${
+          logged
+            ? "mít předplacené členstí."
+            : "být přihlášen a mít předplacené členstí."
+        }`,
       });
     }
     const result = await (
@@ -647,6 +648,7 @@ export default function Receptury({
             isLoading={loading}
             data={data}
             zmenStitek={zmenStitek}
+            logged={logged}
           />
         )}
       </div>
@@ -655,9 +657,11 @@ export default function Receptury({
           currentPage={pageState}
           totalPages={Math.ceil(data.CelkovyPocet / 15)}
           changePage={(page) => {
+            if (loading) return null;
             setPageState(page);
             getDataAndSetQuery(page);
           }}
+          loading={loading}
         />
       )}
     </Container>

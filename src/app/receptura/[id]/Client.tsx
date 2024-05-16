@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import { toast } from "@/hooks/useToast";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -37,10 +38,12 @@ export function Page({
   card,
   curr,
   logged,
+  paid,
 }: {
   card: any;
   curr: any;
   logged: string | undefined;
+  paid: boolean;
 }) {
   const [refresh, setRefresh] = useState(false);
 
@@ -49,6 +52,16 @@ export function Page({
     stitek: "Oblíbené" | "MSklad",
     hodnota: boolean
   ) {
+    if (!logged || !paid) {
+      return toast({
+        intent: "warning",
+        title: `Pro použití této funkce je potřeba ${
+          logged
+            ? "mít předplacené členstí."
+            : "být přihlášen a mít předplacené členstí."
+        }`,
+      });
+    }
     const result = await (
       await fetch("/api", {
         method: "POST",
@@ -113,8 +126,9 @@ export function Page({
         zmenStitek={zmenStitek}
         currParner={currParner}
         logged={logged}
+        paid={paid}
       />
-      {logged ? (
+      {logged && paid ? (
         <>
           <Informations
             title={card.Nazev}
@@ -174,25 +188,29 @@ export function Page({
       ) : (
         <Container className="mt-10 flex flex-col items-center justify-center">
           <p className="text-lg font-semibold">
-            Pro zobrazení více informací o receptuře je potřeba být přihlášen a
-            mít aktivní předplacený profil.
+            Pro zobrazení více informací o receptuře je potřeba
+            {logged
+              ? " mít předplacené členstí."
+              : " být přihlášen a mít předplacené členstí."}
           </p>
-          <ul className="mt-10 flex gap-x-4">
-            <li>
-              <Button asChild className="my-auto w-min">
-                <a href="/prihlasit-se">Přihlásit se</a>
-              </Button>
-            </li>
-            <li>
-              <Button
-                asChild
-                className="my-auto w-min"
-                variant="primary-outline"
-              >
-                <a href="/registrace">Registrovat</a>
-              </Button>
-            </li>
-          </ul>
+          {!logged && (
+            <ul className="mt-10 flex gap-x-4">
+              <li>
+                <Button asChild className="my-auto w-min">
+                  <a href="/prihlasit-se">Přihlásit se</a>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  asChild
+                  className="my-auto w-min"
+                  variant="primary-outline"
+                >
+                  <a href="/registrace">Registrovat</a>
+                </Button>
+              </li>
+            </ul>
+          )}
         </Container>
       )}
     </div>
@@ -383,6 +401,7 @@ export function Hero({
   zmenStitek,
   currParner,
   logged,
+  paid,
 }: {
   logo?: string;
   title: string;
@@ -399,6 +418,7 @@ export function Hero({
   ) => void;
   currParner: any;
   logged: string | undefined;
+  paid: boolean;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   let badgeCounter = 0;
@@ -479,48 +499,57 @@ export function Hero({
             })}
           </div>
           <div className="min-w-20 absolute right-5 top-5 my-auto hidden grid-cols-6 gap-x-3 md:static md:mt-20 md:grid md:gap-x-2 md:px-10">
-            {logged &&
-              icons.map((icon, index) => (
-                <div
-                  key={"kfhi" + index}
-                  className={`${
-                    icon.name === "favorite" ? "flex" : "hidden md:flex"
-                  } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
-                >
-                  <ButtonIcon
-                    onClick={() => {
-                      switch (icon.name) {
-                        case "archive":
-                          return zmenStitek(
-                            veta,
-                            "MSklad",
-                            !stitky.includes("MSklad")
-                          );
-                        case "favorite":
-                          return zmenStitek(
-                            veta,
-                            "Oblíbené",
-                            !stitky.includes("Oblíbené")
-                          );
-                        case "print":
-                          return window.print();
-                      }
-                    }}
-                    icon={icon.name}
-                    className={`bg-white ${
-                      icon.name === "archive" &&
-                      stitky.includes("MSklad") &&
-                      " bg-primary-200"
+            {icons.map((icon, index) => (
+              <div
+                key={"kfhi" + index}
+                className={`${
+                  icon.name === "favorite" ? "flex" : "hidden md:flex"
+                } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
+              >
+                <ButtonIcon
+                  onClick={() => {
+                    switch (icon.name) {
+                      case "archive":
+                        return zmenStitek(
+                          veta,
+                          "MSklad",
+                          !stitky.includes("MSklad")
+                        );
+                      case "favorite":
+                        return zmenStitek(
+                          veta,
+                          "Oblíbené",
+                          !stitky.includes("Oblíbené")
+                        );
+                      case "print":
+                        if (!logged || !paid) {
+                          return toast({
+                            intent: "warning",
+                            title: `Pro použití této funkce je potřeba ${
+                              logged
+                                ? "mít předplacené členstí."
+                                : "být přihlášen a mít předplacené členstí."
+                            }`,
+                          });
+                        }
+                        return window.print();
                     }
+                  }}
+                  icon={icon.name}
+                  className={`bg-white ${
+                    icon.name === "archive" &&
+                    stitky.includes("MSklad") &&
+                    " bg-primary-200"
+                  }
                   ${
                     icon.name === "favorite" &&
                     stitky.includes("Oblíbené") &&
                     "bg-primary-200"
                   }`}
-                  />
-                  <span className="hidden text-sm md:block">{icon.label}</span>
-                </div>
-              ))}
+                />
+                <span className="hidden text-sm md:block">{icon.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -793,9 +822,9 @@ export function Partner({
             <Button
               className={`w-min ${
                 color === "bidfood"
-                  ? "bg-bidfood-900"
+                  ? "bg-bidfood-900 hover:bg-bidfood-950"
                   : color === "bonduelle"
-                    ? "bg-bonduelle-900"
+                    ? "bg-bonduelle-900 hover:bg-bonduelle-950"
                     : ""
               }`}
             >

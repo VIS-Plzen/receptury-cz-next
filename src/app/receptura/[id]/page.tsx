@@ -67,7 +67,9 @@ export default async function Home({ params }: { params: any }) {
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
-  return <Page card={card} curr={curr} logged={showAll} />;
+  return (
+    <Page card={card} curr={curr} logged={showAll} paid={paid === "true"} />
+  );
 }
 
 const cv = {

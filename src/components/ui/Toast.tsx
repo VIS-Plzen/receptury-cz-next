@@ -19,7 +19,7 @@ const ToastViewport = forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={clsx(
-      "tablet:flex-col desktop:pb-12 pointer-events-none fixed bottom-0 left-1/2 top-auto z-modal-above flex max-h-screen w-full max-w-xl -translate-x-1/2 flex-col-reverse gap-3 px-4 pb-40",
+      "tablet:flex-col desktop:pb-12 pointer-events-none fixed bottom-0 left-1/2 top-auto z-modal-above flex max-h-screen w-full max-w-xl -translate-x-1/2 flex-col-reverse gap-3 px-4 pb-7",
       className
     )}
     {...props}

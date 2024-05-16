@@ -8,12 +8,14 @@ type Props = React.ComponentPropsWithoutRef<"div"> & {
   currentPage: number;
   totalPages: number;
   changePage: (page: number) => void;
+  loading?: boolean;
 };
 
 export default function Paginator({
   currentPage,
   totalPages,
   changePage,
+  loading,
 }: Props) {
   // set by ElipssisButton - on click sets +/- 5, showing currenently selected page + offset <DayButton>s
   const [offset, setOffset] = useState<number>(0);
@@ -31,7 +33,11 @@ export default function Paginator({
   }, [currentPage, changePage, totalPages]);
 
   return (
-    <div className="my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2">
+    <div
+      className={`my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2 ${
+        loading && "opacity-50"
+      }`}
+    >
       <ChevronButton
         back
         changePage={changePage}

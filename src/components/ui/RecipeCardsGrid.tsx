@@ -32,6 +32,7 @@ type Props = {
   cardsInGrid?: number;
   assertCard?: boolean;
   zmenStitek?: any;
+  logged?: boolean;
 };
 
 function RecipeCardsGrid({
@@ -43,6 +44,7 @@ function RecipeCardsGrid({
   cardsInGrid,
   assertCard,
   zmenStitek,
+  logged,
 }: Props) {
   return (
     <div
@@ -74,7 +76,7 @@ function RecipeCardsGrid({
             img="/images/food.jpeg"
             zmenStitek={zmenStitek}
             veta={card.Vlastnosti.Veta}
-            stitky={card.Stitky}
+            stitky={logged ? card.Stitky : []}
           />
         ))}
     </div>
