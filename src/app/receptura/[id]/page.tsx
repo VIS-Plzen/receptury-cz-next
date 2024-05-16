@@ -52,8 +52,10 @@ async function readSome(id: string, token: string | undefined) {
 export default async function Home({ params }: { params: any }) {
   const cookie = cookies();
   const token = cookie.get("token")?.value;
+  const paid = cookie.get("paid")?.value;
+  const showAll = token && paid;
 
-  const data: any = await readSome(params.id, token);
+  const data: any = await readSome(params.id, showAll);
 
   if (!data || !data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;
@@ -65,9 +67,7 @@ export default async function Home({ params }: { params: any }) {
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
-  console.log(card);
-
-  return <Page card={card} curr={curr} logged={token} />;
+  return <Page card={card} curr={curr} logged={showAll} />;
 }
 
 const cv = {

@@ -122,6 +122,8 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   const cookies = new Cookies();
   const name = cookies.get("name");
   const token = cookies.get("token");
+  const paid = cookies.get("paid");
+  const prepaid = token && paid === "true";
 
   if (!token)
     return (
@@ -196,6 +198,19 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                 </button>
               )}
             </Menu.Item>
+            {!prepaid && (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active && "bg-primary-100"
+                    } rounded-xl p-2 text-left font-medium text-error-500`}
+                  >
+                    Členstí vypršelo!
+                  </button>
+                )}
+              </Menu.Item>
+            )}
           </div>
         </Menu.Items>
       </Transition>
@@ -235,8 +250,13 @@ function TouchMenu({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const cookies = new Cookies();
+
   const router = useRouter();
   const name = cookies.get("name");
+
+  const token = cookies.get("token");
+  const paid = cookies.get("paid");
+  const prepaid = token && paid === "true";
 
   useEffect(() => {
     setIsOpen(false);
@@ -297,6 +317,14 @@ function TouchMenu({
                         Odhlásit se
                       </button>
                     </li>
+
+                    {!prepaid && (
+                      <li>
+                        <a href="" className="text-error-500">
+                          Členstí vypršelo!
+                        </a>
+                      </li>
+                    )}
                   </ul>
                 </div>
               ) : (

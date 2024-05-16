@@ -4,8 +4,10 @@ import InputField from "@/components/forms/InputField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -80,9 +82,13 @@ function Page() {
       ).json();
       setHasNotice(
         res.success == true
-          ? { variant: "success-solid", message: "Úspěšně registrováno." }
+          ? {
+              variant: "success-solid",
+              message: "Úspěšně registrováno, potvrzovací email byl odeslán.",
+            }
           : { variant: "error-solid", message: res.message }
       );
+      actions.setSubmitting(false);
     },
 
     validationSchema: toFormikValidationSchema(formValidationSchema),
@@ -151,13 +157,20 @@ function Page() {
 
           <div className="flex items-center justify-end">
             <Button
-              className="my-4 items-end"
+              className="relative my-4 items-end"
               type="submit"
               disabled={
                 formik.isSubmitting || hasNotice?.variant === "success-solid"
               }
             >
-              Registrovat se
+              <LoadingSpinner
+                className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
+                  formik.isSubmitting && "opacity-100"
+                }`}
+              />
+              <p className={`${formik.isSubmitting && "opacity-0"}`}>
+                Registrovat se
+              </p>
             </Button>
           </div>
         </form>
@@ -168,7 +181,17 @@ function Page() {
         isOpen={hasNotice !== null}
         onOpenChange={() => setHasNotice(null)}
         className="my-4 px-2 md:px-0"
-      />
+      >
+        {hasNotice?.variant === "success-solid" && (
+          <p className="text-base font-semibold">
+            Také máte možnost{" "}
+            <Link href="/prihlaseni" className="underline underline-offset-2">
+              přihlásit se
+            </Link>
+            .
+          </p>
+        )}
+      </Notice>
     </Container>
   );
 }

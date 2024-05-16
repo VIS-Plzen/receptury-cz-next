@@ -60,37 +60,39 @@ export default function ContentSelector({ searchParams }: any) {
   }
 
   return (
-    <div className="flex flex-col">
-      <Container>
-        <div className="flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
-          {contents.map((cont, index) => (
-            <button
-              key={"kfccc" + index}
-              className={`rounded-full px-5 py-2 font-bold ${
-                cont.key === content
-                  ? "bg-primary text-white"
-                  : "bg-white text-black"
-              }`}
-              onClick={() => updateContent(cont.key)}
-            >
-              {cont.title}
-            </button>
-          ))}
-        </div>
-      </Container>
-      {content === "informace" && <Form />}
-      {content === "receptury" && (
-        <Receptury
-          title="Oblíbené"
-          urlPreQuery={`obsah=${content}`}
-          boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
-          groupsData={groupsData}
-        />
-      )}
-      {content === null && (
-        <LoadingSpinner size="2xl" className="mx-auto my-20" />
-      )}
-    </div>
+    <>
+      <div className="flex flex-col">
+        <Container>
+          <div className="flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
+            {contents.map((cont, index) => (
+              <button
+                key={"kfccc" + index}
+                className={`rounded-full px-5 py-2 font-bold ${
+                  cont.key === content
+                    ? "bg-primary text-white"
+                    : "bg-white text-black"
+                }`}
+                onClick={() => updateContent(cont.key)}
+              >
+                {cont.title}
+              </button>
+            ))}
+          </div>
+        </Container>
+        {content === "informace" && <Form />}
+        {content === "receptury" && (
+          <Receptury
+            title="Oblíbené"
+            urlPreQuery={`obsah=${content}`}
+            boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
+            groupsData={groupsData}
+          />
+        )}
+        {content === null && (
+          <LoadingSpinner size="2xl" className="mx-auto my-20" />
+        )}
+      </div>
+    </>
   );
 }
 

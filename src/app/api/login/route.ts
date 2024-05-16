@@ -34,8 +34,21 @@ export async function POST(request: Request) {
     if (!dataProfile.firstName) {
       return NextResponse.json(dataProfile);
     }
+    const resValidate = await fetch(
+      "https://jidelny.cz/wp-json/receptury/v1/user/validate",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: dataLogin.token,
+        }),
+      }
+    );
+    const dataValidate = await resValidate.json();
+
     dataProfile.token = dataLogin.token;
     dataProfile.tokenValidTo = dataLogin.tokenValidTo;
+    dataProfile.paid = dataValidate.paid ? dataValidate.paidTo : false;
     return NextResponse.json(dataProfile);
   } catch (error) {
     return NextResponse.json({

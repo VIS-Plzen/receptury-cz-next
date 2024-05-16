@@ -65,6 +65,10 @@ export default function Page() {
       if (res.token) {
         cookies.set("token", res.token /* {expires: } */);
         cookies.set("name", res.firstName + " " + res.lastName);
+        cookies.set("paid", res.paid);
+        if (!res.paid) {
+          cookies.set("memModal", "true");
+        }
         localStorage.setItem("userInfo", JSON.stringify(res));
         return router.push("/");
       }

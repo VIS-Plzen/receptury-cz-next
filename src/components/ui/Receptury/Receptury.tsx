@@ -16,6 +16,7 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "@/hooks/useToast";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
@@ -57,7 +58,10 @@ export default function Receptury({
   const paramsObjects = Object.fromEntries(paramsHook);
 
   const cookie = new Cookies();
-  const logged = cookie.get("token");
+
+  let [storage]: any = useLocalStorage("userInfo", "");
+
+  const logged = cookie.get("token") && storage && storage.paid;
 
   const urlGroup =
     paramsObjects &&
@@ -518,11 +522,11 @@ export default function Receptury({
     stitek: "Oblíbené" | "MSklad",
     hodnota: boolean
   ) {
-    console.log(logged);
     if (!logged) {
       return toast({
         intent: "warning",
-        title: "Pro použití této funkce je potřeba být přihlášen",
+        title:
+          "Pro použití této funkce je potřeba být přihlášen a mít aktivní předplacený profil",
       });
     }
     const result = await (

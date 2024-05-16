@@ -76,7 +76,7 @@ type NoticeStyleProps = {
 
 type NoticeProps = React.ComponentPropsWithoutRef<"div"> &
   NoticeStyleProps & {
-    children?: string;
+    children?: any;
     title: string | undefined;
     isOpen?: boolean;
     onOpenChange?: Dispatch<SetStateAction<boolean>>;
