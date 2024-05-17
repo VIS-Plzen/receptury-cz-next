@@ -57,7 +57,7 @@ export function Page({
         intent: "warning",
         title: `Pro použití této funkce je potřeba ${
           logged
-            ? "mít předplacené členství."
+            ? "mít aktivní předplacené členství."
             : "být přihlášen a mít předplacené členství."
         }`,
       });
@@ -190,14 +190,14 @@ export function Page({
           <p className="text-lg font-semibold">
             Pro zobrazení více informací o receptuře je potřeba
             {logged
-              ? " mít předplacené členství."
+              ? " mít aktivní předplacené členství."
               : " být přihlášen a mít předplacené členství."}
           </p>
           {!logged && (
             <ul className="mt-10 flex gap-x-4">
               <li>
                 <Button asChild className="my-auto w-min">
-                  <a href="/prihlasit-se">Přihlásit se</a>
+                  <a href="/prihlaseni">Přihlásit se</a>
                 </Button>
               </li>
               <li>

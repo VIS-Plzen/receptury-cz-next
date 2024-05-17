@@ -45,7 +45,6 @@ export async function POST(request: Request) {
       }
     );
     const dataValidate = await resValidate.json();
-    console.log(dataValidate);
 
     dataProfile.token = dataLogin.token;
     dataProfile.tokenValidTo = dataLogin.tokenValidTo;

@@ -525,7 +525,7 @@ export default function Receptury({
         intent: "warning",
         title: `Pro použití této funkce je potřeba ${
           logged
-            ? "mít předplacené členství."
+            ? "mít aktivní předplacené členství."
             : "být přihlášen a mít předplacené členství."
         }`,
       });
