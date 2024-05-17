@@ -1,6 +1,5 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
 import MembershipModal from "./MembershipModal";
 import Spolupracujeme from "./Spolupracujeme";
@@ -100,12 +99,9 @@ export default async function Home({ searchParams }: any) {
     };
   }
 
-  const cookie = cookies();
-  const showModal = cookie.get("memModal")?.value;
-
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
-      {showModal && <MembershipModal />}
+      <MembershipModal />
       <Inspirace initData={{ nove: nove, oblibene: oblibene }} />
       <Ssr
         searchParams={searchParams}

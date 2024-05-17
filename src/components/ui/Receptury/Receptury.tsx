@@ -59,7 +59,7 @@ export default function Receptury({
   const cookie = new Cookies();
 
   const logged = cookie.get("token");
-  const paid = cookie.get("token") && cookie.get("paid") === "true";
+  const paid = logged && cookie.get("paid");
 
   const urlGroup =
     paramsObjects &&
@@ -525,8 +525,8 @@ export default function Receptury({
         intent: "warning",
         title: `Pro použití této funkce je potřeba ${
           logged
-            ? "mít předplacené členstí."
-            : "být přihlášen a mít předplacené členstí."
+            ? "mít předplacené členství."
+            : "být přihlášen a mít předplacené členství."
         }`,
       });
     }

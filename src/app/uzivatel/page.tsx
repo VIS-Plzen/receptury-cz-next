@@ -8,11 +8,13 @@ export default function Home({ searchParams }: any) {
   return (
     <>
       <div
-        className={`mt-20 w-full bg-error-600 py-3 text-center text-white md:mt-24 ${
-          paid !== "true" && "bg-error-600"
+        className={`mt-20 w-full py-3 text-center text-white md:mt-24 ${
+          paid !== "false" ? "bg-success-600" : "bg-error-600"
         }`}
       >
-        {paid !== "true" && "Pozor, nemáte aktivní účet prémium!"}
+        {paid !== "false"
+          ? "Prémium účet aktivní do: " + paid
+          : "Pozor, nemáte aktivní účet prémium!"}
       </div>
       <div className="flex flex-col items-stretch justify-start gap-24 py-16">
         <ContentSelector searchParams={searchParams} />

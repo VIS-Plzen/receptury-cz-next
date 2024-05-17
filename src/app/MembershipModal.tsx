@@ -1,17 +1,21 @@
 "use client";
 import Modal from "@/components/ui/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 type Props = {};
 
 export default function MembershipModal({}: Props) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const cookies = new Cookies();
-  if (cookies.get("memModal")) {
-    cookies.remove("memModal");
-  }
+
+  useEffect(() => {
+    if (cookies.get("memModal")) {
+      setOpen(true);
+      cookies.remove("memModal");
+    }
+  }, []);
 
   return (
     <Modal setIsOpen={setOpen} isOpen={open} title="Kupte si prémium!">

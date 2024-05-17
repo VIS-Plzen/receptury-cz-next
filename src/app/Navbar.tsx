@@ -123,7 +123,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
   const name = cookies.get("name");
   const token = cookies.get("token");
   const paid = cookies.get("paid");
-  const prepaid = token && paid === "true";
+  const prepaid = token && paid;
 
   if (!token)
     return (
@@ -169,7 +169,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 top-full z-10 mt-4 flex w-full flex-col overflow-hidden rounded-2xl border-2 border-primary-200 bg-white shadow-xl">
-          <div className="flex flex-col p-1">
+          <div className="flex flex-col">
             {dropdownItems.map((item: DropdownItem, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
@@ -189,8 +189,10 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                     active && "bg-primary-100"
                   } rounded-xl p-2 text-left`}
                   onClick={() => {
+                    cookies.remove("paid");
                     cookies.remove("token");
                     cookies.remove("name");
+                    localStorage.removeItem("userInfo");
                     router.push("/prihlaseni");
                   }}
                 >
@@ -198,19 +200,15 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                 </button>
               )}
             </Menu.Item>
-            {!prepaid && (
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active && "bg-primary-100"
-                    } rounded-xl p-2 text-left font-medium text-error-500`}
-                  >
-                    Členstí vypršelo!
-                  </button>
-                )}
-              </Menu.Item>
-            )}
+            <Menu.Item>
+              <button
+                className={`${
+                  prepaid ? "bg-success-600" : "bg-error-600"
+                } px-2 py-1 text-left font-medium text-white`}
+              >
+                {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
+              </button>
+            </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>
@@ -256,7 +254,7 @@ function TouchMenu({
 
   const token = cookies.get("token");
   const paid = cookies.get("paid");
-  const prepaid = token && paid === "true";
+  const prepaid = token && paid;
 
   useEffect(() => {
     setIsOpen(false);
@@ -309,22 +307,27 @@ function TouchMenu({
                     <li>
                       <button
                         onClick={() => {
+                          cookies.remove("paid");
                           cookies.remove("token");
                           cookies.remove("name");
+                          localStorage.removeItem("userInfo");
                           router.push("/prihlaseni");
                         }}
                       >
                         Odhlásit se
                       </button>
                     </li>
-
-                    {!prepaid && (
-                      <li>
-                        <a href="" className="text-error-500">
-                          Členstí vypršelo!
-                        </a>
-                      </li>
-                    )}
+                    <li
+                      className={`-mx-4 w-[calc(100%+48px)] px-4 sm:-mx-6 sm:px-6 ${
+                        prepaid ? "bg-success-600" : "bg-error-600"
+                      }`}
+                    >
+                      <a
+                        className={`block w-full text-left font-medium text-white`}
+                      >
+                        {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
+                      </a>
+                    </li>
                   </ul>
                 </div>
               ) : (

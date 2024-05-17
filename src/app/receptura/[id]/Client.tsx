@@ -57,8 +57,8 @@ export function Page({
         intent: "warning",
         title: `Pro použití této funkce je potřeba ${
           logged
-            ? "mít předplacené členstí."
-            : "být přihlášen a mít předplacené členstí."
+            ? "mít předplacené členství."
+            : "být přihlášen a mít předplacené členství."
         }`,
       });
     }
@@ -190,8 +190,8 @@ export function Page({
           <p className="text-lg font-semibold">
             Pro zobrazení více informací o receptuře je potřeba
             {logged
-              ? " mít předplacené členstí."
-              : " být přihlášen a mít předplacené členstí."}
+              ? " mít předplacené členství."
+              : " být přihlášen a mít předplacené členství."}
           </p>
           {!logged && (
             <ul className="mt-10 flex gap-x-4">
@@ -527,8 +527,8 @@ export function Hero({
                             intent: "warning",
                             title: `Pro použití této funkce je potřeba ${
                               logged
-                                ? "mít předplacené členstí."
-                                : "být přihlášen a mít předplacené členstí."
+                                ? "mít předplacené členství."
+                                : "být přihlášen a mít předplacené členství."
                             }`,
                           });
                         }
