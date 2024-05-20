@@ -204,7 +204,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
               <button
                 className={`${
                   prepaid ? "bg-success-600" : "bg-error-600"
-                } px-2 py-1 text-left font-medium text-white`}
+                } px-2 py-2 text-left font-medium text-white`}
               >
                 {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
               </button>
