@@ -5,7 +5,8 @@ async function readSome(
   selectedGroup: any,
   selectedSubgroup: any,
   comboBoxValues: any,
-  sideBarValues: any
+  sideBarValues: any,
+  sid: string | undefined
 ) {
   //Filtrování
   let podminka = "";
@@ -68,7 +69,7 @@ async function readSome(
       body: JSON.stringify({
         Uzivatel: process.env.BE_USER,
         Heslo: process.env.BE_PASSWORD,
-        SID: "12345VIS",
+        SID: sid,
         Funkce: "Receptury",
         Parametry: [
           {
@@ -330,6 +331,7 @@ export default async function Ssr({
   className = "",
   urlPreQuery = "",
   boxSettings,
+  sid,
 }: {
   searchParams: any;
   title?: string;
@@ -341,8 +343,8 @@ export default async function Ssr({
     disabledValues?: string[];
     initialTrue?: string[];
   };
+  sid?: string;
 }) {
-
   let [selectedGroup, selectedSubgroup] = returnGroups();
 
   function returnGroups() {
@@ -561,7 +563,8 @@ export default async function Ssr({
     selectedGroup,
     selectedSubgroup,
     comboBoxValues,
-    sideBarValues
+    sideBarValues,
+    sid
   );
 
   return (

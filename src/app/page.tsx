@@ -1,5 +1,6 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
 import MembershipModal from "./MembershipModal";
 import Spolupracujeme from "./Spolupracujeme";
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ searchParams }: any) {
+  const cookie = cookies();
+  const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
+
   let nove = await readNew();
   let oblibene = await readFavorite();
 
@@ -22,7 +26,7 @@ export default async function Home({ searchParams }: any) {
         body: JSON.stringify({
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
-          SID: "12345VIS",
+          SID: sid,
           Funkce: "Receptury",
           Parametry: [
             {
@@ -64,7 +68,7 @@ export default async function Home({ searchParams }: any) {
         body: JSON.stringify({
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
-          SID: "12345VIS",
+          SID: sid,
           Funkce: "Receptury",
           Parametry: [
             {
@@ -106,6 +110,7 @@ export default async function Home({ searchParams }: any) {
       <Ssr
         searchParams={searchParams}
         className="border-y-2 border-primary-200"
+        sid={sid}
       />
       <Spolupracujeme />
       <VolitelnyObsah

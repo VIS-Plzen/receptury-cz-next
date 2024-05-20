@@ -24,7 +24,7 @@ async function readSome(id: string, token: string | undefined) {
       body: JSON.stringify({
         Uzivatel: process.env.BE_USER,
         Heslo: process.env.BE_PASSWORD,
-        SID: "12345VIS",
+        SID: token ? token : "12345VIS",
         Funkce: "Receptury",
         Parametry: [
           {

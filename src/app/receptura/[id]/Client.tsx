@@ -66,7 +66,7 @@ export function Page({
       await fetch("/api", {
         method: "POST",
         body: JSON.stringify({
-          Sid: "12345VIS",
+          Sid: logged,
           Funkce: "Stitek",
           Parametry: {
             Tabulka: "Receptury",
