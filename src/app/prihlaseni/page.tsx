@@ -63,9 +63,11 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        cookies.set("token", res.token /* {expires: } */);
-        cookies.set("name", res.firstName + " " + res.lastName);
-        cookies.set("paid", res.paid);
+        cookies.set("token", res.token, { expires: getExpirationTime(2) });
+        cookies.set("name", res.firstName + " " + res.lastName, {
+          expires: getExpirationTime(2),
+        });
+        cookies.set("paid", res.paid, { expires: getExpirationTime(2) });
         if (!res.paid) {
           cookies.set("memModal", "true");
         }
@@ -82,6 +84,12 @@ export default function Page() {
     validateOnChange: false,
     validateOnBlur: true,
   });
+
+  function getExpirationTime(hours: number) {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+    return date;
+  }
 
   const formWasTouched = formik.submitCount > 0;
 

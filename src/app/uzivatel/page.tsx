@@ -9,10 +9,10 @@ export default function Home({ searchParams }: any) {
     <>
       <div
         className={`mt-20 w-full py-3 text-center text-white md:mt-24 ${
-          paid !== "false" ? "bg-success-600" : "bg-error-600"
+          paid && paid !== "false" ? "bg-success-600" : "bg-error-600"
         }`}
       >
-        {paid !== "false"
+        {paid && paid !== "false"
           ? "Prémium účet aktivní do: " + paid
           : "Pozor, nemáte aktivní účet prémium!"}
       </div>

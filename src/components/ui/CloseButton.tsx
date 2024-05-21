@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { forwardRef } from "react";
-import { CancelIcon } from "../icons";
+import { CloseIcon } from "../icons";
 
 type CloseButtonProps = {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "inherit";
@@ -65,7 +65,7 @@ const CloseButton = forwardRef<Ref, CloseButtonProps>(
         type="button"
         {...rest}
       >
-        <CancelIcon
+        <CloseIcon
           aria-hidden="true"
           className={clsx(
             componentVariants.size.icon[size],
