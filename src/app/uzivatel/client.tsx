@@ -12,6 +12,7 @@ import Heading from "@/components/ui/Heading";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Receptury from "@/components/ui/Receptury/Receptury";
 import { groupsData } from "@/components/ui/Receptury/Ssr";
+import { toast } from "@/hooks/useToast";
 import clsx from "clsx";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -145,8 +146,20 @@ function Form() {
     if (res.success) {
       delete data.token;
       localStorage.setItem("userInfo", JSON.stringify(data));
+      const name = data.firstName + " " + data.lastName;
+      cookies.set("name", name);
+      toast({
+        intent: "success",
+        title: "Změny úspěšně uloženy",
+      });
+    } else {
+      toast({
+        intent: "error",
+        title: "Změny se nepovedlo uložit",
+      });
     }
   }
+
   const formValidationSchema: any = z.object({
     firstName: z
       .string({

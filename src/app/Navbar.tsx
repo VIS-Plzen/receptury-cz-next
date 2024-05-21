@@ -323,7 +323,7 @@ function TouchMenu({
                       }`}
                     >
                       <a
-                        className={`block w-full text-left font-medium text-white`}
+                        className={`block w-full py-1 text-left font-medium text-white`}
                       >
                         {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
                       </a>
