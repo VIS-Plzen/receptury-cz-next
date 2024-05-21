@@ -70,7 +70,7 @@ export default function Page() {
           cookies.set("memModal", "true");
         }
         localStorage.setItem("userInfo", JSON.stringify(res));
-        return router.push("/", { swallow: false });
+        return (window.location.href = "/");
       }
 
       // if we recieve a login token, we are succesfully logged in

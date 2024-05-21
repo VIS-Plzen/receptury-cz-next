@@ -193,7 +193,7 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
                     cookies.remove("token");
                     cookies.remove("name");
                     localStorage.removeItem("userInfo");
-                    router.push("/prihlaseni", { swallow: false });
+                    window.location.href = "/prihlaseni";
                   }}
                 >
                   Odhlásit se
@@ -311,7 +311,7 @@ function TouchMenu({
                           cookies.remove("token");
                           cookies.remove("name");
                           localStorage.removeItem("userInfo");
-                          router.push("/prihlaseni", { swallow: false });
+                          window.location.href = "/prihlaseni";
                         }}
                       >
                         Odhlásit se

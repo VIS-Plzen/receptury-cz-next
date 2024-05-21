@@ -122,7 +122,7 @@ export function Page({
         ]}
         image={card.Obrazek}
         veta={card.Identita}
-        stitky={curr.Stitky}
+        stitky={!logged ? curr.Stitky : []}
         zmenStitek={zmenStitek}
         currParner={currParner}
         logged={logged}
@@ -535,16 +535,43 @@ export function Hero({
                         return window.print();
                     }
                   }}
-                  icon={icon.name}
+                  icon={(() => {
+                    let iconName:
+                      | "archive"
+                      | "calendar-view-months"
+                      | "downloading"
+                      | "favorite-fill"
+                      | "favorite"
+                      | "list"
+                      | "print"
+                      | "visibility"
+                      | "archive-fill"
+                      | "rate-review"
+                      | "share"
+                      | "visibility-off"
+                      | undefined = icon.name;
+                    switch (icon.name) {
+                      case "archive":
+                        if (stitky.includes("MSklad"))
+                          iconName = "archive-fill";
+                        break;
+
+                      case "favorite":
+                        if (stitky.includes("Oblíbené"))
+                          iconName = "favorite-fill";
+                        break;
+                    }
+                    return iconName;
+                  })()}
                   className={`bg-white ${
                     icon.name === "archive" &&
                     stitky.includes("MSklad") &&
-                    " bg-primary-200"
+                    " text-primary-500"
                   }
                   ${
                     icon.name === "favorite" &&
                     stitky.includes("Oblíbené") &&
-                    "bg-primary-200"
+                    "text-primary-500"
                   }`}
                 />
                 <span className="hidden text-sm md:block">{icon.label}</span>
@@ -623,16 +650,42 @@ export function Informations({
                       return window.print();
                   }
                 }}
-                icon={icon.name}
+                icon={(() => {
+                  let iconName:
+                    | "archive"
+                    | "calendar-view-months"
+                    | "downloading"
+                    | "favorite-fill"
+                    | "favorite"
+                    | "list"
+                    | "print"
+                    | "visibility"
+                    | "archive-fill"
+                    | "rate-review"
+                    | "share"
+                    | "visibility-off"
+                    | undefined = icon.name;
+                  switch (icon.name) {
+                    case "archive":
+                      if (stitky.includes("MSklad")) iconName = "archive-fill";
+                      break;
+
+                    case "favorite":
+                      if (stitky.includes("Oblíbené"))
+                        iconName = "favorite-fill";
+                      break;
+                  }
+                  return iconName;
+                })()}
                 className={`bg-white ${
                   icon.name === "archive" &&
                   stitky.includes("MSklad") &&
-                  " bg-primary-200"
+                  " text-primary-500"
                 }
                 ${
                   icon.name === "favorite" &&
                   stitky.includes("Oblíbené") &&
-                  "bg-primary-200"
+                  "text-primary-500"
                 }`}
               ></ButtonIcon>
               <span className="text-sm">{icon.label}</span>
