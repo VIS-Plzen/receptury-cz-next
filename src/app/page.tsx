@@ -50,7 +50,6 @@ export default async function Home({ searchParams }: any) {
         }),
       })
     ).json();
-
     if (result.Result) {
       return result.Vety;
     }

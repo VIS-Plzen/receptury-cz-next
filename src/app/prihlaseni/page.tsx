@@ -20,7 +20,6 @@ export default function Page() {
 
   function returnInitNotice() {
     const q = query.get("registration_result");
-    console.log(q, "tuz");
     if (!q) return null;
     let mSet: any = null;
     switch (q) {

@@ -121,12 +121,19 @@ function Form() {
     });
     setHasData(true);
     const data = await res.json();
+
     if (data.firstName) {
       localStorage.setItem("userInfo", JSON.stringify(data));
       Object.keys(data).forEach(
         (key) =>
           formik.getFieldProps("key") && formik.setFieldValue(key, data[key])
       );
+    } else {
+      console.log("Tady doopravit");
+      /* toast({
+        intent: "error",
+        title: "Data se nepodařilo načíst",
+      }); */
     }
   }
 
