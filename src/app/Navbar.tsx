@@ -3,7 +3,10 @@
 import Logo from "@/components/brand/Logo";
 import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
+import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
 import { Menu, Transition } from "@headlessui/react";
@@ -106,7 +109,13 @@ function BurgerButton({
   );
 }
 
-function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
+function DropdownMenu({
+  dropdownItems,
+  openModal,
+}: {
+  dropdownItems: DropdownItem[];
+  openModal: () => void;
+}) {
   const [mounted, setMounted] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -201,13 +210,18 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
               )}
             </Menu.Item>
             <Menu.Item>
-              <button
-                className={`${
-                  prepaid ? "bg-success-600" : "bg-error-600"
-                } px-2 py-2 text-left font-medium text-white`}
-              >
-                {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
-              </button>
+              {prepaid ? (
+                <span className="bg-success-600 px-2 py-2 text-left font-medium text-white">
+                  Členství aktivní
+                </span>
+              ) : (
+                <button
+                  onClick={openModal}
+                  className="bg-error-600 px-2 py-2 text-left font-medium text-white"
+                >
+                  Členství vypršelo!
+                </button>
+              )}
             </Menu.Item>
           </div>
         </Menu.Items>
@@ -219,9 +233,11 @@ function DropdownMenu({ dropdownItems }: { dropdownItems: DropdownItem[] }) {
 function TouchMenu({
   isOpen,
   setIsOpen,
+  openModal,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  openModal: () => void;
 }) {
   // Prevents scrolling when menu is open
   useEffect(() => {
@@ -318,15 +334,25 @@ function TouchMenu({
                       </button>
                     </li>
                     <li
-                      className={`-mx-4 w-[calc(100%+48px)] px-4 sm:-mx-6 sm:px-6 ${
+                      className={`-mx-4 w-[calc(100%+48px)] px-4 py-1 font-medium text-white sm:-mx-6 sm:px-6 ${
                         prepaid ? "bg-success-600" : "bg-error-600"
                       }`}
                     >
-                      <a
-                        className={`block w-full py-1 text-left font-medium text-white`}
-                      >
-                        {prepaid ? "Členství aktivní" : "Členství vypršelo!"}
-                      </a>
+                      {prepaid ? (
+                        <span className="w-full text-left">
+                          Členství aktivní
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setIsOpen(false);
+                            openModal();
+                          }}
+                          className="w-full text-left"
+                        >
+                          Členství vypršelo!
+                        </button>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -359,8 +385,9 @@ function TouchMenu({
 }
 
 export default function Navbar() {
-  // Dropdown menu state
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [cartState, setCartState] = useState<string>("init");
 
   // Menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -368,6 +395,8 @@ export default function Navbar() {
   // Navigation bar state
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+
+  const cookies = new Cookies();
 
   // Thresholds
   const thresholdScrolledPx = 64;
@@ -395,43 +424,106 @@ export default function Navbar() {
     });
   }, [scrollY, setIsVisible]);
 
+  async function addToCard() {
+    setCartState("loading");
+    const res = await (
+      await fetch("/api/addToCart", {
+        method: "POST",
+        body: JSON.stringify({
+          token: cookies.get("token"),
+        }),
+      })
+    ).json();
+    if (res.orderToken) {
+      setCartState("success");
+      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=https://2303-vis-receptury-next-adam.vercel.app/?activated=true`;
+    } else {
+      setCartState("error");
+    }
+  }
+
   return (
-    <nav
-      className={cn(
-        "fixed inset-x-0 top-0 z-fixed w-full transition duration-500 print:hidden",
-        "border-b-2 border-primary-200",
-        isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white",
-        !isVisible && "-translate-y-full"
-      )}
-    >
-      <Container className="relative flex items-center justify-between py-3 lg:py-5">
-        <Link href="/" className="relative z-offcanvas-above rounded-lg">
-          <Logo />
-        </Link>
-
-        <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">
-          {menuRoutes.map((route) => (
-            <li key={route.href}>
-              <ActiveNavLink
-                href={route.href}
-                className="text-sm font-semibold 2xl:text-base"
-                activeClassName="text-primary"
+    <>
+      <nav
+        className={cn(
+          "fixed inset-x-0 top-0 z-fixed w-full transition duration-500 print:hidden",
+          "border-b-2 border-primary-200",
+          isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white",
+          !isVisible && "-translate-y-full"
+        )}
+      >
+        <Container className="relative flex items-center justify-between py-3 lg:py-5">
+          <Link href="/" className="relative z-offcanvas-above rounded-lg">
+            <Logo />
+          </Link>
+          <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">
+            {menuRoutes.map((route) => (
+              <li key={route.href}>
+                <ActiveNavLink
+                  href={route.href}
+                  className="text-sm font-semibold 2xl:text-base"
+                  activeClassName="text-primary"
+                >
+                  {route.label}
+                </ActiveNavLink>
+              </li>
+            ))}
+          </ul>
+          <DropdownMenu
+            dropdownItems={dropdownData}
+            openModal={() => setModalOpen(true)}
+          />
+          <BurgerButton
+            isOpen={isMenuOpen}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex lg:hidden"
+          />
+          <TouchMenu
+            isOpen={isMenuOpen}
+            setIsOpen={setIsMenuOpen}
+            openModal={() => setModalOpen(true)}
+          />
+        </Container>
+      </nav>
+      <Modal
+        isOpen={modalOpen}
+        setIsOpen={setModalOpen}
+        title="Koupit členství!"
+      >
+        <div className="flex flex-col gap-y-8 px-3 py-6">
+          {(cartState === "init" || cartState === "loading") && (
+            <>
+              <p>
+                Následujícím tlačítkem začnete objednávku členství. Proběhne-li
+                objednávka v pořádku, budete odkázáni na stránku potvrzení.
+              </p>
+              <Button
+                className="mx-auto"
+                onClick={addToCard}
+                disabled={cartState === "loading"}
               >
-                {route.label}
-              </ActiveNavLink>
-            </li>
-          ))}
-        </ul>
-
-        <DropdownMenu dropdownItems={dropdownData} />
-
-        <BurgerButton
-          isOpen={isMenuOpen}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="flex lg:hidden"
-        />
-        <TouchMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
-      </Container>
-    </nav>
+                <LoadingSpinner
+                  className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
+                    cartState === "loading" && "opacity-100"
+                  }`}
+                />
+                <p className={`${cartState === "loading" && "opacity-0"}`}>
+                  Vložit do košíku
+                </p>
+              </Button>
+            </>
+          )}
+          {cartState === "success" && (
+            <p>
+              Úspěšně přidáno do košíku, prosím zkontrolujte ostatní okna
+              prohlížeče.
+            </p>
+          )}
+          {cartState === "error" && (
+            <p>Nepodařilo se přidat do košíku, prosím zkuste znovu později.</p>
+          )}
+        </div>
+      </Modal>
+    </>
   );
 }

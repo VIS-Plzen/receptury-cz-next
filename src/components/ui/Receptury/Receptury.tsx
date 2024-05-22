@@ -486,7 +486,7 @@ export default function Receptury({
       await fetch("/api", {
         method: "POST",
         body: JSON.stringify({
-          Sid: logged,
+          Sid: logged ? logged : "12345VIS",
           Funkce: "Receptury",
           Parametry: {
             Tabulka: "Receptury",
