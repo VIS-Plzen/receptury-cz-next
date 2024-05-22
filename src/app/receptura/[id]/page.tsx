@@ -17,6 +17,7 @@ async function readSome(id: string, token: string | undefined) {
         "Dieta3",
         "TepelnaUprava",
       ];
+
   const result = await (
     await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
       method: "POST",
@@ -53,9 +54,9 @@ export default async function Home({ params }: { params: any }) {
   const cookie = cookies();
   const token = cookie.get("token")?.value;
   const paid = cookie.get("paid")?.value;
-  const showAll = token && paid;
+  const showAll = paid && token;
 
-  const data: any = await readSome(params.id, showAll);
+  const data: any = await readSome(params.id, token);
 
   if (!data || !data.Status) {
     return <Heading>Nenačetl jsem.</Heading>;

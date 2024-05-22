@@ -14,7 +14,7 @@ export async function POST(request: Request) {
           lastName: lastName,
           email: email,
           password: password,
-          redirectAfter: "https://receptury.cz/registration-finished",
+          redirectAfter: "https://receptury.cz/prihlaseni",
         }),
       }
     );

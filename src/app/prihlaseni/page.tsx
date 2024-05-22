@@ -8,13 +8,45 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export default function Page() {
+  const cookies = new Cookies();
+  const query = useSearchParams();
+
+  function returnInitNotice() {
+    const q = query.get("registration_result");
+    console.log(q, "tuz");
+    if (!q) return null;
+    let mSet: any = null;
+    switch (q) {
+      case "success":
+        mSet = {
+          variant: "success-solid",
+          message: "Email byl úspěšně potvrzen, můžete se přihlásit",
+        };
+        break;
+      case "invalid":
+        mSet = {
+          variant: "warning-solid",
+          message:
+            "Email se nepodařilo potvrdit, je možné že už byl kód použit nebo není platný.",
+        };
+        break;
+      case "failed":
+        mSet = {
+          variant: "error-solid",
+          message:
+            "Email se nepodařilo potvrdit, je možné že už byl kód použit nebo není platný.",
+        };
+        break;
+    }
+    return mSet;
+  }
   const [hasNotice, setHasNotice] = useState<null | {
     variant:
       | "info"
@@ -26,8 +58,8 @@ export default function Page() {
       | "warning-solid"
       | "error-solid";
     message: string;
-  }>(null);
-  const router = useRouter();
+  }>(returnInitNotice);
+
   const formValidationSchema = z.object({
     email: z
       .string({
@@ -43,7 +75,6 @@ export default function Page() {
       })
       .min(6, "Heslo příliš krátké"),
   });
-  const cookies = new Cookies();
 
   const formik = useFormik({
     initialValues: {
