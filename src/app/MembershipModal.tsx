@@ -16,6 +16,7 @@ export default function MembershipModal({ params }: Props) {
     if (params.activated) {
       router.replace("/");
       cookies.set("paid", addOneYear());
+      getNewValidDate();
     }
     if (cookies.get("memModal")) {
       setOpen(true);
@@ -28,6 +29,18 @@ export default function MembershipModal({ params }: Props) {
     date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * 365);
     const splitted = date.toLocaleDateString().split("/");
     return `${splitted[1]}.${splitted[0]}.${splitted[2]}`;
+  }
+
+  async function getNewValidDate() {
+    const res = await (
+      await fetch("/api/userPrepaid", {
+        method: "POST",
+        body: JSON.stringify({
+          token: cookies.get("token"),
+        }),
+      })
+    ).json();
+    console.log(res);
   }
 
   return (

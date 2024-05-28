@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
 import { useFormik } from "formik";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Cookies from "universal-cookie";
 import { z } from "zod";
@@ -17,6 +17,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 export default function Page() {
   const cookies = new Cookies();
   const query = useSearchParams();
+  const router = useRouter();
 
   function returnInitNotice() {
     const q = query.get("registration_result");
@@ -102,7 +103,8 @@ export default function Page() {
           cookies.set("memModal", "true");
         }
         localStorage.setItem("userInfo", JSON.stringify(res));
-        return (window.location.href = "/");
+        router.push("/");
+        router.refresh();
       }
 
       // if we recieve a login token, we are succesfully logged in

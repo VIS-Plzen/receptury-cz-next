@@ -202,7 +202,8 @@ function DropdownMenu({
                     cookies.remove("token");
                     cookies.remove("name");
                     localStorage.removeItem("userInfo");
-                    window.location.href = "/prihlaseni";
+                    router.push("/prihlaseni");
+                    router.refresh();
                   }}
                 >
                   Odhlásit se
@@ -327,7 +328,8 @@ function TouchMenu({
                           cookies.remove("token");
                           cookies.remove("name");
                           localStorage.removeItem("userInfo");
-                          window.location.href = "/prihlaseni";
+                          router.push("/prihlaseni");
+                          router.refresh();
                         }}
                       >
                         Odhlásit se
