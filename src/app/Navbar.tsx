@@ -500,7 +500,7 @@ export default function Navbar() {
                 objednávka v pořádku, budete odkázáni na stránku potvrzení.
               </p>
               <Button
-                className="mx-auto"
+                className="relative mx-auto"
                 onClick={addToCard}
                 disabled={cartState === "loading"}
               >

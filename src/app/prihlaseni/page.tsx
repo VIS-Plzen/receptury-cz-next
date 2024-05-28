@@ -105,10 +105,9 @@ export default function Page() {
         localStorage.setItem("userInfo", JSON.stringify(res));
         router.push("/");
         router.refresh();
+      } else {
+        setHasNotice({ variant: "error-solid", message: res.message });
       }
-
-      // if we recieve a login token, we are succesfully logged in
-      setHasNotice({ variant: "error-solid", message: res.message });
     },
 
     validationSchema: toFormikValidationSchema(formValidationSchema),
