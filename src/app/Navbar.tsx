@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 const menuRoutes = [
@@ -106,6 +106,42 @@ function BurgerButton({
         )}
       />
     </button>
+  );
+}
+
+function SubscriptionBanner(props: React.ComponentPropsWithoutRef<"div">) {
+  // check payment status
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  const paid = cookies.get("paid");
+  const prepaid = token && paid;
+
+  // if (!prepaid) return null;
+
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center gap-x-6 bg-error-600 px-6 py-2.5 sm:px-3.5",
+        props.className
+      )}
+    >
+      <p className="text-sm leading-6 text-white">
+        <a href="#">
+          <strong className="font-semibold">
+            Členství v aplikaci není platné
+          </strong>
+          <svg
+            viewBox="0 0 2 2"
+            className="mx-2 inline h-0.5 w-0.5 fill-current"
+            aria-hidden="true"
+          >
+            <circle cx={1} cy={1} r={1} />
+          </svg>
+          Obnovte si člevství &nbsp;
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </p>
+    </div>
   );
 }
 
@@ -443,13 +479,13 @@ export default function Navbar() {
   }
 
   return (
-    <>
+    <div className="fixed inset-x-0 top-0 z-fixed">
       <nav
         className={cn(
-          "fixed inset-x-0 top-0 z-fixed w-full transition duration-500 print:hidden",
+          "w-full transition duration-500 print:hidden",
           "border-b-2 border-primary-200",
-          isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white",
-          !isVisible && "-translate-y-full"
+          isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white"
+          // !isVisible && "-translate-y-full"
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
@@ -524,6 +560,7 @@ export default function Navbar() {
           )}
         </div>
       </Modal>
-    </>
+      <SubscriptionBanner />
+    </div>
   );
 }
