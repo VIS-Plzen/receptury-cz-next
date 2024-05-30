@@ -40,6 +40,7 @@ async function readSome(id: string, token: string | undefined) {
       }),
     })
   ).json();
+
   if (result.Result) {
     result.Result.Vety = result.Vety;
     return result.Result;
@@ -59,7 +60,11 @@ export default async function Home({ params }: { params: any }) {
   const data: any = await readSome(params.id, token);
 
   if (!data || !data.Status) {
-    return <Heading>Nenačetl jsem.</Heading>;
+    return (
+      <div className="flex h-[calc(100vh-200px)] justify-center pt-48">
+        <Heading size="sm">Nepodařilo se načíst data.</Heading>
+      </div>
+    );
   }
 
   if (!data.Vety[0]) {

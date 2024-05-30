@@ -109,27 +109,55 @@ function BurgerButton({
   );
 }
 
-function SubscriptionBanner(props: React.ComponentPropsWithoutRef<"div">) {
+function SubscriptionBanner({
+  openModal,
+  className = "",
+}: {
+  openModal: () => void;
+  className?: string;
+}) {
+  const [state, setState] = useState("init");
   // check payment status
   const cookies = new Cookies();
   const token = cookies.get("token");
   const paid = cookies.get("paid");
   const prepaid = token && paid;
 
-  // if (!prepaid) return null;
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setState(token);
+  }, []);
+
+  if (state === "init") return null;
+  if (prepaid) return null;
+  if (["/prihlaseni", "/registrace"].includes(pathname)) return null;
+
+  let texts = token
+    ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
+    : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"];
+
+  function fceToCall() {
+    if (!token) {
+      router.push("/prihlaseni");
+      router.refresh();
+    } else {
+      openModal();
+    }
+  }
 
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-x-6 bg-error-600 px-6 py-2.5 sm:px-3.5",
-        props.className
+        "flex items-center justify-center gap-x-6 px-6 py-2.5 sm:px-3.5",
+        token ? "bg-error-600" : "bg-warning-600",
+        className
       )}
     >
       <p className="text-sm leading-6 text-white">
-        <a href="#">
-          <strong className="font-semibold">
-            Členství v aplikaci není platné
-          </strong>
+        <button onClick={fceToCall}>
+          <strong className="font-semibold">{texts[0]}</strong>
           <svg
             viewBox="0 0 2 2"
             className="mx-2 inline h-0.5 w-0.5 fill-current"
@@ -137,9 +165,11 @@ function SubscriptionBanner(props: React.ComponentPropsWithoutRef<"div">) {
           >
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Obnovte si člevství &nbsp;
-          <span aria-hidden="true">&rarr;</span>
-        </a>
+          {texts[1]}
+          <span aria-hidden="true" className="ml-2">
+            &rarr;
+          </span>
+        </button>
       </p>
     </div>
   );
@@ -562,7 +592,7 @@ export default function Navbar() {
           )}
         </div>
       </Modal>
-      <SubscriptionBanner />
+      <SubscriptionBanner openModal={() => setModalOpen(true)} />
     </div>
   );
 }
