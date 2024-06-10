@@ -14,20 +14,27 @@ import Label from "./Label";
 
 type Props = React.ComponentPropsWithoutRef<"input"> & {
   name: string;
-  type?: "text" | "email" | "tel" | "url" | "number";
+  type?: "text" | "email" | "tel" | "url" | "number" | "password";
   label?: string;
+  variant?: "gray" | "white";
   helperText?: string | boolean | undefined | null;
   errorText?: string | boolean | undefined | null;
   className?: string;
   isLoading?: boolean;
-  [key: string]: any;
 };
+
+const variantClasses = {
+  gray: "bg-primary-50 text-gray-900",
+  white: "bg-white text-gray-900",
+};
+
 const InputField = forwardRef<HTMLInputElement, Props>(
   (
     {
       name,
       type = "text",
       label,
+      variant = "white",
       helperText,
       errorText,
       className = "",
@@ -37,6 +44,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
     forwardedRef
   ) => {
     const generatedId = useId();
+
     return (
       <div
         className={cn(
@@ -66,9 +74,10 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           type={type}
           name={name}
           className={cn(
-            "mb-4 block w-full appearance-none px-3 py-2.5",
+            "mb-4 block w-full appearance-none px-3 py-2.5 focus:outline-none",
             "rounded-lg border-2 border-primary-200",
-            "bg-white text-base text-gray-900",
+            variantClasses[variant],
+            "text-base text-gray-900",
             "placeholder:text-gray-700/60",
             "focus:border-primary focus:ring-primary/50",
             "transition duration-150",
