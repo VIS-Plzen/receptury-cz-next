@@ -4,6 +4,34 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
 
+const faqContent = [
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
@@ -188,42 +216,33 @@ export default function Home() {
     );
   }
   function FAQ() {
+    // split the faq content array into two columns
+    const half = Math.ceil(faqContent.length / 2);
+    const firstHalf = faqContent.slice(0, half);
+    const secondHalf = faqContent.slice(half);
+
     return (
       <Container>
         <Heading as="h1" hasMarginBottom>
           FAQ
         </Heading>
-        <div className="grid gap-x-5 md:grid-cols-2">
+        <div className="grid gap-x-10 md:grid-cols-2">
           <Collapse.Group>
             <div className="w-full space-y-2 divide-y-2 divide-primary-200">
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
+              {firstHalf.map((faq) => (
+                <Collapse key={faq.title} title={faq.title}>
+                  <p>{faq.content}</p>
+                </Collapse>
+              ))}
+            </div>
+          </Collapse.Group>
+          <Collapse.Group className="border-t-2 border-primary-200 md:border-none">
+            <div className="w-full space-y-2 divide-y-2 divide-primary-200">
+              {secondHalf.map((faq) => (
+                <Collapse key={faq.title} title={faq.title}>
+                  <p>{faq.content}</p>
+                </Collapse>
+              ))}
             </div>
           </Collapse.Group>
         </div>
