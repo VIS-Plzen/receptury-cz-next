@@ -1,6 +1,7 @@
 "use client";
 
 import InputField from "@/components/forms/InputField";
+import PasswordField from "@/components/forms/PasswordField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -105,8 +106,9 @@ function Page() {
         <Heading size="md">Registrace</Heading>
         <form onSubmit={formik.handleSubmit}>
           <InputField
-            type="firstName"
+            type="text"
             name="firstName"
+            variant="gray"
             placeholder="Jméno"
             value={formik.values.firstName}
             errorText={
@@ -118,8 +120,9 @@ function Page() {
             onBlur={formik.handleBlur}
           ></InputField>
           <InputField
-            type="lastName"
+            type="text"
             name="lastName"
+            variant="gray"
             placeholder="Příjmení"
             value={formik.values.lastName}
             onChange={formik.handleChange}
@@ -133,6 +136,7 @@ function Page() {
           <InputField
             type="email"
             name="email"
+            variant="gray"
             placeholder="Email@email.com"
             value={formik.values.email}
             errorText={
@@ -141,9 +145,9 @@ function Page() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></InputField>
-          <InputField
-            type="password"
+          <PasswordField
             name="password"
+            variant="gray"
             placeholder="Heslo"
             value={formik.values.password}
             onChange={formik.handleChange}
@@ -153,7 +157,7 @@ function Page() {
               formik.errors.password
             }
             onBlur={formik.handleBlur}
-          ></InputField>
+          ></PasswordField>
 
           <div className="flex items-center justify-end">
             <Button

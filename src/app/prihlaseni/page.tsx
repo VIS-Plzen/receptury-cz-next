@@ -1,6 +1,7 @@
 "use client";
 
 import InputField from "@/components/forms/InputField";
+import PasswordField from "@/components/forms/PasswordField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
@@ -132,6 +133,7 @@ export default function Page() {
           <InputField
             type="email"
             name="email"
+            variant="gray"
             placeholder="Email@email.com"
             value={formik.values.email}
             errorText={
@@ -140,10 +142,10 @@ export default function Page() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></InputField>
-          <InputField
-            type="password"
+          <PasswordField
             name="password"
             placeholder="Heslo"
+            variant="gray"
             value={formik.values.password}
             onChange={formik.handleChange}
             errorText={
@@ -152,7 +154,7 @@ export default function Page() {
               formik.errors.password
             }
             onBlur={formik.handleBlur}
-          ></InputField>
+          ></PasswordField>
           <div className="flex items-start justify-between border-b border-primary-200">
             {/* redirect to jidelny.cz for password reset*/}
             <StyledLink href="https://jidelny.cz/profil/zapomenute-heslo/?redirectAfter=https://receptury.cz/password-reset-complete">
