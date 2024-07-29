@@ -35,6 +35,9 @@ export default function ContentSelector({ searchParams }: any) {
   );
   const router = useRouter();
 
+  const cookies = new Cookies();
+  const sid = cookies.get("token");
+
   useEffect(() => {
     const regexMatch = urlParams.match(/obsah=(informace|receptury)/);
     if (!regexMatch) return setContent("informace");
@@ -43,6 +46,13 @@ export default function ContentSelector({ searchParams }: any) {
       return setContent("informace");
     setContent(cont);
   }, [urlParams]);
+
+  useEffect(() => {
+    if (sid) return;
+    localStorage.removeItem("userInfo");
+    router.push("/prihlaseni");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sid]);
 
   function updateContent(cont: "informace" | "receptury") {
     let query = urlParams;

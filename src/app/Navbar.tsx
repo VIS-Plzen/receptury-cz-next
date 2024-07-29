@@ -128,6 +128,7 @@ function SubscriptionBanner({
 
   useEffect(() => {
     setState(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (state === "init") return null;
@@ -190,7 +191,11 @@ function DropdownMenu({
 
   useEffect(() => setMounted(true), []);
 
-  useEffect(() => setRefresh(!refresh), [pathname]);
+  useEffect(
+    () => setRefresh(!refresh),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pathname]
+  );
 
   if (!mounted) return null;
 

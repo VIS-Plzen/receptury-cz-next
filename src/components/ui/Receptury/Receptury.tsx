@@ -273,6 +273,7 @@ export default function Receptury({
       setData(await getData(pageState));
       setInitialLoad(false);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function updateSideBarValue(

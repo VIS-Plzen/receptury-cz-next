@@ -16,6 +16,7 @@ async function readSome(id: string, token: string | undefined) {
         "Dieta2",
         "Dieta3",
         "TepelnaUprava",
+        "Receptar",
       ];
 
   const result = await (
@@ -26,7 +27,7 @@ async function readSome(id: string, token: string | undefined) {
         Uzivatel: process.env.BE_USER,
         Heslo: process.env.BE_PASSWORD,
         SID: token ? token : "12345VIS",
-        Funkce: "Receptury",
+        Funkce: "RecepturyDetail",
         Parametry: [
           {
             Tabulka: "Receptury",
@@ -77,7 +78,3 @@ export default async function Home({ params }: { params: any }) {
     <Page card={card} curr={curr} logged={showAll} paid={paid === "true"} />
   );
 }
-
-const cv = {
-  base: "border-secondary",
-};

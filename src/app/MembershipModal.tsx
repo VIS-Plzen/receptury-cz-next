@@ -22,6 +22,7 @@ export default function MembershipModal({ params }: Props) {
       setOpen(true);
       cookies.remove("memModal");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function addOneYear() {

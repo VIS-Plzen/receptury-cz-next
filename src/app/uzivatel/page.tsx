@@ -8,7 +8,7 @@ export default function Home({ searchParams }: any) {
   return (
     <>
       <div
-        className={`mt-20 w-full py-3 text-center text-white md:mt-24 ${
+        className={`mt-20 hidden w-full py-3 text-center text-white md:mt-24 ${
           paid && paid !== "false" ? "bg-success-600" : "bg-error-600"
         }`}
       >
