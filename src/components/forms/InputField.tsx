@@ -18,7 +18,7 @@ type Props = React.ComponentPropsWithoutRef<"input"> & {
   label?: string;
   variant?: "gray" | "white";
   helperText?: string | boolean | undefined | null;
-  errorText?: string | boolean | undefined | null;
+  errorText?: string | boolean | undefined | null | any;
   className?: string;
   isLoading?: boolean;
 };
