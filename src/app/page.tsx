@@ -15,8 +15,7 @@ export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
 
-  let nove = await readNew();
-  let oblibene = await readFavorite();
+  const [nove, oblibene] = await Promise.all([readNew(), readFavorite()]);
 
   async function readNew() {
     const result = await (
