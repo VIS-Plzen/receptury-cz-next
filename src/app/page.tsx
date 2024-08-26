@@ -103,7 +103,7 @@ export default async function Home({ searchParams }: any) {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
       <MembershipModal params={searchParams} />
-      {/* <Inspirace initData={{ nove: nove, oblibene: oblibene }} /> */}
+      {/* <Inspirace initData={{ nove: nove, oblibene: oblibene }} />. */}
       <Ssr
         searchParams={searchParams}
         className="border-y-2 border-primary-200"
