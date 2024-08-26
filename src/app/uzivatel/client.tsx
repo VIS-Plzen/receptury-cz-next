@@ -74,7 +74,7 @@ export default function ContentSelector({ searchParams }: any) {
     <>
       <div className="flex flex-col">
         <Container>
-          <div className="flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
+          <div className="mt-20 flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
             {contents.map((cont, index) => (
               <button
                 key={"kfccc" + index}
