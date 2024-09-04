@@ -60,7 +60,7 @@ async function readSomeByCode(code: string) {
       body: JSON.stringify({
         Uzivatel: process.env.BE_USER,
         Heslo: process.env.BE_PASSWORD,
-        SID: "6rm5yniw0hr3vg6p9n290qeg00wyw1ick7n1sf0b7qe08whmxw5llnej26oviwsz",
+        SID: "12345VIS",
         Funkce: "RecepturyDetail",
         Parametry: [
           {
@@ -71,13 +71,17 @@ async function readSomeByCode(code: string) {
     })
   ).json();
 
-  if (result.Result) {
+  if (result.Result && result.Result.Status) {
     result.Result.Vety = result.Vety;
     return result.Result;
   }
+
   return {
     Status: false,
-    Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    Chyba: {
+      Kod: 1000,
+      message: result.Result.Chyba?.Popis ?? "Chybně odchyceno v API",
+    },
   };
 }
 
@@ -100,7 +104,7 @@ export default async function Home({
 
   const data: any =
     params.id === "sdilena"
-      ? readSomeByCode(Object.keys(searchParams)[0])
+      ? await readSomeByCode(Object.keys(searchParams)[0])
       : await readSome(params.id, token);
 
   if (!data || !data.Status) {
@@ -125,6 +129,7 @@ export default async function Home({
       token={token}
       paid={paid ? true : false}
       path={path}
+      shared={params.id === "sdilena"}
     />
   );
 }

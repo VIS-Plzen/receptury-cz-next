@@ -46,6 +46,7 @@ export function Page({
   paid,
   token,
   path,
+  shared,
 }: {
   card: any;
   curr: any;
@@ -53,6 +54,7 @@ export function Page({
   paid: boolean;
   token: string | undefined;
   path?: string;
+  shared?: boolean;
 }) {
   const [refresh, setRefresh] = useState(false);
 
@@ -126,7 +128,7 @@ export function Page({
         method: "POST",
         body: JSON.stringify({
           sid: token ?? "12345VIS",
-          cislo: curr.veta,
+          cislo: curr.Vlastnosti.Identita,
         }),
       })
     ).json();
@@ -172,7 +174,7 @@ export function Page({
         paid={paid}
         getShareLink={getShareLink}
       />
-      {logged && paid ? (
+      {shared || (logged && paid) ? (
         <>
           <Informations
             title={card.Nazev}
