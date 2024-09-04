@@ -746,7 +746,7 @@ function TopRow({
           {initialLoad
             ? " Vyhledávám receptury"
             : pocet !== 0
-              ? `Našli jsme pro vás ${pocet} receptur`
+              ? `Našli jsme pro vás ${pocet ? pocet : "0"} receptur`
               : "Nenašli jsme žádná data"}
         </p>
       </div>

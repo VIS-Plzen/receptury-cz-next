@@ -97,7 +97,7 @@ async function readSome(
       }),
     })
   ).json();
-  if (result.Result) {
+  if (result.Result && result.Result.Status) {
     result.Result.Vety = result.Vety;
     return result.Result;
   }

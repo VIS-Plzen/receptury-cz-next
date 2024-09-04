@@ -17,7 +17,8 @@ const icons: {
     | "favorite-fill"
     | "favorite"
     | "list"
-    | "print";
+    | "print"
+    | "share";
   label: string;
 }[] = [
   {
@@ -32,6 +33,10 @@ const icons: {
     name: "archive",
     label: "MSklad",
   },
+  {
+    name: "share",
+    label: "Sdílet",
+  },
 ];
 
 export function Page({
@@ -39,11 +44,15 @@ export function Page({
   curr,
   logged,
   paid,
+  token,
+  path,
 }: {
   card: any;
   curr: any;
   logged: string | undefined;
   paid: boolean;
+  token: string | undefined;
+  path?: string;
 }) {
   const [refresh, setRefresh] = useState(false);
 
@@ -101,6 +110,40 @@ export function Page({
     },
   ];
 
+  async function getShareLink() {
+    if (!logged || !paid) {
+      return toast({
+        intent: "warning",
+        title: `Pro použití této funkce je potřeba ${
+          logged
+            ? "mít předplacené členství."
+            : "být přihlášen a mít předplacené členství."
+        }`,
+      });
+    }
+    const res = await (
+      await fetch("/api/shareRecipe", {
+        method: "POST",
+        body: JSON.stringify({
+          sid: token ?? "12345VIS",
+          cislo: curr.veta,
+        }),
+      })
+    ).json();
+    if (res.Status) {
+      navigator.clipboard.writeText(`${path}/receptura/sdilena?${res.Kod}`);
+      toast({
+        intent: "success",
+        title: "Odkaz uložen do clipboardu, nyní stačí vložit.",
+      });
+    } else {
+      toast({
+        intent: "error",
+        title: "Nepodařilo se vytvořit odkaz.",
+      });
+    }
+  }
+
   const currParner =
     card.Receptar === "1"
       ? partnerInfo[0]
@@ -127,6 +170,7 @@ export function Page({
         currParner={currParner}
         logged={logged}
         paid={paid}
+        getShareLink={getShareLink}
       />
       {logged && paid ? (
         <>
@@ -399,6 +443,7 @@ export function Hero({
   veta,
   stitky,
   zmenStitek,
+  getShareLink,
   currParner,
   logged,
   paid,
@@ -416,6 +461,7 @@ export function Hero({
     hodnota: boolean,
     changeHodnota?: () => void
   ) => void;
+  getShareLink: () => void;
   currParner: any;
   logged: string | undefined;
   paid: boolean;
@@ -533,6 +579,8 @@ export function Hero({
                           });
                         }
                         return window.print();
+                      case "share":
+                        return getShareLink();
                     }
                   }}
                   icon={(() => {
