@@ -95,6 +95,7 @@ const PasswordField = forwardRef<HTMLInputElement, Props>(
             className="absolute right-2.5 top-1/2 -translate-y-1/2"
             onClick={() => setShowPassword(!showPassword)}
             showPassword={showPassword}
+            type="button"
           />
         </div>
         {/* Error text */}
