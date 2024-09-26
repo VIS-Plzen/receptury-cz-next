@@ -10,7 +10,7 @@ import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -45,6 +45,9 @@ export default function Page() {
             "Email se nepodařilo potvrdit, je možné že už byl kód použit nebo není platný.",
         };
         break;
+      default:
+        mSet = null;
+        break;
     }
     return mSet;
   }
@@ -60,6 +63,13 @@ export default function Page() {
       | "error-solid";
     message: string;
   }>(returnInitNotice);
+
+  useEffect(() => {
+    cookies.remove("token");
+    cookies.remove("paid");
+    cookies.remove("name");
+    localStorage.removeItem("userInfo");
+  }, []);
 
   const formValidationSchema = z.object({
     email: z
@@ -105,7 +115,6 @@ export default function Page() {
         }
         localStorage.setItem("userInfo", JSON.stringify(res));
         router.push("/");
-        router.refresh();
       } else {
         setHasNotice({ variant: "error-solid", message: res.message });
       }

@@ -54,9 +54,19 @@ export function Page({
   paid: boolean;
   token: string | undefined;
   path?: string;
-  shared?: boolean;
+  shared?: number | false;
 }) {
   const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    // přepíše text v liště na počet kolikrát jde ještě sdílená zobrazit
+    if (!shared) return;
+    setTimeout(() => {
+      const el = document.getElementById("slt1");
+      if (!el) return;
+      el.textContent = el.innerText.replace("%", shared.toString());
+    }, 200);
+  }, [shared]);
 
   async function zmenStitek(
     veta: number,
@@ -167,14 +177,15 @@ export function Page({
         ]}
         image={card.Obrazek}
         veta={card.Identita}
-        stitky={!logged ? curr.Stitky : []}
+        stitky={logged ? curr.Stitky : []}
         zmenStitek={zmenStitek}
         currParner={currParner}
         logged={logged}
         paid={paid}
         getShareLink={getShareLink}
+        refresh={refresh}
       />
-      {shared || (logged && paid) ? (
+      {shared !== false || (logged && paid) ? (
         <>
           <Informations
             title={card.Nazev}
@@ -211,6 +222,7 @@ export function Page({
             veta={card.Identita}
             stitky={curr.Stitky}
             zmenStitek={zmenStitek}
+            refresh={refresh}
           />
 
           {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
@@ -449,6 +461,7 @@ export function Hero({
   currParner,
   logged,
   paid,
+  refresh,
 }: {
   logo?: string;
   title: string;
@@ -467,9 +480,15 @@ export function Hero({
   currParner: any;
   logged: string | undefined;
   paid: boolean;
+  refresh: boolean;
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
+  const [, setRefreshIn] = useState(refresh);
   let badgeCounter = 0;
+
+  useEffect(() => {
+    setRefreshIn(refresh);
+  }, []);
 
   useEffect(() => {
     if (!image) return;
@@ -645,6 +664,7 @@ export function Informations({
   veta,
   stitky,
   zmenStitek,
+  refresh,
 }: {
   title: string;
   postup: string;
@@ -670,195 +690,229 @@ export function Informations({
     hodnota: boolean,
     changeHodnota?: () => void
   ) => void;
+  refresh: boolean;
 }) {
-  function Title() {
-    return (
-      <div className="flex flex-col gap-3 md:flex-row md:justify-between">
-        <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
-        <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
-          {icons.map((icon, index) => (
-            <div
-              key={"kfii" + index}
-              className={`flex flex-col items-center gap-1 text-center`}
-            >
-              <ButtonIcon
-                onClick={() => {
-                  switch (icon.name) {
-                    case "archive":
-                      return zmenStitek(
-                        veta,
-                        "MSklad",
-                        !stitky.includes("MSklad")
-                      );
-                    case "favorite":
-                      return zmenStitek(
-                        veta,
-                        "Oblíbené",
-                        !stitky.includes("Oblíbené")
-                      );
-                    case "print":
-                      return window.print();
-                  }
-                }}
-                icon={(() => {
-                  let iconName:
-                    | "archive"
-                    | "calendar-view-months"
-                    | "downloading"
-                    | "favorite-fill"
-                    | "favorite"
-                    | "list"
-                    | "print"
-                    | "visibility"
-                    | "archive-fill"
-                    | "rate-review"
-                    | "share"
-                    | "visibility-off"
-                    | undefined = icon.name;
-                  switch (icon.name) {
-                    case "archive":
-                      if (stitky.includes("MSklad")) iconName = "archive-fill";
-                      break;
+  const [, setRefreshIn] = useState(refresh);
 
-                    case "favorite":
-                      if (stitky.includes("Oblíbené"))
-                        iconName = "favorite-fill";
-                      break;
-                  }
-                  return iconName;
-                })()}
-                className={`bg-white ${
-                  icon.name === "archive" &&
-                  stitky.includes("MSklad") &&
-                  " text-primary-500"
-                }
-                ${
-                  icon.name === "favorite" &&
-                  stitky.includes("Oblíbené") &&
-                  "text-primary-500"
-                }`}
-              ></ButtonIcon>
-              <span className="text-sm">{icon.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  function Hmotnost() {
-    return (
-      <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
-        <span className="my-auto font-bold lg:text-lg">Hmotnost</span>
-        <div className="flex flex-row divide-x-2 divide-primary-300/60">
-          <div className="flex flex-col items-center px-2">
-            <span className="font-bold">Porce</span>
-            <span>{hmotnost.porce}g</span>
-          </div>
-          {hmotnost.masa !== "0" && (
-            <div className="flex flex-col items-center px-2">
-              <span className="font-bold">Masa</span>
-              <span>{hmotnost.masa}g</span>
-            </div>
-          )}
-          {hmotnost.omacky !== "0" && (
-            <div className="flex flex-col items-center pl-2">
-              <span className="font-bold">Omáčky</span>
-              <span>{hmotnost.omacky}g</span>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    setRefreshIn(refresh);
+  }, [refresh]);
 
-  function Postup() {
-    return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
-        <Heading size="sm">Postup</Heading>
-        <p>
-          {postup && postup.replace("&lt;p&gt;", "").replace("&lt;/p&gt;", "")}
-        </p>
-      </div>
-    );
-  }
-  function Alergeny() {
-    return (
-      <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
-        <Heading size="sm">Alergeny</Heading>
-        <div className="flex flex-row gap-x-3">
-          {alergeny.alergeny.map((alergen, index) => (
-            <span
-              key={"aaai" + index}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-300/60 font-bold text-black"
-            >
-              {alergen}
-            </span>
-          ))}
-        </div>
-        <p>{alergeny.text}</p>
-      </div>
-    );
-  }
-  function Skladba() {
-    return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
-        <Heading size="sm">Doporučení ke skladbě</Heading>
-        <p>
-          <span className="font-bold text-black">Doporučená polévka: </span>
-          {skladba.polevka}
-        </p>
-        <p>
-          <span className="font-bold text-black">Doporučená příloha: </span>
-          {skladba.priloha}
-        </p>
-        <p>
-          <span className="font-bold text-black">Doporučený doplněk: </span>
-          {skladba.doplnek}
-        </p>
-      </div>
-    );
-  }
-  function Terapeut() {
-    let badgeCounter = 0;
-    return (
-      <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
-        <Heading size="sm">Nutriční terapeut</Heading>
-        <p>{terapeut.text}</p>
-        <div className="flex flex-row gap-1.5">
-          {terapeut.badges.map((badge: any, index: number) => {
-            if (!badge || badgeCounter >= 4) return null;
-            badgeCounter++;
-            return (
-              <Badge
-                key={"bmbi" + index}
-                variant={index <= 2 ? "healthy" : undefined}
-              >
-                {badge}
-              </Badge>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
   return (
     <Container className="flex flex-col gap-5 sm:gap-7">
-      <Title />
+      <Title
+        stitky={stitky}
+        title={title}
+        veta={veta}
+        zmenStitek={zmenStitek}
+      />
       <div className="flex flex-col gap-5 print:flex-row sm:gap-7 md:flex-row">
         <div className="flex flex-col gap-5 sm:gap-7">
-          <Hmotnost />
+          <Hmotnost hmotnost={hmotnost} />
           <Kalkulacka kalkulacka={kalkulacka} />
         </div>
         <div className="flex flex-col gap-5 sm:gap-7">
-          <Postup />
+          <Postup postup={postup} />
           <div className="grid gap-5 sm:gap-7 xl:grid-cols-2">
-            <Alergeny />
-            <Skladba />
+            <Alergeny alergeny={alergeny} />
+            <Skladba skladba={skladba} />
           </div>
-          <Terapeut />
+          <Terapeut terapeut={terapeut} />
         </div>
       </div>
     </Container>
+  );
+}
+
+function Title({
+  title,
+  zmenStitek,
+  veta,
+  stitky,
+}: {
+  title: string;
+  zmenStitek: (
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean
+  ) => void;
+  veta: number;
+  stitky: string[];
+}) {
+  return (
+    <div className="flex flex-col gap-3 md:flex-row md:justify-between">
+      <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
+      <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
+        {icons.map((icon, index) => (
+          <div
+            key={"kfii" + index}
+            className={`flex flex-col items-center gap-1 text-center`}
+          >
+            <ButtonIcon
+              onClick={() => {
+                switch (icon.name) {
+                  case "archive":
+                    return zmenStitek(
+                      veta,
+                      "MSklad",
+                      !stitky.includes("MSklad")
+                    );
+                  case "favorite":
+                    return zmenStitek(
+                      veta,
+                      "Oblíbené",
+                      !stitky.includes("Oblíbené")
+                    );
+                  case "print":
+                    return window.print();
+                }
+              }}
+              icon={(() => {
+                let iconName:
+                  | "archive"
+                  | "calendar-view-months"
+                  | "downloading"
+                  | "favorite-fill"
+                  | "favorite"
+                  | "list"
+                  | "print"
+                  | "visibility"
+                  | "archive-fill"
+                  | "rate-review"
+                  | "share"
+                  | "visibility-off"
+                  | undefined = icon.name;
+                switch (icon.name) {
+                  case "archive":
+                    if (stitky.includes("MSklad")) iconName = "archive-fill";
+                    break;
+
+                  case "favorite":
+                    if (stitky.includes("Oblíbené")) iconName = "favorite-fill";
+                    break;
+                }
+                return iconName;
+              })()}
+              className={`bg-white ${
+                icon.name === "archive" &&
+                stitky.includes("MSklad") &&
+                " text-primary-500"
+              }
+              ${
+                icon.name === "favorite" &&
+                stitky.includes("Oblíbené") &&
+                "text-primary-500"
+              }`}
+            ></ButtonIcon>
+            <span className="text-sm">{icon.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+function Hmotnost({ hmotnost }: { hmotnost: any }) {
+  return (
+    <div className="flex flex-col justify-between gap-y-2 rounded-3xl border-2 border-primary-300/60 bg-white p-5 sm:flex-row">
+      <span className="my-auto font-bold lg:text-lg">Hmotnost</span>
+      <div className="flex flex-row divide-x-2 divide-primary-300/60">
+        <div className="flex flex-col items-center px-2">
+          <span className="font-bold">Porce</span>
+          <span>{hmotnost.porce}g</span>
+        </div>
+        {hmotnost.masa !== "0" && (
+          <div className="flex flex-col items-center px-2">
+            <span className="font-bold">Masa</span>
+            <span>{hmotnost.masa}g</span>
+          </div>
+        )}
+        {hmotnost.omacky !== "0" && (
+          <div className="flex flex-col items-center pl-2">
+            <span className="font-bold">Omáčky</span>
+            <span>{hmotnost.omacky}g</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Postup({ postup }: { postup?: string }) {
+  return (
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+      <Heading size="sm">Postup</Heading>
+      <p>
+        {postup && postup.replace("&lt;p&gt;", "").replace("&lt;/p&gt;", "")}
+      </p>
+    </div>
+  );
+}
+function Alergeny({
+  alergeny,
+}: {
+  alergeny: { text: string; alergeny: string[] };
+}) {
+  return (
+    <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+      <Heading size="sm">Alergeny</Heading>
+      <div className="flex flex-row gap-x-3">
+        {alergeny.alergeny.map((alergen, index) => (
+          <span
+            key={"aaai" + index}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-300/60 font-bold text-black"
+          >
+            {alergen}
+          </span>
+        ))}
+      </div>
+      <p>{alergeny.text}</p>
+    </div>
+  );
+}
+function Skladba({ skladba }: { skladba: any }) {
+  return (
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+      <Heading size="sm">Doporučení ke skladbě</Heading>
+      <p>
+        <span className="font-bold text-black">Doporučená polévka: </span>
+        {skladba.polevka}
+      </p>
+      <p>
+        <span className="font-bold text-black">Doporučená příloha: </span>
+        {skladba.priloha}
+      </p>
+      <p>
+        <span className="font-bold text-black">Doporučený doplněk: </span>
+        {skladba.doplnek}
+      </p>
+    </div>
+  );
+}
+function Terapeut({
+  terapeut,
+}: {
+  terapeut: { text: string; badges: string[] };
+}) {
+  let badgeCounter = 0;
+  return (
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
+      <Heading size="sm">Nutriční terapeut</Heading>
+      <p>{terapeut.text}</p>
+      <div className="flex flex-row gap-1.5">
+        {terapeut.badges.map((badge: any, index: number) => {
+          if (!badge || badgeCounter >= 4) return null;
+          badgeCounter++;
+          return (
+            <Badge
+              key={"bmbi" + index}
+              variant={index <= 2 ? "healthy" : undefined}
+            >
+              {badge}
+            </Badge>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

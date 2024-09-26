@@ -1,4 +1,5 @@
 import Heading from "@/components/ui/Heading";
+import { compareDates } from "@/utils/compareDates";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 
@@ -121,15 +122,17 @@ export default async function Home({
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
+  const paidDate = compareDates(paid);
+
   return (
     <Page
       card={card}
       curr={curr}
       logged={showAll}
       token={token}
-      paid={paid ? true : false}
+      paid={paidDate}
       path={path}
-      shared={params.id === "sdilena"}
+      shared={params.id === "sdilena" ? curr.ZbyvaSdileni : false}
     />
   );
 }
