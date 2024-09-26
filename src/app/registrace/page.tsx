@@ -9,7 +9,8 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import { useFormik } from "formik";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -26,6 +27,15 @@ function Page() {
       | "error-solid";
     message: string;
   }>(null);
+
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    cookies.remove("token");
+    cookies.remove("paid");
+    cookies.remove("name");
+    localStorage.removeItem("userInfo");
+  }, []);
 
   const formValidationSchema = z.object({
     firstName: z
@@ -138,6 +148,7 @@ function Page() {
             name="email"
             variant="gray"
             placeholder="Email@email.com"
+            autoComplete="off"
             value={formik.values.email}
             errorText={
               formWasTouched && formik.touched.email && formik.errors.email
@@ -151,6 +162,7 @@ function Page() {
             placeholder="Heslo"
             value={formik.values.password}
             onChange={formik.handleChange}
+            autoComplete="off"
             errorText={
               formWasTouched &&
               formik.touched.password &&

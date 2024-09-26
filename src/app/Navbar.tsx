@@ -135,14 +135,16 @@ function SubscriptionBanner({
   if (prepaid) return null;
   if (["/prihlaseni", "/registrace"].includes(pathname)) return null;
 
-  let texts = token
-    ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
-    : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"];
+  let texts =
+    pathname !== "/receptura/sdilena"
+      ? token
+        ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
+        : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"]
+      : ["Receptura vám byla sdílena", `Lze otevřít ještě: %x`];
 
   function fceToCall() {
     if (!token) {
       router.push("/prihlaseni");
-      router.refresh();
     } else {
       openModal();
     }
@@ -166,7 +168,7 @@ function SubscriptionBanner({
           >
             <circle cx={1} cy={1} r={1} />
           </svg>
-          {texts[1]}
+          <span id="slt1">{texts[1]}</span>
           <span aria-hidden="true" className="ml-2">
             &rarr;
           </span>
