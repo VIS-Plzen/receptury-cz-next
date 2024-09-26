@@ -16,7 +16,9 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       <input
         id={generatedId}
         type="checkbox"
-        onChange={(e) => onChange && onChange(e.target.checked)}
+        onChange={(e) =>
+          !props.disabled && onChange && onChange(e.target.checked)
+        }
         {...props}
         className={cn(
           "peer flex-none cursor-pointer appearance-none",

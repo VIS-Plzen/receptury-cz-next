@@ -1,24 +1,19 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { firstName, lastName, email, password } = await request.json();
+  const { body } = await request.json();
 
   try {
     const res = await fetch(
-      "https://jidelny.cz/wp-json/receptury/v1/user/register",
+      "https://jidelny.cz/wp-json/receptury/v1/user/edit",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-          redirectAfter: "https://receptury.cz/prihlaseni",
-        }),
+        body: JSON.stringify(body),
       }
     );
     const data = await res.json();
+
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json({

@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
 
-/* Příklad parametrů
-    {
-      Tabulka: string; "Receptury"
-      Operace: "Read" | "Create" | "Update" | "Delete";
-      Podminka?: string; "Druh='Svačiny Pomazánky'"
-      Hodnoty?: { Druh: string; Nazev: string; Stav: string };
-      Stitek?: { Nazev: string; Uzivatel: string; Pouziti: string };
-    },
-*/
-
 export async function POST(request: Request) {
-  const { Sid, Funkce, Parametry } = await request.json();
+  const { sid, cislo } = await request.json();
 
   try {
     const res = await fetch(
@@ -22,17 +12,20 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
-          SID: Sid,
-          Funkce: Funkce,
-          Parametry: [Parametry],
+          SID: sid,
+          Funkce: "Sdilet",
+          Parametry: [
+            {
+              Receptura: cislo,
+            },
+          ],
         }),
       }
     );
 
     const data = await res.json();
-    if (data.Result) {
-      data.Result.Vety = data.Vety;
-      return NextResponse.json(data.Result);
+    if (data.Result?.Status) {
+      return NextResponse.json({ Status: true, Kod: data.Kod });
     }
     return NextResponse.json({
       Status: false,
@@ -41,7 +34,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({
       Status: false,
-      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+      Chyba: { Kod: 1001, message: "Chybně odchyceno v API" },
     });
   }
 }

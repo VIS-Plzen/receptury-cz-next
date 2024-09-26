@@ -10,11 +10,19 @@ type Props = {
     Chyba?: { Kod: number; Popis: string };
     Vety?: {
       Vlastnosti: {
+        Veta: number;
         Nazev: string;
         Identita: string;
+        DruhSkupina: string;
+        DruhPodskupina: string;
+        TepelnaUprava: string;
+        Dieta1: "Ano" | "Ne";
+        Dieta2: "Ano" | "Ne";
+        Dieta3: "Ano" | "Ne";
         badges: string[];
         img?: string;
       };
+      Stitky: string[];
     }[];
   };
   gridView?: any;
@@ -22,6 +30,9 @@ type Props = {
   length?: number;
   className?: string;
   cardsInGrid?: number;
+  assertCard?: boolean;
+  zmenStitek?: any;
+  logged?: boolean;
 };
 
 function RecipeCardsGrid({
@@ -31,8 +42,10 @@ function RecipeCardsGrid({
   length = 15,
   className = "",
   cardsInGrid,
+  assertCard,
+  zmenStitek,
+  logged,
 }: Props) {
-  console.log();
   return (
     <div
       className={cn(
@@ -52,8 +65,18 @@ function RecipeCardsGrid({
             isLoading={isLoading}
             label={card.Vlastnosti.Nazev}
             id={card.Vlastnosti.Identita}
-            badges={[]}
+            badges={[
+              card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+              card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+              card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+              card.Vlastnosti.TepelnaUprava,
+              card.Vlastnosti.DruhSkupina,
+              card.Vlastnosti.DruhPodskupina,
+            ]}
             img="/images/food.jpeg"
+            zmenStitek={zmenStitek}
+            veta={card.Vlastnosti.Veta}
+            stitky={logged ? card.Stitky : []}
           />
         ))}
     </div>

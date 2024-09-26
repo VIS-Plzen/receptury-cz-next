@@ -16,229 +16,34 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { toast } from "@/hooks/useToast";
 import * as Dialog from "@radix-ui/react-dialog";
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-
-const groupsData = [
-  {
-    value: "bezmase_sladke",
-    title: "Bezmasé sladké pokrmy",
-    options: [
-      { value: "pecene", title: "Pečené a smažené" },
-      { value: "varene", title: "Vařené" },
-      { value: "kase", title: "Kaše" },
-    ],
-  },
-  {
-    value: "bezmase_slane",
-    title: "Bezmasé slané pokrmy",
-    options: [
-      {
-        value: "zeleninove",
-        title: "Zeleninové",
-      },
-      {
-        value: "lusteniny",
-        title: "Luštěninové",
-      },
-      {
-        value: "moucne",
-        title: "Moučné a obilninové",
-      },
-      { value: "testovinove", title: "Těstovinové" },
-      { value: "bramborove", title: "Bramborové" },
-      { value: "houbove", title: "Houbové" },
-      { value: "salaty", title: "Saláty" },
-      { value: "ostatni", title: "Ostatní" },
-    ],
-  },
-  {
-    value: "doplnky",
-    title: "Doplňky",
-    options: [
-      {
-        value: "salaty_zeleninove",
-        title: "Saláty zeleninové",
-      },
-      {
-        value: "salaty_ovocne",
-        title: "Saláty ovocné",
-      },
-      {
-        value: "kompoty",
-        title: "Kompoty",
-      },
-      {
-        value: "moucniky",
-        title: "Moučníky",
-      },
-      {
-        value: "mlecne_dezerty",
-        title: "Mléčné dezerty",
-      },
-      {
-        value: "zelenina_cerstva",
-        title: "Zelenina čerstvá",
-      },
-      {
-        value: "ovoce_cerstve",
-        title: "Ovoce čerstvé",
-      },
-      {
-        value: "ostatni",
-        title: "Ostatní",
-      },
-    ],
-  },
-  {
-    value: "masite",
-    title: "Masité pokrmy",
-    options: [
-      { value: "veprove", title: "Vepřové" },
-      { value: "kureci", title: "Kuřecí" },
-      { value: "kruti", title: "Krůtí" },
-      { value: "kralici", title: "Králičí" },
-      { value: "hovezi", title: "Hovězí" },
-      { value: "zverina", title: "Zvěřina" },
-      { value: "teleci", title: "Telecí" },
-      { value: "vnitrnosti", title: "Vnitřnosti" },
-      { value: "husi_a_kachni", title: "Husí a kachní" },
-      { value: "ostatni", title: "Ostatní" },
-      {
-        value: "mleta_masa_a_masove_smesi",
-        title: "Mletá masa a masové směsi",
-      },
-    ],
-  },
-  {
-    value: "napoje",
-    title: "Nápoje",
-    options: [],
-  },
-  { value: "nezadano", title: "Nezadáno", options: [] },
-  {
-    value: "polevky",
-    title: "Polévky",
-    options: [
-      {
-        value: "zeleninove",
-        title: "Zeleninové",
-      },
-      {
-        value: "lusteninove",
-        title: "Luštěninové",
-      },
-      {
-        value: "masove_a_rybi",
-        title: "Masové a rybí",
-      },
-      {
-        value: "obilninove",
-        title: "Obilninové",
-      },
-      { value: "bramborove", title: "Bramborové" },
-      { value: "vyvary", title: "Vývary" },
-      { value: "houbove", title: "Houbové" },
-      {
-        value: "ostatni",
-        title: "Ostatní",
-      },
-    ],
-  },
-  {
-    value: "prilohy_a_prikrmy",
-    title: "Přílohy a příkrmy",
-    options: [
-      { value: "bramborove", title: "Bramborové" },
-      { value: "testovinove", title: "Těstovinové" },
-      { value: "obilninove", title: "Obilninové" },
-      { value: "knedliky", title: "Knedlíky" },
-      { value: "zelenina", title: "Zelenina" },
-      { value: "omacky", title: "Omáčky" },
-      { value: "pecivo", title: "Pečivo" },
-      { value: "ostatni", title: "Ostatní" },
-      { value: "lusteninove", title: "Luštěninové" },
-    ],
-  },
-  {
-    value: "rybi_pokrmy",
-    title: "Rybí pokrmy",
-    options: [],
-  },
-  {
-    value: "svaciny",
-    title: "Svačiny",
-    options: [
-      {
-        value: "pomazanky_syrove_a_tvarohove",
-        title: "Pomazánky sýrové a tvarohové",
-      },
-      {
-        value: "pomazanky_masove",
-        title: "Pomazánky masové",
-      },
-      {
-        value: "pomazanky_vajecne",
-        title: "Pomazánky vaječné",
-      },
-      {
-        value: "pomazanky_rybi",
-        title: "Pomazánky rybí",
-      },
-      {
-        value: "mlecne_vyrobky",
-        title: "Mléčné výrobky",
-      },
-      {
-        value: "kase",
-        title: "Kaše",
-      },
-      {
-        value: "pecivo",
-        title: "Pečivo",
-      },
-      {
-        value: "moucniky",
-        title: "Moučníky",
-      },
-      {
-        value: "ostatni",
-        title: "Ostatní",
-      },
-      {
-        value: "pomazanky_zeleninove/ovocne",
-        title: "Pomazánky zeleninové/ovocné",
-      },
-      {
-        value: "pomazanky_lusteninove",
-        title: "Pomazánky luštěninové",
-      },
-      {
-        value: "pomazanky_ostatni",
-        title: "Pomazánky ostatní",
-      },
-    ],
-  },
-  {
-    value: "zavarky",
-    title: "Zavářky",
-    options: [],
-  },
-];
+import Cookies from "universal-cookie";
 
 export default function Receptury({
   title = "Receptury",
   className = "",
   urlPreQuery = "",
+  boxSettings,
+  initialData,
+  groupsData,
 }: {
   title?: string;
   initialData?: any;
   className?: string;
   urlPreQuery?: string;
+  boxSettings?: {
+    hiddenBoxes?: string[];
+    disabledValues?: string[];
+    initialTrue?: string[];
+  };
+  groupsData: any;
 }) {
-  const [data, setData] = useState<any>("init");
+  const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
   const [gridView, setGridView] = useState(true);
@@ -251,10 +56,15 @@ export default function Receptury({
   const urlParamsSplitted = urlParams.split("&");
   const paramsObjects = Object.fromEntries(paramsHook);
 
+  const cookie = new Cookies();
+
+  const logged = cookie.get("token");
+  const paid = logged && cookie.get("paid");
+
   const urlGroup =
     paramsObjects &&
     paramsObjects.skupina &&
-    groupsData.find((group) => group.value === paramsObjects.skupina);
+    groupsData.find((group: any) => group.value === paramsObjects.skupina);
 
   const [selectedGroup, setSelectedGroup] = useState(
     urlGroup ? urlGroup.value : "nezadano"
@@ -265,11 +75,17 @@ export default function Receptury({
     urlGroup &&
     paramsObjects.podskupina &&
     urlGroup.options.find(
-      (subgroup) => subgroup.value === paramsObjects.podskupina
+      (subgroup: any) => subgroup.value === paramsObjects.podskupina
     );
 
   const [selectedSubgroup, setSelectedSubgroup] = useState(
-    urlSubGroup ? urlSubGroup.value : urlGroup ? urlGroup.options[0].value : ""
+    urlSubGroup
+      ? urlSubGroup.value
+      : urlGroup
+        ? urlGroup.options.length !== 0
+          ? urlGroup.options[0].value
+          : ""
+        : ""
   );
 
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -282,48 +98,134 @@ export default function Receptury({
   const [initialLoad, setInitialLoad] = useState(true);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
-    const holder = [
+    let holder: {
+      title: string;
+      name: string;
+      backend: string;
+      options: {
+        title: string;
+        name: string;
+        checked: boolean;
+        disabled?: boolean;
+        backend?: string;
+      }[];
+    }[] = [
       {
         title: "Obecné",
         name: "obecne",
+        backend: "Obecne",
         options: [
-          { title: "Moje oblíbené", name: "moje", checked: false },
-          { title: "Nutričně ověřeno", name: "nutricni", checked: false },
-          { title: "Stáhnout do skladu", name: "sklad", checked: false },
           {
-            title: "Videorecepty",
-            name: "videorecepty",
+            title: "Moje oblíbené",
+            name: "moje",
+            backend: "Oblíbené",
             checked: false,
+          },
+          {
+            title: "Nutričně ověřeno",
+            name: "nutricni",
+            backend: "SchvalenoNT",
+            checked: false,
+          },
+          {
+            title: "Stáhnout do skladu",
+            name: "sklad",
+            backend: "MSklad",
+            checked: false,
+          },
+          {
+            title: "Videoreceptury",
+            name: "videoreceptury",
+            checked: false,
+            backend: "Video",
           },
         ],
       },
       {
         title: "Speciální strava",
         name: "special",
+        backend: "Dieta",
         options: [
-          { title: "Bezlepková", name: "bezlepkova", checked: false },
-          { title: "Bezmléčná", name: "bezmlecna", checked: false },
-          { title: "Šetřící", name: "setrici", checked: false },
+          {
+            title: "Bezlepková",
+            name: "bezlepkova",
+            backend: "Dieta1",
+            checked: false,
+          },
+          {
+            title: "Bezmléčná",
+            name: "bezmlecna",
+            backend: "Dieta2",
+            checked: false,
+          },
+          {
+            title: "Šetřící",
+            name: "setrici",
+            backend: "Dieta3",
+            checked: false,
+          },
         ],
       },
       {
         title: "Způsob přípravy",
         name: "priprava",
+        backend: "TepelnaUprava",
         options: [
-          { title: "Vařené", name: "varene", checked: false },
-          { title: "Dušené", name: "dusene", checked: false },
-          { title: "Pečené", name: "pecene", checked: false },
-          { title: "Zapečené", name: "zapecene", checked: false },
-          { title: "Smažené", name: "smazene", checked: false },
-          { title: "Ostatní", name: "ostatni", checked: false },
+          {
+            title: "Vařené",
+            name: "varene",
+            backend: "Vařené",
+            checked: false,
+          },
+          {
+            title: "Dušené",
+            name: "dusene",
+            backend: "Dušené",
+            checked: false,
+          },
+          {
+            title: "Pečené",
+            name: "pecene",
+            backend: "Pečené",
+            checked: false,
+          },
+          {
+            title: "Zapečené",
+            name: "zapecene",
+            backend: "Zapečené",
+            checked: false,
+          },
+          {
+            title: "Smažené",
+            name: "smazene",
+            backend: "Smažené",
+            checked: false,
+          },
+          {
+            title: "Ostatní",
+            name: "ostatni",
+            backend: "Ostatní",
+            checked: false,
+          },
         ],
       },
       {
         title: "Partner",
         name: "partner",
+        backend: "Receptar",
         options: [
-          { title: "Bidfood", name: "bidfood", checked: false },
-          { title: "Bonduelle", name: "bonduelle", checked: false },
+          {
+            title: "Bidfood",
+            name: "bidfood",
+            backend: "1",
+            checked: false,
+          },
+          {
+            title: "Bonduelle",
+            name: "bonduelle",
+            backend: "2",
+            checked: false,
+          },
         ],
       },
     ];
@@ -341,6 +243,17 @@ export default function Receptury({
       }
     });
 
+    if (boxSettings) {
+      holder.forEach((box) =>
+        box.options.forEach((boxValue) => {
+          const valueName = boxValue.name;
+          if (boxSettings.initialTrue?.includes(valueName))
+            boxValue.checked = true;
+          if (boxSettings.disabledValues?.includes(valueName))
+            boxValue.disabled = true;
+        })
+      );
+    }
     return holder;
   });
   const [pageState, setPageState] = useState<number>(
@@ -354,11 +267,13 @@ export default function Receptury({
   useEffect(() => {
     const local = localStorage.getItem("gridView");
     setGridView(local === "true");
+    if (initialData) return setInitialLoad(false);
 
     (async () => {
       setData(await getData(pageState));
       setInitialLoad(false);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function updateSideBarValue(
@@ -388,13 +303,17 @@ export default function Receptury({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: ["Receptura 1", "Receptura 2"],
+        options: [
+          "Znojemský guláš",
+          "Hovězí pečeně na celeru",
+          "Celerová pomazánka s krabím masem",
+        ],
       },
       {
         title: "Dle suroviny",
         name: "surovina",
         value: "",
-        options: ["Surovina 1", "Surovina 2"],
+        options: ["Cizrna", "Avokádo", "Med", "Rajčata"],
       },
     ];
     // Načte hodnoty z URL
@@ -411,7 +330,11 @@ export default function Receptury({
   function resetFilters() {
     sideBarValues.forEach((box) => {
       box.options.forEach((option) => {
-        option.checked = false;
+        if (
+          !boxSettings?.initialTrue?.includes(option.name) ||
+          !boxSettings?.disabledValues?.includes(option.name)
+        )
+          option.checked = false;
       });
     });
 
@@ -439,9 +362,13 @@ export default function Receptury({
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
-  async function getDataAndSetQuery(page: number) {
+  async function getDataAndSetQuery(newPage: number | undefined) {
     setLoading(true);
+<<<<<<< HEAD:src/app/Receptury.tsx
 
+=======
+    const page = newPage ? newPage : pageState;
+>>>>>>> origin/development:src/components/ui/Receptury/Receptury.tsx
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -453,7 +380,8 @@ export default function Receptury({
     if (selectedGroup !== "nezadano") {
       if (query === "") query += "skupina=" + selectedGroup;
       else query += "&skupina=" + selectedGroup;
-      if (selectedSubgroup) query += "&podskupina=" + selectedSubgroup;
+      if (selectedSubgroup && selectedSubgroup !== "vse")
+        query += "&podskupina=" + selectedSubgroup;
     }
 
     let hasBox = false;
@@ -500,27 +428,91 @@ export default function Receptury({
   }
 
   async function getData(page: number) {
+    //Filtrování
+    let podminka = "";
+    let stitek = "";
+
+    //Skupina podskupina
     const group = groupsData.find((item: any) => item.value === selectedGroup);
-    const subGroup = group?.options.find(
-      (item: any) => item.value === selectedSubgroup
-    );
+    if (group && group.value !== "nezadano") {
+      podminka += `DruhSkupina='${group.title}'`;
+
+      const subGroup = group.options.find(
+        (item: any) => item.value === selectedSubgroup
+      );
+      if (subGroup && subGroup.value !== "vse") {
+        podminka += ` AND DruhPodskupina='${subGroup.title}'`;
+      }
+    }
+
+    //Comboboxy
+    if (comboBoxValues[0].value !== "") {
+      if (podminka !== "") podminka += " AND ";
+      podminka += `Nazev LIKE '%${comboBoxValues[0].value}%'`;
+    }
+
+    //Boxiky
+    sideBarValues.forEach((box) => {
+      let boxPodminka = "";
+      box.options.forEach((option) => {
+        if (option.checked && option.backend) {
+          switch (box.name) {
+            case "partner":
+              if (boxPodminka !== "") boxPodminka += " OR ";
+              boxPodminka += `${box.backend}='${option.backend}'`;
+              break;
+            case "priprava":
+              if (boxPodminka !== "") boxPodminka += " OR ";
+              boxPodminka += `${box.backend}='${option.backend}'`;
+              break;
+            case "special":
+              if (boxPodminka !== "") boxPodminka += " AND ";
+              boxPodminka += `${option.backend}='Ano'`;
+              break;
+            case "obecne":
+              if (option.name === "moje" || option.name === "sklad") {
+                stitek = option.backend;
+              } else {
+                if (boxPodminka !== "") boxPodminka += " AND ";
+                boxPodminka += `${option.backend}<>''`;
+                break;
+              }
+          }
+        }
+      });
+      if (boxPodminka !== "") {
+        if (podminka !== "") podminka += ` AND `;
+        podminka += `(${boxPodminka})`;
+        boxPodminka = "";
+      }
+    });
 
     const result = await (
       await fetch("/api", {
         method: "POST",
         body: JSON.stringify({
-          Sid: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          Sid: logged ? logged : "12345VIS",
+          Funkce: "Receptury",
           Parametry: {
             Tabulka: "Receptury",
             Operace: "Read",
-            Podminka:
-              group?.value === "nezadano"
-                ? ""
-                : `Druh='${group?.title} ${subGroup?.title}'`,
+            Podminka: podminka,
             Limit: 15,
             Offset: (page - 1) * 15,
-            Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+            Vlastnosti: [
+              "Veta",
+              "Nazev",
+              "Identita",
+              "Obrazek",
+              "DruhSkupina",
+              "DruhPodskupina",
+              "Dieta1",
+              "Dieta2",
+              "Dieta3",
+              "TepelnaUprava",
+            ],
+            Stitek: stitek,
+            Surovina: comboBoxValues[1].value.toLowerCase(),
           },
         }),
       })
@@ -528,11 +520,64 @@ export default function Receptury({
     return result;
   }
 
+  async function zmenStitek(
+    veta: number,
+    stitek: "Oblíbené" | "MSklad",
+    hodnota: boolean
+  ) {
+    if (!logged || !paid) {
+      return toast({
+        intent: "warning",
+        title: `Pro použití této funkce je potřeba ${
+          logged
+            ? "mít aktivní předplacené členství."
+            : "být přihlášen a mít předplacené členství."
+        }`,
+      });
+    }
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: logged,
+          Funkce: "Stitek",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: hodnota ? "Pridat" : "Smazat",
+            Stitek: stitek,
+            Vety: [veta],
+          },
+        }),
+      })
+    ).json();
+    if (result.Status) {
+      let vetaStringed = veta.toString();
+      setData((prev: any) => {
+        let objHolder = prev;
+        const curr = objHolder.Vety.find(
+          (veta: any) => veta.Vlastnosti.Veta === vetaStringed
+        );
+
+        if (hodnota) curr.Stitky.push(stitek);
+        else {
+          var index = curr.Stitky.indexOf(stitek);
+          if (index !== -1) {
+            curr.Stitky.splice(index, 1);
+          }
+        }
+
+        return objHolder;
+      });
+
+      setRefresh(!refresh);
+    }
+  }
+
   return (
     <Container className={`py-6 ${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
-        data={data ? data.Vety : null}
+        pocet={data && data.CelkovyPocet}
         gridView={initialLoad === true ? undefined : gridView}
         setGridView={(grid: boolean) => {
           setGridView(grid);
@@ -545,6 +590,7 @@ export default function Receptury({
         updateCombobox={updateCombobox}
         refresh={refresh}
         initialLoad={initialLoad}
+        getData={getDataAndSetQuery}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
         <MobileFilters
@@ -555,7 +601,10 @@ export default function Receptury({
           sideBarValues={sideBarValues}
           updateCombobox={updateCombobox}
           updateSideBarValue={updateSideBarValue}
-          getDataAndSetQuery={() => getDataAndSetQuery(pageState)}
+          getDataAndSetQuery={() => {
+            setSideBarOpen(false);
+            getDataAndSetQuery(pageState);
+          }}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
           setSelectedGroup={(val: string) => {
@@ -581,6 +630,7 @@ export default function Receptury({
           cancelDisabled={cancelDisabled}
           loading={loading}
           refresh={refresh}
+          hideBoxes={boxSettings?.hiddenBoxes}
         />
 
         {initialLoad ? (
@@ -594,7 +644,7 @@ export default function Receptury({
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"
-              : "Nepodařilo se najít žádné recepty na základě vyplněných filtrů"}
+              : "Nepodařilo se najít žádné receptury na základě vyplněných filtrů"}
           </p>
         ) : (
           <RecipeCardsGrid
@@ -602,17 +652,23 @@ export default function Receptury({
             gridView={gridView}
             isLoading={loading}
             data={data}
+            zmenStitek={zmenStitek}
+            logged={logged}
           />
         )}
       </div>
-      <Paginator
-        currentPage={pageState}
-        totalPages={25}
-        changePage={(page) => {
-          setPageState(page);
-          getDataAndSetQuery(page);
-        }}
-      />
+      {data && data.CelkovyPocet > 15 && (
+        <Paginator
+          currentPage={pageState}
+          totalPages={Math.ceil(data.CelkovyPocet / 15)}
+          changePage={(page) => {
+            if (loading) return null;
+            setPageState(page);
+            getDataAndSetQuery(page);
+          }}
+          loading={loading}
+        />
+      )}
     </Container>
   );
 }
@@ -622,6 +678,7 @@ function Comboboxes({
   comboBoxValues,
   updateCombobox,
   refresh,
+  getData,
 }: {
   className: string;
   comboBoxValues: {
@@ -632,6 +689,7 @@ function Comboboxes({
   }[];
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
+  getData: () => void;
 }) {
   return (
     <div className={`${className}`}>
@@ -645,6 +703,7 @@ function Comboboxes({
           onChange={(value: string) => updateCombobox(index, value)}
           aria-label={"Vyhledat " + combo.title}
           z={100 - index}
+          onEnter={getData}
         />
       ))}
     </div>
@@ -653,7 +712,7 @@ function Comboboxes({
 
 function TopRow({
   title,
-  data,
+  pocet,
   comboBoxValues,
   gridView,
   setGridView,
@@ -663,9 +722,10 @@ function TopRow({
   updateCombobox,
   refresh,
   initialLoad,
+  getData,
 }: {
   title: string;
-  data: any;
+  pocet: number;
   comboBoxValues: {
     title: string;
     name: string;
@@ -680,6 +740,7 @@ function TopRow({
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
   initialLoad: boolean;
+  getData: (page?: number) => void;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
@@ -688,8 +749,8 @@ function TopRow({
         <p className="pt-3 font-bold text-black">
           {initialLoad
             ? " Vyhledávám receptury"
-            : data
-              ? `Našli jsme pro vás ${data.length} receptůr`
+            : pocet !== 0
+              ? `Našli jsme pro vás ${pocet ? pocet : "0"} receptur`
               : "Nenašli jsme žádná data"}
         </p>
       </div>
@@ -698,6 +759,7 @@ function TopRow({
         comboBoxValues={comboBoxValues}
         updateCombobox={updateCombobox}
         refresh={refresh}
+        getData={() => getData()}
       />
       <div className="flex items-center gap-x-4">
         <ToggleGridButton
@@ -736,6 +798,7 @@ function MobileFilters({
   cancelDisabled,
   loading,
   refresh,
+  hideBoxes,
 }: {
   sideBarOpen: boolean;
   groupsData: any;
@@ -745,7 +808,7 @@ function MobileFilters({
   setSelectedSubgroup: (selectedSubgroup: any) => void;
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
-  sideBarValues: { title: string; options: any[] }[];
+  sideBarValues: { title: string; name: string; options: any[] }[];
   comboBoxValues: {
     title: string;
     name: string;
@@ -763,6 +826,7 @@ function MobileFilters({
   cancelDisabled: boolean;
   loading: boolean;
   refresh: boolean;
+  hideBoxes?: string[];
 }) {
   return (
     <>
@@ -778,9 +842,9 @@ function MobileFilters({
               <motion.div
                 key="modal"
                 className="lg:hidden"
-                initial={{ opacity: 0 }}
+                /* initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0 }} */
               >
                 <Dialog.Overlay className="DialogOverlay" />
                 <Dialog.Content className="DialogContent">
@@ -801,6 +865,7 @@ function MobileFilters({
                     cancelDisabled={cancelDisabled}
                     loading={loading}
                     refresh={refresh}
+                    hideBoxes={hideBoxes}
                   />
                 </Dialog.Content>
               </motion.div>
@@ -827,6 +892,7 @@ function MobileFilters({
           cancelDisabled={cancelDisabled}
           loading={loading}
           refresh={refresh}
+          hideBoxes={hideBoxes}
         />
       </div>
     </>
@@ -850,6 +916,7 @@ function SideBar({
   cancelDisabled,
   loading,
   refresh,
+  hideBoxes = [],
 }: {
   setSideBarOpen: (open: boolean) => void;
   resetFilters: () => void;
@@ -858,7 +925,7 @@ function SideBar({
   selectedSubgroup: any;
   setSelectedSubgroup: (selectedSubgroup: any) => void;
   groupsData: any;
-  sideBarValues: { title: string; options: any[] }[];
+  sideBarValues: { title: string; name: string; options: any[] }[];
   comboBoxValues: {
     title: string;
     name: string;
@@ -876,6 +943,7 @@ function SideBar({
   cancelDisabled: boolean;
   loading: boolean;
   refresh: boolean;
+  hideBoxes?: string[];
 }) {
   return (
     <div
@@ -895,6 +963,7 @@ function SideBar({
           comboBoxValues={comboBoxValues}
           updateCombobox={updateCombobox}
           refresh={refresh}
+          getData={getDataAndSetQuery}
         />
         <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
           <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">
@@ -953,18 +1022,24 @@ function SideBar({
                 setSelected={(item: any) => {
                   setSelectedSubgroup(item);
                 }}
+                disabled={
+                  groupsData.find((item: any) => item.value === selectedGroup)
+                    ?.options?.length <= 1
+                }
               />
             </div>
-
-            {sideBarValues.map((box, index) => (
-              <SideBarBox
-                key={"ffsbb" + index}
-                title={box.title}
-                options={box.options}
-                bIndex={index}
-                updateSideBarValue={updateSideBarValue}
-              />
-            ))}
+            {sideBarValues.map(
+              (box, index) =>
+                !hideBoxes.includes(box.name) && (
+                  <SideBarBox
+                    key={"ffsbb" + index}
+                    title={box.title}
+                    options={box.options}
+                    bIndex={index}
+                    updateSideBarValue={updateSideBarValue}
+                  />
+                )
+            )}
           </div>
         </div>
       </Container>
@@ -1003,11 +1078,11 @@ function SideBarBox({
   };
 
   return (
-    <div className="border-t border-primary-200 py-4">
+    <div className="border-t border-primary-200 py-2">
       <button
         onClick={() => setOpen(!open)}
         aria-label={!open ? "Zobrazit" : "Skrýt"}
-        className="w-full rounded-lg"
+        className={clsx(open && "mb-2", "w-full rounded-lg")}
       >
         <div className="flex w-full flex-row items-center justify-between text-center">
           <Heading as="h3" size="inherit">
@@ -1022,12 +1097,12 @@ function SideBarBox({
       <AnimatePresence initial={false}>
         {open && (
           <motion.ul
-            className="mt-2 space-y-2 overflow-x-visible"
+            className="space-y-2 overflow-x-visible"
             initial="closed"
             animate="open"
             exit="closed"
             variants={variants}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.15 }}
           >
             {options.map((o: any, oIndex: number) => (
               <motion.li
@@ -1037,6 +1112,7 @@ function SideBarBox({
                 <Checkbox
                   checked={o.checked}
                   label={o.title}
+                  disabled={o.disabled}
                   onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
                 />
               </motion.li>

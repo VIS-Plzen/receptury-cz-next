@@ -68,9 +68,9 @@ export function Collapse({
           id={"collapse-trigger-" + triggerId}
           aria-controls={"collapse-panel-" + panelID}
           aria-expanded={isOpen ? "true" : "false"}
-          className="flex w-full items-center justify-between py-4 text-black hover:text-primary"
+          className="flex w-full items-center justify-between py-2.5 text-black hover:text-primary"
         >
-          <span className="block w-full text-left text-lg font-extrabold uppercase transition-colors duration-300 sm:text-xl">
+          <span className="block w-full text-left text-lg font-bold leading-tight transition-colors duration-300">
             {title}
           </span>
           <CloseIcon

@@ -1,9 +1,10 @@
-import DebugContextProvider from "@/context/Debug";
+import { ToastContainer } from "@/components/ui/ToastContainer";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Providers from "./Providers";
 import SkipNavigationButton from "./SkipNavigationButton";
 
 const nunito = Nunito({
@@ -27,7 +28,7 @@ export default function RootLayout({
       <body
         className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        <DebugContextProvider>
+        <Providers>
           <SkipNavigationButton
             href="#obsah"
             className="hidden lg:inline-flex"
@@ -37,7 +38,8 @@ export default function RootLayout({
           </header>
           <main id="obsah">{children}</main>
           <Footer />
-        </DebugContextProvider>
+          <ToastContainer />
+        </Providers>
       </body>
     </html>
   );

@@ -3,7 +3,34 @@ import Collapse from "@/components/ui/Collapse";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
-import { Disclosure } from "@headlessui/react";
+
+const faqContent = [
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt illum maiores aliquam saepe a hic vitae nostrum amet perferendis maxime. Autem nihil possimus blanditiis dolorem fugit fuga saepe.",
+  },
+];
 
 export default function Home() {
   return (
@@ -189,66 +216,33 @@ export default function Home() {
     );
   }
   function FAQ() {
-    function Disclone({
-      title,
-      children,
-    }: {
-      title: string;
-      children: React.ReactNode;
-    }) {
-      return (
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between border-t-2 border-primary-600/30 py-2 text-lg font-bold text-black">
-                <span>{title}</span>
-                <span className="text-3xl">{open ? "-" : "+"}</span>
-              </Disclosure.Button>
+    // split the faq content array into two columns
+    const half = Math.ceil(faqContent.length / 2);
+    const firstHalf = faqContent.slice(0, half);
+    const secondHalf = faqContent.slice(half);
 
-              <Disclosure.Panel>{children}</Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      );
-    }
     return (
       <Container>
         <Heading as="h1" hasMarginBottom>
           FAQ
         </Heading>
-        <div className="grid gap-x-5 md:grid-cols-2">
+        <div className="grid gap-x-10 md:grid-cols-2">
           <Collapse.Group>
-            <div className="w-full space-y-2">
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
+            <div className="w-full space-y-2 divide-y-2 divide-primary-200">
+              {firstHalf.map((faq) => (
+                <Collapse key={faq.title} title={faq.title}>
+                  <p>{faq.content}</p>
+                </Collapse>
+              ))}
             </div>
-            <div className="w-full space-y-2">
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
-              <Collapse title="Lze toto otevřít?">
-                <p>
-                  Jasně, jde obojí! Dám sem trochu delší text aby to vypadalo
-                  normálně: Headless UI keeps track of a lot of state about each
-                  component, like which listbox option is currently selected.
-                </p>
-              </Collapse>
+          </Collapse.Group>
+          <Collapse.Group className="border-t-2 border-primary-200 md:border-none">
+            <div className="w-full space-y-2 divide-y-2 divide-primary-200">
+              {secondHalf.map((faq) => (
+                <Collapse key={faq.title} title={faq.title}>
+                  <p>{faq.content}</p>
+                </Collapse>
+              ))}
             </div>
           </Collapse.Group>
         </div>

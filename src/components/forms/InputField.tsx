@@ -1,5 +1,6 @@
 import { cn } from "@/utils/cn";
 import { forwardRef, useId } from "react";
+import LoadingSpinner from "../ui/LoadingSpinner";
 import ErrorText from "./ErrorText";
 import HelperText from "./HelperText";
 import Label from "./Label";
@@ -13,31 +14,41 @@ import Label from "./Label";
 
 type Props = React.ComponentPropsWithoutRef<"input"> & {
   name: string;
-  type?: "text" | "email" | "tel" | "url" | "number";
+  type?: "text" | "email" | "tel" | "url" | "number" | "password";
   label?: string;
+  variant?: "gray" | "white";
   helperText?: string | boolean | undefined | null;
-  errorText?: string | boolean | undefined | null;
+  errorText?: string | boolean | undefined | null | any;
   className?: string;
-  [key: string]: any;
+  isLoading?: boolean;
 };
+
+const variantClasses = {
+  gray: "bg-primary-50 text-gray-900",
+  white: "bg-white text-gray-900",
+};
+
 const InputField = forwardRef<HTMLInputElement, Props>(
   (
     {
       name,
       type = "text",
       label,
+      variant = "white",
       helperText,
       errorText,
       className = "",
+      isLoading = false,
       ...props
     },
     forwardedRef
   ) => {
     const generatedId = useId();
+
     return (
       <div
         className={cn(
-          "flex w-full flex-col items-start justify-start gap-1 py-1",
+          "relative flex w-full flex-col items-start justify-start gap-1 py-1",
           props.disabled && "cursor-not-allowed opacity-70",
           className
         )}
@@ -63,9 +74,10 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           type={type}
           name={name}
           className={cn(
-            "block w-full appearance-none px-3 py-2.5",
+            "mb-4 block w-full appearance-none px-3 py-2.5 focus:outline-none",
             "rounded-lg border-2 border-primary-200",
-            "bg-white text-base text-gray-900",
+            variantClasses[variant],
+            "text-base text-gray-900",
             "placeholder:text-gray-700/60",
             "focus:border-primary focus:ring-primary/50",
             "transition duration-150",
@@ -75,9 +87,12 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           )}
           {...props}
         />
+        {isLoading && <LoadingSpinner className="absolute left-2.5 top-1/2" />}
 
         {/* Error text */}
-        {errorText && <ErrorText>{errorText}</ErrorText>}
+        {errorText && (
+          <ErrorText className="absolute bottom-[5px]">{errorText}</ErrorText>
+        )}
       </div>
     );
   }

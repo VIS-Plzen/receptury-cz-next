@@ -31,20 +31,12 @@ const footerRoutes = [
 
 const partners = [
   {
-    label: "Partner 1",
-    href: "/",
+    label: "Bidfood",
+    href: "/bidfood",
   },
   {
-    label: "Partner 2",
-    href: "/",
-  },
-  {
-    label: "Partner 3",
-    href: "/",
-  },
-  {
-    label: "Partner 4",
-    href: "/",
+    label: "Bonduelle",
+    href: "/bonduelle",
   },
 ];
 
@@ -74,7 +66,7 @@ export default function Footer() {
   return (
     <>
       <footer className="w-full items-center bg-white">
-        <Container className="flex items-center justify-start py-[40px] lg:py-[100px]">
+        <Container className="flex items-center justify-start py-[40px] print:hidden lg:py-[100px]">
           <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
             {/* Navigation */}
             <div className="flex flex-col justify-start pb-[20px] pr-[20px]">
@@ -155,6 +147,11 @@ export default function Footer() {
               </ul>
             </div>
           </div>
+        </Container>
+        <Container className="hidden print:block">
+          <p className="text-end text-base">
+            &copy; {currentYear} KnihovnaReceptur.cz
+          </p>
         </Container>
       </footer>
       {/* Debug Modal */}

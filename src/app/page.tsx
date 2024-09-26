@@ -1,34 +1,23 @@
+import Ssr from "@/components/ui/Receptury/Ssr";
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
-import Receptury from "./Receptury";
+import MembershipModal from "./MembershipModal";
 import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
 
-export default async function Home() {
-  /* let data = await readSome(); */
+export const metadata: Metadata = {
+  title: "Stránka | Receptury",
+  description: "Desc",
+};
 
-  async function createNew() {
-    return await (
-      await fetch("/api", {
-        method: "POST",
-        body: JSON.stringify({
-          sid: "12345VIS",
-          funkce: "ObecnyDotaz",
-          parametry: {
-            Tabulka: "Receptury",
-            Operace: "Create",
-          },
-          Hodnoty: {
-            CisloReceptury: 421112233,
-            Druh: "Svačiny Pomazánky sýrové a tvarohové",
-            Nazev: "Jidlo",
-            Stav: "Rozpracovaná",
-          },
-        }),
-      })
-    ).json();
-  }
+export default async function Home({ searchParams }: any) {
+  const cookie = cookies();
+  const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
 
-  /* async function readSome() {
+  const [nove, oblibene] = await Promise.all([readNew(), readFavorite()]);
+
+  async function readNew() {
     const result = await (
       await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
         method: "POST",
@@ -36,36 +25,90 @@ export default async function Home() {
         body: JSON.stringify({
           Uzivatel: process.env.BE_USER,
           Heslo: process.env.BE_PASSWORD,
-          SID: "12345VIS",
-          Funkce: "ObecnyDotaz",
+          SID: sid,
+          Funkce: "Receptury",
           Parametry: [
             {
               Tabulka: "Receptury",
               Operace: "Read",
-              Limit: 15,
-              Vlastnosti: ["Nazev", "Identita", "Obrazek"],
+              Limit: 10,
+              OrderBy: "DatumAktualizace",
+              Vlastnosti: [
+                "Nazev",
+                "Identita",
+                "Obrazek",
+                "DruhSkupina",
+                "DruhPodskupina",
+                "Dieta1",
+                "Dieta2",
+                "Dieta3",
+                "TepelnaUprava",
+              ],
             },
           ],
         }),
       })
     ).json();
-
-    if (result.Result) {
-      result.Result.Vety = result.Vety;
-      return result.Result;
+    if (result.Result && result.Result.Status) {
+      return result.Vety;
     }
     return {
       Status: false,
       Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
     };
   }
- */
+
+  async function readFavorite() {
+    const result = await (
+      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Uzivatel: process.env.BE_USER,
+          Heslo: process.env.BE_PASSWORD,
+          SID: sid,
+          Funkce: "Receptury",
+          Parametry: [
+            {
+              Tabulka: "Receptury",
+              Operace: "Read",
+              Stitek: "Oblíbené",
+              Limit: 10,
+              OrderBy: "",
+              Vlastnosti: [
+                "Nazev",
+                "Identita",
+                "Obrazek",
+                "DruhSkupina",
+                "DruhPodskupina",
+                "Dieta1",
+                "Dieta2",
+                "Dieta3",
+                "TepelnaUprava",
+              ],
+            },
+          ],
+        }),
+      })
+    ).json();
+
+    if (result.Result && result.Result.Status) {
+      return result.Vety;
+    }
+    return {
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    };
+  }
+
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
-      <Inspirace />
-      <Receptury
+      <MembershipModal params={searchParams} />
+      <Inspirace initData={{ nove: nove, oblibene: oblibene }} />
+      <Ssr
+        searchParams={searchParams}
         className="border-y-2 border-primary-200"
-        initialData={undefined}
+        sid={sid}
       />
       <Spolupracujeme />
       <VolitelnyObsah

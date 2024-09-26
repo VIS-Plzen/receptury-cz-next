@@ -2,15 +2,15 @@ import { ArrowRightAltIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import Ssr from "@/components/ui/Receptury/Ssr";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import Image from "next/image";
 import Katalog from "../Katalog";
-import Receptury from "../Receptury";
-import { Partner } from "../receptura/[id]/page";
+import { Partner } from "../receptura/[id]/Client";
 
-export default function Home() {
+export default function Home({ searchParams }: any) {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
       <Partner
@@ -30,18 +30,26 @@ export default function Home() {
         }
         img={"/images/food.jpeg"}
       />
-      <Receptury />
+
+      <Ssr
+        searchParams={searchParams}
+        boxSettings={{
+          initialTrue: ["bonduelle"],
+          disabledValues: ["bonduelle", "bidfood"],
+          hiddenBoxes: ["partner"],
+        }}
+      />
     </div>
   );
 
   function Kontakt({ telefon, email }: { telefon: string; email: string }) {
     return (
       <Container>
-        <div className="bg-bonduelle-700/15 border-bonduelle-700 flex flex-col justify-between gap-5 rounded-2xl border-2 p-5 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-5 rounded-2xl border-2 border-bonduelle-700 bg-bonduelle-700/15 p-5 md:flex-row md:items-center">
           <Heading as="h2" size="sm">
             Kontaktujte obchodního zástupce
           </Heading>
-          <div className="divide-bonduelle-700 flex flex-col gap-3 whitespace-nowrap sm:flex-row sm:divide-x-2">
+          <div className="flex flex-col gap-3 divide-bonduelle-700 whitespace-nowrap sm:flex-row sm:divide-x-2">
             <a href={`tel:${telefon}`} className="flex w-min flex-col">
               <span className="font-semibold">Telefon</span>
               <span className="font-bold text-black">{telefon}</span>
@@ -82,7 +90,7 @@ export default function Home() {
     return (
       <Container>
         <div
-          className={`border-bonduelle-700 bg-bonduelle-700/15 flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl border-2 p-6 md:flex-row lg:p-8 ${className}`}
+          className={`flex w-full flex-col justify-between gap-x-5 gap-y-10 rounded-3xl border-2 border-bonduelle-700 bg-bonduelle-700/15 p-6 md:flex-row lg:p-8 ${className}`}
         >
           <div className="flex max-w-xl flex-col gap-y-7">
             <Heading>{title}</Heading>

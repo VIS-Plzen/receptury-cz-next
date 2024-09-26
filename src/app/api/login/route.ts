@@ -4,7 +4,7 @@ export async function POST(request: Request) {
   const { email, password } = await request.json();
 
   try {
-    const res = await fetch(
+    const resLogin = await fetch(
       "https://jidelny.cz/wp-json/receptury/v1/user/login",
       {
         method: "POST",
@@ -15,10 +15,41 @@ export async function POST(request: Request) {
         }),
       }
     );
-    const data = await res.json();
+    const dataLogin = await resLogin.json();
+    if (!dataLogin.token) {
+      return NextResponse.json(dataLogin);
+    }
 
-    // console.log(data);
-    return NextResponse.json(data);
+    const resProfile = await fetch(
+      "https://jidelny.cz/wp-json/receptury/v1/user/profile",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: dataLogin.token,
+        }),
+      }
+    );
+    const dataProfile = await resProfile.json();
+    if (!dataProfile.firstName) {
+      return NextResponse.json(dataProfile);
+    }
+    const resValidate = await fetch(
+      "https://jidelny.cz/wp-json/receptury/v1/user/validate",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: dataLogin.token,
+        }),
+      }
+    );
+    const dataValidate = await resValidate.json();
+
+    dataProfile.token = dataLogin.token;
+    dataProfile.tokenValidTo = dataLogin.tokenValidTo;
+    dataProfile.paid = dataValidate.paid ? dataValidate.paidTo : false;
+    return NextResponse.json(dataProfile);
   } catch (error) {
     return NextResponse.json({
       Status: false,

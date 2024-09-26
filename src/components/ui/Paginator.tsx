@@ -8,18 +8,20 @@ type Props = React.ComponentPropsWithoutRef<"div"> & {
   currentPage: number;
   totalPages: number;
   changePage: (page: number) => void;
+  loading?: boolean;
 };
 
 export default function Paginator({
   currentPage,
   totalPages,
   changePage,
+  loading,
 }: Props) {
   // set by ElipssisButton - on click sets +/- 5, showing currenently selected page + offset <DayButton>s
   const [offset, setOffset] = useState<number>(0);
   const iconSize = "h-8 w-8 sm:h-9 sm:w-9";
   const isTablet = useMediaQuery("(min-width: 768px)");
-  const pagesOffset = isTablet ? 5 : 3;
+  const pagesOffset = isTablet ? 5 : 4;
 
   useEffect(() => {
     if (currentPage < 1) {
@@ -31,7 +33,11 @@ export default function Paginator({
   }, [currentPage, changePage, totalPages]);
 
   return (
-    <div className="my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2">
+    <div
+      className={`my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2 ${
+        loading && "opacity-50"
+      }`}
+    >
       <ChevronButton
         back
         changePage={changePage}
@@ -53,7 +59,8 @@ export default function Paginator({
           <>
             {[2, 3, 4, 5, 6, 7].map(
               (page, index) =>
-                (isTablet || index <= 3) && (
+                (isTablet || index <= 3) &&
+                page <= totalPages && (
                   <DayButton
                     page={page}
                     key={"ppbn" + page}
@@ -65,22 +72,36 @@ export default function Paginator({
                   />
                 )
             )}
-            <ElipssisButton
-              iconSize={iconSize}
-              setOffset={setOffset}
-              offset={offset}
-              pagesOffset={pagesOffset}
-              back
-            />
+            {((!isTablet && totalPages > 5) || totalPages > 8) && (
+              <ElipssisButton
+                iconSize={iconSize}
+                setOffset={(page) => {
+                  if (loading) {
+                    return;
+                  }
+                  setOffset(page);
+                }}
+                offset={offset}
+                pagesOffset={pagesOffset}
+                back
+              />
+            )}
           </>
         ) : currentPage + offset >= totalPages - pagesOffset + 1 ? (
           <>
-            <ElipssisButton
-              iconSize={iconSize}
-              setOffset={setOffset}
-              offset={offset}
-              pagesOffset={pagesOffset}
-            />
+            {((!isTablet && totalPages > 5) || totalPages > 8) && (
+              <ElipssisButton
+                iconSize={iconSize}
+                setOffset={(page) => {
+                  if (loading) {
+                    return;
+                  }
+                  setOffset(page);
+                }}
+                offset={offset}
+                pagesOffset={pagesOffset}
+              />
+            )}
             {[
               totalPages - 6,
               totalPages - 5,
@@ -90,7 +111,8 @@ export default function Paginator({
               totalPages - 1,
             ].map(
               (page, index) =>
-                (isTablet || index >= 2) && (
+                (isTablet || index >= 2) &&
+                page > 1 && (
                   <DayButton
                     page={page}
                     key={"ppbn" + page}
@@ -107,7 +129,12 @@ export default function Paginator({
           <>
             <ElipssisButton
               iconSize={iconSize}
-              setOffset={setOffset}
+              setOffset={(page) => {
+                if (loading) {
+                  return;
+                }
+                setOffset(page);
+              }}
               offset={offset}
               pagesOffset={pagesOffset}
             />
@@ -134,20 +161,27 @@ export default function Paginator({
             <ElipssisButton
               back
               iconSize={iconSize}
-              setOffset={setOffset}
+              setOffset={(page) => {
+                if (loading) {
+                  return;
+                }
+                setOffset(page);
+              }}
               offset={offset}
               pagesOffset={pagesOffset}
             />
           </>
         )}
-        <DayButton
-          page={totalPages}
-          changePage={changePage}
-          currentPage={currentPage}
-          iconSize={iconSize}
-          setOffset={setOffset}
-          totalPages={totalPages}
-        />
+        {((!isTablet && totalPages > 4) || totalPages > 7) && (
+          <DayButton
+            page={totalPages}
+            changePage={changePage}
+            currentPage={currentPage}
+            iconSize={iconSize}
+            setOffset={setOffset}
+            totalPages={totalPages}
+          />
+        )}
       </div>
       <ChevronButton
         changePage={changePage}

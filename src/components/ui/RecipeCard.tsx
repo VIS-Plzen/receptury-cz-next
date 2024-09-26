@@ -12,37 +12,46 @@ type RecipeCardProps = {
   label: string;
   id?: string;
   img?: any;
-  badges: string[];
+  badges: (string | false)[];
   className?: string;
+  zmenStitek?: any;
+  veta?: any;
+  stitky?: any;
 };
 
 type BadgesProps = {
-  badges: string[];
+  badges: (string | false)[];
 };
-
 //function to render action buttons on card
-function ActionButtons({ isGridView }: any) {
+function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
+  if (!stitky) return null;
   return (
-    <div className={cn("flex flex-row space-x-1", !isGridView && "space-x-3")}>
+    <div
+      className={cn("flex flex-row space-x-1", !isGridView && "md:space-x-2")}
+    >
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
-          icon="favorite"
+          icon={stitky.includes("Oblíbené") ? "favorite-fill" : "favorite"}
           aria-label="Přidat recepturu do oblíbených"
-          onClick={(e) => e.preventDefault()}
+          className={`bg-white 
+          ${stitky.includes("Oblíbené") && "text-primary-500"}`}
+          onClick={(e) => {
+            e.preventDefault();
+            zmenStitek(veta, "Oblíbené", !stitky.includes("Oblíbené"));
+          }}
         />
       </div>
+
       <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
-          icon="share"
-          aria-label="Sdílet recepturu"
-          onClick={(e) => e.preventDefault()}
-        />
-      </div>
-      <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
-        <ButtonIcon
-          icon="archive"
-          aria-label="Uložit recepturu"
-          onClick={(e) => e.preventDefault()}
+          icon={stitky.includes("MSklad") ? "archive-fill" : "archive"}
+          aria-label="MSklad"
+          className={`bg-white 
+          ${stitky.includes("MSklad") && "text-primary-500"}`}
+          onClick={(e) => {
+            e.preventDefault();
+            zmenStitek(veta, "MSklad", !stitky.includes("MSklad"));
+          }}
         />
       </div>
     </div>
@@ -51,14 +60,23 @@ function ActionButtons({ isGridView }: any) {
 
 // function to redner badges on card
 function BadgeRenderer({ badges }: BadgesProps) {
+  let badgeCounter = 0;
   return (
-    <ul className="flex flex-wrap justify-start gap-1">
-      {badges.map((badge, index) => (
-        <li key={index}>
-          <Badge className="md:px-2 md:py-0.5 md:text-xs">{badge}</Badge>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-wrap justify-start gap-1">
+      {badges.map((badge, index) => {
+        if (!badge || badgeCounter >= 4) return null;
+        badgeCounter++;
+        return (
+          <Badge
+            key={index}
+            className="md:px-2 md:py-0.5 md:text-xs"
+            variant={index <= 2 ? "healthy" : undefined}
+          >
+            {badge}
+          </Badge>
+        );
+      })}
+    </div>
   );
 }
 
@@ -69,6 +87,9 @@ function GridCardLayout({
   img,
   isLoading,
   className,
+  zmenStitek,
+  stitky,
+  veta,
 }: RecipeCardProps) {
   return (
     <div
@@ -105,7 +126,12 @@ function GridCardLayout({
             isLoading && "hidden"
           )}
         >
-          <ActionButtons isGridView={true} />
+          <ActionButtons
+            isGridView={true}
+            zmenStitek={zmenStitek}
+            veta={veta}
+            stitky={stitky}
+          />
         </div>
       </div>
       <div
@@ -142,22 +168,30 @@ function RowCardLayout({
   img,
   isLoading,
   className,
+  zmenStitek,
+  veta,
+  stitky,
 }: RecipeCardProps) {
   return (
     <div
       className={cn(
-        "h-[70px] flex-row justify-between overflow-hidden rounded-2xl",
+        "h-min min-h-[70px] w-full flex-row items-center justify-between overflow-hidden rounded-2xl bg-white",
         isLoading && "animate-pulse border-2 border-gray-200",
         !isLoading && "border-2 border-primary-300/30",
         className
       )}
     >
       {img ? (
-        <div className={cn("relative h-[70px] w-[70px]")}>
+        <div className={cn("relative h-full w-[70px]")}>
           <Image alt="" src={img} fill className="object-cover" />
         </div>
       ) : (
-        <div className={cn("bg-primary-300/30 p-2.5", isLoading && "hidden")}>
+        <div
+          className={cn(
+            "flex h-full items-center bg-primary-300/30 p-2.5",
+            isLoading && "hidden"
+          )}
+        >
           <MealSymbol />
         </div>
       )}
@@ -167,36 +201,39 @@ function RowCardLayout({
           isLoading && "block h-full w-[70px] bg-gray-200"
         )}
       ></div>
-      <div
-        className={cn(
-          "flex flex-grow flex-row items-center justify-between bg-white"
-        )}
-      >
-        <div className="line-clamp-3 w-80 pl-[20px] pr-2 text-sm font-bold">
-          <p className={cn("block", isLoading && "hidden")}>{label}</p>
-          <div
-            className={cn(
-              isLoading && "h-4 w-full rounded-full bg-gray-300",
-              !isLoading && "hidden"
-            )}
-          ></div>
-        </div>
-        <div className="flex items-center justify-between gap-12">
-          <div className={cn("block", isLoading && "hidden")}>
-            <BadgeRenderer badges={badges} />
-          </div>
-          <div className="items-center">
-            <div className={cn(isLoading && "hidden")}>
-              <div className={cn("hidden items-center space-x-2 p-3 md:flex")}>
-                <ActionButtons isGridView={false} />
-              </div>
-            </div>
+      <div className="flex w-full items-center justify-between gap-x-3 bg-white px-4 py-2">
+        <div className={cn("grid w-full gap-x-3 gap-y-1 md:grid-cols-2")}>
+          <div className="line-clamp-3 text-sm font-bold">
+            <p className={cn("block", isLoading && "hidden")}>{label}</p>
             <div
-              className={cn("hidden", isLoading && "flex flex-row gap-2 pr-10")}
-            >
-              <div className="h-4 w-12 animate-pulse rounded-full bg-gray-200"></div>
-              <div className="h-4 w-12 animate-pulse rounded-full bg-gray-200"></div>
+              className={cn(
+                isLoading && "h-4 w-full rounded-full bg-gray-300",
+                !isLoading && "hidden"
+              )}
+            ></div>
+          </div>
+          <div className="flex items-center justify-between gap-12">
+            <div className={cn("block", isLoading && "hidden")}>
+              <BadgeRenderer badges={badges} />
             </div>
+          </div>
+        </div>
+        <div className="items-center">
+          <div className={cn(isLoading && "hidden")}>
+            <div className={cn("flex items-center")}>
+              <ActionButtons
+                isGridView={false}
+                zmenStitek={zmenStitek}
+                veta={veta}
+                stitky={stitky}
+              />
+            </div>
+          </div>
+          <div
+            className={cn("hidden", isLoading && "flex flex-row gap-2 pr-10")}
+          >
+            <div className="h-4 w-12 animate-pulse rounded-full bg-gray-200"></div>
+            <div className="h-4 w-12 animate-pulse rounded-full bg-gray-200"></div>
           </div>
         </div>
       </div>
@@ -213,14 +250,28 @@ function RecipeCard({
   badges,
   className,
   isLoading,
+  zmenStitek,
+  stitky,
+  veta,
 }: RecipeCardProps) {
   return (
     <ReturnedLayout
-      card={{ label: label, id: id, badges: badges, className: className }}
+      card={{
+        label: label,
+        id: id,
+        badges: badges,
+        className: className,
+        zmenStitek: zmenStitek,
+        stitky: stitky,
+        veta: veta,
+      }}
       loading={isLoading}
       isGridView={isGridView}
       forceGrid={forceGrid}
       forceRow={forceRow}
+      zmenStitek={zmenStitek}
+      stitky={stitky}
+      veta={veta}
     />
   );
 }
@@ -231,12 +282,18 @@ function ReturnedLayout({
   forceRow,
   card,
   loading,
+  zmenStitek,
+  stitky,
+  veta,
 }: {
   isGridView: boolean | undefined;
   forceGrid?: boolean;
   forceRow?: boolean;
   card: RecipeCardProps;
   loading?: boolean;
+  zmenStitek: any;
+  stitky: any;
+  veta: any;
 }) {
   let href = "";
   if (card.id != null) {
@@ -246,7 +303,7 @@ function ReturnedLayout({
   }
 
   return (
-    <a href={href}>
+    <a href={`/receptura/${card.id}`} className="flex w-full">
       <GridCardLayout
         label={card.label}
         badges={card.badges}
@@ -261,6 +318,9 @@ function ReturnedLayout({
                 ? "hidden md:block"
                 : "hidden"
         }`}
+        zmenStitek={zmenStitek}
+        stitky={stitky}
+        veta={veta}
       />
       <RowCardLayout
         label={card.label}
@@ -276,6 +336,9 @@ function ReturnedLayout({
                 ? "flex md:hidden"
                 : "flex"
         }`}
+        zmenStitek={zmenStitek}
+        stitky={stitky}
+        veta={veta}
       />
     </a>
   );

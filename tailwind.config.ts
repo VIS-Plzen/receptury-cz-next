@@ -63,6 +63,10 @@ const config: Config = {
         DEFAULT: colors.red[500],
         ...colors.red,
       },
+      healthy: {
+        DEFAULT: colors.green[500],
+        ...colors.green,
+      },
     },
     fontFamily: {
       sans: ["var(--font-nunito)", ...defaultTheme.fontFamily.sans],

@@ -6,55 +6,35 @@ import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-export default function Inspirace({ className = "" }: { className?: string }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+export default function Inspirace({
+  className = "",
+  initData,
+}: {
+  className?: string;
+  initData?: any;
+}) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
-
-  const defaultTab = useMemo(
-    () => searchParams.get("tab") || "doporucene",
-    [searchParams.get("tab")]
-  );
 
   const TabsData = [
     {
-      value: "doporucene",
-      title: "Doporučené pro vás",
+      value: "nove",
+      title: "Nové receptury",
     },
     {
       value: "oblibene",
       title: "Oblíbené",
     },
-    {
-      value: "nove",
-      title: "Nové recepty",
-    },
   ];
 
   const [selected, setSelected] = useState(TabsData[0].value);
 
-  // useEffect(() => {
-  //   const newSearchParams = new URLSearchParams();
-  //   newSearchParams.set("tab", selected);
-  //   router.push(`${pathname}?${newSearchParams.toString()}`);
-  // }, [selected, router]);
-
-  // useEffect(() => {
-  //   const tabParam = searchParams.get("tab");
-  //   if (tabParam && tabParam !== selected.value) {
-  //     const selectedTab = TabsData.find((tab) => tab.value === tabParam);
-  //     if (selectedTab) {
-  //       setSelected(selectedTab);
-  //     }
-  //   }
-  // }, [searchParams]);
+  const [data, setData] = useState<any>(initData[selected]);
+  const [loading, setLoading] = useState<any>(data ? false : true);
 
   useEffect(() => {
     if (!window) return;
@@ -85,6 +65,11 @@ export default function Inspirace({ className = "" }: { className?: string }) {
     );
   }
 
+  function setNewSelected(newSelected: string) {
+    setSelected(newSelected);
+    setData(initData[newSelected]);
+  }
+
   return (
     <div className={cn(className)}>
       <Container>
@@ -99,12 +84,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             <Tabs
               value={selected}
               className="w-full"
-              onValueChange={(value: string) => {
-                const selectedTab = TabsData.find((tab) => tab.value === value);
-                if (selectedTab) {
-                  setSelected(selectedTab.value);
-                }
-              }}
+              onValueChange={setNewSelected}
             >
               <div className="hidden w-full flex-row justify-between md:flex">
                 <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
@@ -126,7 +106,7 @@ export default function Inspirace({ className = "" }: { className?: string }) {
           <Selector
             data={TabsData}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={setNewSelected}
             className="block md:hidden"
           />
 
@@ -153,17 +133,31 @@ export default function Inspirace({ className = "" }: { className?: string }) {
             pagination={{ clickable: false }}
             className=" [--swiper-pagination-color:theme(colors.primary.600)]"
           >
-            {Array.from({ length: 10 }, (_, index) => (
-              <SwiperSlide key={index} className="py-10">
-                <RecipeCard
-                  key={index}
-                  isLoading={false}
-                  label={"Smažené kuřecí řízečky, bramborové placičky"}
-                  badges={["Dieta", "Brambor"]}
-                  forceGrid
-                />
-              </SwiperSlide>
-            ))}
+            {data && data.length > 0 ? (
+              data.map((card: any, index: number) => (
+                <SwiperSlide key={index} className="py-10">
+                  <RecipeCard
+                    key={index}
+                    isLoading={loading}
+                    id={card.Vlastnosti.Identita}
+                    label={card.Vlastnosti.Nazev}
+                    badges={[
+                      card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                      card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                      card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                      card.Vlastnosti.TepelnaUprava,
+                      card.Vlastnosti.DruhSkupina,
+                      card.Vlastnosti.DruhPodskupina,
+                    ]}
+                    forceGrid
+                  />
+                </SwiperSlide>
+              ))
+            ) : (
+              <div className="flex h-[400px] items-center px-10">
+                <p>Data se nepodařilo najít</p>
+              </div>
+            )}
           </Swiper>
         </div>
       </Container>
