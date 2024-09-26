@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   receptury-cz-next-testing:
     build:

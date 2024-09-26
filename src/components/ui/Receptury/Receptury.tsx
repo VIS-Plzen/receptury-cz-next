@@ -364,11 +364,7 @@ export default function Receptury({
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
   async function getDataAndSetQuery(newPage: number | undefined) {
     setLoading(true);
-<<<<<<< HEAD:src/app/Receptury.tsx
-
-=======
     const page = newPage ? newPage : pageState;
->>>>>>> origin/development:src/components/ui/Receptury/Receptury.tsx
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
