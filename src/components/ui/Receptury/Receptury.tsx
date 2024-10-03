@@ -653,18 +653,18 @@ export default function Receptury({
           />
         )}
       </div>
-      {data && data.CelkovyPocet > 15 && (
-        <Paginator
-          currentPage={pageState}
-          totalPages={Math.ceil(data.CelkovyPocet / 15)}
-          changePage={(page) => {
-            if (loading) return null;
-            setPageState(page);
-            getDataAndSetQuery(page);
-          }}
-          loading={loading}
-        />
-      )}
+      <Paginator
+        currentPage={pageState}
+        totalPages={
+          data?.CelkovyPocet ? Math.ceil(data.CelkovyPocet / 15) : pageState
+        }
+        changePage={(page) => {
+          if (loading) return null;
+          setPageState(page);
+          getDataAndSetQuery(page);
+        }}
+        loading={loading}
+      />
     </Container>
   );
 }
