@@ -175,7 +175,7 @@ function RowCardLayout({
   return (
     <div
       className={cn(
-        "h-min min-h-[70px] w-full flex-row items-center justify-between overflow-hidden rounded-2xl bg-white",
+        "min-h-[70px] w-full flex-row items-center justify-between overflow-hidden rounded-2xl bg-white",
         isLoading && "animate-pulse border-2 border-gray-200",
         !isLoading && "border-2 border-primary-300/30",
         className

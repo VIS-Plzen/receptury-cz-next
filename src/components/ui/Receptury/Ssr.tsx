@@ -62,49 +62,56 @@ async function readSome(
     }
   });
 
-  const result = await (
-    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        Uzivatel: process.env.BE_USER,
-        Heslo: process.env.BE_PASSWORD,
-        SID: sid ? sid : "12345VIS",
-        Funkce: "Receptury",
-        Parametry: [
-          {
-            Tabulka: "Receptury",
-            Operace: "Read",
-            Podminka: podminka,
-            Limit: 15,
-            Offset: (page - 1) * 15,
-            Vlastnosti: [
-              "Veta",
-              "Nazev",
-              "Identita",
-              "Obrazek",
-              "DruhSkupina",
-              "DruhPodskupina",
-              "Dieta1",
-              "Dieta2",
-              "Dieta3",
-              "TepelnaUprava",
-            ],
-            Stitek: stitek,
-            Surovina: comboBoxValues[1].value.toLowerCase(),
-          },
-        ],
-      }),
-    })
-  ).json();
-  if (result.Result && result.Result.Status) {
-    result.Result.Vety = result.Vety;
-    return result.Result;
+  try {
+    const result = await (
+      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Uzivatel: process.env.BE_USER,
+          Heslo: process.env.BE_PASSWORD,
+          SID: sid ? sid : "12345VIS",
+          Funkce: "Receptury",
+          Parametry: [
+            {
+              Tabulka: "Receptury",
+              Operace: "Read",
+              Podminka: podminka,
+              Limit: 15,
+              Offset: (page - 1) * 15,
+              Vlastnosti: [
+                "Veta",
+                "Nazev",
+                "Identita",
+                "Obrazek",
+                "DruhSkupina",
+                "DruhPodskupina",
+                "Dieta1",
+                "Dieta2",
+                "Dieta3",
+                "TepelnaUprava",
+              ],
+              Stitek: stitek,
+              Surovina: comboBoxValues[1].value.toLowerCase(),
+            },
+          ],
+        }),
+      })
+    ).json();
+    if (result.Result && result.Result.Status) {
+      result.Result.Vety = result.Vety;
+      return result.Result;
+    }
+    return {
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    };
+  } catch {
+    return {
+      Status: false,
+      Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+    };
   }
-  return {
-    Status: false,
-    Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
-  };
 }
 
 export const groupsData = [

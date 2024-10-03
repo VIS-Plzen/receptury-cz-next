@@ -32,6 +32,10 @@ export default function Paginator({
     }
   }, [currentPage, changePage, totalPages]);
 
+  if (totalPages === 1) {
+    return null;
+  }
+
   return (
     <div
       className={`my-7 flex w-full flex-row justify-center gap-x-0.5 md:gap-x-2 ${
