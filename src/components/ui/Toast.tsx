@@ -19,7 +19,7 @@ const ToastViewport = forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={clsx(
-      "tablet:flex-col desktop:pb-12 pointer-events-none fixed bottom-0 left-1/2 top-auto z-modal-above flex max-h-screen w-full max-w-xl -translate-x-1/2 flex-col-reverse gap-3 px-4 pb-7",
+      "pointer-events-none fixed bottom-0 left-1/2 top-auto z-modal-above flex max-h-screen w-full max-w-xl -translate-x-1/2 flex-col-reverse gap-3 px-4 pb-7 md:flex-col lg:pb-12",
       className
     )}
     {...props}
@@ -34,7 +34,7 @@ type ToastComponentProps = {
 
 // Component Variant Styles
 const componentVariants = {
-  base: "group relative z-tooltip pointer-events-auto grid grid-cols-12 items-center w-full gap-3 overflow-hidden rounded-3xl px-4 py-3 shadow-lg transition-all data-[swipe=move]:transition-none data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=open]:slide-in-from-top-full data-[state=open]:tablet:slide-in-from-bottom-full data-[state=closed]:slide-out-to-right-full",
+  base: "group relative z-tooltip pointer-events-auto grid grid-cols-12 items-center w-full gap-3 overflow-hidden rounded-3xl px-4 py-3 shadow-lg transition-all data-[swipe=move]:transition-none data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=open]:slide-in-from-top-full data-[state=open]:md:slide-in-from-bottom-full data-[state=closed]:slide-out-to-right-full",
   intent: {
     default:
       "border border-transparent bg-gray-900 text-white dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100",
@@ -49,7 +49,7 @@ const componentVariants = {
 
 // Záloha původních hodnot
 // const componentVariants = {
-//   base: "group relative z-tooltip pointer-events-auto grid grid-cols-9 items-center w-full gap-3 overflow-hidden rounded-3xl p-4 shadow-lg transition-all data-[swipe=move]:transition-none data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=open]:slide-in-from-top-full data-[state=open]:tablet:slide-in-from-bottom-full data-[state=closed]:slide-out-to-right-full",
+//   base: "group relative z-tooltip pointer-events-auto grid grid-cols-9 items-center w-full gap-3 overflow-hidden rounded-3xl p-4 shadow-lg transition-all data-[swipe=move]:transition-none data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=open]:slide-in-from-top-full data-[state=open]:md:slide-in-from-bottom-full data-[state=closed]:slide-out-to-right-full",
 //   intent: {
 //     default:
 //       "border border-transparent bg-gray-900 text-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100",
@@ -158,7 +158,7 @@ const ToastDescription = forwardRef<
   <ToastPrimitives.Description
     ref={ref}
     className={clsx(
-      "desktop:text-base max-h-28 whitespace-pre-line text-sm opacity-90",
+      "max-h-28 whitespace-pre-line text-sm opacity-90 lg:text-base",
       className
     )}
     {...props}

@@ -1,5 +1,5 @@
 import Heading from "@/components/ui/Heading";
-import { compareDates } from "@/utils/compareDates";
+import { compareDates } from "@/utils/dateWorker";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 
