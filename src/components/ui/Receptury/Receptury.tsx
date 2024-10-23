@@ -380,8 +380,8 @@ export default function Receptury({
         query += "&podskupina=" + selectedSubgroup;
     }
 
-    let hasBox = false;
     sideBarValues.forEach((box) => {
+      let hasBox = false;
       let hasOption = false;
       box.options.forEach((option) => {
         if (!option.checked) return;
