@@ -65,7 +65,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="w-full items-center bg-white">
+      <footer className="w-full items-center border-t-2 border-primary-200 bg-white">
         <Container className="flex items-center justify-start py-[40px] print:hidden lg:py-[100px]">
           <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
             {/* Navigation */}

@@ -5,7 +5,6 @@ import PasswordField from "@/components/forms/PasswordField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -35,6 +34,7 @@ function Page() {
     cookies.remove("paid");
     cookies.remove("name");
     localStorage.removeItem("userInfo");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formValidationSchema = z.object({
@@ -111,7 +111,7 @@ function Page() {
   const formWasTouched = formik.submitCount > 0;
 
   return (
-    <Container className="my-16 flex flex-col items-center justify-center py-20 text-black sm:my-32 md:py-0 xl:my-64">
+    <Container className="flex flex-col items-center justify-center pb-32 pt-8 text-black md:pb-36 md:pt-10 lg:pt-16">
       <div className="w-full space-y-4 rounded-2xl border-2 border-primary-200 bg-white p-8 sm:w-2/3 xl:w-1/3">
         <Heading size="md">Registrace</Heading>
         <form onSubmit={formik.handleSubmit}>
@@ -178,15 +178,9 @@ function Page() {
               disabled={
                 formik.isSubmitting || hasNotice?.variant === "success-solid"
               }
+              isLoading={formik.isSubmitting}
             >
-              <LoadingSpinner
-                className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
-                  formik.isSubmitting && "opacity-100"
-                }`}
-              />
-              <p className={`${formik.isSubmitting && "opacity-0"}`}>
-                Registrovat se
-              </p>
+              Registrovat se
             </Button>
           </div>
         </form>

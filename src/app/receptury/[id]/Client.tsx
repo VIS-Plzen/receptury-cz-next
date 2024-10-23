@@ -143,7 +143,7 @@ export function Page({
       })
     ).json();
     if (res.Status) {
-      navigator.clipboard.writeText(`${path}/receptura/sdilena?${res.Kod}`);
+      navigator.clipboard.writeText(`${path}/receptury/sdilena?${res.Kod}`);
       toast({
         intent: "success",
         title: "Odkaz uložen do clipboardu, nyní stačí vložit.",
@@ -488,7 +488,7 @@ export function Hero({
 
   useEffect(() => {
     setRefreshIn(refresh);
-  }, []);
+  }, [setRefreshIn, refresh]);
 
   useEffect(() => {
     if (!image) return;

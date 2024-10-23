@@ -13,7 +13,6 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Receptury from "@/components/ui/Receptury/Receptury";
 import { groupsData } from "@/components/ui/Receptury/Ssr";
 import { toast } from "@/hooks/useToast";
-import clsx from "clsx";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -559,15 +558,10 @@ function Form() {
           </div>
           <Button
             type="submit"
-            disabled={formik.isSubmitting}
+            isLoading={formik.isSubmitting}
             className="relative"
           >
-            {formik.isSubmitting && (
-              <LoadingSpinner className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2" />
-            )}
-            <span className={clsx(formik.isSubmitting && "invisible")}>
-              Uložit změny
-            </span>
+            Uložit změny
           </Button>
         </form>
         <svg

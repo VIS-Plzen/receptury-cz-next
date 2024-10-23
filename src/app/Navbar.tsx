@@ -5,7 +5,6 @@ import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
@@ -136,7 +135,7 @@ function SubscriptionBanner({
   if (["/prihlaseni", "/registrace"].includes(pathname)) return null;
 
   let texts =
-    pathname !== "/receptura/sdilena"
+    pathname !== "/receptury/sdilena"
       ? token
         ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
         : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"]
@@ -518,7 +517,8 @@ export default function Navbar() {
   }
 
   return (
-    <div className="fixed inset-x-0 top-0 z-fixed">
+    // <div className="fixed inset-x-0 top-0 z-fixed">
+    <div className="relative">
       <nav
         className={cn(
           "w-full transition duration-500 print:hidden",
@@ -575,16 +575,9 @@ export default function Navbar() {
               <Button
                 className="relative mx-auto"
                 onClick={addToCard}
-                disabled={cartState === "loading"}
+                isLoading={cartState === "loading"}
               >
-                <LoadingSpinner
-                  className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
-                    cartState === "loading" && "opacity-100"
-                  }`}
-                />
-                <p className={`${cartState === "loading" && "opacity-0"}`}>
-                  Vložit do košíku
-                </p>
+                Vložit do košíku
               </Button>
             </>
           )}

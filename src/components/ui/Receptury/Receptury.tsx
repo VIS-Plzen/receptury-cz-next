@@ -968,16 +968,10 @@ function SideBar({
               variant="black"
               size="sm"
               onClick={() => getDataAndSetQuery()}
-              disabled={saveDisabled || loading}
+              disabled={saveDisabled}
+              isLoading={loading}
             >
-              <LoadingSpinner
-                className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${
-                  !loading && "opacity-0"
-                }`}
-              />
-              <span className={`flex flex-row ${loading && "opacity-0"}`}>
-                <CheckSmallIcon className="shrink-0" /> Potvrdit výběr
-              </span>
+              <CheckSmallIcon className="shrink-0" /> Potvrdit výběr
             </Button>
             <Button
               className="mb-2 w-full"

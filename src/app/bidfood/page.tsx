@@ -8,11 +8,11 @@ import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import Image from "next/image";
 import Katalog from "../Katalog";
-import { Partner } from "../receptura/[id]/Client";
+import { Partner } from "../receptury/[id]/Client";
 
 export default function Home({ searchParams }: any) {
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <Partner
         jmeno={partners[0].title}
         heslo={partners[0].slogan}

@@ -33,11 +33,17 @@ export default function RootLayout({
             href="#obsah"
             className="hidden lg:inline-flex"
           />
-          <header>
-            <Navbar />
-          </header>
-          <main id="obsah">{children}</main>
-          <Footer />
+          <div className="grid min-h-[100dvh] grid-rows-[1fr_auto]">
+            <div className="relative grid min-h-[100dvh] grid-rows-[auto_1fr]">
+              <header className="sticky top-0 z-fixed">
+                <Navbar />
+              </header>
+              <main id="obsah" className="max-w-[100vw]">
+                {children}
+              </main>
+            </div>
+            <Footer />
+          </div>
           <ToastContainer />
         </Providers>
       </body>

@@ -297,13 +297,13 @@ function ReturnedLayout({
 }) {
   let href = "";
   if (card.id != null) {
-    href = `/receptura/${card.id}`;
+    href = `/receptury/${card.id}`;
   } else {
     href = "/";
   }
 
   return (
-    <a href={`/receptura/${card.id}`} className="flex w-full">
+    <a href={`/receptury/${card.id}`} className="flex w-full">
       <GridCardLayout
         label={card.label}
         badges={card.badges}
