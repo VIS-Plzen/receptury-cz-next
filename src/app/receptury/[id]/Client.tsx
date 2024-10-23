@@ -163,7 +163,7 @@ export function Page({
         ? partnerInfo[1]
         : "";
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 print:py-5 md:pb-36 md:pt-10">
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}
