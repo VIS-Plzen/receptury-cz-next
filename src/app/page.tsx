@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
+  const inspiraceVisible = cookie.get("inspiraceVisible")?.value;
 
   const [nove, oblibene] = await Promise.all([readNew(), readFavorite()]);
 
@@ -104,7 +105,10 @@ export default async function Home({ searchParams }: any) {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <MembershipModal params={searchParams} />
-      <Inspirace initData={{ nove: nove, oblibene: oblibene }} />
+      <Inspirace
+        inspiraceVisible={inspiraceVisible === "true"}
+        initData={{ nove: nove, oblibene: oblibene }}
+      />
       <Ssr
         searchParams={searchParams}
         className="border-y-2 border-primary-200"

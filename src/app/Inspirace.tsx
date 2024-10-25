@@ -6,19 +6,22 @@ import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Cookies from "universal-cookie";
 
 export default function Inspirace({
   className = "",
   initData,
+  inspiraceVisible,
 }: {
   className?: string;
   initData?: any;
+  inspiraceVisible: boolean;
 }) {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(inspiraceVisible);
 
   const TabsData = [
     {
@@ -35,17 +38,10 @@ export default function Inspirace({
 
   const [data, setData] = useState<any>(initData[selected]);
   const [loading, setLoading] = useState<any>(data ? false : true);
-
-  useEffect(() => {
-    if (!window) return;
-    const localVisible =
-      window.localStorage.getItem("inspiraceVisible") !== "false";
-    setIsVisible(localVisible);
-  }, []);
+  const cookies = new Cookies();
 
   function setLocalVisible(visible: boolean) {
-    if (!window) return;
-    window.localStorage.setItem("inspiraceVisible", visible.toString());
+    cookies.set("inspiraceVisible", visible.toString());
     setIsVisible(visible);
   }
 

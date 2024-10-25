@@ -8,6 +8,7 @@ import Container from "@/components/ui/Container";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
+import { compareDates } from "@/utils/dateWorker";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
@@ -111,38 +112,31 @@ function BurgerButton({
 function SubscriptionBanner({
   openModal,
   className = "",
+  logged,
+  paid,
 }: {
   openModal: () => void;
   className?: string;
+  logged: boolean;
+  paid: boolean;
 }) {
-  const [state, setState] = useState("init");
-  // check payment status
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
-  const prepaid = token && paid;
+  const prepaid = logged && paid;
 
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    setState(token);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (state === "init") return null;
   if (prepaid) return null;
   if (["/prihlaseni", "/registrace"].includes(pathname)) return null;
 
   let texts =
     pathname !== "/receptury/sdilena"
-      ? token
+      ? logged
         ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
         : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"]
       : ["Receptura vám byla sdílena", `Lze otevřít ještě: %x`];
 
   function fceToCall() {
-    if (!token) {
+    if (!logged) {
       router.push("/prihlaseni");
     } else {
       openModal();
@@ -153,7 +147,7 @@ function SubscriptionBanner({
     <div
       className={cn(
         "flex items-center justify-center gap-x-6 px-6 py-2.5 sm:px-3.5",
-        token ? "bg-error-600" : "bg-warning-600",
+        logged ? "bg-error-600" : "bg-warning-600",
         className
       )}
     >
@@ -180,33 +174,22 @@ function SubscriptionBanner({
 function DropdownMenu({
   dropdownItems,
   openModal,
+  logged,
+  paid,
+  name,
 }: {
   dropdownItems: DropdownItem[];
   openModal: () => void;
+  logged: boolean;
+  paid: boolean;
+  name: string;
 }) {
-  const [mounted, setMounted] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-
   const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => setMounted(true), []);
-
-  useEffect(
-    () => setRefresh(!refresh),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname]
-  );
-
-  if (!mounted) return null;
-
   const cookies = new Cookies();
-  const name = cookies.get("name");
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
-  const prepaid = token && paid;
 
-  if (!token)
+  const prepaid = logged && paid;
+
+  if (!logged)
     return (
       <ul className="hidden gap-x-4 lg:flex">
         <li>
@@ -307,10 +290,14 @@ function TouchMenu({
   isOpen,
   setIsOpen,
   openModal,
+  logged,
+  paid,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   openModal: () => void;
+  logged: boolean;
+  paid: boolean;
 }) {
   // Prevents scrolling when menu is open
   useEffect(() => {
@@ -341,9 +328,7 @@ function TouchMenu({
   const router = useRouter();
   const name = cookies.get("name");
 
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
-  const prepaid = token && paid;
+  const prepaid = logged && paid;
 
   useEffect(() => {
     setIsOpen(false);
@@ -380,7 +365,7 @@ function TouchMenu({
                 ))}
               </motion.ul>
 
-              {cookies.get("token") ? (
+              {logged ? (
                 <div className="mt-8 flex flex-col">
                   <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
                     <span className="mr-auto block font-bold leading-tight">
@@ -458,7 +443,15 @@ function TouchMenu({
   );
 }
 
-export default function Navbar() {
+export default function Navbar({
+  logged,
+  paid,
+  name,
+}: {
+  logged: boolean;
+  paid: boolean;
+  name: string;
+}) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [cartState, setCartState] = useState<string>("init");
@@ -470,7 +463,18 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  const [loggedIn, setLoggedIn] = useState(logged);
+  const [paidIn, setPaidIn] = useState(paid);
+  const [nameIn, setNameIn] = useState(name);
+
   const cookies = new Cookies();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setLoggedIn(cookies.get("token") ? true : false);
+    setPaidIn(compareDates(cookies.get("paid")));
+    setNameIn(cookies.get("name") ?? "");
+  }, [pathname]);
 
   // Thresholds
   const thresholdScrolledPx = 64;
@@ -547,6 +551,9 @@ export default function Navbar() {
           <DropdownMenu
             dropdownItems={dropdownData}
             openModal={() => setModalOpen(true)}
+            logged={loggedIn}
+            paid={paidIn}
+            name={nameIn}
           />
           <BurgerButton
             isOpen={isMenuOpen}
@@ -557,6 +564,8 @@ export default function Navbar() {
             isOpen={isMenuOpen}
             setIsOpen={setIsMenuOpen}
             openModal={() => setModalOpen(true)}
+            logged={loggedIn}
+            paid={paidIn}
           />
         </Container>
       </nav>
@@ -592,7 +601,11 @@ export default function Navbar() {
           )}
         </div>
       </Modal>
-      <SubscriptionBanner openModal={() => setModalOpen(true)} />
+      <SubscriptionBanner
+        logged={loggedIn}
+        paid={paidIn}
+        openModal={() => setModalOpen(true)}
+      />
     </div>
   );
 }

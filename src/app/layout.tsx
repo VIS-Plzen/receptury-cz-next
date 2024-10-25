@@ -1,7 +1,9 @@
 import { ToastContainer } from "@/components/ui/ToastContainer";
 import "@/styles/globals.css";
+import { compareDates } from "@/utils/dateWorker";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import { cookies } from "next/headers";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Providers from "./Providers";
@@ -23,6 +25,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookie = cookies();
+  const sid = cookie.has("token");
+  const paid = compareDates(cookie.get("paid")?.value);
+  const name = cookie.get("name")?.value;
+
   return (
     <html lang="cs">
       <body
@@ -36,7 +43,7 @@ export default function RootLayout({
           <div className="grid min-h-[100dvh] grid-rows-[1fr_auto]">
             <div className="relative grid min-h-[100dvh] grid-rows-[auto_1fr]">
               <header className="sticky top-0 z-fixed">
-                <Navbar />
+                <Navbar logged={sid} paid={paid} name={name ?? ""} />
               </header>
               <main id="obsah" className="max-w-[100vw]">
                 {children}
