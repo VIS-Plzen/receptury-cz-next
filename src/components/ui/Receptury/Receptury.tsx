@@ -382,7 +382,7 @@ export default function Receptury({
       let hasBox = false;
       let hasOption = false;
       box.options.forEach((option) => {
-        if (!option.checked) return;
+        if (!option.checked || option.disabled) return;
         if (!hasBox) {
           hasBox = true;
           if (!hasOption) {

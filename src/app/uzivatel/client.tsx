@@ -46,7 +46,7 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sid]);
 
-  function updateContent(cont: "informace" | "receptury") {
+  function updateContent(cont: "informace" | "receptury" | string) {
     let query = urlParams;
     const regexMatch = query.match(/obsah=(informace|receptury)/);
     if (regexMatch) {
@@ -66,7 +66,11 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
     <div className="flex flex-col">
       <Container>
         <div className="flex w-full items-center justify-between pt-5 md:pt-10">
-          <Tabs value={content} className="w-full" onValueChange={setContent}>
+          <Tabs
+            value={content}
+            className="w-full"
+            onValueChange={updateContent}
+          >
             <div className="hidden w-full flex-row justify-between md:flex">
               <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
                 {contents.map((cont, index) => (
@@ -87,7 +91,7 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
         <Selector
           data={contents}
           selected={content}
-          setSelected={setContent}
+          setSelected={updateContent}
           className="block md:hidden"
           valueKey="key"
         />
