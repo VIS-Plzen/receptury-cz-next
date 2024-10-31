@@ -7,7 +7,7 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
-import { returnExpirationTime } from "@/utils/shorties";
+import { logOut, returnExpirationTime } from "@/utils/shorties";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -65,10 +65,7 @@ export default function Page() {
   }>(returnInitNotice);
 
   useEffect(() => {
-    cookies.remove("token");
-    cookies.remove("paid");
-    cookies.remove("name");
-    localStorage.removeItem("userInfo");
+    logOut();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -107,11 +104,12 @@ export default function Page() {
 
       if (res.token) {
         const expires = returnExpirationTime(2);
-        cookies.set("token", res.token, { expires: expires });
+        cookies.set("token", res.token, { expires: expires, path: "/" });
         cookies.set("name", res.firstName + " " + res.lastName, {
           expires: expires,
+          path: "/",
         });
-        cookies.set("paid", res.paid, { expires: expires });
+        cookies.set("paid", res.paid, { expires: expires, path: "/" });
         if (!res.paid) {
           cookies.set("memModal", "true");
         }

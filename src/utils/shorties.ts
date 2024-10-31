@@ -1,3 +1,5 @@
+import Cookies from "universal-cookie";
+
 export function shortenFoodNames(foodNames: string[]) {
   const baseNamesMap = new Map();
 
@@ -99,4 +101,14 @@ export function returnExpirationTime(hours: number) {
   const date = new Date();
   date.setTime(date.getTime() + hours * 60 * 60 * 1000);
   return date;
+}
+
+export function logOut() {
+  if (!window) return;
+  const cookies = new Cookies();
+  cookies.remove("token", { path: "/" });
+  cookies.remove("paid", { path: "/" });
+  cookies.remove("name", { path: "/" });
+  localStorage.removeItem("userInfo");
+  console.log(cookies.getAll());
 }

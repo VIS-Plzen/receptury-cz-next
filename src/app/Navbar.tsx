@@ -9,6 +9,7 @@ import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
 import { compareDates } from "@/utils/dateWorker";
+import { logOut } from "@/utils/shorties";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
@@ -253,10 +254,7 @@ function DropdownMenu({
                     active && "bg-primary-100"
                   } rounded-xl p-2 text-left`}
                   onClick={() => {
-                    cookies.remove("paid");
-                    cookies.remove("token");
-                    cookies.remove("name");
-                    localStorage.removeItem("userInfo");
+                    logOut();
                     router.push("/prihlaseni");
                     router.refresh();
                   }}
@@ -381,10 +379,7 @@ function TouchMenu({
                     <li>
                       <button
                         onClick={() => {
-                          cookies.remove("paid");
-                          cookies.remove("token");
-                          cookies.remove("name");
-                          localStorage.removeItem("userInfo");
+                          logOut();
                           router.push("/prihlaseni");
                           router.refresh();
                         }}

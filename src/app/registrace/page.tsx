@@ -6,10 +6,10 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
+import { logOut } from "@/utils/shorties";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -27,13 +27,8 @@ function Page() {
     message: string;
   }>(null);
 
-  const cookies = new Cookies();
-
   useEffect(() => {
-    cookies.remove("token");
-    cookies.remove("paid");
-    cookies.remove("name");
-    localStorage.removeItem("userInfo");
+    logOut();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
