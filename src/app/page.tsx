@@ -13,10 +13,14 @@ export const metadata: Metadata = {
 
 export default async function Home({ searchParams }: any) {
   const cookie = cookies();
+  const gridView = cookie.get("gridView")?.value ?? "false";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
-  const inspiraceVisible = cookie.get("inspiraceVisible")?.value;
+  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
 
-  const [nove, oblibene] = await Promise.all([readNew(), readFavorite()]);
+  const [nove, oblibene] =
+    inspiraceVisible !== "false"
+      ? await Promise.all([readNew(), readFavorite()])
+      : ["hidden", "hidden"];
 
   async function readNew() {
     const result = await (
@@ -106,13 +110,14 @@ export default async function Home({ searchParams }: any) {
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <MembershipModal params={searchParams} />
       <Inspirace
-        inspiraceVisible={inspiraceVisible === "true"}
+        inspiraceVisible={inspiraceVisible}
         initData={{ nove: nove, oblibene: oblibene }}
       />
       <Ssr
         searchParams={searchParams}
         className="border-y-2 border-primary-200"
         sid={sid}
+        isGridView={gridView === "true"}
       />
       <Spolupracujeme />
       <VolitelnyObsah

@@ -7,6 +7,7 @@ export default function Home({ searchParams }: any) {
   const paidTo = cookie.get("paid")?.value;
   const paid = compareDates(paidTo);
   const paidToDate = returnBetterDate(paidTo, ".", "DMY");
+  const gridView = cookie.get("gridView")?.value ?? "false";
 
   return (
     <>
@@ -22,7 +23,10 @@ export default function Home({ searchParams }: any) {
           !paid && "mt-20"
         }`}
       >
-        <ContentSelector searchParams={searchParams} />
+        <ContentSelector
+          searchParams={searchParams}
+          isGridView={gridView === "true"}
+        />
       </div>
     </>
   );

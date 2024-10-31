@@ -45,13 +45,16 @@ export default function Testing({ params, searchParams }: any) {
   async function getData() {
     const result = await readSome();
   }
+  function fce() {
+    console.log("Log");
+  }
   return (
     <div className="min-h-screen pt-40">
       <Container>
         <Heading as="h1" size="2xl" className="text-center">
           Stránka pro testování komponent
         </Heading>
-        <Button onClick={getData}>Zavolej funkci</Button>
+        <Button onClick={fce}>Zavolej funkci</Button>
         {/* <RecipeCardsGrid /> */}
         <ModalTester />
         <MyCombobox

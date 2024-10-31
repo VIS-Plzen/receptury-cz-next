@@ -7,6 +7,7 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
+import { returnExpirationTime } from "@/utils/shorties";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -105,11 +106,12 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        cookies.set("token", res.token, { expires: getExpirationTime(2) });
+        const expires = returnExpirationTime(2);
+        cookies.set("token", res.token, { expires: expires });
         cookies.set("name", res.firstName + " " + res.lastName, {
-          expires: getExpirationTime(2),
+          expires: expires,
         });
-        cookies.set("paid", res.paid, { expires: getExpirationTime(2) });
+        cookies.set("paid", res.paid, { expires: expires });
         if (!res.paid) {
           cookies.set("memModal", "true");
         }
@@ -125,12 +127,6 @@ export default function Page() {
     validateOnChange: false,
     validateOnBlur: true,
   });
-
-  function getExpirationTime(hours: number) {
-    const date = new Date();
-    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-    return date;
-  }
 
   const formWasTouched = formik.submitCount > 0;
 

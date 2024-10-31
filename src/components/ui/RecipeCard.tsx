@@ -9,10 +9,10 @@ type RecipeCardProps = {
   forceGrid?: boolean;
   forceRow?: boolean;
   isLoading?: boolean;
-  label: string;
+  label?: string;
   id?: string;
   img?: any;
-  badges: (string | false)[];
+  badges?: (string | false)[];
   className?: string;
   zmenStitek?: any;
   veta?: any;
@@ -20,7 +20,7 @@ type RecipeCardProps = {
 };
 
 type BadgesProps = {
-  badges: (string | false)[];
+  badges?: (string | false)[];
 };
 //function to render action buttons on card
 function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
@@ -63,7 +63,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
   let badgeCounter = 0;
   return (
     <div className="flex flex-wrap justify-start gap-1">
-      {badges.map((badge, index) => {
+      {badges?.map((badge, index) => {
         if (!badge || badgeCounter >= 4) return null;
         badgeCounter++;
         return (
@@ -301,7 +301,6 @@ function ReturnedLayout({
   } else {
     href = "/";
   }
-
   return (
     <a href={`/receptury/${card.id}`} className="flex w-full">
       <GridCardLayout

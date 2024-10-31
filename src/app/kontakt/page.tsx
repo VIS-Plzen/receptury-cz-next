@@ -229,8 +229,8 @@ export default function Home() {
         <div className="grid gap-x-10 md:grid-cols-2">
           <Collapse.Group>
             <div className="w-full space-y-2 divide-y-2 divide-primary-200">
-              {firstHalf.map((faq) => (
-                <Collapse key={faq.title} title={faq.title}>
+              {firstHalf.map((faq, index) => (
+                <Collapse key={index} title={faq.title}>
                   <p>{faq.content}</p>
                 </Collapse>
               ))}
@@ -238,8 +238,8 @@ export default function Home() {
           </Collapse.Group>
           <Collapse.Group className="border-t-2 border-primary-200 md:border-none">
             <div className="w-full space-y-2 divide-y-2 divide-primary-200">
-              {secondHalf.map((faq) => (
-                <Collapse key={faq.title} title={faq.title}>
+              {secondHalf.map((faq, index) => (
+                <Collapse key={"d" + index} title={faq.title}>
                   <p>{faq.content}</p>
                 </Collapse>
               ))}

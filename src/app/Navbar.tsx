@@ -474,6 +474,7 @@ export default function Navbar({
     setLoggedIn(cookies.get("token") ? true : false);
     setPaidIn(compareDates(cookies.get("paid")));
     setNameIn(cookies.get("name") ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Thresholds

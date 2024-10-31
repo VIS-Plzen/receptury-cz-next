@@ -6,6 +6,7 @@ import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
+import { returnExpirationTime } from "@/utils/shorties";
 import { useState } from "react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
@@ -16,12 +17,16 @@ export default function Inspirace({
   className = "",
   initData,
   inspiraceVisible,
+  token,
 }: {
   className?: string;
   initData?: any;
-  inspiraceVisible: boolean;
+  inspiraceVisible: string;
+  token?: string;
 }) {
-  const [isVisible, setIsVisible] = useState<boolean>(inspiraceVisible);
+  const [isVisible, setIsVisible] = useState<boolean>(
+    inspiraceVisible !== "false"
+  );
 
   const TabsData = [
     {
@@ -34,15 +39,65 @@ export default function Inspirace({
     },
   ];
 
-  const [selected, setSelected] = useState(TabsData[0].value);
+  const [selected, setSelected] = useState(
+    inspiraceVisible !== "false" ? inspiraceVisible : TabsData[0].value
+  );
 
-  const [data, setData] = useState<any>(initData[selected]);
+  const [data, setData] = useState<any>(initData);
   const [loading, setLoading] = useState<any>(data ? false : true);
   const cookies = new Cookies();
 
   function setLocalVisible(visible: boolean) {
-    cookies.set("inspiraceVisible", visible.toString());
+    const toSet = visible ? selected : "false";
+    cookies.set("inspiraceVisible", toSet, {
+      expires: returnExpirationTime(24 * 30),
+    });
+    setNewSelected(selected);
     setIsVisible(visible);
+  }
+
+  async function setNewSelected(newSelected: string) {
+    if (data[newSelected] !== "hidden") return setSelected(newSelected);
+    if (newSelected !== selected)
+      cookies.set("inspiraceVisible", newSelected, {
+        expires: returnExpirationTime(24 * 30),
+      });
+    setLoading(true);
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: token ? token : "12345VIS",
+          Funkce: "Receptury",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Limit: 10,
+            OrderBy: newSelected === "nove" ? "DatumAktualizace" : undefined,
+            Vlastnosti: [
+              "Nazev",
+              "Identita",
+              "Obrazek",
+              "DruhSkupina",
+              "DruhPodskupina",
+              "Dieta1",
+              "Dieta2",
+              "Dieta3",
+              "TepelnaUprava",
+            ],
+            Stitek: newSelected === "nove" ? "Oblíbené" : undefined,
+          },
+        }),
+      })
+    ).json();
+    if (result.Status) {
+      setData((prevData: any) => ({
+        ...prevData,
+        [newSelected]: result.Vety,
+      }));
+    }
+    setLoading(false);
+    setSelected(newSelected);
   }
 
   function HideButton({ className = "" }: { className?: string }) {
@@ -59,11 +114,6 @@ export default function Inspirace({
         />
       </div>
     );
-  }
-
-  function setNewSelected(newSelected: string) {
-    setSelected(newSelected);
-    setData(initData[newSelected]);
   }
 
   return (
@@ -129,8 +179,11 @@ export default function Inspirace({
             pagination={{ clickable: false }}
             className=" [--swiper-pagination-color:theme(colors.primary.600)]"
           >
-            {data && data.length > 0 ? (
-              data.map((card: any, index: number) => (
+            {data &&
+            data[selected] &&
+            data[selected] !== "hidden" &&
+            data[selected].length > 0 ? (
+              data[selected].map((card: any, index: number) => (
                 <SwiperSlide key={index} className="py-10">
                   <RecipeCard
                     key={index}
@@ -147,6 +200,12 @@ export default function Inspirace({
                     ]}
                     forceGrid
                   />
+                </SwiperSlide>
+              ))
+            ) : data[selected] === "hidden" ? (
+              Array.from({ length: 6 }, (_, index) => (
+                <SwiperSlide key={index} className="py-10">
+                  <RecipeCard key={index} isLoading={true} forceGrid />
                 </SwiperSlide>
               ))
             ) : (

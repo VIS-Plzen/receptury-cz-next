@@ -1,4 +1,7 @@
+import { suroviny } from "@/utils/static";
 import Receptury from "./Receptury";
+
+export const recipesPerPage = 15;
 
 async function readSome(
   page: any,
@@ -77,8 +80,8 @@ async function readSome(
               Tabulka: "Receptury",
               Operace: "Read",
               Podminka: podminka,
-              Limit: 15,
-              Offset: (page - 1) * 15,
+              Limit: recipesPerPage,
+              Offset: (page - 1) * recipesPerPage,
               Vlastnosti: [
                 "Veta",
                 "Nazev",
@@ -339,6 +342,7 @@ export default async function Ssr({
   urlPreQuery = "",
   boxSettings,
   sid,
+  isGridView,
 }: {
   searchParams: any;
   title?: string;
@@ -351,6 +355,7 @@ export default async function Ssr({
     initialTrue?: string[];
   };
   sid?: string;
+  isGridView?: boolean;
 }) {
   let [selectedGroup, selectedSubgroup] = returnGroups();
 
@@ -534,17 +539,13 @@ export default async function Ssr({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: [
-          "Znojemský guláš",
-          "Hovězí pečeně na celeru",
-          "Celerová pomazánka s krabím masem",
-        ],
+        options: [],
       },
       {
         title: "Dle suroviny",
         name: "surovina",
         value: "",
-        options: ["Cizrna", "Avokádo", "Med", "Rajčata"],
+        options: suroviny,
       },
     ];
     // Načte hodnoty z URL
@@ -582,6 +583,7 @@ export default async function Ssr({
       urlPreQuery={urlPreQuery}
       initialData={data}
       groupsData={groupsData}
+      isGridView={isGridView}
     />
   );
 }

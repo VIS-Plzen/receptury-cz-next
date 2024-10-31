@@ -1,6 +1,7 @@
 "use client";
 import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
+import Radio from "@/components/forms/Radio";
 import {
   CancelIcon,
   CheckSmallIcon,
@@ -11,18 +12,20 @@ import {
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { toast } from "@/hooks/useToast";
+import { returnExpirationTime } from "@/utils/shorties";
+import { suroviny } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import Cookies from "universal-cookie";
+import { recipesPerPage } from "./Ssr";
 
 export default function Receptury({
   title = "Receptury",
@@ -31,6 +34,7 @@ export default function Receptury({
   boxSettings,
   initialData,
   groupsData,
+  isGridView,
 }: {
   title?: string;
   initialData?: any;
@@ -42,11 +46,12 @@ export default function Receptury({
     initialTrue?: string[];
   };
   groupsData: any;
+  isGridView?: boolean;
 }) {
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleId = useId();
-  const [gridView, setGridView] = useState(true);
+  const [gridView, setGridView] = useState(isGridView);
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
   const paramsHook = useSearchParams();
@@ -92,10 +97,7 @@ export default function Receptury({
   const [cancelDisabled, setCancelDisabled] = useState(true);
 
   // loading tlačítek a karet
-  const [loading, setLoading] = useState<boolean>(false);
-
-  // initial load pro výběr gridu z local storage
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [loading, setLoading] = useState<boolean>(initialData ? false : true);
 
   const [sideBarValues, setSideBarValues] = useState(() => {
     let holder: {
@@ -264,28 +266,28 @@ export default function Receptury({
     })()
   );
 
-  useEffect(() => {
-    const local = localStorage.getItem("gridView");
-    setGridView(local === "true");
-    if (initialData) return setInitialLoad(false);
-
-    (async () => {
-      setData(await getData(pageState));
-      setInitialLoad(false);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   function updateSideBarValue(
     boxIndex: number,
     checkboxIndex: number,
-    checked: boolean
+    checked: boolean,
+    radio?: boolean
   ) {
-    setSideBarValues((prev: any) => {
-      let objHolder = prev;
-      objHolder[boxIndex].options[checkboxIndex].checked = checked;
-      return objHolder;
-    });
+    if (radio) {
+      setSideBarValues((prev: any) => {
+        let objHolder = prev;
+        objHolder[boxIndex].options.forEach(
+          (option: any) => (option.checked = false)
+        );
+        objHolder[boxIndex].options[checkboxIndex].checked = checked;
+        return objHolder;
+      });
+    } else {
+      setSideBarValues((prev: any) => {
+        let objHolder = prev;
+        objHolder[boxIndex].options[checkboxIndex].checked = checked;
+        return objHolder;
+      });
+    }
     setSaveDisabled(false);
     setCancelDisabled(false);
     setRefresh(!refresh);
@@ -303,17 +305,13 @@ export default function Receptury({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: [
-          "Znojemský guláš",
-          "Hovězí pečeně na celeru",
-          "Celerová pomazánka s krabím masem",
-        ],
+        options: [],
       },
       {
         title: "Dle suroviny",
         name: "surovina",
         value: "",
-        options: ["Cizrna", "Avokádo", "Med", "Rajčata"],
+        options: suroviny,
       },
     ];
     // Načte hodnoty z URL
@@ -493,8 +491,8 @@ export default function Receptury({
             Tabulka: "Receptury",
             Operace: "Read",
             Podminka: podminka,
-            Limit: 15,
-            Offset: (page - 1) * 15,
+            Limit: recipesPerPage,
+            Offset: (page - 1) * recipesPerPage,
             Vlastnosti: [
               "Veta",
               "Nazev",
@@ -515,6 +513,15 @@ export default function Receptury({
     ).json();
     return result;
   }
+
+  useEffect(() => {
+    if (initialData) return;
+    (async () => {
+      setData(await getData(pageState));
+      setLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function zmenStitek(
     veta: number,
@@ -574,9 +581,12 @@ export default function Receptury({
       <TopRow
         comboBoxValues={comboBoxValues}
         pocet={data && data.CelkovyPocet}
-        gridView={initialLoad === true ? undefined : gridView}
+        gridView={gridView}
         setGridView={(grid: boolean) => {
           setGridView(grid);
+          cookie.set("gridView", grid.toString(), {
+            expires: returnExpirationTime(24 * 30),
+          });
           localStorage.setItem("gridView", grid.toString());
         }}
         setSideBarOpen={setSideBarOpen}
@@ -585,7 +595,8 @@ export default function Receptury({
         toggleId={toggleId}
         updateCombobox={updateCombobox}
         refresh={refresh}
-        initialLoad={initialLoad}
+        initialData={initialData}
+        loading={loading}
         getData={getDataAndSetQuery}
       />
       <div className="block lg:grid lg:grid-cols-5 xl:grid-cols-6">
@@ -629,13 +640,13 @@ export default function Receptury({
           hideBoxes={boxSettings?.hiddenBoxes}
         />
 
-        {initialLoad ? (
-          <div className="relative col-span-4 h-full py-20">
-            <LoadingSpinner
-              size="xl"
-              className={`absolute left-1/2 top-16 z-10 -translate-x-1/2`}
-            />
-          </div>
+        {!initialData && loading ? (
+          <RecipeCardsGrid
+            className="col-span-4 pt-0 xl:col-span-5"
+            gridView={gridView}
+            isLoading={true}
+            data={(() => ({ Status: true, Vety: Array.from({ length: 6 }) }))()}
+          />
         ) : !data || !data.Vety || data.Vety.length === 0 ? (
           <p className="col-span-4 mx-auto mt-16">
             {!data
@@ -656,7 +667,9 @@ export default function Receptury({
       <Paginator
         currentPage={pageState}
         totalPages={
-          data?.CelkovyPocet ? Math.ceil(data.CelkovyPocet / 15) : pageState
+          data?.CelkovyPocet
+            ? Math.ceil(data.CelkovyPocet / recipesPerPage)
+            : pageState
         }
         changePage={(page) => {
           if (loading) return null;
@@ -717,8 +730,9 @@ function TopRow({
   setSideBarOpen,
   updateCombobox,
   refresh,
-  initialLoad,
   getData,
+  initialData,
+  loading,
 }: {
   title: string;
   pocet: number;
@@ -735,16 +749,17 @@ function TopRow({
   setSideBarOpen: (open: boolean) => void;
   updateCombobox: (index: number, value: string) => void;
   refresh: boolean;
-  initialLoad: boolean;
   getData: (page?: number) => void;
+  initialData: any;
+  loading: boolean;
 }) {
   return (
     <div className="flex flex-row items-center justify-between py-7">
       <div className="flex flex-col">
         <Heading>{title}</Heading>
         <p className="pt-3 font-bold text-black">
-          {initialLoad
-            ? " Vyhledávám receptury"
+          {!initialData && loading
+            ? "Vyhledávám receptury"
             : pocet !== 0
               ? `Našli jsme pro vás ${pocet ? pocet : "0"} receptur`
               : "Nenašli jsme žádná data"}
@@ -1024,6 +1039,7 @@ function SideBar({
                   <SideBarBox
                     key={"ffsbb" + index}
                     title={box.title}
+                    name={box.name}
                     options={box.options}
                     bIndex={index}
                     updateSideBarValue={updateSideBarValue}
@@ -1039,17 +1055,20 @@ function SideBar({
 
 function SideBarBox({
   title,
+  name,
   bIndex,
   options,
   updateSideBarValue,
 }: {
   title: string;
+  name: string;
   bIndex: number;
   options: any[];
   updateSideBarValue: (
     boxIndex: number,
     optionIndex: number,
-    value: boolean
+    value: boolean,
+    radio?: boolean
   ) => void;
 }) {
   const [open, setOpen] = useState(true);
@@ -1099,12 +1118,25 @@ function SideBarBox({
                 key={"sbbo" + oIndex}
                 className={`cursor-pointer overflow-x-visible`}
               >
-                <Checkbox
-                  checked={o.checked}
-                  label={o.title}
-                  disabled={o.disabled}
-                  onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
-                />
+                {name === "obecne" ? (
+                  <Radio
+                    checked={o.checked}
+                    label={o.title}
+                    disabled={o.disabled}
+                    id={o.name}
+                    name={name}
+                    onChange={(e: any) =>
+                      updateSideBarValue(bIndex, oIndex, e, true)
+                    }
+                  />
+                ) : (
+                  <Checkbox
+                    checked={o.checked}
+                    label={o.title}
+                    disabled={o.disabled}
+                    onChange={(e: any) => updateSideBarValue(bIndex, oIndex, e)}
+                  />
+                )}
               </motion.li>
             ))}
           </motion.ul>

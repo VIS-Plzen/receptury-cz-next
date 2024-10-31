@@ -9,9 +9,9 @@ import TextArea from "@/components/forms/TextArea";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Receptury from "@/components/ui/Receptury/Receptury";
 import { groupsData } from "@/components/ui/Receptury/Ssr";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "@/hooks/useToast";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -20,9 +20,9 @@ import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-export default function ContentSelector({ searchParams }: any) {
-  const [content, setContent] = useState<"informace" | "receptury" | null>(
-    null
+export default function ContentSelector({ searchParams, isGridView }: any) {
+  const [content, setContent] = useState<"informace" | "receptury">(
+    searchParams?.obsah ?? "informace"
   );
   const contents: { key: "informace" | "receptury"; title: string }[] = [
     { key: "informace", title: "Osobní informace" },
@@ -36,15 +36,6 @@ export default function ContentSelector({ searchParams }: any) {
 
   const cookies = new Cookies();
   const sid = cookies.get("token");
-
-  useEffect(() => {
-    const regexMatch = urlParams.match(/obsah=(informace|receptury)/);
-    if (!regexMatch) return setContent("informace");
-    let cont = regexMatch[1];
-    if (cont !== "informace" && cont !== "receptury")
-      return setContent("informace");
-    setContent(cont);
-  }, [urlParams]);
 
   useEffect(() => {
     if (sid) return;
@@ -70,54 +61,50 @@ export default function ContentSelector({ searchParams }: any) {
   }
 
   return (
-    <>
-      <div className="flex flex-col">
-        <Container>
-          <div className="mt-20 flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
-            {contents.map((cont, index) => (
-              <button
-                key={"kfccc" + index}
-                className={`rounded-full px-5 py-2 font-bold ${
-                  cont.key === content
-                    ? "bg-primary text-white"
-                    : "bg-white text-black"
-                }`}
-                onClick={() => updateContent(cont.key)}
-              >
-                {cont.title}
-              </button>
-            ))}
-          </div>
-        </Container>
-        {content === "informace" && <Form />}
-        {content === "receptury" && (
-          <Receptury
-            title="Oblíbené"
-            urlPreQuery={`obsah=${content}`}
-            boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
-            groupsData={groupsData}
-          />
-        )}
-        {content === null && (
-          <LoadingSpinner size="2xl" className="mx-auto my-20" />
-        )}
-      </div>
-    </>
+    <div className="flex flex-col">
+      <Container>
+        <div className="mt-20 flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
+          {contents.map((cont, index) => (
+            <button
+              key={"kfccc" + index}
+              className={`rounded-full px-5 py-2 font-bold ${
+                cont.key === content
+                  ? "bg-primary text-white"
+                  : "bg-white text-black"
+              }`}
+              onClick={() => updateContent(cont.key)}
+            >
+              {cont.title}
+            </button>
+          ))}
+        </div>
+      </Container>
+      {content === "informace" && <Form />}
+      {content === "receptury" && (
+        <Receptury
+          title="Oblíbené"
+          urlPreQuery={`obsah=${content}`}
+          boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
+          groupsData={groupsData}
+          isGridView={isGridView}
+        />
+      )}
+    </div>
   );
 }
 
 function Form() {
   const cookies = new Cookies();
+  let [info]: any = useLocalStorage("userInfo");
   const [hasData, setHasData] = useState(false);
 
-  let info: any = localStorage.getItem("userInfo");
-  if (!hasData) {
-    if (info) {
-      info = JSON.parse(info);
+  useEffect(() => {
+    if (!hasData) {
       if (info) setHasData(true);
       if (!info) getUserInfo();
-    } else getUserInfo();
-  }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function getUserInfo() {
     const token = cookies.get("token");
