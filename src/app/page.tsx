@@ -19,7 +19,10 @@ export default async function Home({ searchParams }: any) {
 
   const [nove, oblibene] =
     inspiraceVisible !== "false"
-      ? await Promise.all([readNew(), readFavorite()])
+      ? await Promise.all([
+          inspiraceVisible === "nove" ? readNew() : "hidden",
+          inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
+        ])
       : ["hidden", "hidden"];
 
   async function readNew() {

@@ -85,7 +85,7 @@ export default function Inspirace({
               "Dieta3",
               "TepelnaUprava",
             ],
-            Stitek: newSelected === "nove" ? "Oblíbené" : undefined,
+            Stitek: newSelected === "oblibene" ? "Oblíbené" : undefined,
           },
         }),
       })
@@ -177,7 +177,7 @@ export default function Inspirace({
             }}
             modules={[Pagination]}
             pagination={{ clickable: false }}
-            className=" [--swiper-pagination-color:theme(colors.primary.600)]"
+            className="[--swiper-pagination-color:theme(colors.primary.600)]"
           >
             {data &&
             data[selected] &&

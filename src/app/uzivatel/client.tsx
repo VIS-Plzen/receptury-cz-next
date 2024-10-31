@@ -11,6 +11,8 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Receptury from "@/components/ui/Receptury/Receptury";
 import { groupsData } from "@/components/ui/Receptury/Ssr";
+import Selector from "@/components/ui/Selector";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "@/hooks/useToast";
 import { useFormik } from "formik";
@@ -21,7 +23,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export default function ContentSelector({ searchParams, isGridView }: any) {
-  const [content, setContent] = useState<"informace" | "receptury">(
+  const [content, setContent] = useState<string>(
     searchParams?.obsah ?? "informace"
   );
   const contents: { key: "informace" | "receptury"; title: string }[] = [
@@ -63,21 +65,32 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
   return (
     <div className="flex flex-col">
       <Container>
-        <div className="mt-20 flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
-          {contents.map((cont, index) => (
-            <button
-              key={"kfccc" + index}
-              className={`rounded-full px-5 py-2 font-bold ${
-                cont.key === content
-                  ? "bg-primary text-white"
-                  : "bg-white text-black"
-              }`}
-              onClick={() => updateContent(cont.key)}
-            >
-              {cont.title}
-            </button>
-          ))}
+        <div className="flex w-full items-center justify-between pt-5 md:pt-10">
+          <Tabs value={content} className="w-full" onValueChange={setContent}>
+            <div className="hidden w-full flex-row justify-between md:flex">
+              <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
+                {contents.map((cont, index) => (
+                  <TabsTrigger
+                    value={cont.key}
+                    className="w-full"
+                    key={cont.key}
+                    id={"TabsTriggerIndex" + index}
+                    aria-controls={"TabsTriggerIndex" + index}
+                  >
+                    {cont.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+          </Tabs>
         </div>
+        <Selector
+          data={contents}
+          selected={content}
+          setSelected={setContent}
+          className="block md:hidden"
+          valueKey="key"
+        />
       </Container>
       {content === "informace" && <Form />}
       {content === "receptury" && (

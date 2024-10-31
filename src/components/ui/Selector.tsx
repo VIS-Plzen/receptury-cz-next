@@ -11,6 +11,7 @@ type Props = {
   className?: string;
   updateFunction?: any;
   disabled?: boolean;
+  valueKey?: string;
 };
 
 function Selector({
@@ -20,6 +21,7 @@ function Selector({
   className,
   updateFunction,
   disabled,
+  valueKey = "value",
 }: Props) {
   if (data.length === 0) {
     disabled = true;
@@ -31,8 +33,8 @@ function Selector({
         disabled={disabled}
         onChange={(newValue: any) => {
           setSelected(
-            data.find((tab: any) => tab.value === newValue).value ||
-              data[0].value
+            data.find((tab: any) => tab[valueKey] === newValue)[valueKey] ||
+              data[0][valueKey]
           );
         }}
       >
@@ -40,7 +42,7 @@ function Selector({
           <Listbox.Button className="w-full rounded-2xl border-2 border-primary-300 bg-white focus:border-primary/50 focus:ring-0 disabled:border-gray-200">
             <div className="flex items-center justify-between p-2.5">
               <span className="block truncate">
-                {data.find((tab: any) => tab.value === selected)?.title}
+                {data.find((tab: any) => tab[valueKey] === selected)?.title}
               </span>
 
               <div>
@@ -57,7 +59,7 @@ function Selector({
             <Listbox.Options className="absolute z-40 mt-2 w-full cursor-pointer overflow-hidden rounded-2xl border-2 border-primary-200 bg-white">
               {data.map((tab: any) => (
                 <Listbox.Option
-                  key={tab.value}
+                  key={tab[valueKey]}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
                       active
@@ -65,7 +67,7 @@ function Selector({
                         : "text-gray-900"
                     }`
                   }
-                  value={tab.value}
+                  value={tab[valueKey]}
                 >
                   {({ selected }) => (
                     <>

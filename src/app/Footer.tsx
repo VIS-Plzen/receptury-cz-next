@@ -67,7 +67,7 @@ export default function Footer() {
     <>
       <footer className="w-full items-center border-t-2 border-primary-200 bg-white">
         <Container className="flex items-center justify-start py-[40px] print:hidden lg:py-[100px]">
-          <div className="grid w-full grid-cols-2 text-sm lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
+          <div className="grid w-full gap-10 text-sm md:grid-cols-2 lg:grid-cols-4 lg:gap-[110px] lg:text-lg">
             {/* Navigation */}
             <div className="flex flex-col justify-start pb-[20px] pr-[20px]">
               <Heading as={"h2"} size="sm" hasMarginBottom>
@@ -131,9 +131,6 @@ export default function Footer() {
 
             {/* Search */}
             <div className="flex flex-col justify-start">
-              <Heading as={"h2"} size="sm" hasMarginBottom>
-                Vyhledávání
-              </Heading>
               <ul>
                 <li className="py-[5px] text-xs">
                   <button
