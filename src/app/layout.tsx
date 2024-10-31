@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
+        className={`overflow-x-hidden bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
         <Providers>
           <SkipNavigationButton

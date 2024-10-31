@@ -159,7 +159,7 @@ export default function Inspirace({
           <Swiper
             spaceBetween={16}
             breakpoints={{
-              370: {
+              500: {
                 slidesPerView: 2,
               },
               640: {
