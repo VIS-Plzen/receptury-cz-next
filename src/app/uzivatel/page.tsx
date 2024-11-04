@@ -1,12 +1,16 @@
-import { compareDates, returnBetterDate } from "@/utils/dateWorker";
+import { returnBetterDate } from "@/utils/dateWorker";
+import { coder, useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
 export default function Home({ searchParams }: any) {
   const cookie = cookies();
-  const paidTo = cookie.get("paid")?.value;
-  const paid = compareDates(paidTo);
-  const paidToDate = returnBetterDate(paidTo, ".", "DMY");
+  const paidCookie = cookie.get("paid")?.value;
+  const paid = useCoderAndCompareDates(paidCookie);
+  const paidCoder = coder(paidCookie);
+  const paidToDate = paidCoder.success
+    ? returnBetterDate(paidCoder.data, ".", "DMY")
+    : "";
   const gridView = cookie.get("gridView")?.value ?? "false";
 
   return (

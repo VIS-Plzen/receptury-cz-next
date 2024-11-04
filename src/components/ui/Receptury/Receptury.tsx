@@ -35,6 +35,8 @@ export default function Receptury({
   initialData,
   groupsData,
   isGridView,
+  logged,
+  paid,
 }: {
   title?: string;
   initialData?: any;
@@ -47,6 +49,8 @@ export default function Receptury({
   };
   groupsData: any;
   isGridView?: boolean;
+  logged?: string | boolean;
+  paid?: string | boolean;
 }) {
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -62,9 +66,6 @@ export default function Receptury({
   const paramsObjects = Object.fromEntries(paramsHook);
 
   const cookie = new Cookies();
-
-  const logged = cookie.get("token");
-  const paid = logged && cookie.get("paid");
 
   const urlGroup =
     paramsObjects &&
@@ -1125,8 +1126,8 @@ function SideBarBox({
                     disabled={o.disabled}
                     id={o.name}
                     name={name}
-                    onChange={(e: any) =>
-                      updateSideBarValue(bIndex, oIndex, e, true)
+                    onClick={() =>
+                      updateSideBarValue(bIndex, oIndex, !o.checked, true)
                     }
                   />
                 ) : (

@@ -1,4 +1,5 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
@@ -15,6 +16,7 @@ export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const gridView = cookie.get("gridView")?.value ?? "false";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
   const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
 
   const [nove, oblibene] =
@@ -115,11 +117,13 @@ export default async function Home({ searchParams }: any) {
       <Inspirace
         inspiraceVisible={inspiraceVisible}
         initData={{ nove: nove, oblibene: oblibene }}
+        token={sid}
       />
       <Ssr
         searchParams={searchParams}
         className="border-y-2 border-primary-200"
-        sid={sid}
+        token={sid}
+        paid={paid}
         isGridView={gridView === "true"}
       />
       <Spolupracujeme />

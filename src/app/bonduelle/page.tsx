@@ -6,6 +6,7 @@ import Ssr from "@/components/ui/Receptury/Ssr";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Katalog from "../Katalog";
@@ -14,6 +15,9 @@ import { Partner } from "../receptury/[id]/Client";
 export default function Home({ searchParams }: any) {
   const cookie = cookies();
   const gridView = cookie.get("gridView")?.value ?? "false";
+  const token = cookie.get("token")?.value;
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <Partner
@@ -42,6 +46,8 @@ export default function Home({ searchParams }: any) {
           hiddenBoxes: ["partner"],
         }}
         isGridView={gridView === "true"}
+        token={token}
+        paid={paid}
       />
     </div>
   );

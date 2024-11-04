@@ -1,5 +1,5 @@
 import Heading from "@/components/ui/Heading";
-import { compareDates } from "@/utils/dateWorker";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 
@@ -100,7 +100,7 @@ export default async function Home({
 
   const cookie = cookies();
   const token = cookie.get("token")?.value;
-  const paid = compareDates(cookie.get("paid")?.value);
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
 
   const data: any =
     params.id === "sdilena"

@@ -466,9 +466,22 @@ export default function Navbar({
   const pathname = usePathname();
 
   useEffect(() => {
-    setLoggedIn(cookies.get("token") ? true : false);
-    setPaidIn(compareDates(cookies.get("paid")));
-    setNameIn(cookies.get("name") ?? "");
+    const cookieToken = cookies.get("token");
+    if (!cookieToken && !loggedIn) return;
+    (async () => {
+      const res = await (
+        await fetch("/api/coder", {
+          method: "POST",
+          body: JSON.stringify({
+            key: cookies.get("paid"),
+          }),
+        })
+      ).json();
+      if (!res.success) setPaidIn(false);
+      else setPaidIn(compareDates(res.data));
+      setLoggedIn(cookies.get("token") ? true : false);
+      setNameIn(cookies.get("name") ?? "");
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 

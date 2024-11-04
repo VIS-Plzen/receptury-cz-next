@@ -7,9 +7,10 @@ import Label from "./Label";
 type RadioProps = React.ComponentPropsWithoutRef<"input"> & {
   className?: string;
   label?: string;
+  onChange?: (e: boolean) => void;
 };
 
-function Radio({ className, label, ...props }: RadioProps) {
+function Radio({ className, label, onChange, ...props }: RadioProps) {
   const id = props.id;
 
   return (
@@ -18,6 +19,7 @@ function Radio({ className, label, ...props }: RadioProps) {
         <input
           type="radio"
           id={id}
+          onChange={(e) => !props.disabled && onChange?.(e.target.checked)}
           {...props}
           className={cn(
             "h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black",

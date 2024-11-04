@@ -32,7 +32,7 @@ type Props = {
   cardsInGrid?: number;
   assertCard?: boolean;
   zmenStitek?: any;
-  logged?: boolean;
+  logged?: boolean | string;
 };
 
 function RecipeCardsGrid({

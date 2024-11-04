@@ -341,7 +341,8 @@ export default async function Ssr({
   className = "",
   urlPreQuery = "",
   boxSettings,
-  sid,
+  token,
+  paid,
   isGridView,
 }: {
   searchParams: any;
@@ -354,7 +355,8 @@ export default async function Ssr({
     disabledValues?: string[];
     initialTrue?: string[];
   };
-  sid?: string;
+  token?: string;
+  paid?: boolean | string;
   isGridView?: boolean;
 }) {
   let [selectedGroup, selectedSubgroup] = returnGroups();
@@ -572,7 +574,7 @@ export default async function Ssr({
     selectedSubgroup,
     comboBoxValues,
     sideBarValues,
-    sid
+    token
   );
 
   return (
@@ -584,6 +586,8 @@ export default async function Ssr({
       initialData={data}
       groupsData={groupsData}
       isGridView={isGridView}
+      logged={token}
+      paid={paid}
     />
   );
 }
