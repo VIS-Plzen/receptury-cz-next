@@ -22,7 +22,12 @@ import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-export default function ContentSelector({ searchParams, isGridView }: any) {
+export default function ContentSelector({
+  searchParams,
+  isGridView,
+  paid,
+  token,
+}: any) {
   const [content, setContent] = useState<string>(
     searchParams?.obsah ?? "informace"
   );
@@ -36,15 +41,12 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
   );
   const router = useRouter();
 
-  const cookies = new Cookies();
-  const sid = cookies.get("token");
-
   useEffect(() => {
-    if (sid) return;
+    if (token) return;
     localStorage.removeItem("userInfo");
     router.push("/prihlaseni");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sid]);
+  }, [token]);
 
   function updateContent(cont: "informace" | "receptury" | string) {
     let query = urlParams;
@@ -104,6 +106,8 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
           boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
           groupsData={groupsData}
           isGridView={isGridView}
+          logged={token}
+          paid={paid}
         />
       )}
     </div>
@@ -112,6 +116,7 @@ export default function ContentSelector({ searchParams, isGridView }: any) {
 
 function Form() {
   const cookies = new Cookies();
+  const router = useRouter();
   let [info]: any = useLocalStorage("userInfo");
   const [hasData, setHasData] = useState(false);
 
@@ -323,14 +328,38 @@ function Form() {
 
   const formWasTouched = formik.submitCount > 0;
 
+  async function tempActivate() {
+    const res = await (
+      await fetch("/api/coder", {
+        method: "POST",
+        body: JSON.stringify({
+          dataString: "1.1.2025",
+          length: "long",
+        }),
+      })
+    ).json();
+    if (!res.success) return;
+    cookies.set("paid", res.data);
+    router.refresh();
+  }
+
   return (
     <Container>
       <div className="w-full grid-cols-2 gap-x-20 py-6 md:grid">
         <form onSubmit={formik.handleSubmit} className="w-full space-y-6 py-7">
           <div>
-            <Heading as="h1" hasMarginBottom>
-              Osobní údaje
-            </Heading>
+            <div className="flex">
+              <Heading as="h1" hasMarginBottom>
+                Osobní údaje
+              </Heading>
+              <button
+                className="mb-[0.65em] ml-5 underline"
+                type="button"
+                onClick={tempActivate}
+              >
+                Aktivovat placený účet
+              </button>
+            </div>
             <InputField
               name="firstName"
               label="Jméno"

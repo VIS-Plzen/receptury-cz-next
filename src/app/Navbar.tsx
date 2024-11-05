@@ -8,7 +8,6 @@ import Container from "@/components/ui/Container";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
-import { compareDates } from "@/utils/dateWorker";
 import { logOut } from "@/utils/shorties";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
@@ -463,27 +462,12 @@ export default function Navbar({
   const [nameIn, setNameIn] = useState(name);
 
   const cookies = new Cookies();
-  const pathname = usePathname();
 
   useEffect(() => {
-    const cookieToken = cookies.get("token");
-    if (!cookieToken && !loggedIn) return;
-    (async () => {
-      const res = await (
-        await fetch("/api/coder", {
-          method: "POST",
-          body: JSON.stringify({
-            key: cookies.get("paid"),
-          }),
-        })
-      ).json();
-      if (!res.success) setPaidIn(false);
-      else setPaidIn(compareDates(res.data));
-      setLoggedIn(cookies.get("token") ? true : false);
-      setNameIn(cookies.get("name") ?? "");
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    setPaidIn(paid);
+    setLoggedIn(logged);
+    setNameIn(name);
+  }, [paid, logged, name]);
 
   // Thresholds
   const thresholdScrolledPx = 64;

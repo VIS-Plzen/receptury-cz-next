@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -107,20 +108,6 @@ export function Page({
     }
     setRefresh(!refresh);
   }
-  const partnerInfo: any = [
-    {
-      logo: null,
-      jmeno: "Bidfood",
-      name: "bidfood",
-      heslo: "Heslo partnera, něco o bidfood a jídle",
-    },
-    {
-      logo: null,
-      jmeno: "Bonduelle",
-      name: "bonduelle",
-      heslo: "Něco jako heslo nebo popis, tady pro Bonduelle",
-    },
-  ];
 
   async function getShareLink() {
     if (!logged || !paid) {
@@ -158,9 +145,9 @@ export function Page({
 
   const currParner =
     card.Receptar === "1"
-      ? partnerInfo[0]
+      ? partners[0]
       : card.Receptar === "2"
-        ? partnerInfo[1]
+        ? partners[1]
         : "";
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 print:py-5 md:pb-36 md:pt-10">
@@ -224,9 +211,7 @@ export function Page({
             zmenStitek={zmenStitek}
             refresh={refresh}
           />
-
           {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
-
           {/* <VolitelnyObsah
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
@@ -235,10 +220,16 @@ export function Page({
       /> */}
           {currParner && (
             <Partner
-              jmeno={currParner.jmeno}
-              heslo={currParner.heslo}
-              img="/images/food.jpeg"
-              color={currParner.name}
+              jmeno={currParner.title}
+              heslo={currParner.slogan}
+              img={currParner.img}
+              color={
+                currParner.title.toLocaleLowerCase() as
+                  | "default"
+                  | "bidfood"
+                  | "bonduelle"
+              }
+              logo={currParner.logo}
               hasButton
             />
           )}
@@ -529,21 +520,21 @@ export function Hero({
               !currParner && "opacity-0"
             }`}
           >
-            {currParner.logo ? (
+            {currParner.logoBlack ? (
               <Image
-                src={currParner.logo}
-                className="bg-transparent object-cover mix-blend-screen"
+                src={currParner.logoBlack}
+                className="bg-transparent object-contain"
                 alt=""
                 height={50}
                 width={100}
               />
             ) : (
               <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
-                {currParner.jmeno}
+                {currParner.title}
               </span>
             )}
             <span className="line-clamp-2">
-              Tuto recepturu pro vás připravila společnost {currParner.jmeno}
+              Tuto recepturu pro vás připravila společnost {currParner.title}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">

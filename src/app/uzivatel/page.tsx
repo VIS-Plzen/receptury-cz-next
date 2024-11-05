@@ -5,6 +5,7 @@ import ContentSelector from "./client";
 
 export default function Home({ searchParams }: any) {
   const cookie = cookies();
+  const token = cookie.get("token")?.value;
   const paidCookie = cookie.get("paid")?.value;
   const paid = useCoderAndCompareDates(paidCookie);
   const paidCoder = coder(paidCookie);
@@ -24,6 +25,8 @@ export default function Home({ searchParams }: any) {
         <ContentSelector
           searchParams={searchParams}
           isGridView={gridView === "true"}
+          token={token}
+          paid={paid}
         />
       </div>
     </>
