@@ -109,11 +109,19 @@ export default function MyCombobox({
               onChange(query);
             }}
           >
-            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-x-hidden rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {query.length > 0 && <Option value={query} onClick={onChange} />}
-              {filteredValues.map((value, key) => (
-                <Option value={value} onClick={onChange} key={"iiik" + key} />
-              ))}
+              {filteredValues.map(
+                (value, key) =>
+                  key < 100 &&
+                  value !== query && (
+                    <Option
+                      value={value}
+                      onClick={onChange}
+                      key={"iiik" + key}
+                    />
+                  )
+              )}
             </Combobox.Options>
           </Transition>
         </div>
@@ -135,7 +143,7 @@ function Option({
     <Combobox.Option
       id={value}
       className={({ active }) =>
-        `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+        `relative cursor-pointer select-none py-2 pl-5 pr-2 ${
           active && "bg-primary-200"
         }`
       }
@@ -153,7 +161,7 @@ function Option({
           </button>
           {selected && (
             <span
-              className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+              className={`absolute inset-y-0 left-0 flex items-center ${
                 active ? "text-white" : "text-teal-600"
               }`}
             >

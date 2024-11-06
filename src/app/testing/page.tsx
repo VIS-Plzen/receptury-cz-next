@@ -4,6 +4,8 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { ModalTester } from "@/components/ui/Modal";
+import { shortenFoodNames } from "@/utils/shorties";
+import { nazvy } from "@/utils/static";
 
 export default function Testing({ params, searchParams }: any) {
   async function createNew() {
@@ -45,8 +47,27 @@ export default function Testing({ params, searchParams }: any) {
   async function getData() {
     const result = await readSome();
   }
-  function fce() {
-    console.log("Log");
+  async function returnAllNames() {
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: "12345VIS",
+          Funkce: "Receptury",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Vlastnosti: ["Nazev"],
+          },
+        }),
+      })
+    ).json();
+    if (!result.Status) return;
+    const nazvy = result.Vety.map((veta: any) => veta.Vlastnosti.Nazev);
+    console.log(nazvy);
+  }
+  async function fce() {
+    console.log(shortenFoodNames(nazvy));
   }
   return (
     <div className="min-h-screen pt-40">

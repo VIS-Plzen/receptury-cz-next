@@ -18,7 +18,7 @@ import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { toast } from "@/hooks/useToast";
 import { returnExpirationTime } from "@/utils/shorties";
-import { suroviny } from "@/utils/static";
+import { nazvy, suroviny } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -306,7 +306,7 @@ export default function Receptury({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: [],
+        options: nazvy,
       },
       {
         title: "Dle suroviny",

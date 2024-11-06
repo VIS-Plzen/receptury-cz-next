@@ -1,4 +1,4 @@
-import { suroviny } from "@/utils/static";
+import { nazvy, suroviny } from "@/utils/static";
 import Receptury from "./Receptury";
 
 export const recipesPerPage = 15;
@@ -541,7 +541,7 @@ export default async function Ssr({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: [],
+        options: nazvy,
       },
       {
         title: "Dle suroviny",

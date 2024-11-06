@@ -12,6 +12,18 @@ export function shortenFoodNames(foodNames: string[]) {
     // Remove specific common suffixes or words that are less significant
     // For example, we can remove "s vejcem", "s sýrem", etc.
     const suffixesToRemove = [
+      "(bd)",
+      "(sd)",
+      "(dd)",
+      "(bmd)",
+      "i.",
+      "ii.",
+      "na celeru",
+      "na smetaně",
+      "na kyselo",
+      "se sójovým masem",
+      "se zeleninou a sýrem",
+      "s křenem",
       "s vejcem",
       "s sýrem",
       "s tofu",
