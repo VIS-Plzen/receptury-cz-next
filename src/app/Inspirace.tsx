@@ -55,11 +55,15 @@ export default function Inspirace({
   }
 
   async function setNewSelected(newSelected: string) {
-    if (data[newSelected] !== "hidden") return setSelected(newSelected);
-    if (newSelected !== selected)
+    if (newSelected !== selected) {
+      console.log(newSelected, returnExpirationTime(24 * 30));
       cookies.set("inspiraceVisible", newSelected, {
         expires: returnExpirationTime(24 * 30),
+        path: "/",
       });
+    }
+    if (data[newSelected] !== "hidden") return setSelected(newSelected);
+
     setLoading(true);
     const result = await (
       await fetch("/api", {
