@@ -49,6 +49,7 @@ export default function Inspirace({
     const toSet = visible ? selected : "false";
     cookies.set("inspiraceVisible", toSet, {
       expires: returnExpirationTime(24 * 30),
+      path: "/",
     });
     setNewSelected(selected);
     setIsVisible(visible);
@@ -56,7 +57,6 @@ export default function Inspirace({
 
   async function setNewSelected(newSelected: string) {
     if (newSelected !== selected) {
-      console.log(newSelected, returnExpirationTime(24 * 30));
       cookies.set("inspiraceVisible", newSelected, {
         expires: returnExpirationTime(24 * 30),
         path: "/",
