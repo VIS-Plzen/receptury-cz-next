@@ -70,7 +70,7 @@ const Carousel: React.FC<PropType> = (props) => {
 
       {hasDots && (
         <div className="mt-4 flex w-full justify-center gap-x-2 md:gap-x-5">
-          {scrollSnaps.length > 1 &&
+          {scrollSnaps.length > 1 ? (
             scrollSnaps.map((_: any, index: number) => (
               <button
                 key={index}
@@ -81,7 +81,10 @@ const Carousel: React.FC<PropType> = (props) => {
                   <span className="block flex h-2 w-2 rounded-full bg-white"></span>
                 )}
               </button>
-            ))}
+            ))
+          ) : (
+            <div className="block h-4"></div>
+          )}
         </div>
       )}
     </div>
