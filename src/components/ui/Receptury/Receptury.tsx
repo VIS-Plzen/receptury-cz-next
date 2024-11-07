@@ -512,7 +512,6 @@ export default function Receptury({
         }),
       })
     ).json();
-    console.log(result);
     return result;
   }
 
