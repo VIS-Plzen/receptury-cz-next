@@ -238,7 +238,7 @@ function DropdownMenu({
               <Menu.Item key={index}>
                 {({ active }) => (
                   <a
-                    className={`${active && "bg-primary-100"} rounded-xl p-2`}
+                    className={`${active && "bg-primary-100"} p-2`}
                     href={item.href}
                   >
                     {item.label}
@@ -249,9 +249,7 @@ function DropdownMenu({
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${
-                    active && "bg-primary-100"
-                  } rounded-xl p-2 text-left`}
+                  className={`${active && "bg-primary-100"} p-2 text-left`}
                   onClick={() => {
                     logOut();
                     router.push("/prihlaseni");
