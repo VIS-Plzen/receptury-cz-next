@@ -1,13 +1,16 @@
 "use client";
+import { ArrowLeftAltIcon } from "@/components/icons";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const icons: {
@@ -514,9 +517,19 @@ export function Hero({
             <MealSymbol size={48} className="scale-150" />
           )}
         </div>
-        <div className="flex flex-col  gap-y-6 p-5 md:px-0 md:py-14">
+        <div className="flex flex-col gap-y-6 p-5 md:px-0 md:pb-14 md:pt-5">
+          <StyledLink
+            className="hidden underline underline-offset-4 hover:text-primary md:ml-6 md:flex"
+            asChild
+            hoverEffect="none"
+          >
+            <Link href="/">
+              <ArrowLeftAltIcon />
+              Zpět na hlavní stránku
+            </Link>
+          </StyledLink>
           <div
-            className={`flex gap-x-2 md:mt-auto md:px-10 ${
+            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
               !currParner && "opacity-0"
             }`}
           >
@@ -533,7 +546,7 @@ export function Hero({
                 {currParner.title}
               </span>
             )}
-            <span className="line-clamp-2">
+            <span className="my-auto line-clamp-2 h-min">
               Tuto recepturu pro vás připravila společnost {currParner.title}
             </span>
           </div>
