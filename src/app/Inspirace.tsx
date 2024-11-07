@@ -1,6 +1,7 @@
 "use client";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
+import Carousel from "@/components/ui/EmblaCarousel";
 import Heading from "@/components/ui/Heading";
 import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
@@ -8,9 +9,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
 import { returnExpirationTime } from "@/utils/shorties";
 import { useState } from "react";
-import "swiper/css";
-import { Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import Cookies from "universal-cookie";
 
 export default function Inspirace({
@@ -155,65 +153,39 @@ export default function Inspirace({
             setSelected={setNewSelected}
             className="block md:hidden"
           />
-
-          <Swiper
-            spaceBetween={16}
-            breakpoints={{
-              500: {
-                slidesPerView: 2,
-              },
-              640: {
-                slidesPerView: 3,
-              },
-              768: {
-                slidesPerView: 4,
-              },
-              1024: {
-                slidesPerView: 5,
-              },
-              1280: {
-                slidesPerView: 6,
-              },
-            }}
-            modules={[Pagination]}
-            pagination={{ clickable: false }}
-            className="[--swiper-pagination-color:theme(colors.primary.600)]"
-          >
-            {data &&
-            data[selected] &&
-            data[selected] !== "hidden" &&
-            data[selected].length > 0 ? (
-              data[selected].map((card: any, index: number) => (
-                <SwiperSlide key={index} className="py-10">
-                  <RecipeCard
-                    key={index}
-                    isLoading={loading}
-                    id={card.Vlastnosti.Identita}
-                    label={card.Vlastnosti.Nazev}
-                    badges={[
-                      card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
-                      card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
-                      card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
-                      card.Vlastnosti.TepelnaUprava,
-                      card.Vlastnosti.DruhSkupina,
-                      card.Vlastnosti.DruhPodskupina,
-                    ]}
-                    forceGrid
-                  />
-                </SwiperSlide>
-              ))
-            ) : data[selected] === "hidden" ? (
-              Array.from({ length: 6 }, (_, index) => (
-                <SwiperSlide key={index} className="py-10">
-                  <RecipeCard key={index} isLoading={true} forceGrid />
-                </SwiperSlide>
-              ))
-            ) : (
-              <div className="flex h-[400px] items-center px-10">
-                <p>Data se nepodařilo najít</p>
-              </div>
-            )}
-          </Swiper>
+          {data?.[selected] ? (
+            <Carousel
+              options={{ align: "start" }}
+              hasDots
+              slides={
+                data[selected] === "hidden"
+                  ? Array.from({ length: 6 }, (_, index) => (
+                      <RecipeCard key={index} isLoading={true} forceGrid />
+                    ))
+                  : data[selected].map((card: any, index: number) => (
+                      <RecipeCard
+                        key={index}
+                        isLoading={loading}
+                        id={card.Vlastnosti.Identita}
+                        label={card.Vlastnosti.Nazev}
+                        badges={[
+                          card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                          card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                          card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                          card.Vlastnosti.TepelnaUprava,
+                          card.Vlastnosti.DruhSkupina,
+                          card.Vlastnosti.DruhPodskupina,
+                        ]}
+                        forceGrid
+                      />
+                    ))
+              }
+            />
+          ) : (
+            <div className="flex h-[400px] items-center px-10">
+              <p>Data se nepodařilo najít</p>
+            </div>
+          )}
         </div>
       </Container>
     </div>

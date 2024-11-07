@@ -17,6 +17,7 @@ type RecipeCardProps = {
   zmenStitek?: any;
   veta?: any;
   stitky?: any;
+  width?: string;
 };
 
 type BadgesProps = {
@@ -94,7 +95,7 @@ function GridCardLayout({
   return (
     <div
       className={cn(
-        "h-80 w-full min-w-[180px] overflow-hidden rounded-2xl",
+        "h-80 w-full overflow-hidden rounded-2xl",
         isLoading && "animate-pulse border-2 border-gray-200",
         !isLoading && "border-2 border-primary-300/30",
         className
@@ -253,6 +254,7 @@ function RecipeCard({
   zmenStitek,
   stitky,
   veta,
+  width,
 }: RecipeCardProps) {
   return (
     <ReturnedLayout
@@ -272,6 +274,7 @@ function RecipeCard({
       zmenStitek={zmenStitek}
       stitky={stitky}
       veta={veta}
+      width={width}
     />
   );
 }
@@ -285,6 +288,7 @@ function ReturnedLayout({
   zmenStitek,
   stitky,
   veta,
+  width,
 }: {
   isGridView: boolean | undefined;
   forceGrid?: boolean;
@@ -294,6 +298,7 @@ function ReturnedLayout({
   zmenStitek: any;
   stitky: any;
   veta: any;
+  width?: string;
 }) {
   let href = "";
   if (card.id != null) {
@@ -302,7 +307,7 @@ function ReturnedLayout({
     href = "/";
   }
   return (
-    <a href={`/receptury/${card.id}`} className="flex w-full">
+    <a href={`/receptury/${card.id}`} className={`flex w-full ${width}`}>
       <GridCardLayout
         label={card.label}
         badges={card.badges}
@@ -316,7 +321,7 @@ function ReturnedLayout({
               : isGridView
                 ? "hidden md:block"
                 : "hidden"
-        }`}
+        } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}
@@ -326,7 +331,7 @@ function ReturnedLayout({
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={` ${
+        className={`${
           forceRow
             ? "flex"
             : forceGrid
@@ -334,7 +339,7 @@ function ReturnedLayout({
               : isGridView
                 ? "flex md:hidden"
                 : "flex"
-        }`}
+        } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}

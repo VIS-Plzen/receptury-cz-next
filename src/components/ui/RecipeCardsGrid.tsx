@@ -1,7 +1,4 @@
 import { cn } from "@/utils/cn";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
