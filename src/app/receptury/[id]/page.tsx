@@ -3,9 +3,9 @@ import { useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 
-async function readSome(id: string, token: string | undefined) {
+async function readSome(id: string, token: string | undefined, paid: boolean) {
   if (id === "test.receptury.adelis.cz") return null;
-  const vlastnosti = token
+  const vlastnosti = paid
     ? []
     : [
         "Nazev",
@@ -105,7 +105,7 @@ export default async function Home({
   const data: any =
     params.id === "sdilena"
       ? await readSomeByCode(Object.keys(searchParams)[0])
-      : await readSome(params.id, paid ? token : undefined);
+      : await readSome(params.id, token, paid);
 
   if (!data || !data.Status) {
     return (
