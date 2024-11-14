@@ -119,6 +119,14 @@ export default function Receptury({
         backend: "Obecne",
         options: [
           {
+            title: "Vše",
+            name: "vse",
+            backend: "",
+            checked: !["moje", "nutricni", "sklad", "videoreceptury"].includes(
+              paramsObjects.obecne
+            ),
+          },
+          {
             title: "Moje oblíbené",
             name: "moje",
             backend: "Oblíbené",
@@ -237,12 +245,15 @@ export default function Receptury({
       const [key, values] = splitUrlParams(param);
       const box = holder.find((b) => b.name === key);
       if (box && Array.isArray(values)) {
-        values.forEach((v) => {
-          const option = box.options.find((o) => o.name === v);
-          if (option) {
-            option.checked = true;
-          }
-        });
+        if (box.name === "obecne") {
+          const option = box.options.find((o) => o.name === values[0]);
+          if (option) option.checked = true;
+        } else {
+          values.forEach((v) => {
+            const option = box.options.find((o) => o.name === v);
+            if (option) option.checked = true;
+          });
+        }
       }
     });
 
@@ -383,7 +394,7 @@ export default function Receptury({
       let hasBox = false;
       let hasOption = false;
       box.options.forEach((option) => {
-        if (!option.checked || option.disabled) return;
+        if (!option.checked || option.disabled || !option.backend) return;
         if (!hasBox) {
           hasBox = true;
           if (!hasOption) {
@@ -1126,8 +1137,8 @@ function SideBarBox({
                     disabled={o.disabled}
                     id={o.name}
                     name={name}
-                    onClick={() =>
-                      updateSideBarValue(bIndex, oIndex, !o.checked, true)
+                    onChange={() =>
+                      updateSideBarValue(bIndex, oIndex, true, true)
                     }
                   />
                 ) : (
