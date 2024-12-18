@@ -103,7 +103,7 @@ export default function ContentSelector({
         <Receptury
           title="Oblíbené"
           urlPreQuery={`obsah=${content}`}
-          boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
+          boxSettings={{ initialTrue: ["moje"], hiddenBoxes: ["obecne"] }}
           groupsData={groupsData}
           isGridView={isGridView}
           logged={token}

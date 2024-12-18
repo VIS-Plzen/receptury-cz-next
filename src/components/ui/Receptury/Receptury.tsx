@@ -122,9 +122,7 @@ export default function Receptury({
             title: "Vše",
             name: "vse",
             backend: "",
-            checked: !["moje", "nutricni", "sklad", "videoreceptury"].includes(
-              paramsObjects.obecne
-            ),
+            checked: false,
           },
           {
             title: "Moje oblíbené",
@@ -147,8 +145,8 @@ export default function Receptury({
           {
             title: "Videoreceptury",
             name: "videoreceptury",
-            checked: false,
             backend: "Video",
+            checked: false,
           },
         ],
       },

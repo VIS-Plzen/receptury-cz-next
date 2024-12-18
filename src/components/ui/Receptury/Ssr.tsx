@@ -340,7 +340,9 @@ export default async function Ssr({
   title = "Receptury",
   className = "",
   urlPreQuery = "",
-  boxSettings,
+  boxSettings = {
+    initialTrue: ["vse"],
+  },
   token,
   paid,
   isGridView,
@@ -396,9 +398,7 @@ export default async function Ssr({
             title: "Vše",
             name: "vse",
             backend: "",
-            checked: !["moje", "nutricni", "sklad", "videoreceptury"].includes(
-              searchParams.obecne
-            ),
+            checked: false,
           },
           {
             title: "Moje oblíbené",
@@ -421,8 +421,8 @@ export default async function Ssr({
           {
             title: "Videoreceptury",
             name: "videoreceptury",
-            checked: false,
             backend: "Video",
+            checked: false,
           },
         ],
       },
