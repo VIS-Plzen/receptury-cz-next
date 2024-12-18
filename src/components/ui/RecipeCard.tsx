@@ -43,7 +43,7 @@ function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
         />
       </div>
 
-      <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
+      <div className="hidden items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
           icon={stitky.includes("MSklad") ? "archive-fill" : "archive"}
           aria-label="MSklad"

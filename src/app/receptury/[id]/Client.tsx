@@ -573,9 +573,11 @@ export function Hero({
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
-                className={`${
-                  icon.name === "favorite" ? "flex" : "hidden md:flex"
-                } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
+                className={`
+                      w-min flex-col items-center gap-1 justify-self-center text-center
+                      ${icon.name === "favorite" ? "flex" : "hidden md:flex"}
+                      ${icon.name === "archive" && "!hidden"}
+                    `}
               >
                 <ButtonIcon
                   onClick={() => {
@@ -746,11 +748,13 @@ function Title({
   return (
     <div className="flex flex-col gap-3 md:flex-row md:justify-between">
       <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
-      <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
+      <div className="right-5 top-5 grid max-w-xs grid-cols-3 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
         {icons.map((icon, index) => (
           <div
             key={"kfii" + index}
-            className={`flex flex-col items-center gap-1 text-center`}
+            className={`flex flex-col items-center gap-1 text-center ${
+              icon.name === "archive" && "!hidden"
+            }`}
           >
             <ButtonIcon
               onClick={() => {
