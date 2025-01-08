@@ -1,5 +1,4 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
-import { useCoderAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
@@ -16,8 +15,9 @@ export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const gridView = cookie.get("gridView")?.value ?? "false";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
-  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+  const paid = cookie.get("paid")?.value;
   const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
+  const memberModal = await returnMemberModal();
 
   const [nove, oblibene] =
     inspiraceVisible !== "false"
@@ -111,9 +111,24 @@ export default async function Home({ searchParams }: any) {
     };
   }
 
+  async function returnMemberModal() {
+    if (searchParams.activated && sid !== "12345VIS") {
+      const res = await (
+        await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/userPrepaid", {
+          method: "POST",
+          body: JSON.stringify({
+            token: sid,
+          }),
+        })
+      ).json();
+      if (res.Status) return "paid";
+    } else if (cookie.has("memModal")) return "unpaid";
+    return undefined;
+  }
+
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
-      <MembershipModal params={searchParams} />
+      {memberModal && <MembershipModal type={memberModal} />}
       <Inspirace
         inspiraceVisible={inspiraceVisible}
         initData={{ nove: nove, oblibene: oblibene }}
@@ -124,6 +139,10 @@ export default async function Home({ searchParams }: any) {
         className="border-y-2 border-primary-200"
         token={sid}
         paid={paid}
+        boxSettings={{
+          disabledValues: ["bonduelle", "bidfood"],
+          hiddenBoxes: ["partner"],
+        }}
         isGridView={gridView === "true"}
       />
       <Spolupracujeme />

@@ -328,38 +328,14 @@ function Form() {
 
   const formWasTouched = formik.submitCount > 0;
 
-  async function tempActivate() {
-    const res = await (
-      await fetch("/api/coder", {
-        method: "POST",
-        body: JSON.stringify({
-          dataString: "1.1.2025",
-          length: "long",
-        }),
-      })
-    ).json();
-    if (!res.success) return;
-    cookies.set("paid", res.data);
-    router.refresh();
-  }
-
   return (
     <Container>
       <div className="w-full grid-cols-2 gap-x-20 py-6 md:grid">
         <form onSubmit={formik.handleSubmit} className="w-full space-y-6 py-7">
           <div>
-            <div className="flex">
-              <Heading as="h1" hasMarginBottom>
-                Osobní údaje
-              </Heading>
-              <button
-                className="mb-[0.65em] ml-5 underline"
-                type="button"
-                onClick={tempActivate}
-              >
-                Aktivovat placený účet
-              </button>
-            </div>
+            <Heading as="h1" hasMarginBottom>
+              Osobní údaje
+            </Heading>
             <InputField
               name="firstName"
               label="Jméno"

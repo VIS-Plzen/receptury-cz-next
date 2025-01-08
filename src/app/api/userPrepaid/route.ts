@@ -1,3 +1,4 @@
+import { coder, returnPaidTo } from "@/utils/shorties";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -15,8 +16,17 @@ export async function POST(request: Request) {
       }
     );
     const data = await res.json();
+    if (data.paid) {
+      const coderRes = coder(undefined, returnPaidTo(data.paidTo), "long");
+      if (!coderRes.Status) {
+        return NextResponse.json({
+          Status: false,
+          Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+        });
+      } else return NextResponse.json({ Status: true, paidTo: coderRes.data });
+    }
 
-    return NextResponse.json(data);
+    return NextResponse.json({ Status: false, paidTo: false });
   } catch (error) {
     return NextResponse.json({
       Status: false,

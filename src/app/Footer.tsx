@@ -96,7 +96,7 @@ export default function Footer() {
 
             {/* Partners */}
             <div className="flex flex-col justify-start pb-[20px]">
-              <Heading as={"h2"} size="sm" hasMarginBottom>
+              {/*<Heading as={"h2"} size="sm" hasMarginBottom>
                 Partneři
               </Heading>
               <ul className="flex flex-col justify-between ">
@@ -107,7 +107,7 @@ export default function Footer() {
                     </StyledLink>
                   </li>
                 ))}
-              </ul>
+              </ul>*/}
             </div>
 
             {/* Contact */}

@@ -132,7 +132,7 @@ export function coder(
   length?: "short" | "long"
 ) {
   const secretKey = process.env.CDR_KEY;
-  if (!secretKey) return { success: false, error: "No secret key in ENV" };
+  if (!secretKey) return { Status: false, error: "No secret key in ENV" };
 
   let currTime =
     length === "short"
@@ -146,30 +146,35 @@ export function coder(
     const splitted = decryptedData.split("&");
     const incTime = parseInt(splitted[splitted.length - 1]);
     if (currTime > incTime + 15) {
-      return { success: false, error: "Time exceeded" };
+      return { Status: false, error: "Time exceeded" };
     } else {
       decryptedData = decryptedData.substring(
         0,
         decryptedData.lastIndexOf("&")
       );
-      return { success: true, data: decryptedData };
+      return { Status: true, data: decryptedData };
     }
   } else {
     if (!dataString) {
-      return { success: false, error: "No KEY or DataString" };
+      return { Status: false, error: "No KEY or DataString" };
     }
 
     dataString += "&" + currTime;
     const cipher = crypto.createCipher("aes-256-cbc", secretKey);
     let encryptedData = cipher.update(dataString, "utf8", "hex");
     encryptedData += cipher.final("hex");
-    return { success: true, data: encryptedData };
+    return { Status: true, data: encryptedData };
   }
 }
 
 export function useCoderAndCompareDates(paid: string | undefined) {
   if (!paid) return false;
   const coded: any = coder(paid);
-  if (!coded.success) return false;
+  if (!coded.Status) return false;
   return compareDates(coded.data);
+}
+
+export function returnPaidTo(paidTo: string | null) {
+  if (paidTo) return paidTo;
+  return "2055-01-07T11:29:42+01:00";
 }

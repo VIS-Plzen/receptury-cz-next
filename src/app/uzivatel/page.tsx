@@ -9,7 +9,7 @@ export default function Home({ searchParams }: any) {
   const paidCookie = cookie.get("paid")?.value;
   const paid = useCoderAndCompareDates(paidCookie);
   const paidCoder = coder(paidCookie);
-  const paidToDate = paidCoder.success
+  const paidToDate = paidCoder.Status
     ? returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
   const gridView = cookie.get("gridView")?.value ?? "false";

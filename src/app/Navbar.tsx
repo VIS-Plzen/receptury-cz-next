@@ -22,14 +22,14 @@ const menuRoutes = [
     label: "Hlavní strana",
     href: "/",
   },
-  {
+  /* {
     label: "Bidfood",
     href: "/bidfood",
   },
   {
     label: "Bonduelle",
     href: "/bonduelle",
-  },
+  }, */
   {
     label: "Kontakt",
     href: "/kontakt",
@@ -512,14 +512,12 @@ export default function Navbar({
   }
 
   return (
-    // <div className="fixed inset-x-0 top-0 z-fixed">
     <div className="relative">
       <nav
         className={cn(
           "w-full transition duration-500 print:hidden",
           "border-b-2 border-primary-200",
           isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white"
-          // !isVisible && "-translate-y-full"
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">

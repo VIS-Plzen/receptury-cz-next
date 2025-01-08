@@ -1,4 +1,4 @@
-import { coder } from "@/utils/shorties";
+import { coder, returnPaidTo } from "@/utils/shorties";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -49,12 +49,14 @@ export async function POST(request: Request) {
 
     dataProfile.token = dataLogin.token;
     dataProfile.tokenValidTo = dataLogin.tokenValidTo;
+
     const paid: any = coder(
       undefined,
-      dataValidate.paid ? dataValidate.paidTo : "false",
+      dataValidate.paid ? returnPaidTo(dataValidate.paidTo) : "false",
       "long"
     );
-    if (!paid.success) {
+
+    if (!paid.Status) {
       NextResponse.json({
         Status: false,
         Chyba: { Kod: 1000, message: paid.error },
