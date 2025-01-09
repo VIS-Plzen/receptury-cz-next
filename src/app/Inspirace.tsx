@@ -118,8 +118,20 @@ export default function Inspirace({
     );
   }
 
+  async function test() {
+    const res = await (
+      await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/userPrepaid", {
+        method: "POST",
+        body: JSON.stringify({
+          token: token,
+        }),
+      })
+    ).json();
+  }
+
   return (
     <div className={cn(className)}>
+      <button onClick={test}>Click me</button>
       <Container>
         <div className="flex flex-row items-center justify-between">
           <Heading as="h1" size="lg">

@@ -23,7 +23,16 @@ export async function POST(request: Request) {
           Status: false,
           Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
         });
-      } else return NextResponse.json({ Status: true, paidTo: coderRes.data });
+      }
+      const response = NextResponse.json({
+        Status: true,
+        paidTo: coderRes.data,
+      });
+      response.cookies.set("paid", coderRes.data ?? "", {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+      });
+      return response;
     }
 
     return NextResponse.json({ Status: false, paidTo: false });
