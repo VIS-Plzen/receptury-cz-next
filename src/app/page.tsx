@@ -1,9 +1,9 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
 import MembershipModal from "./MembershipModal";
-import Spolupracujeme from "./Spolupracujeme";
 import VolitelnyObsah from "./VolitelnyObsah";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const gridView = cookie.get("gridView")?.value ?? "false";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
-  const paid = cookie.get("paid")?.value;
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
   const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
   const memberModal = await returnMemberModal();
 
@@ -112,18 +112,8 @@ export default async function Home({ searchParams }: any) {
   }
 
   async function returnMemberModal() {
-    if (searchParams.activated && sid !== "12345VIS") {
-      const res = await (
-        await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/userPrepaid", {
-          method: "POST",
-          body: JSON.stringify({
-            token: sid,
-          }),
-        })
-      ).json();
-      if (res.Status) return "paid";
-    } else if (cookie.has("memModal")) return "unpaid";
-    return undefined;
+    if (searchParams.activated && sid !== "12345VIS" && paid) return "paid";
+    else if (cookie.has("memModal")) return "unpaid";
   }
 
   return (
@@ -145,7 +135,7 @@ export default async function Home({ searchParams }: any) {
         }}
         isGridView={gridView === "true"}
       />
-      <Spolupracujeme />
+      {/* <Spolupracujeme /> */}
       <VolitelnyObsah
         title="Volitelný obsah"
         img="/images/food.jpeg"

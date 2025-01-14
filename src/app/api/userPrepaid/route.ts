@@ -4,6 +4,13 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   const { token } = await request.json();
 
+  if (!token) {
+    return NextResponse.json({
+      Status: false,
+      Chyba: { Kod: 1000, message: "Není vyplňen SID token." },
+    });
+  }
+
   try {
     const res = await fetch(
       "https://jidelny.cz/wp-json/receptury/v1/user/validate",
@@ -16,26 +23,25 @@ export async function POST(request: Request) {
       }
     );
     const data = await res.json();
-    if (data.paid) {
-      const coderRes = coder(undefined, returnPaidTo(data.paidTo), "long");
-      if (!coderRes.Status) {
-        return NextResponse.json({
-          Status: false,
-          Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
-        });
-      }
-      const response = NextResponse.json({
-        Status: true,
-        paidTo: coderRes.data,
+    if (!data.email)
+      return NextResponse.json({
+        Status: false,
+        Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
       });
-      response.cookies.set("paid", coderRes.data ?? "", {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 365,
-      });
-      return response;
-    }
 
-    return NextResponse.json({ Status: false, paidTo: false });
+    const coderRes = coder(undefined, returnPaidTo(data), "long");
+
+    if (!coderRes.Status) {
+      return NextResponse.json({
+        Status: false,
+        Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+      });
+    }
+    const response = NextResponse.json({
+      Status: true,
+      paidTo: coderRes.data,
+    });
+    return response;
   } catch (error) {
     return NextResponse.json({
       Status: false,

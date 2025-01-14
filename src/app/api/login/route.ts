@@ -50,11 +50,7 @@ export async function POST(request: Request) {
     dataProfile.token = dataLogin.token;
     dataProfile.tokenValidTo = dataLogin.tokenValidTo;
 
-    const paid: any = coder(
-      undefined,
-      dataValidate.paid ? returnPaidTo(dataValidate.paidTo) : "false",
-      "long"
-    );
+    const paid: any = coder(undefined, returnPaidTo(dataValidate), "long");
 
     if (!paid.Status) {
       NextResponse.json({
