@@ -7,7 +7,7 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
-import { logOut, returnExpirationTime } from "@/utils/shorties";
+import { cFalse, logOut, returnExpirationTime } from "@/utils/shorties";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -111,11 +111,7 @@ export default function Page() {
         });
         cookies.set("paid", res.paid, { expires: expires, path: "/" });
 
-        if (
-          !res.paid ||
-          res.paid ===
-            "9079d9e16c4eddcc223508bfd3253d7c4cb3d6db59bbba2a5d5fd5abc75eda5e"
-        ) {
+        if (!res.paid || res.paid === cFalse) {
           cookies.set("memModal", "true");
         }
         localStorage.setItem("userInfo", JSON.stringify(res));

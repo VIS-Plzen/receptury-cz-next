@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
 import MembershipModal from "./MembershipModal";
-import VolitelnyObsah from "./VolitelnyObsah";
 
 export const metadata: Metadata = {
   title: "Stránka | Receptury",
@@ -126,7 +125,8 @@ export default async function Home({ searchParams }: any) {
       />
       <Ssr
         searchParams={searchParams}
-        className="border-y-2 border-primary-200"
+        // border-y-2 při volitelný obsah
+        className="border-t-2 border-primary-200"
         token={sid}
         paid={paid}
         boxSettings={{
@@ -136,11 +136,11 @@ export default async function Home({ searchParams }: any) {
         isGridView={gridView === "true"}
       />
       {/* <Spolupracujeme /> */}
-      <VolitelnyObsah
+      {/*  <VolitelnyObsah
         title="Volitelný obsah"
         img="/images/food.jpeg"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-      />
+      /> */}
     </div>
   );
 }
