@@ -9,11 +9,12 @@ import TextArea from "@/components/forms/TextArea";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Receptury from "@/components/ui/Receptury/Receptury";
 import { groupsData } from "@/components/ui/Receptury/Ssr";
+import Selector from "@/components/ui/Selector";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "@/hooks/useToast";
-import clsx from "clsx";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -21,9 +22,14 @@ import Cookies from "universal-cookie";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-export default function ContentSelector({ searchParams }: any) {
-  const [content, setContent] = useState<"informace" | "receptury" | null>(
-    null
+export default function ContentSelector({
+  searchParams,
+  isGridView,
+  paid,
+  token,
+}: any) {
+  const [content, setContent] = useState<string>(
+    searchParams?.obsah ?? "informace"
   );
   const contents: { key: "informace" | "receptury"; title: string }[] = [
     { key: "informace", title: "Osobní informace" },
@@ -35,26 +41,19 @@ export default function ContentSelector({ searchParams }: any) {
   );
   const router = useRouter();
 
-  const cookies = new Cookies();
-  const sid = cookies.get("token");
+  useEffect(() => {
+    if (!searchParams.obsah) return;
+    setContent(searchParams.obsah);
+  }, [searchParams]);
 
   useEffect(() => {
-    const regexMatch = urlParams.match(/obsah=(informace|receptury)/);
-    if (!regexMatch) return setContent("informace");
-    let cont = regexMatch[1];
-    if (cont !== "informace" && cont !== "receptury")
-      return setContent("informace");
-    setContent(cont);
-  }, [urlParams]);
-
-  useEffect(() => {
-    if (sid) return;
+    if (token) return;
     localStorage.removeItem("userInfo");
     router.push("/prihlaseni");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sid]);
+  }, [token]);
 
-  function updateContent(cont: "informace" | "receptury") {
+  function updateContent(cont: "informace" | "receptury" | string) {
     let query = urlParams;
     const regexMatch = query.match(/obsah=(informace|receptury)/);
     if (regexMatch) {
@@ -71,54 +70,68 @@ export default function ContentSelector({ searchParams }: any) {
   }
 
   return (
-    <>
-      <div className="flex flex-col">
-        <Container>
-          <div className="mt-20 flex flex-row gap-x-5 border-b-2 border-b-primary-600/30 pb-10">
-            {contents.map((cont, index) => (
-              <button
-                key={"kfccc" + index}
-                className={`rounded-full px-5 py-2 font-bold ${
-                  cont.key === content
-                    ? "bg-primary text-white"
-                    : "bg-white text-black"
-                }`}
-                onClick={() => updateContent(cont.key)}
-              >
-                {cont.title}
-              </button>
-            ))}
-          </div>
-        </Container>
-        {content === "informace" && <Form />}
-        {content === "receptury" && (
-          <Receptury
-            title="Oblíbené"
-            urlPreQuery={`obsah=${content}`}
-            boxSettings={{ initialTrue: ["moje"], disabledValues: ["moje"] }}
-            groupsData={groupsData}
-          />
-        )}
-        {content === null && (
-          <LoadingSpinner size="2xl" className="mx-auto my-20" />
-        )}
-      </div>
-    </>
+    <div className="flex flex-col">
+      <Container>
+        <div className="flex w-full items-center justify-between pt-5 md:pt-10">
+          <Tabs
+            value={content}
+            className="w-full"
+            onValueChange={updateContent}
+          >
+            <div className="hidden w-full flex-row justify-between md:flex">
+              <TabsList className="w-full items-center justify-evenly md:max-w-[550px]">
+                {contents.map((cont, index) => (
+                  <TabsTrigger
+                    value={cont.key}
+                    className="w-full"
+                    key={cont.key}
+                    id={"TabsTriggerIndex" + index}
+                    aria-controls={"TabsTriggerIndex" + index}
+                  >
+                    {cont.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+          </Tabs>
+        </div>
+        <Selector
+          data={contents}
+          selected={content}
+          setSelected={updateContent}
+          className="block md:hidden"
+          valueKey="key"
+        />
+      </Container>
+      {content === "informace" && <Form />}
+      {content === "receptury" && (
+        <Receptury
+          title="Oblíbené"
+          urlPreQuery={`obsah=${content}`}
+          boxSettings={{ initialTrue: ["moje"], hiddenBoxes: ["obecne"] }}
+          groupsData={groupsData}
+          isGridView={isGridView}
+          logged={token}
+          paid={paid}
+        />
+      )}
+    </div>
   );
 }
 
 function Form() {
   const cookies = new Cookies();
+  const router = useRouter();
+  let [info]: any = useLocalStorage("userInfo");
   const [hasData, setHasData] = useState(false);
 
-  let info: any = localStorage.getItem("userInfo");
-  if (!hasData) {
-    if (info) {
-      info = JSON.parse(info);
+  useEffect(() => {
+    if (!hasData) {
       if (info) setHasData(true);
       if (!info) getUserInfo();
-    } else getUserInfo();
-  }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function getUserInfo() {
     const token = cookies.get("token");
@@ -559,15 +572,10 @@ function Form() {
           </div>
           <Button
             type="submit"
-            disabled={formik.isSubmitting}
+            isLoading={formik.isSubmitting}
             className="relative"
           >
-            {formik.isSubmitting && (
-              <LoadingSpinner className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2" />
-            )}
-            <span className={clsx(formik.isSubmitting && "invisible")}>
-              Uložit změny
-            </span>
+            Uložit změny
           </Button>
         </form>
         <svg

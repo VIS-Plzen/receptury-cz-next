@@ -5,10 +5,10 @@ import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
+import { cFalse, logOut } from "@/utils/shorties";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
@@ -22,14 +22,14 @@ const menuRoutes = [
     label: "Hlavní strana",
     href: "/",
   },
-  {
+  /* {
     label: "Bidfood",
     href: "/bidfood",
   },
   {
     label: "Bonduelle",
     href: "/bonduelle",
-  },
+  }, */
   {
     label: "Kontakt",
     href: "/kontakt",
@@ -112,32 +112,35 @@ function BurgerButton({
 function SubscriptionBanner({
   openModal,
   className = "",
+  token,
+  paid,
 }: {
   openModal: () => void;
   className?: string;
+  token?: string;
+  paid?: string;
 }) {
-  const [state, setState] = useState("init");
-  // check payment status
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
-  const prepaid = token && paid;
+  const state = !token ? "login" : paid === cFalse ? "pay" : "ok";
 
+  const cookies = new Cookies();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    setState(token);
+    if (!token) return;
+    const cookiePaid = cookies.get("paid");
+    if (cookiePaid === paid) return;
+    cookies.set("paid", paid);
+    router.refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (state === "init") return null;
-  if (prepaid) return null;
+  if (!state || state === "ok") return null;
   if (["/prihlaseni", "/registrace"].includes(pathname)) return null;
 
   let texts =
-    pathname !== "/receptura/sdilena"
-      ? token
+    pathname !== "/receptury/sdilena"
+      ? state === "pay"
         ? ["Členství v aplikaci není platné", "Obnovte si člevství"]
         : ["Nepřihlášený uživatel", "Pro více funkcí se přihlašte"]
       : ["Receptura vám byla sdílena", `Lze otevřít ještě: %x`];
@@ -181,30 +184,18 @@ function SubscriptionBanner({
 function DropdownMenu({
   dropdownItems,
   openModal,
+  token,
+  paid,
+  name,
 }: {
   dropdownItems: DropdownItem[];
   openModal: () => void;
+  token?: string;
+  paid?: boolean;
+  name: string;
 }) {
-  const [mounted, setMounted] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-
   const router = useRouter();
-  const pathname = usePathname();
 
-  useEffect(() => setMounted(true), []);
-
-  useEffect(
-    () => setRefresh(!refresh),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname]
-  );
-
-  if (!mounted) return null;
-
-  const cookies = new Cookies();
-  const name = cookies.get("name");
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
   const prepaid = token && paid;
 
   if (!token)
@@ -255,26 +246,21 @@ function DropdownMenu({
             {dropdownItems.map((item: DropdownItem, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
-                  <a
-                    className={`${active && "bg-primary-100"} rounded-xl p-2`}
+                  <Link
+                    className={`${active && "bg-primary-100"} p-2`}
                     href={item.href}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 )}
               </Menu.Item>
             ))}
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${
-                    active && "bg-primary-100"
-                  } rounded-xl p-2 text-left`}
+                  className={`${active && "bg-primary-100"} p-2 text-left`}
                   onClick={() => {
-                    cookies.remove("paid");
-                    cookies.remove("token");
-                    cookies.remove("name");
-                    localStorage.removeItem("userInfo");
+                    logOut();
                     router.push("/prihlaseni");
                     router.refresh();
                   }}
@@ -308,10 +294,14 @@ function TouchMenu({
   isOpen,
   setIsOpen,
   openModal,
+  token,
+  paid,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   openModal: () => void;
+  token?: string;
+  paid?: boolean;
 }) {
   // Prevents scrolling when menu is open
   useEffect(() => {
@@ -342,8 +332,6 @@ function TouchMenu({
   const router = useRouter();
   const name = cookies.get("name");
 
-  const token = cookies.get("token");
-  const paid = cookies.get("paid");
   const prepaid = token && paid;
 
   useEffect(() => {
@@ -381,7 +369,7 @@ function TouchMenu({
                 ))}
               </motion.ul>
 
-              {cookies.get("token") ? (
+              {token ? (
                 <div className="mt-8 flex flex-col">
                   <div className="flex w-56 cursor-pointer items-center justify-start gap-2">
                     <span className="mr-auto block font-bold leading-tight">
@@ -391,16 +379,13 @@ function TouchMenu({
                   <ul className="flex flex-col gap-2 pt-4">
                     {dropdownData.map((item, index) => (
                       <li key={index}>
-                        <a href={item.href}>{item.label}</a>
+                        <Link href={item.href}>{item.label}</Link>
                       </li>
                     ))}
                     <li>
                       <button
                         onClick={() => {
-                          cookies.remove("paid");
-                          cookies.remove("token");
-                          cookies.remove("name");
-                          localStorage.removeItem("userInfo");
+                          logOut();
                           router.push("/prihlaseni");
                           router.refresh();
                         }}
@@ -459,7 +444,15 @@ function TouchMenu({
   );
 }
 
-export default function Navbar() {
+export default function Navbar({
+  token,
+  paid,
+  name,
+}: {
+  token?: string;
+  paid?: string;
+  name: string;
+}) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [cartState, setCartState] = useState<string>("init");
@@ -471,7 +464,17 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  const [tokenIn, setTokenIn] = useState(token);
+  const [paidIn, setPaidIn] = useState(paid);
+  const [nameIn, setNameIn] = useState(name);
+
   const cookies = new Cookies();
+
+  useEffect(() => {
+    setPaidIn(paid);
+    setTokenIn(token);
+    setNameIn(name);
+  }, [paid, token, name]);
 
   // Thresholds
   const thresholdScrolledPx = 64;
@@ -511,20 +514,21 @@ export default function Navbar() {
     ).json();
     if (res.orderToken) {
       setCartState("success");
-      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=https://2303-vis-receptury-next-adam.vercel.app/?activated=true`;
+      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=http://receptury.jidelny.cz/?activated=true`;
     } else {
       setCartState("error");
     }
   }
 
+  const paidBoolean = !!paidIn && paidIn !== cFalse;
+
   return (
-    <div className="fixed inset-x-0 top-0 z-fixed">
+    <div className="relative">
       <nav
         className={cn(
           "w-full transition duration-500 print:hidden",
           "border-b-2 border-primary-200",
           isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white"
-          // !isVisible && "-translate-y-full"
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
@@ -547,6 +551,9 @@ export default function Navbar() {
           <DropdownMenu
             dropdownItems={dropdownData}
             openModal={() => setModalOpen(true)}
+            token={tokenIn}
+            paid={paidBoolean}
+            name={nameIn}
           />
           <BurgerButton
             isOpen={isMenuOpen}
@@ -557,6 +564,8 @@ export default function Navbar() {
             isOpen={isMenuOpen}
             setIsOpen={setIsMenuOpen}
             openModal={() => setModalOpen(true)}
+            token={tokenIn}
+            paid={paidBoolean}
           />
         </Container>
       </nav>
@@ -575,16 +584,9 @@ export default function Navbar() {
               <Button
                 className="relative mx-auto"
                 onClick={addToCard}
-                disabled={cartState === "loading"}
+                isLoading={cartState === "loading"}
               >
-                <LoadingSpinner
-                  className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
-                    cartState === "loading" && "opacity-100"
-                  }`}
-                />
-                <p className={`${cartState === "loading" && "opacity-0"}`}>
-                  Vložit do košíku
-                </p>
+                Vložit do košíku
               </Button>
             </>
           )}
@@ -599,7 +601,11 @@ export default function Navbar() {
           )}
         </div>
       </Modal>
-      <SubscriptionBanner openModal={() => setModalOpen(true)} />
+      <SubscriptionBanner
+        token={tokenIn}
+        paid={paidIn}
+        openModal={() => setModalOpen(true)}
+      />
     </div>
   );
 }

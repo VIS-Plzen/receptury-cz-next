@@ -18,7 +18,7 @@ type UseLocalStorageReturn<T> = [T, SetValue<T>];
 
 export const useLocalStorage = <T>(
   key: string,
-  initialValue: T
+  initialValue?: T
 ): UseLocalStorageReturn<T> => {
   const [value, setValue] = useState<T>(() => {
     try {

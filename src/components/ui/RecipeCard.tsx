@@ -9,18 +9,19 @@ type RecipeCardProps = {
   forceGrid?: boolean;
   forceRow?: boolean;
   isLoading?: boolean;
-  label: string;
+  label?: string;
   id?: string;
   img?: any;
-  badges: (string | false)[];
+  badges?: (string | false)[];
   className?: string;
   zmenStitek?: any;
   veta?: any;
   stitky?: any;
+  width?: string;
 };
 
 type BadgesProps = {
-  badges: (string | false)[];
+  badges?: (string | false)[];
 };
 //function to render action buttons on card
 function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
@@ -42,7 +43,7 @@ function ActionButtons({ isGridView, zmenStitek, veta, stitky }: any) {
         />
       </div>
 
-      <div className="flex items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
+      <div className="hidden items-center justify-center rounded-full border-2 border-primary-300/30 bg-white">
         <ButtonIcon
           icon={stitky.includes("MSklad") ? "archive-fill" : "archive"}
           aria-label="MSklad"
@@ -63,7 +64,7 @@ function BadgeRenderer({ badges }: BadgesProps) {
   let badgeCounter = 0;
   return (
     <div className="flex flex-wrap justify-start gap-1">
-      {badges.map((badge, index) => {
+      {badges?.map((badge, index) => {
         if (!badge || badgeCounter >= 4) return null;
         badgeCounter++;
         return (
@@ -94,7 +95,7 @@ function GridCardLayout({
   return (
     <div
       className={cn(
-        "h-80 w-full min-w-[180px] overflow-hidden rounded-2xl",
+        "h-80 w-full overflow-hidden rounded-2xl",
         isLoading && "animate-pulse border-2 border-gray-200",
         !isLoading && "border-2 border-primary-300/30",
         className
@@ -253,6 +254,7 @@ function RecipeCard({
   zmenStitek,
   stitky,
   veta,
+  width,
 }: RecipeCardProps) {
   return (
     <ReturnedLayout
@@ -272,6 +274,7 @@ function RecipeCard({
       zmenStitek={zmenStitek}
       stitky={stitky}
       veta={veta}
+      width={width}
     />
   );
 }
@@ -285,6 +288,7 @@ function ReturnedLayout({
   zmenStitek,
   stitky,
   veta,
+  width,
 }: {
   isGridView: boolean | undefined;
   forceGrid?: boolean;
@@ -294,16 +298,16 @@ function ReturnedLayout({
   zmenStitek: any;
   stitky: any;
   veta: any;
+  width?: string;
 }) {
   let href = "";
   if (card.id != null) {
-    href = `/receptura/${card.id}`;
+    href = `/receptury/${card.id}`;
   } else {
     href = "/";
   }
-
   return (
-    <a href={`/receptura/${card.id}`} className="flex w-full">
+    <a href={`/receptury/${card.id}`} className={`flex w-full ${width}`}>
       <GridCardLayout
         label={card.label}
         badges={card.badges}
@@ -317,7 +321,7 @@ function ReturnedLayout({
               : isGridView
                 ? "hidden md:block"
                 : "hidden"
-        }`}
+        } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}
@@ -327,7 +331,7 @@ function ReturnedLayout({
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={` ${
+        className={`${
           forceRow
             ? "flex"
             : forceGrid
@@ -335,7 +339,7 @@ function ReturnedLayout({
               : isGridView
                 ? "flex md:hidden"
                 : "flex"
-        }`}
+        } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}

@@ -1,4 +1,7 @@
+import { nazvy, suroviny } from "@/utils/static";
 import Receptury from "./Receptury";
+
+export const recipesPerPage = 15;
 
 async function readSome(
   page: any,
@@ -77,8 +80,8 @@ async function readSome(
               Tabulka: "Receptury",
               Operace: "Read",
               Podminka: podminka,
-              Limit: 15,
-              Offset: (page - 1) * 15,
+              Limit: recipesPerPage,
+              Offset: (page - 1) * recipesPerPage,
               Vlastnosti: [
                 "Veta",
                 "Nazev",
@@ -337,8 +340,12 @@ export default async function Ssr({
   title = "Receptury",
   className = "",
   urlPreQuery = "",
-  boxSettings,
-  sid,
+  boxSettings = {
+    initialTrue: ["vse"],
+  },
+  token,
+  paid,
+  isGridView,
 }: {
   searchParams: any;
   title?: string;
@@ -350,7 +357,9 @@ export default async function Ssr({
     disabledValues?: string[];
     initialTrue?: string[];
   };
-  sid?: string;
+  token?: string;
+  paid?: boolean | string;
+  isGridView?: boolean;
 }) {
   let [selectedGroup, selectedSubgroup] = returnGroups();
 
@@ -386,6 +395,12 @@ export default async function Ssr({
         backend: "Obecne",
         options: [
           {
+            title: "Vše",
+            name: "vse",
+            backend: "",
+            checked: false,
+          },
+          {
             title: "Moje oblíbené",
             name: "moje",
             backend: "Oblíbené",
@@ -406,8 +421,8 @@ export default async function Ssr({
           {
             title: "Videoreceptury",
             name: "videoreceptury",
-            checked: false,
             backend: "Video",
+            checked: false,
           },
         ],
       },
@@ -504,12 +519,15 @@ export default async function Ssr({
         const values = searchParams[key].split(",");
         const box = holder.find((b) => b.name === key);
         if (box && Array.isArray(values)) {
-          values.forEach((v) => {
-            const option = box.options.find((o) => o.name === v);
-            if (option) {
-              option.checked = true;
-            }
-          });
+          if (box.name === "obecne") {
+            const option = box.options.find((o) => o.name === values[0]);
+            if (option) option.checked = true;
+          } else {
+            values.forEach((v) => {
+              const option = box.options.find((o) => o.name === v);
+              if (option) option.checked = true;
+            });
+          }
         }
       });
 
@@ -534,17 +552,13 @@ export default async function Ssr({
         title: "Dle receptury",
         name: "receptura",
         value: "",
-        options: [
-          "Znojemský guláš",
-          "Hovězí pečeně na celeru",
-          "Celerová pomazánka s krabím masem",
-        ],
+        options: nazvy,
       },
       {
         title: "Dle suroviny",
         name: "surovina",
         value: "",
-        options: ["Cizrna", "Avokádo", "Med", "Rajčata"],
+        options: suroviny,
       },
     ];
     // Načte hodnoty z URL
@@ -571,7 +585,7 @@ export default async function Ssr({
     selectedSubgroup,
     comboBoxValues,
     sideBarValues,
-    sid
+    token
   );
 
   return (
@@ -582,6 +596,9 @@ export default async function Ssr({
       urlPreQuery={urlPreQuery}
       initialData={data}
       groupsData={groupsData}
+      isGridView={isGridView}
+      logged={token}
+      paid={paid}
     />
   );
 }

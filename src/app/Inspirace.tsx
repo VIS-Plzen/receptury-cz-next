@@ -1,24 +1,30 @@
 "use client";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
+import Carousel from "@/components/ui/EmblaCarousel";
 import Heading from "@/components/ui/Heading";
 import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { cn } from "@/utils/cn";
-import { useEffect, useState } from "react";
-import "swiper/css";
-import { Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { returnExpirationTime } from "@/utils/shorties";
+import { useState } from "react";
+import Cookies from "universal-cookie";
 
 export default function Inspirace({
   className = "",
   initData,
+  inspiraceVisible,
+  token,
 }: {
   className?: string;
   initData?: any;
+  inspiraceVisible: string;
+  token?: string;
 }) {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(
+    inspiraceVisible !== "false"
+  );
 
   const TabsData = [
     {
@@ -31,22 +37,69 @@ export default function Inspirace({
     },
   ];
 
-  const [selected, setSelected] = useState(TabsData[0].value);
+  const [selected, setSelected] = useState(
+    inspiraceVisible !== "false" ? inspiraceVisible : TabsData[0].value
+  );
 
-  const [data, setData] = useState<any>(initData[selected]);
+  const [data, setData] = useState<any>(initData);
   const [loading, setLoading] = useState<any>(data ? false : true);
-
-  useEffect(() => {
-    if (!window) return;
-    const localVisible =
-      window.localStorage.getItem("inspiraceVisible") !== "false";
-    setIsVisible(localVisible);
-  }, []);
+  const cookies = new Cookies();
 
   function setLocalVisible(visible: boolean) {
-    if (!window) return;
-    window.localStorage.setItem("inspiraceVisible", visible.toString());
+    const toSet = visible ? selected : "false";
+    cookies.set("inspiraceVisible", toSet, {
+      expires: returnExpirationTime(24 * 30),
+      path: "/",
+    });
+    setNewSelected(selected);
     setIsVisible(visible);
+  }
+
+  async function setNewSelected(newSelected: string) {
+    if (newSelected !== selected) {
+      cookies.set("inspiraceVisible", newSelected, {
+        expires: returnExpirationTime(24 * 30),
+        path: "/",
+      });
+    }
+    if (data[newSelected] !== "hidden") return setSelected(newSelected);
+
+    setLoading(true);
+    const result = await (
+      await fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+          Sid: token ? token : "12345VIS",
+          Funkce: "Receptury",
+          Parametry: {
+            Tabulka: "Receptury",
+            Operace: "Read",
+            Limit: 10,
+            OrderBy: newSelected === "nove" ? "DatumAktualizace" : undefined,
+            Vlastnosti: [
+              "Nazev",
+              "Identita",
+              "Obrazek",
+              "DruhSkupina",
+              "DruhPodskupina",
+              "Dieta1",
+              "Dieta2",
+              "Dieta3",
+              "TepelnaUprava",
+            ],
+            Stitek: newSelected === "oblibene" ? "Oblíbené" : undefined,
+          },
+        }),
+      })
+    ).json();
+    if (result.Status) {
+      setData((prevData: any) => ({
+        ...prevData,
+        [newSelected]: result.Vety,
+      }));
+    }
+    setLoading(false);
+    setSelected(newSelected);
   }
 
   function HideButton({ className = "" }: { className?: string }) {
@@ -63,11 +116,6 @@ export default function Inspirace({
         />
       </div>
     );
-  }
-
-  function setNewSelected(newSelected: string) {
-    setSelected(newSelected);
-    setData(initData[newSelected]);
   }
 
   return (
@@ -109,56 +157,39 @@ export default function Inspirace({
             setSelected={setNewSelected}
             className="block md:hidden"
           />
-
-          <Swiper
-            spaceBetween={16}
-            breakpoints={{
-              370: {
-                slidesPerView: 2,
-              },
-              640: {
-                slidesPerView: 3,
-              },
-              768: {
-                slidesPerView: 4,
-              },
-              1024: {
-                slidesPerView: 5,
-              },
-              1280: {
-                slidesPerView: 6,
-              },
-            }}
-            modules={[Pagination]}
-            pagination={{ clickable: false }}
-            className=" [--swiper-pagination-color:theme(colors.primary.600)]"
-          >
-            {data && data.length > 0 ? (
-              data.map((card: any, index: number) => (
-                <SwiperSlide key={index} className="py-10">
-                  <RecipeCard
-                    key={index}
-                    isLoading={loading}
-                    id={card.Vlastnosti.Identita}
-                    label={card.Vlastnosti.Nazev}
-                    badges={[
-                      card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
-                      card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
-                      card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
-                      card.Vlastnosti.TepelnaUprava,
-                      card.Vlastnosti.DruhSkupina,
-                      card.Vlastnosti.DruhPodskupina,
-                    ]}
-                    forceGrid
-                  />
-                </SwiperSlide>
-              ))
-            ) : (
-              <div className="flex h-[400px] items-center px-10">
-                <p>Data se nepodařilo najít</p>
-              </div>
-            )}
-          </Swiper>
+          {data?.[selected] ? (
+            <Carousel
+              options={{ align: "start" }}
+              hasDots
+              slides={
+                data[selected] === "hidden"
+                  ? Array.from({ length: 6 }, (_, index) => (
+                      <RecipeCard key={index} isLoading={true} forceGrid />
+                    ))
+                  : data[selected].map((card: any, index: number) => (
+                      <RecipeCard
+                        key={index}
+                        isLoading={loading}
+                        id={card.Vlastnosti.Identita}
+                        label={card.Vlastnosti.Nazev}
+                        badges={[
+                          card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                          card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                          card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                          card.Vlastnosti.TepelnaUprava,
+                          card.Vlastnosti.DruhSkupina,
+                          card.Vlastnosti.DruhPodskupina,
+                        ]}
+                        forceGrid
+                      />
+                    ))
+              }
+            />
+          ) : (
+            <div className="flex h-[400px] items-center px-10">
+              <p>Data se nepodařilo najít</p>
+            </div>
+          )}
         </div>
       </Container>
     </div>

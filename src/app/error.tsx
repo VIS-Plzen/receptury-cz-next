@@ -18,14 +18,14 @@ export default function Error({
   return (
     <div className="py-10">
       <Container className="bg-error-400 py-10 text-error-950">
-        <h2>Something went wrong!</h2>
+        <h2>Něco se pokazilo!</h2>
         <button
           onClick={
             // Attempt to recover by trying to re-render the segment
             () => reset()
           }
         >
-          Try again
+          Zkusit znovu
         </button>
       </Container>
     </div>

@@ -1,11 +1,11 @@
 import Heading from "@/components/ui/Heading";
-import { compareDates } from "@/utils/dateWorker";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 
-async function readSome(id: string, token: string | undefined) {
+async function readSome(id: string, token: string | undefined, paid: boolean) {
   if (id === "test.receptury.adelis.cz") return null;
-  const vlastnosti = token
+  const vlastnosti = paid
     ? []
     : [
         "Nazev",
@@ -100,13 +100,12 @@ export default async function Home({
 
   const cookie = cookies();
   const token = cookie.get("token")?.value;
-  const paid = cookie.get("paid")?.value;
-  const showAll = paid && token;
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
 
   const data: any =
     params.id === "sdilena"
       ? await readSomeByCode(Object.keys(searchParams)[0])
-      : await readSome(params.id, token);
+      : await readSome(params.id, token, paid);
 
   if (!data || !data.Status) {
     return (
@@ -122,15 +121,13 @@ export default async function Home({
   const curr = data.Vety[0];
   const card = curr.Vlastnosti;
 
-  const paidDate = compareDates(paid);
-
   return (
     <Page
       card={card}
       curr={curr}
-      logged={showAll}
+      logged={token}
       token={token}
-      paid={paidDate}
+      paid={paid}
       path={path}
       shared={params.id === "sdilena" ? curr.ZbyvaSdileni : false}
     />

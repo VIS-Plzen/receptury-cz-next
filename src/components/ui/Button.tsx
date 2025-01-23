@@ -1,9 +1,11 @@
+"use client";
+
 import { cn } from "@/utils/cn";
 import { Slot } from "@radix-ui/react-slot";
 import { forwardRef } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 type Props = React.ComponentPropsWithoutRef<"button"> & {
-  asChild?: boolean;
   variant?:
     | "primary"
     | "primary-outline"
@@ -13,11 +15,17 @@ type Props = React.ComponentPropsWithoutRef<"button"> & {
     | "black";
   size?: "sm" | "md" | "lg";
   className?: string;
-};
+} & (
+    | { asChild?: never; isLoading?: boolean }
+    | { asChild: true; isLoading?: never }
+  );
 
 // Component Variants
 const cv = {
-  base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-bold tracking-wider transition duration-200 disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-offset-0 focus-visible:outline-[3px]",
+  base: [
+    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-bold tracking-wider transition duration-200 disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-offset-0 focus-visible:outline-[3px]",
+    "data-[state=loading]:pointer-events-none data-[state=loading]:opacity-50",
+  ],
   variant: {
     primary:
       "text-primary-50 bg-primary hover:bg-primary-600 focus-visible:outline-primary/70 focus-visible:ring-0",
@@ -41,10 +49,39 @@ const cv = {
 
 const Button = forwardRef<HTMLButtonElement, Props>(
   (
-    { asChild, variant = "primary", size = "md", className = "", ...props },
+    {
+      asChild,
+      variant = "primary",
+      size = "md",
+      isLoading = false,
+      className = "",
+      ...props
+    },
     forwardedRef
   ) => {
     const Component = asChild ? Slot : "button";
+
+    if (!asChild && isLoading) {
+      return (
+        <Component
+          data-state="loading"
+          disabled
+          ref={forwardedRef}
+          className={cn(cv.base, cv.variant[variant], cv.size[size], className)}
+          {...props}
+        >
+          <span className="invisible inline-flex items-center justify-center gap-2">
+            {props.children}
+          </span>
+          <LoadingSpinner
+            size="inherit"
+            color="inherit"
+            className="absolute left-1/2 top-1/2 m-auto origin-center -translate-x-1/2 -translate-y-1/2 scale-125"
+          />
+        </Component>
+      );
+    }
+
     return (
       <Component
         ref={forwardedRef}

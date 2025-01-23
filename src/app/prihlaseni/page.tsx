@@ -5,9 +5,9 @@ import PasswordField from "@/components/forms/PasswordField";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { Notice } from "@/components/ui/Notice";
 import StyledLink from "@/components/ui/StyledLink";
+import { cFalse, logOut, returnExpirationTime } from "@/utils/shorties";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -65,10 +65,8 @@ export default function Page() {
   }>(returnInitNotice);
 
   useEffect(() => {
-    cookies.remove("token");
-    cookies.remove("paid");
-    cookies.remove("name");
-    localStorage.removeItem("userInfo");
+    logOut();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formValidationSchema = z.object({
@@ -105,16 +103,20 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        cookies.set("token", res.token, { expires: getExpirationTime(2) });
+        const expires = returnExpirationTime(2);
+        cookies.set("token", res.token, { expires: expires, path: "/" });
         cookies.set("name", res.firstName + " " + res.lastName, {
-          expires: getExpirationTime(2),
+          expires: expires,
+          path: "/",
         });
-        cookies.set("paid", res.paid, { expires: getExpirationTime(2) });
-        if (!res.paid) {
+        cookies.set("paid", res.paid, { expires: expires, path: "/" });
+
+        if (!res.paid || res.paid === cFalse) {
           cookies.set("memModal", "true");
         }
         localStorage.setItem("userInfo", JSON.stringify(res));
         router.push("/");
+        router.refresh();
       } else {
         setHasNotice({ variant: "error-solid", message: res.message });
       }
@@ -126,16 +128,10 @@ export default function Page() {
     validateOnBlur: true,
   });
 
-  function getExpirationTime(hours: number) {
-    const date = new Date();
-    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-    return date;
-  }
-
   const formWasTouched = formik.submitCount > 0;
 
   return (
-    <Container className="my-16 flex flex-col items-center justify-center py-20 text-black sm:my-32 md:py-0 xl:my-64">
+    <Container className="flex flex-col items-center justify-center pb-32 pt-8 text-black md:pb-36 md:pt-10 lg:pt-16">
       <div className="w-full space-y-4 rounded-2xl border-2 border-primary-200 bg-white p-8 sm:w-2/3 xl:w-1/3">
         <Heading size="md">Přihlášení</Heading>
         <form onSubmit={formik.handleSubmit}>
@@ -172,16 +168,9 @@ export default function Page() {
             <Button
               className="relative my-4 items-end "
               type="submit"
-              disabled={formik.isSubmitting}
+              isLoading={formik.isSubmitting}
             >
-              <LoadingSpinner
-                className={`absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center opacity-0 ${
-                  formik.isSubmitting && "opacity-100"
-                }`}
-              />
-              <span className={`${formik.isSubmitting && "opacity-0"}`}>
-                Přihlásit se
-              </span>
+              Přihlásit se
             </Button>
           </div>
         </form>

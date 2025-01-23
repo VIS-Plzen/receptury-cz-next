@@ -7,17 +7,19 @@ import Label from "./Label";
 type RadioProps = React.ComponentPropsWithoutRef<"input"> & {
   className?: string;
   label?: string;
+  onChange?: (e: boolean) => void;
 };
 
-function Radio({ className, label, ...props }: RadioProps) {
+function Radio({ className, label, onChange, ...props }: RadioProps) {
   const id = props.id;
 
   return (
     <div className={cn("flex cursor-pointer items-center", className)}>
-      <div className="relative flex">
+      <div className="relative flex items-center justify-center">
         <input
           type="radio"
           id={id}
+          onChange={(e) => !props.disabled && onChange?.(e.target.checked)}
           {...props}
           className={cn(
             "h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black",
@@ -30,11 +32,11 @@ function Radio({ className, label, ...props }: RadioProps) {
         />
         <div
           className={cn(
-            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform",
+            "absolute",
             "rounded-full bg-primary-500",
-            "transition-all duration-150 ease-in-out",
-            "h-3 w-3 scale-0 opacity-0",
-            props.checked ? "scale-100 opacity-100" : ""
+            "transition duration-150 ease-in-out",
+            "h-3 w-3",
+            props.checked ? "scale-100 opacity-100" : "scale-0 opacity-0"
           )}
         />
       </div>

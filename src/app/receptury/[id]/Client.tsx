@@ -1,12 +1,16 @@
 "use client";
+import { ArrowLeftAltIcon } from "@/components/icons";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
+import StyledLink from "@/components/ui/StyledLink";
+import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const icons: {
@@ -107,20 +111,6 @@ export function Page({
     }
     setRefresh(!refresh);
   }
-  const partnerInfo: any = [
-    {
-      logo: null,
-      jmeno: "Bidfood",
-      name: "bidfood",
-      heslo: "Heslo partnera, něco o bidfood a jídle",
-    },
-    {
-      logo: null,
-      jmeno: "Bonduelle",
-      name: "bonduelle",
-      heslo: "Něco jako heslo nebo popis, tady pro Bonduelle",
-    },
-  ];
 
   async function getShareLink() {
     if (!logged || !paid) {
@@ -143,7 +133,7 @@ export function Page({
       })
     ).json();
     if (res.Status) {
-      navigator.clipboard.writeText(`${path}/receptura/sdilena?${res.Kod}`);
+      navigator.clipboard.writeText(`${path}/receptury/sdilena?${res.Kod}`);
       toast({
         intent: "success",
         title: "Odkaz uložen do clipboardu, nyní stačí vložit.",
@@ -158,12 +148,12 @@ export function Page({
 
   const currParner =
     card.Receptar === "1"
-      ? partnerInfo[0]
+      ? partners[0]
       : card.Receptar === "2"
-        ? partnerInfo[1]
+        ? partners[1]
         : "";
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 print:py-5 md:py-48">
+    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 print:py-5 md:pb-36 md:pt-10">
       <Hero
         title={card.Nazev}
         jmeno={card.Autor}
@@ -224,9 +214,7 @@ export function Page({
             zmenStitek={zmenStitek}
             refresh={refresh}
           />
-
           {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
-
           {/* <VolitelnyObsah
         className="bg-white"
         title="Volitelný obsah partnera k danému receptu"
@@ -235,10 +223,16 @@ export function Page({
       /> */}
           {currParner && (
             <Partner
-              jmeno={currParner.jmeno}
-              heslo={currParner.heslo}
-              img="/images/food.jpeg"
-              color={currParner.name}
+              jmeno={currParner.title}
+              heslo={currParner.slogan}
+              img={currParner.img}
+              color={
+                currParner.title.toLocaleLowerCase() as
+                  | "default"
+                  | "bidfood"
+                  | "bonduelle"
+              }
+              logo={currParner.logo}
               hasButton
             />
           )}
@@ -488,7 +482,7 @@ export function Hero({
 
   useEffect(() => {
     setRefreshIn(refresh);
-  }, []);
+  }, [setRefreshIn, refresh]);
 
   useEffect(() => {
     if (!image) return;
@@ -523,27 +517,37 @@ export function Hero({
             <MealSymbol size={48} className="scale-150" />
           )}
         </div>
-        <div className="flex flex-col  gap-y-6 p-5 md:px-0 md:py-14">
+        <div className="flex flex-col gap-y-6 p-5 md:px-0 md:pb-14 md:pt-5">
+          <StyledLink
+            className="hidden underline underline-offset-4 hover:text-primary md:ml-6 md:flex"
+            asChild
+            hoverEffect="none"
+          >
+            <Link href="/">
+              <ArrowLeftAltIcon />
+              Zpět na hlavní stránku
+            </Link>
+          </StyledLink>
           <div
-            className={`flex gap-x-2 md:mt-auto md:px-10 ${
+            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
               !currParner && "opacity-0"
             }`}
           >
-            {currParner.logo ? (
+            {currParner.logoBlack ? (
               <Image
-                src={currParner.logo}
-                className="bg-transparent object-cover mix-blend-screen"
+                src={currParner.logoBlack}
+                className="bg-transparent object-contain"
                 alt=""
                 height={50}
                 width={100}
               />
             ) : (
               <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
-                {currParner.jmeno}
+                {currParner.title}
               </span>
             )}
-            <span className="line-clamp-2">
-              Tuto recepturu pro vás připravila společnost {currParner.jmeno}
+            <span className="my-auto line-clamp-2 h-min">
+              Tuto recepturu pro vás připravila společnost {currParner.title}
             </span>
           </div>
           <div className="flex flex-col gap-y-3 md:flex-col-reverse md:px-10">
@@ -569,9 +573,11 @@ export function Hero({
             {icons.map((icon, index) => (
               <div
                 key={"kfhi" + index}
-                className={`${
-                  icon.name === "favorite" ? "flex" : "hidden md:flex"
-                } flex w-min flex-col items-center gap-1 justify-self-center text-center`}
+                className={`
+                      w-min flex-col items-center gap-1 justify-self-center text-center
+                      ${icon.name === "favorite" ? "flex" : "hidden md:flex"}
+                      ${icon.name === "archive" && "!hidden"}
+                    `}
               >
                 <ButtonIcon
                   onClick={() => {
@@ -742,11 +748,13 @@ function Title({
   return (
     <div className="flex flex-col gap-3 md:flex-row md:justify-between">
       <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
-      <div className="right-5 top-5 grid max-w-xs grid-cols-4 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
+      <div className="right-5 top-5 grid max-w-xs grid-cols-3 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
         {icons.map((icon, index) => (
           <div
             key={"kfii" + index}
-            className={`flex flex-col items-center gap-1 text-center`}
+            className={`flex flex-col items-center gap-1 text-center ${
+              icon.name === "archive" && "!hidden"
+            }`}
           >
             <ButtonIcon
               onClick={() => {

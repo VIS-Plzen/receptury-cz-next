@@ -1,10 +1,9 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
+import { useCoderAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
 import MembershipModal from "./MembershipModal";
-import Spolupracujeme from "./Spolupracujeme";
-import VolitelnyObsah from "./VolitelnyObsah";
 
 export const metadata: Metadata = {
   title: "Stránka | Receptury",
@@ -13,9 +12,19 @@ export const metadata: Metadata = {
 
 export default async function Home({ searchParams }: any) {
   const cookie = cookies();
+  const gridView = cookie.get("gridView")?.value ?? "false";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
+  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
+  const memberModal = await returnMemberModal();
 
-  const [nove, oblibene] = await Promise.all([readNew(), readFavorite()]);
+  const [nove, oblibene] =
+    inspiraceVisible !== "false"
+      ? await Promise.all([
+          inspiraceVisible === "nove" ? readNew() : "hidden",
+          inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
+        ])
+      : ["hidden", "hidden"];
 
   async function readNew() {
     const result = await (
@@ -101,21 +110,37 @@ export default async function Home({ searchParams }: any) {
     };
   }
 
+  async function returnMemberModal() {
+    if (searchParams.activated && sid !== "12345VIS" && paid) return "paid";
+    else if (cookie.has("memModal")) return "unpaid";
+  }
+
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 py-32 md:py-36">
-      <MembershipModal params={searchParams} />
-      <Inspirace initData={{ nove: nove, oblibene: oblibene }} />
+    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
+      {memberModal && <MembershipModal type={memberModal} />}
+      <Inspirace
+        inspiraceVisible={inspiraceVisible}
+        initData={{ nove: nove, oblibene: oblibene }}
+        token={sid}
+      />
       <Ssr
         searchParams={searchParams}
-        className="border-y-2 border-primary-200"
-        sid={sid}
+        // border-y-2 při volitelný obsah
+        className="border-t-2 border-primary-200"
+        token={sid}
+        paid={paid}
+        boxSettings={{
+          disabledValues: ["bonduelle", "bidfood"],
+          hiddenBoxes: ["partner"],
+        }}
+        isGridView={gridView === "true"}
       />
-      <Spolupracujeme />
-      <VolitelnyObsah
+      {/* <Spolupracujeme /> */}
+      {/*  <VolitelnyObsah
         title="Volitelný obsah"
         img="/images/food.jpeg"
         text="Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-      />
+      /> */}
     </div>
   );
 }

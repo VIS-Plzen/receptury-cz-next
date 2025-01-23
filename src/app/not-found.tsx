@@ -1,26 +1,28 @@
+import { HomeIcon } from "@/components/icons";
+import Button from "@/components/ui/Button";
+import Container from "@/components/ui/Container";
+import Heading from "@/components/ui/Heading";
+import Link from "next/link";
+
 export default function NotFound() {
   return (
-    <div className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-      <div className="text-center">
-        <p className="text-indigo-600 text-base font-semibold">404</p>
-        <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          Page not found
-        </h1>
-        <p className="mt-6 text-base leading-7 text-gray-600">
-          Sorry, we could not find the page you are looking for.
-        </p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <a
-            href="#"
-            className="bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600 rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            Go back home
-          </a>
-          <a href="#" className="text-sm font-semibold text-gray-900">
-            Contact support <span aria-hidden="true">&rarr;</span>
-          </a>
-        </div>
+    <Container className="flex flex-col items-center justify-center gap-8 pb-32 pt-8 text-center md:pb-36 md:pt-10">
+      <p className="text-indigo-600 text-base font-semibold">404</p>
+      <Heading as="h1" size="lg">
+        Stránka nebyla nalezena
+      </Heading>
+      <p className="text-base leading-7">
+        Omlouváme se, stránka, kterou hledáte již neexistuje, nebo byla
+        přesunuta.
+      </p>
+      <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <Button asChild className="w-full">
+          <Link href="/">
+            <HomeIcon size={18} />
+            Domovská stránka
+          </Link>
+        </Button>
       </div>
-    </div>
+    </Container>
   );
 }

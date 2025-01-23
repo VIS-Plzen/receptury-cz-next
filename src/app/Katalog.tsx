@@ -5,12 +5,9 @@ import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
 import Image from "next/image";
-import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 
+import Carousel from "@/components/ui/EmblaCarousel";
 import "/src/styles/globals.css";
-import "/src/styles/swiper.css";
 
 function Katalog() {
   const produkty = [
@@ -65,49 +62,31 @@ function Katalog() {
             <ArrowRightAltIcon />
           </StyledLink>
         </div>
-        <Swiper
-          spaceBetween={0}
-          modules={[Navigation]}
-          cssMode={true}
-          navigation={true}
-          breakpoints={{
-            0: {
-              slidesPerView: 1,
-            },
-            570: {
-              slidesPerView: 2,
-            },
-            820: {
-              slidesPerView: 3,
-            },
-            1120: {
-              slidesPerView: 4,
-            },
-          }}
-          className="flex w-[calc(100%-64px)] justify-center !overflow-visible [--swiper-navigation-color:theme(colors.primary.600)] [--swiper-pagination-color:theme(colors.primary.600)] [&>.swiper-button-next]:-right-8 [&>.swiper-button-prev]:-left-8"
-        >
-          {produkty.map((produkt, index) => (
-            <SwiperSlide key={index}>
-              <a
-                key={index}
-                href={produkt.href}
-                className="flex h-[300px] flex-col gap-y-3 overflow-hidden px-5"
-              >
-                <div className="relative h-4/5">
-                  <Image
-                    src={produkt.img}
-                    alt={""}
-                    fill
-                    className="rounded-xl object-cover"
-                  />
-                </div>
-                <span className="mt-auto text-sm font-bold text-black">
-                  {produkt.title}
-                </span>
-              </a>
-            </SwiperSlide>
+        <Carousel
+          hasArrows
+          options={{ align: "start" }}
+          className="flex w-[calc(100%-64px)] justify-center !overflow-visible"
+          slidesWidth="flex-slides1 min-[500px]:flex-slides2 min-[768px]:flex-slides3 min-[1024px]:flex-slides4"
+          slides={produkty.map((produkt, index) => (
+            <a
+              key={index}
+              href={produkt.href}
+              className="flex h-[300px] flex-col gap-y-3 overflow-hidden px-5"
+            >
+              <div className="relative h-4/5">
+                <Image
+                  src={produkt.img}
+                  alt={""}
+                  fill
+                  className="rounded-xl object-cover"
+                />
+              </div>
+              <span className="mt-auto text-sm font-bold text-black">
+                {produkt.title}
+              </span>
+            </a>
           ))}
-        </Swiper>
+        />
       </div>
     </Container>
   );

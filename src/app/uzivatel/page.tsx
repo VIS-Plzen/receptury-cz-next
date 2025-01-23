@@ -1,28 +1,33 @@
-import { compareDates, returnBetterDate } from "@/utils/dateWorker";
+import { returnBetterDate } from "@/utils/dateWorker";
+import { coder, useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
 export default function Home({ searchParams }: any) {
   const cookie = cookies();
-  const paidTo = cookie.get("paid")?.value;
-  const paid = compareDates(paidTo);
-  const paidToDate = returnBetterDate(paidTo, ".", "DMY");
+  const token = cookie.get("token")?.value;
+  const paidCookie = cookie.get("paid")?.value;
+  const paid = useCoderAndCompareDates(paidCookie);
+  const paidCoder = coder(paidCookie);
+  const paidToDate = paidCoder.Status
+    ? returnBetterDate(paidCoder.data, ".", "DMY")
+    : "";
+  const gridView = cookie.get("gridView")?.value ?? "false";
 
   return (
     <>
       {paid && (
-        <div
-          className={`mt-16 w-full bg-success-600 py-3 text-center text-white md:mt-20`}
-        >
+        <div className={`w-full bg-success-600 py-3 text-center text-white`}>
           Prémium účet aktivní do: {paidToDate}
         </div>
       )}
-      <div
-        className={`flex flex-col items-stretch justify-start gap-24 pb-16 ${
-          !paid && "mt-20"
-        }`}
-      >
-        <ContentSelector searchParams={searchParams} />
+      <div className={`flex flex-col items-stretch justify-start gap-24 pb-16`}>
+        <ContentSelector
+          searchParams={searchParams}
+          isGridView={gridView === "true"}
+          token={token}
+          paid={paid}
+        />
       </div>
     </>
   );

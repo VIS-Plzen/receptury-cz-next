@@ -1,7 +1,4 @@
 import { cn } from "@/utils/cn";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import RecipeCard from "./RecipeCard";
 
 type Props = {
@@ -32,17 +29,15 @@ type Props = {
   cardsInGrid?: number;
   assertCard?: boolean;
   zmenStitek?: any;
-  logged?: boolean;
+  logged?: boolean | string;
 };
 
 function RecipeCardsGrid({
   data,
   gridView = false,
   isLoading = false,
-  length = 15,
   className = "",
   cardsInGrid,
-  assertCard,
   zmenStitek,
   logged,
 }: Props) {
@@ -63,20 +58,20 @@ function RecipeCardsGrid({
             key={index}
             isGridView={gridView}
             isLoading={isLoading}
-            label={card.Vlastnosti.Nazev}
-            id={card.Vlastnosti.Identita}
+            label={card?.Vlastnosti.Nazev}
+            id={card?.Vlastnosti.Identita}
             badges={[
-              card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
-              card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
-              card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
-              card.Vlastnosti.TepelnaUprava,
-              card.Vlastnosti.DruhSkupina,
-              card.Vlastnosti.DruhPodskupina,
+              card?.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+              card?.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+              card?.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+              card?.Vlastnosti.TepelnaUprava,
+              card?.Vlastnosti.DruhSkupina,
+              card?.Vlastnosti.DruhPodskupina,
             ]}
             img="/images/food.jpeg"
             zmenStitek={zmenStitek}
-            veta={card.Vlastnosti.Veta}
-            stitky={logged ? card.Stitky : []}
+            veta={card?.Vlastnosti.Veta}
+            stitky={logged ? card?.Stitky : []}
           />
         ))}
     </div>

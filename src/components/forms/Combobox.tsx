@@ -15,6 +15,7 @@ type Props = {
   onChange?: any;
   onEnter?: any;
   error?: string | false;
+  maxShownOptions?: 100;
   [x: string]: any;
 };
 
@@ -29,9 +30,11 @@ export default function MyCombobox({
   onChange,
   onEnter,
   error,
+  maxShownOptions = 100,
   ...rest
 }: Props) {
   const [query, setQuery] = useState(selectedOption);
+  const [offset, setOffset] = useState(0);
 
   const filteredValues =
     query === ""
@@ -39,6 +42,8 @@ export default function MyCombobox({
       : options.filter((option) => {
           return option.toLowerCase().includes(query.toLowerCase());
         });
+  const filteredLength = filteredValues.length;
+  const filteredPages = Math.round(filteredLength / maxShownOptions);
 
   return (
     <div className={`w-full`} style={{ zIndex: z }}>
@@ -79,6 +84,7 @@ export default function MyCombobox({
                 onChange(activeValue);
                 onEnter && onEnter();
               }}
+              onFocus={() => setOffset(0)}
               autoComplete="off"
               {...rest}
             />
@@ -109,11 +115,38 @@ export default function MyCombobox({
               onChange(query);
             }}
           >
-            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-x-hidden rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              {filteredPages > 0 && offset > 0 && (
+                <button
+                  className="w-full border-b border-gray-400 text-center"
+                  onClick={() => offset > 0 && setOffset(offset - 1)}
+                >
+                  Předchozí {`${offset + 1}/${filteredPages + 1}`}
+                </button>
+              )}
               {query.length > 0 && <Option value={query} onClick={onChange} />}
-              {filteredValues.map((value, key) => (
-                <Option value={value} onClick={onChange} key={"iiik" + key} />
-              ))}
+              {filteredValues.map(
+                (value, key) =>
+                  (filteredValues.length < maxShownOptions ||
+                    (key > maxShownOptions * offset &&
+                      key < maxShownOptions * (offset + 1))) &&
+                  value !== query && (
+                    <Option
+                      value={value}
+                      onClick={onChange}
+                      key={"iiik" + key}
+                    />
+                  )
+              )}
+              {filteredPages > 1 &&
+                maxShownOptions * (offset + 1) < filteredLength && (
+                  <button
+                    className="w-full border-t border-gray-400 text-center"
+                    onClick={() => setOffset(offset + 1)}
+                  >
+                    Další {`${offset + 1}/${filteredPages + 1}`}
+                  </button>
+                )}
             </Combobox.Options>
           </Transition>
         </div>
@@ -135,7 +168,7 @@ function Option({
     <Combobox.Option
       id={value}
       className={({ active }) =>
-        `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+        `relative cursor-pointer select-none py-2 pl-5 pr-2 ${
           active && "bg-primary-200"
         }`
       }
@@ -153,7 +186,7 @@ function Option({
           </button>
           {selected && (
             <span
-              className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+              className={`absolute inset-y-0 left-0 flex items-center ${
                 active ? "text-white" : "text-teal-600"
               }`}
             >
