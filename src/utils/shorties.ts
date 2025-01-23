@@ -140,19 +140,23 @@ export function coder(
       : new Date("9999-12-30").getTime();
   currTime = Math.floor(currTime / 1000);
   if (key) {
-    const decipher = crypto.createDecipher("aes-256-cbc", secretKey);
-    let decryptedData = decipher.update(key, "hex", "utf8");
-    decryptedData += decipher.final("utf8");
-    const splitted = decryptedData.split("&");
-    const incTime = parseInt(splitted[splitted.length - 1]);
-    if (currTime > incTime + 15) {
-      return { Status: false, error: "Time exceeded" };
-    } else {
-      decryptedData = decryptedData.substring(
-        0,
-        decryptedData.lastIndexOf("&")
-      );
-      return { Status: true, data: decryptedData };
+    try {
+      const decipher = crypto.createDecipher("aes-256-cbc", secretKey);
+      let decryptedData = decipher.update(key, "hex", "utf8");
+      decryptedData += decipher.final("utf8");
+      const splitted = decryptedData.split("&");
+      const incTime = parseInt(splitted[splitted.length - 1]);
+      if (currTime > incTime + 15) {
+        return { Status: false, error: "Time exceeded" };
+      } else {
+        decryptedData = decryptedData.substring(
+          0,
+          decryptedData.lastIndexOf("&")
+        );
+        return { Status: true, data: decryptedData };
+      }
+    } catch {
+      return { Status: false, error: "Wrong key format." };
     }
   } else {
     if (!dataString) {

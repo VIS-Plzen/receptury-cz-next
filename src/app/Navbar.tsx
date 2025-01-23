@@ -127,6 +127,7 @@ function SubscriptionBanner({
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!token) return;
     const cookiePaid = cookies.get("paid");
     if (cookiePaid === paid) return;
     cookies.set("paid", paid);
