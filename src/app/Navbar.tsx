@@ -132,6 +132,7 @@ function SubscriptionBanner({
     if (cookiePaid === paid) return;
     cookies.set("paid", paid);
     router.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!state || state === "ok") return null;
@@ -190,7 +191,7 @@ function DropdownMenu({
   dropdownItems: DropdownItem[];
   openModal: () => void;
   token?: string;
-  paid?: string;
+  paid?: boolean;
   name: string;
 }) {
   const router = useRouter();
@@ -245,12 +246,12 @@ function DropdownMenu({
             {dropdownItems.map((item: DropdownItem, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
-                  <a
+                  <Link
                     className={`${active && "bg-primary-100"} p-2`}
                     href={item.href}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 )}
               </Menu.Item>
             ))}
@@ -300,7 +301,7 @@ function TouchMenu({
   setIsOpen: (isOpen: boolean) => void;
   openModal: () => void;
   token?: string;
-  paid?: string;
+  paid?: boolean;
 }) {
   // Prevents scrolling when menu is open
   useEffect(() => {
@@ -378,7 +379,7 @@ function TouchMenu({
                   <ul className="flex flex-col gap-2 pt-4">
                     {dropdownData.map((item, index) => (
                       <li key={index}>
-                        <a href={item.href}>{item.label}</a>
+                        <Link href={item.href}>{item.label}</Link>
                       </li>
                     ))}
                     <li>
@@ -519,6 +520,8 @@ export default function Navbar({
     }
   }
 
+  const paidBoolean = !!paidIn && paidIn !== cFalse;
+
   return (
     <div className="relative">
       <nav
@@ -549,7 +552,7 @@ export default function Navbar({
             dropdownItems={dropdownData}
             openModal={() => setModalOpen(true)}
             token={tokenIn}
-            paid={paidIn}
+            paid={paidBoolean}
             name={nameIn}
           />
           <BurgerButton
@@ -562,7 +565,7 @@ export default function Navbar({
             setIsOpen={setIsMenuOpen}
             openModal={() => setModalOpen(true)}
             token={tokenIn}
-            paid={paidIn}
+            paid={paidBoolean}
           />
         </Container>
       </nav>

@@ -15,6 +15,7 @@ export default function MembershipModal({ type }: Props) {
     setOpen(true);
     if (type !== "paid") return;
     window.history.pushState(null, "", pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function close() {

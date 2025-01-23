@@ -42,6 +42,11 @@ export default function ContentSelector({
   const router = useRouter();
 
   useEffect(() => {
+    if (!searchParams.obsah) return;
+    setContent(searchParams.obsah);
+  }, [searchParams]);
+
+  useEffect(() => {
     if (token) return;
     localStorage.removeItem("userInfo");
     router.push("/prihlaseni");
