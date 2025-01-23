@@ -514,7 +514,7 @@ export default function Navbar({
     ).json();
     if (res.orderToken) {
       setCartState("success");
-      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=http://receptury.jidelny.cz/?activated=true`;
+      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=${process.env.NEXT_PUBLIC_BASE_URL}/?activated=true`;
     } else {
       setCartState("error");
     }

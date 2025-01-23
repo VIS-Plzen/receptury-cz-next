@@ -111,8 +111,10 @@ export default async function Home({ searchParams }: any) {
   }
 
   async function returnMemberModal() {
-    if (searchParams.activated && sid !== "12345VIS" && paid) return "paid";
-    else if (cookie.has("memModal")) return "unpaid";
+    if (searchParams.activated && sid !== "12345VIS") {
+      if (searchParams.order_result === "success" && paid) return "paid";
+      else if (searchParams.order_result === "pending") return "pending";
+    } else if (cookie.has("memModal")) return "unpaid";
   }
 
   return (
