@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { cookies } from "next/headers";
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 import Providers from "./Providers";
 import SkipNavigationButton from "./SkipNavigationButton";
 
@@ -51,7 +52,7 @@ export default async function RootLayout({ children }: any) {
           <div className="grid min-h-[100dvh] grid-rows-[1fr_auto]">
             <div className="relative grid min-h-[100dvh] grid-rows-[auto_1fr]">
               <header className="sticky top-0 z-fixed">
-                {/*  <Navbar token={token} paid={paid} name={name ?? ""} /> */}
+                <Navbar token={token} paid={paid} name={name ?? ""} />
               </header>
               <main id="obsah" className="max-w-[100vw]">
                 {children}
