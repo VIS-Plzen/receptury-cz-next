@@ -180,10 +180,12 @@ export function useCoderAndCompareDates(paid: string | undefined) {
 
 export function returnPaidTo(data: { paid: boolean; paidTo: string | null }) {
   if (!data.paid) return "false";
-  const paidTo = data.paidTo;
-  if (paidTo) return paidTo;
-  return "2055-01-07T11:29:42+01:00";
+  if (!data.paidTo) return infiniteDate;
+  if (!compareDates(data.paidTo)) return "false";
+  return data.paidTo;
 }
 
 export const cFalse =
   "9079d9e16c4eddcc223508bfd3253d7c4cb3d6db59bbba2a5d5fd5abc75eda5e";
+
+export const infiniteDate = "2099-01-01T01:01:01+01:00";

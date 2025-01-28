@@ -1,5 +1,5 @@
 import { returnBetterDate } from "@/utils/dateWorker";
-import { coder, useCoderAndCompareDates } from "@/utils/shorties";
+import { coder, infiniteDate, useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
@@ -10,7 +10,9 @@ export default function Home({ searchParams }: any) {
   const paid = useCoderAndCompareDates(paidCookie);
   const paidCoder = coder(paidCookie);
   const paidToDate = paidCoder.Status
-    ? returnBetterDate(paidCoder.data, ".", "DMY")
+    ? paidCoder.data === infiniteDate
+      ? "Nekonečné"
+      : returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
   const gridView = cookie.get("gridView")?.value ?? "false";
 
