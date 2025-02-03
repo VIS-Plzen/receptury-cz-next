@@ -14,7 +14,7 @@ export default function Home({ searchParams }: any) {
       ? "Nekonečné"
       : returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
-  const gridView = cookie.get("gridView")?.value ?? "false";
+  const gridView = cookie.get("gridView")?.value ?? "true";
 
   return (
     <>

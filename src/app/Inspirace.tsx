@@ -6,9 +6,10 @@ import Heading from "@/components/ui/Heading";
 import RecipeCard from "@/components/ui/RecipeCard";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { useCard } from "@/context/FavoriteCards";
 import { cn } from "@/utils/cn";
 import { returnExpirationTime } from "@/utils/shorties";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 export default function Inspirace({
@@ -22,6 +23,8 @@ export default function Inspirace({
   inspiraceVisible: string;
   token?: string;
 }) {
+  const { cards, setAllCards, cardsLength } = useCard();
+
   const [isVisible, setIsVisible] = useState<boolean>(
     inspiraceVisible !== "false"
   );
@@ -93,6 +96,9 @@ export default function Inspirace({
       })
     ).json();
     if (result.Status) {
+      if (newSelected === "oblibene") {
+        setAllCards(result.Vety);
+      }
       setData((prevData: any) => ({
         ...prevData,
         [newSelected]: result.Vety,
@@ -117,6 +123,22 @@ export default function Inspirace({
       </div>
     );
   }
+
+  useEffect(() => {
+    if (
+      !initData ||
+      (initData.oblibene === "hidden" && initData.oblibene?.length === 0)
+    )
+      return;
+    setAllCards(initData.oblibene);
+  }, []);
+
+  useEffect(() => {
+    setData((prevData: any) => ({
+      ...prevData,
+      oblibene: cards,
+    }));
+  }, [cardsLength]);
 
   return (
     <div className={cn(className)}>
@@ -159,14 +181,14 @@ export default function Inspirace({
           />
           {data?.[selected] ? (
             <Carousel
-              options={{ align: "start" }}
-              hasDots
+              options={{ align: "start", loop: true }}
+              hasArrows
               slides={
                 data[selected] === "hidden"
                   ? Array.from({ length: 6 }, (_, index) => (
                       <RecipeCard key={index} isLoading={true} forceGrid />
                     ))
-                  : data[selected].map((card: any, index: number) => (
+                  : data[selected]?.map((card: any, index: number) => (
                       <RecipeCard
                         key={index}
                         isLoading={loading}

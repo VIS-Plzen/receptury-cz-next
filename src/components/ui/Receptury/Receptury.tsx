@@ -16,6 +16,7 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { useCard } from "@/context/FavoriteCards";
 import { toast } from "@/hooks/useToast";
 import { returnExpirationTime } from "@/utils/shorties";
 import { nazvy, suroviny } from "@/utils/static";
@@ -64,6 +65,7 @@ export default function Receptury({
   );
   const urlParamsSplitted = urlParams.split("&");
   const paramsObjects = Object.fromEntries(paramsHook);
+  const { addCard, removeCard, cardsLength } = useCard();
 
   const cookie = new Cookies();
 
@@ -357,6 +359,7 @@ export default function Receptury({
     setCancelDisabled(true);
     setSaveDisabled(false);
     setRefresh(!refresh);
+    getDataAndSetQuery(pageState);
   }
 
   function updateCombobox(index: number, value: string) {
@@ -565,11 +568,12 @@ export default function Receptury({
     ).json();
     if (result.Status) {
       let vetaStringed = veta.toString();
+
+      const curr = data.Vety.find(
+        (veta: any) => veta.Vlastnosti.Identita === vetaStringed
+      );
       setData((prev: any) => {
         let objHolder = prev;
-        const curr = objHolder.Vety.find(
-          (veta: any) => veta.Vlastnosti.Veta === vetaStringed
-        );
 
         if (hodnota) curr.Stitky.push(stitek);
         else {
@@ -581,13 +585,18 @@ export default function Receptury({
 
         return objHolder;
       });
-
-      setRefresh(!refresh);
+      setTimeout(() => {
+        if (hodnota) {
+          addCard(curr);
+        } else {
+          removeCard(vetaStringed);
+        }
+      }, 50);
     }
   }
 
   return (
-    <Container className={`py-6 ${className}`}>
+    <Container className={`${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
         pocet={data && data.CelkovyPocet}
@@ -719,7 +728,10 @@ function Comboboxes({
           name={combo.name}
           options={combo.options}
           selectedOption={combo.value}
-          onChange={(value: string) => updateCombobox(index, value)}
+          onChange={(value: string) => {
+            updateCombobox(index, value);
+            getData();
+          }}
           aria-label={"Vyhledat " + combo.title}
           z={100 - index}
           onEnter={getData}
@@ -860,13 +872,7 @@ function MobileFilters({
         <AnimatePresence initial={false}>
           <Dialog.Portal>
             {sideBarOpen && (
-              <motion.div
-                key="modal"
-                className="lg:hidden"
-                /* initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }} */
-              >
+              <motion.div key="modal" className="lg:hidden">
                 <Dialog.Overlay className="DialogOverlay" />
                 <Dialog.Content className="DialogContent">
                   <SideBar
@@ -986,7 +992,7 @@ function SideBar({
           refresh={refresh}
           getData={getDataAndSetQuery}
         />
-        <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
+        <div className="flex flex-col-reverse overflow-x-visible">
           <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">
             <Button
               className="relative mb-2 w-full"

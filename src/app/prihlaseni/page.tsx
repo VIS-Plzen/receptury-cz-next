@@ -160,13 +160,13 @@ export default function Page() {
             }
             onBlur={formik.handleBlur}
           ></PasswordField>
-          <div className="flex items-start justify-between border-b border-primary-200">
+          <div className="flex flex-col-reverse items-end border-b border-primary-200 md:flex-row md:items-center md:justify-between">
             {/* redirect to jidelny.cz for password reset*/}
             <StyledLink href="https://jidelny.cz/profil/zapomenute-heslo/?redirectAfter=https://receptury.cz/password-reset-complete">
               Zapomenuté heslo?
             </StyledLink>
             <Button
-              className="relative my-4 items-end "
+              className="relative my-4 w-full items-end md:w-auto"
               type="submit"
               isLoading={formik.isSubmitting}
             >

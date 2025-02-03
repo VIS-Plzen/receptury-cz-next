@@ -196,13 +196,12 @@ export function Page({
               text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
             }}
             terapeut={{
-              text:
-                card.VyjadreniNT === "" ? "Není vyplněno" : card.VyjadreniNT,
+              text: card.VyjadreniNT,
               badges: [
                 card.Dieta1 === "Ano" && "Bezlepková",
                 card.Dieta2 === "Ano" && "Bezmléčná",
                 card.Dieta3 === "Ano" && "Šetřící",
-              ],
+              ].filter(Boolean),
             }}
             skladba={{
               polevka: card.DoporucenaPolevka,
@@ -213,6 +212,7 @@ export function Page({
             stitky={curr.Stitky}
             zmenStitek={zmenStitek}
             refresh={refresh}
+            getShareLink={getShareLink}
           />
           {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
           {/* <VolitelnyObsah
@@ -671,6 +671,7 @@ export function Informations({
   stitky,
   zmenStitek,
   refresh,
+  getShareLink,
 }: {
   title: string;
   postup: string;
@@ -697,6 +698,7 @@ export function Informations({
     changeHodnota?: () => void
   ) => void;
   refresh: boolean;
+  getShareLink: () => void;
 }) {
   const [, setRefreshIn] = useState(refresh);
 
@@ -711,6 +713,7 @@ export function Informations({
         title={title}
         veta={veta}
         zmenStitek={zmenStitek}
+        getShareLink={getShareLink}
       />
       <div className="flex flex-col gap-5 print:flex-row sm:gap-7 md:flex-row">
         <div className="flex flex-col gap-5 sm:gap-7">
@@ -719,7 +722,12 @@ export function Informations({
         </div>
         <div className="flex flex-col gap-5 sm:gap-7">
           <Postup postup={postup} />
-          <div className="grid gap-5 sm:gap-7 xl:grid-cols-2">
+          <div
+            className={`grid gap-5 sm:gap-7 ${
+              (skladba.polevka || skladba.priloha || skladba.doplnek) &&
+              "xl:grid-cols-2"
+            }`}
+          >
             <Alergeny alergeny={alergeny} />
             <Skladba skladba={skladba} />
           </div>
@@ -735,6 +743,7 @@ function Title({
   zmenStitek,
   veta,
   stitky,
+  getShareLink,
 }: {
   title: string;
   zmenStitek: (
@@ -744,6 +753,7 @@ function Title({
   ) => void;
   veta: number;
   stitky: string[];
+  getShareLink: () => void;
 }) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:justify-between">
@@ -773,6 +783,8 @@ function Title({
                     );
                   case "print":
                     return window.print();
+                  case "share":
+                    return getShareLink();
                 }
               }}
               icon={(() => {
@@ -878,6 +890,7 @@ function Alergeny({
   );
 }
 function Skladba({ skladba }: { skladba: any }) {
+  if (!skladba.polevka && !skladba.priloha && !skladba.doplnek) return null;
   return (
     <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
       <Heading size="sm">Doporučení ke skladbě</Heading>
@@ -902,6 +915,8 @@ function Terapeut({
   terapeut: { text: string; badges: string[] };
 }) {
   let badgeCounter = 0;
+  if (!terapeut.text && terapeut.badges.length === 0) return null;
+
   return (
     <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Nutriční terapeut</Heading>

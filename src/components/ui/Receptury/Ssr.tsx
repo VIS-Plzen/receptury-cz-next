@@ -119,6 +119,11 @@ async function readSome(
 
 export const groupsData = [
   {
+    value: "nezadano",
+    title: "Vše",
+    options: [{ value: "vse", title: "Vše" }],
+  },
+  {
     value: "bezmase_sladke",
     title: "Bezmasé sladké pokrmy",
     options: [
@@ -215,11 +220,6 @@ export const groupsData = [
   {
     value: "napoje",
     title: "Nápoje",
-    options: [{ value: "vse", title: "Vše" }],
-  },
-  {
-    value: "nezadano",
-    title: "Nezadáno",
     options: [{ value: "vse", title: "Vše" }],
   },
   {

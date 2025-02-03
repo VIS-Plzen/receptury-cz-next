@@ -273,7 +273,7 @@ function RecipeCard({
       forceRow={forceRow}
       zmenStitek={zmenStitek}
       stitky={stitky}
-      veta={veta}
+      veta={id}
       width={width}
     />
   );

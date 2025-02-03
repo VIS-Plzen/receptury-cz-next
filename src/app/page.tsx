@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 
 export default async function Home({ searchParams }: any) {
   const cookie = cookies();
-  const gridView = cookie.get("gridView")?.value ?? "false";
+  const gridView = cookie.get("gridView")?.value ?? "true";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
-  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
+  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "nove";
   const memberModal = await returnMemberModal();
 
   const [nove, oblibene] =
@@ -118,7 +118,7 @@ export default async function Home({ searchParams }: any) {
   }
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
+    <div className="flex flex-col items-stretch justify-start pb-20 pt-8 md:pt-10">
       {memberModal && <MembershipModal type={memberModal} />}
       <Inspirace
         inspiraceVisible={inspiraceVisible}

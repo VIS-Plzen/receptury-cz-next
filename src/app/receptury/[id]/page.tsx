@@ -1,7 +1,7 @@
-import Heading from "@/components/ui/Heading";
 import { useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
+import { ErrorPage } from "./Error";
 
 async function readSome(id: string, token: string | undefined, paid: boolean) {
   if (id === "test.receptury.adelis.cz") return null;
@@ -102,17 +102,14 @@ export default async function Home({
   const token = cookie.get("token")?.value;
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
 
-  const data: any =
-    params.id === "sdilena"
-      ? await readSomeByCode(Object.keys(searchParams)[0])
-      : await readSome(params.id, token, paid);
+  const shared = params.id === "sdilena";
+
+  const data: any = shared
+    ? await readSomeByCode(Object.keys(searchParams)[0])
+    : await readSome(params.id, token, paid);
 
   if (!data || !data.Status) {
-    return (
-      <div className="flex h-[calc(100vh-200px)] justify-center pt-48">
-        <Heading size="sm">Nepodařilo se načíst data.</Heading>
-      </div>
-    );
+    return <ErrorPage shared={shared} />;
   }
 
   if (!data.Vety[0]) {
@@ -129,7 +126,7 @@ export default async function Home({
       token={token}
       paid={paid}
       path={path}
-      shared={params.id === "sdilena" ? curr.ZbyvaSdileni : false}
+      shared={shared ? curr.ZbyvaSdileni : false}
     />
   );
 }

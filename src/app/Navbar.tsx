@@ -436,6 +436,24 @@ function TouchMenu({
                   </li>
                 </ul>
               )}
+              <div className="mt-20 flex items-center gap-x-3 gap-x-6 md:hidden">
+                <Link
+                  href="/"
+                  className="relative z-offcanvas-above rounded-lg"
+                >
+                  <Logo className="h-8 w-auto" />
+                </Link>
+                <span className="text-2xl">/</span>
+                <a
+                  href="https://www.jidelny.cz"
+                  className="z-offcanvas-above rounded-lg"
+                >
+                  <img
+                    src="/logo/logo-jidelny.svg"
+                    className="h-6 bg-transparent"
+                  />
+                </a>
+              </div>
             </Container>
           </motion.div>
         </>
@@ -532,9 +550,21 @@ export default function Navbar({
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
-          <Link href="/" className="relative z-offcanvas-above rounded-lg">
-            <Logo />
-          </Link>
+          <div className="z-offcanvas-above flex items-center gap-x-3">
+            <Link href="/" className="relative rounded-lg">
+              <Logo />
+            </Link>
+            <span className="hidden text-2xl md:block">/</span>
+            <a
+              href="https://www.jidelny.cz"
+              className="hidden rounded-lg md:block"
+            >
+              <img
+                src="/logo/logo-jidelny.svg"
+                className="h-8 bg-transparent"
+              />
+            </a>
+          </div>
           <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">
             {menuRoutes.map((route) => (
               <li key={route.href}>

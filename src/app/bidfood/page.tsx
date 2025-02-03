@@ -14,7 +14,7 @@ import { Partner } from "../receptury/[id]/Client";
 
 export default function Home({ searchParams }: any) {
   const cookie = cookies();
-  const gridView = cookie.get("gridView")?.value ?? "false";
+  const gridView = cookie.get("gridView")?.value ?? "true";
   const token = cookie.get("token")?.value;
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
   return (
