@@ -131,6 +131,7 @@ export default function Inspirace({
     )
       return;
     setAllCards(initData.oblibene);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -138,7 +139,7 @@ export default function Inspirace({
       ...prevData,
       oblibene: cards,
     }));
-  }, [cardsLength]);
+  }, [cardsLength, cards]);
 
   return (
     <div className={cn(className)}>
@@ -179,7 +180,7 @@ export default function Inspirace({
             setSelected={setNewSelected}
             className="block md:hidden"
           />
-          {data?.[selected] ? (
+          {data?.[selected] && data[selected].length !== 0 ? (
             <Carousel
               options={{ align: "start", loop: true }}
               hasArrows
@@ -209,7 +210,11 @@ export default function Inspirace({
             />
           ) : (
             <div className="flex h-[400px] items-center px-10">
-              <p>Data se nepodařilo najít</p>
+              <p>
+                {selected === "nove"
+                  ? "Receptury se nepodařilo najít."
+                  : "Žádné receptury k zobrazení."}
+              </p>
             </div>
           )}
         </div>

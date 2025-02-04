@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "@/components/brand/Logo";
+import LogoJidelny from "@/components/brand/LogoJidelny";
 import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
@@ -436,22 +437,14 @@ function TouchMenu({
                   </li>
                 </ul>
               )}
-              <div className="mt-20 flex items-center gap-x-3 gap-x-6 md:hidden">
-                <Link
-                  href="/"
-                  className="relative z-offcanvas-above rounded-lg"
-                >
+              <div className="z-offcanvas-above mt-20 flex items-center gap-x-3 gap-x-6 md:hidden">
+                <Link href="/" className="relative rounded-lg">
                   <Logo className="h-8 w-auto" />
                 </Link>
                 <span className="text-2xl">/</span>
-                <a
-                  href="https://www.jidelny.cz"
-                  className="z-offcanvas-above rounded-lg"
-                >
-                  <img
-                    src="/logo/logo-jidelny.svg"
-                    className="h-6 bg-transparent"
-                  />
+
+                <a href="https://www.jidelny.cz" className="rounded-lg">
+                  <LogoJidelny className="h-6 w-auto bg-transparent" />
                 </a>
               </div>
             </Container>
@@ -550,7 +543,7 @@ export default function Navbar({
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
-          <div className="z-offcanvas-above flex items-center gap-x-3">
+          <div className="z-offcanvas-above flex items-center gap-x-5">
             <Link href="/" className="relative rounded-lg">
               <Logo />
             </Link>
@@ -559,10 +552,7 @@ export default function Navbar({
               href="https://www.jidelny.cz"
               className="hidden rounded-lg md:block"
             >
-              <img
-                src="/logo/logo-jidelny.svg"
-                className="h-8 bg-transparent"
-              />
+              <LogoJidelny className="h-8 w-auto bg-transparent" />
             </a>
           </div>
           <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">

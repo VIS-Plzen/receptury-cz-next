@@ -27,9 +27,9 @@ const Carousel: React.FC<PropType> = (props) => {
   } = usePrevNextButtons(emblaApi);
 
   return (
-    <div className="py-10">
+    <div className="px-5 py-10">
       <div className="tablet:px-3 relative">
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="mx-3 overflow-hidden" ref={emblaRef}>
           <div className="flex" style={{ touchAction: "pan-y pinch-zoom" }}>
             {slides.map((slide, index) => (
               <div
@@ -50,7 +50,7 @@ const Carousel: React.FC<PropType> = (props) => {
           <>
             {!prevBtnDisabled && (
               <button
-                className="absolute -left-10 top-1/2 z-fixed hidden -translate-y-1/2 md:block"
+                className="absolute -left-10 top-1/2 hidden -translate-y-1/2 md:block"
                 onClick={onPrevButtonClick}
               >
                 <ChevronLeftIcon className="h-16 w-16"></ChevronLeftIcon>
@@ -58,7 +58,7 @@ const Carousel: React.FC<PropType> = (props) => {
             )}
             {!nextBtnDisabled && (
               <button
-                className="absolute -right-10 top-1/2 z-fixed hidden -translate-y-1/2 md:block"
+                className="absolute -right-10 top-1/2 hidden -translate-y-1/2 md:block"
                 onClick={onNextButtonClick}
               >
                 <ChevronRightIcon className="h-16 w-16"></ChevronRightIcon>

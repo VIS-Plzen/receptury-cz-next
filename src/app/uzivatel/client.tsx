@@ -153,10 +153,10 @@ function Form() {
       );
     } else {
       console.log("Tady doopravit");
-      /* toast({
+      toast({
         intent: "error",
         title: "Data se nepodařilo načíst",
-      }); */
+      });
     }
   }
 

@@ -135,6 +135,7 @@ function GridCardLayout({
           />
         </div>
       </div>
+      {/* LAYOUT SHIFT TADY - ZAKOMENTOVAT LABEL A BADGE RENDERER */}
       <div
         className={cn(
           "flex h-44 flex-grow flex-col justify-between bg-white p-[16px]"
@@ -142,7 +143,6 @@ function GridCardLayout({
       >
         <div className="line-clamp-3 text-sm font-bold">
           <p className={cn(isLoading && "hidden")}>{label}</p>
-          {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
@@ -152,7 +152,6 @@ function GridCardLayout({
         <div className={cn(isLoading && "hidden")}>
           <BadgeRenderer badges={badges} />
         </div>
-        {/* loading badges placeholder */}
         <div className={cn("hidden", isLoading && "flex flex-col gap-1")}>
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
