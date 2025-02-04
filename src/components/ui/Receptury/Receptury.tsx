@@ -566,33 +566,37 @@ export default function Receptury({
         }),
       })
     ).json();
-    if (result.Status) {
-      let vetaStringed = veta.toString();
-
-      const curr = data.Vety.find(
-        (veta: any) => veta.Vlastnosti.Identita === vetaStringed
-      );
-      setData((prev: any) => {
-        let objHolder = prev;
-
-        if (hodnota) curr.Stitky.push(stitek);
-        else {
-          var index = curr.Stitky.indexOf(stitek);
-          if (index !== -1) {
-            curr.Stitky.splice(index, 1);
-          }
-        }
-
-        return objHolder;
+    if (!result.Status) {
+      return toast({
+        intent: "error",
+        title: `Recepturu se nepodařilo přidat.`,
       });
-      setTimeout(() => {
-        if (hodnota) {
-          addCard(curr);
-        } else {
-          removeCard(vetaStringed);
-        }
-      }, 50);
     }
+    let vetaStringed = veta.toString();
+
+    const curr = data.Vety.find(
+      (veta: any) => veta.Vlastnosti.Identita === vetaStringed
+    );
+    setData((prev: any) => {
+      let objHolder = prev;
+
+      if (hodnota) curr.Stitky.push(stitek);
+      else {
+        var index = curr.Stitky.indexOf(stitek);
+        if (index !== -1) {
+          curr.Stitky.splice(index, 1);
+        }
+      }
+
+      return objHolder;
+    });
+    setTimeout(() => {
+      if (hodnota) {
+        addCard(curr);
+      } else {
+        removeCard(vetaStringed);
+      }
+    }, 50);
   }
 
   return (

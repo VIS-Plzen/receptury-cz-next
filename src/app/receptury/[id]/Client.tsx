@@ -102,6 +102,13 @@ export function Page({
         }),
       })
     ).json();
+    if (!result.Status) {
+      return toast({
+        intent: "error",
+        title: `Recepturu se nepodařilo přidat.`,
+      });
+    }
+
     if (hodnota) curr.Stitky.push(stitek);
     else {
       var index = curr.Stitky.indexOf(stitek);
