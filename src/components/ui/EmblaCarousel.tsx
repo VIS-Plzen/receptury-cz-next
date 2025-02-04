@@ -27,7 +27,7 @@ const Carousel: React.FC<PropType> = (props) => {
   } = usePrevNextButtons(emblaApi);
 
   return (
-    <div className="px-5 py-10">
+    <div className="py-10 md:px-5">
       <div className="tablet:px-3 relative">
         <div className="mx-3 overflow-hidden" ref={emblaRef}>
           <div className="flex" style={{ touchAction: "pan-y pinch-zoom" }}>
