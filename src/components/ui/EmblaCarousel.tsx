@@ -29,7 +29,7 @@ const Carousel: React.FC<PropType> = (props) => {
   return (
     <div className="py-10 md:px-5">
       <div className="tablet:px-3 relative">
-        <div className="mx-3 overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden md:mx-3" ref={emblaRef}>
           <div className="flex" style={{ touchAction: "pan-y pinch-zoom" }}>
             {slides.map((slide, index) => (
               <div
