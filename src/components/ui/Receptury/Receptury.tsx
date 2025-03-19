@@ -65,7 +65,7 @@ export default function Receptury({
   );
   const urlParamsSplitted = urlParams.split("&");
   const paramsObjects = Object.fromEntries(paramsHook);
-  const { addCard, removeCard, cardsLength } = useCard();
+  const { addCard, removeCard } = useCard();
 
   const cookie = new Cookies();
 
@@ -590,6 +590,7 @@ export default function Receptury({
 
       return objHolder;
     });
+    setRefresh(!refresh);
     setTimeout(() => {
       if (hodnota) {
         addCard(curr);

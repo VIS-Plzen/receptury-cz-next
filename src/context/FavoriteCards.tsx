@@ -19,7 +19,7 @@ interface Card {
 
 // Define context type
 interface CardContextType {
-  cards: Card[];
+  cards: Card[] | "hidden";
   addCard: (card: Card) => void;
   removeCard: (id: string) => void;
   setAllCards: (newCards: Card[]) => void;
@@ -31,12 +31,13 @@ const CardContext = createContext<CardContextType | null>(null);
 
 // Provider component
 export function CardProvider({ children }: { children: React.ReactNode }) {
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = useState<Card[] | "hidden">([]);
 
   // Function to add a new card
   const addCard = (card: Card) => {
     setCards((prev) => {
       // Check if a card with the same Identita already exists
+      if (prev === "hidden") return prev;
       const exists = prev.some(
         (existingCard) =>
           existingCard.Vlastnosti.Identita === card.Vlastnosti.Identita
@@ -52,7 +53,10 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
 
   // Function to remove a card by its Identita
   const removeCard = (id: string) => {
-    setCards((prev) => prev.filter((card) => card.Vlastnosti.Identita !== id));
+    setCards((prev) => {
+      if (prev === "hidden") return prev;
+      return prev.filter((card) => card.Vlastnosti.Identita !== id);
+    });
   };
 
   // Function to replace all cards
