@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: any) {
 
   async function readNew() {
     const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -69,7 +69,7 @@ export default async function Home({ searchParams }: any) {
 
   async function readFavorite() {
     const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -103,6 +103,11 @@ export default function Inspirace({
         ...prevData,
         [newSelected]: result.Vety,
       }));
+    } else {
+      setData((prevData: any) => ({
+        ...prevData,
+        [newSelected]: result,
+      }));
     }
     setLoading(false);
     setSelected(newSelected);
@@ -180,16 +185,18 @@ export default function Inspirace({
             setSelected={setNewSelected}
             className="block md:hidden"
           />
-          {data?.[selected] && data[selected].length !== 0 ? (
+          {data?.[selected] &&
+          data[selected]?.length !== 0 &&
+          data[selected].Status !== false ? (
             <Carousel
               options={{ align: "start", loop: true }}
               hasArrows
               slides={
-                data[selected] === "hidden"
+                data?.[selected] === "hidden"
                   ? Array.from({ length: 6 }, (_, index) => (
                       <RecipeCard key={index} isLoading={true} forceGrid />
                     ))
-                  : data[selected]?.map((card: any, index: number) => (
+                  : data?.[selected]?.map((card: any, index: number) => (
                       <RecipeCard
                         key={index}
                         isLoading={loading}

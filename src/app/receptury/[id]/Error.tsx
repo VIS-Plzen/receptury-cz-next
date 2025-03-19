@@ -8,7 +8,6 @@ export function ErrorPage({ shared }: { shared: boolean }) {
     setTimeout(() => {
       const el = document.getElementById("slt1");
       if (!el) return;
-      console.log("tu");
       el.textContent = "Nepodařilo se získat";
     }, 200);
   }, [shared]);

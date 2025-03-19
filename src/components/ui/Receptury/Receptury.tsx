@@ -978,7 +978,7 @@ function SideBar({
 }) {
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-0`}
     >
       <Container className="overflow-x-visible lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
@@ -1020,7 +1020,7 @@ function SideBar({
             </Button>
           </div>
           <div className="overflow-x-visible">
-            <div className="space-y-2 border-t border-primary-200 pb-4 pt-2">
+            <div className="space-y-2 border-primary-200 pb-4 max-lg:border-t max-lg:pt-2">
               <p className="font-bold">Skupina</p>
               <Selector
                 data={groupsData}

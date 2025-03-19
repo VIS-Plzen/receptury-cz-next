@@ -14,20 +14,17 @@ export async function POST(request: Request) {
   const { Sid, Funkce, Parametry } = await request.json();
 
   try {
-    const res = await fetch(
-      "https://test.receptury.adelis.cz/APIFrontend.aspx",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          Uzivatel: process.env.BE_USER,
-          Heslo: process.env.BE_PASSWORD,
-          SID: Sid,
-          Funkce: Funkce,
-          Parametry: [Parametry],
-        }),
-      }
-    );
+    const res = await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        Uzivatel: process.env.BE_USER,
+        Heslo: process.env.BE_PASSWORD,
+        SID: Sid,
+        Funkce: Funkce,
+        Parametry: [Parametry],
+      }),
+    });
 
     const data = await res.json();
     if (data.Result) {

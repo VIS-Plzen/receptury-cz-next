@@ -4,7 +4,7 @@ import { LogMe, Page } from "./Client";
 import { ErrorPage } from "./Error";
 
 async function readSome(id: string, token: string | undefined, paid: boolean) {
-  if (id === "test.receptury.adelis.cz") return null;
+  if (id === "receptury.adelis.cz") return null;
   const vlastnosti = paid
     ? []
     : [
@@ -21,7 +21,7 @@ async function readSome(id: string, token: string | undefined, paid: boolean) {
       ];
 
   const result = await (
-    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+    await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -55,7 +55,7 @@ async function readSome(id: string, token: string | undefined, paid: boolean) {
 
 async function readSomeByCode(code: string) {
   const result = await (
-    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+    await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

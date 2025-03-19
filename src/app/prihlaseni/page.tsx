@@ -103,7 +103,8 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        const expires = returnExpirationTime(2);
+        setHasNotice(null);
+        const expires = returnExpirationTime(24 * 30);
         cookies.set("token", res.token, { expires: expires, path: "/" });
         cookies.set("name", res.firstName + " " + res.lastName, {
           expires: expires,

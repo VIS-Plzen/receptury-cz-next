@@ -84,9 +84,9 @@ export default function Galerie({
 
   if (
     !images ||
-    ((images[0] === "" || images[0] === "test.receptury.adelis.cz/") &&
-      (images[1] === "" || images[1] === "test.receptury.adelis.cz/") &&
-      (images[2] === "" || images[2] === "test.receptury.adelis.cz/"))
+    ((images[0] === "" || images[0] === "receptury.adelis.cz/") &&
+      (images[1] === "" || images[1] === "receptury.adelis.cz/") &&
+      (images[2] === "" || images[2] === "receptury.adelis.cz/"))
   )
     return null;
 

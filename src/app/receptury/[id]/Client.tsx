@@ -64,12 +64,12 @@ export function Page({
 
   useEffect(() => {
     // přepíše text v liště na počet kolikrát jde ještě sdílená zobrazit
-    if (!shared) return;
+    if (!shared && shared !== 0) return;
     setTimeout(() => {
       const el = document.getElementById("slt1");
       if (!el) return;
       el.textContent = el.innerText.replace("%", shared.toString());
-    }, 200);
+    }, 50);
   }, [shared]);
 
   async function zmenStitek(
@@ -394,7 +394,7 @@ export function Kalkulacka({
                 key={"kfdr" + index}
                 className="border-t border-primary-300/60"
               >
-                <td className="py-3 font-bold print:py-0.5">
+                <td className="whitespace-nowrap py-3 font-bold print:py-0.5">
                   {calcResult} {row.MernaJednotka}
                 </td>
                 <td className="py-3 print:py-0.5">{row.NazevSuroviny}</td>

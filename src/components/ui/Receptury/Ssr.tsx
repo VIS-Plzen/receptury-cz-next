@@ -67,7 +67,7 @@ async function readSome(
 
   try {
     const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

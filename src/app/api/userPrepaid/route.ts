@@ -1,4 +1,4 @@
-import { coder, returnPaidTo } from "@/utils/shorties";
+import { cFalse, coder, returnPaidTo } from "@/utils/shorties";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -8,6 +8,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       Status: false,
       Chyba: { Kod: 1000, message: "Není vyplňen SID token." },
+      paidTo: cFalse,
     });
   }
 
@@ -23,10 +24,12 @@ export async function POST(request: Request) {
       }
     );
     const data = await res.json();
+
     if (!data.email)
       return NextResponse.json({
         Status: false,
         Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+        paidTo: cFalse,
       });
 
     const coderRes = coder(undefined, returnPaidTo(data), "long");
@@ -35,6 +38,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         Status: false,
         Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+        paidTo: cFalse,
       });
     }
     const response = NextResponse.json({
@@ -46,6 +50,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       Status: false,
       Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+      paidTo: cFalse,
     });
   }
 }
