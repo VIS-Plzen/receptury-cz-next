@@ -33,6 +33,9 @@ export default function DebugModal({
               </span>
             )}
             <span>
+              <b>Backend: </b> {process.env.NEXT_PUBLIC_RECEPTURY_URL}
+            </span>
+            <span>
               <b>Verze aplikace: {packageJson.version}</b>
             </span>
           </div>
