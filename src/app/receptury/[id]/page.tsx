@@ -86,19 +86,20 @@ async function readSomeByCode(code: string) {
   };
 }
 
-export default async function Home({
-  params,
-  searchParams,
-}: {
-  params: any;
-  searchParams: any;
-}) {
-  const headersList = headers();
+export default async function Home(
+  props: {
+    params: Promise<any>;
+    searchParams: Promise<any>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+  const headersList = await headers();
   const host = headersList.get("host");
   const protocol = headersList.get("x-forwarded-proto") || "http";
   const path = `${protocol}://${host}${params.path || ""}`;
 
-  const cookie = cookies();
+  const cookie = await cookies();
   const token = cookie.get("token")?.value;
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
 

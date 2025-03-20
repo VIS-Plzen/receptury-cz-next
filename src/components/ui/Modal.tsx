@@ -2,7 +2,7 @@
 import Container from "@/components/ui/Container";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import type { MutableRefObject } from "react";
 import { useEffect, useState } from "react";
 import { ArrowLeftAltIcon } from "../icons";

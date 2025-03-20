@@ -29,7 +29,7 @@ type Props = React.ComponentPropsWithRef<"button"> & {
     | "visibility"
     | "visibility-off"
     | undefined;
-  children?: React.ReactElement;
+  children?: React.ReactElement<any>;
   className?: string;
 };
 

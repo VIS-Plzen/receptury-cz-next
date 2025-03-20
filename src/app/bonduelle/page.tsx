@@ -1,3 +1,4 @@
+import { use } from "react";
 import { ArrowRightAltIcon } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
@@ -12,8 +13,9 @@ import Image from "next/image";
 import Katalog from "../Katalog";
 import { Partner } from "../receptury/[id]/Client";
 
-export default function Home({ searchParams }: any) {
-  const cookie = cookies();
+export default function Home(props: any) {
+  const searchParams = use(props.searchParams);
+  const cookie = use(cookies());
   const gridView = cookie.get("gridView")?.value ?? "true";
   const token = cookie.get("token")?.value;
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);

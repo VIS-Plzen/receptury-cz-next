@@ -1,5 +1,7 @@
 import { cn } from "@/utils/cn";
 
+import type { JSX } from "react";
+
 type Props<E extends React.ElementType = "h2"> = {
   children: React.ReactNode;
   as?: E | keyof JSX.IntrinsicElements;

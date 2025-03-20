@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: any) {
-  const cookie = cookies();
+  const cookie = await cookies();
   const token = cookie.get("token")?.value;
   const paid = await returnPaid();
   const name = cookie.get("name")?.value;

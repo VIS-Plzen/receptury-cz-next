@@ -64,7 +64,7 @@ export default function LogoNaseStrava({
       )}
     >
       <Logomark className="origin-right scale-90" />
-      <span className="block text-lg font-bold text-dark-purple min-[374px]:text-2xl">
+      <span className="block text-lg font-bold text-[#541348] min-[374px]:text-2xl">
         Naše strava od VIS Plzeň
       </span>
     </a>

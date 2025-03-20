@@ -1,10 +1,12 @@
+import { use } from "react";
 import { returnBetterDate } from "@/utils/dateWorker";
 import { coder, infiniteDate, useCoderAndCompareDates } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
-export default function Home({ searchParams }: any) {
-  const cookie = cookies();
+export default function Home(props: any) {
+  const searchParams = use(props.searchParams);
+  const cookie = use(cookies());
   const token = cookie.get("token")?.value;
   const paidCookie = cookie.get("paid")?.value;
   const paid = useCoderAndCompareDates(paidCookie);

@@ -3,14 +3,14 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { tv } from "tailwind-variants";
 import clsx from "clsx";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Dispatch, SetStateAction } from "react";
 import {
-  CancelIcon,
-  CheckIcon,
-  CloseIcon,
-  ErrorIcon,
-  HelpIcon,
+    CancelIcon,
+    CheckIcon,
+    CloseIcon,
+    ErrorIcon,
+    HelpIcon,
 } from "../icons";
 import Button from "./Button";
 

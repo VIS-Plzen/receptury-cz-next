@@ -10,8 +10,9 @@ export const metadata: Metadata = {
   description: "Desc",
 };
 
-export default async function Home({ searchParams }: any) {
-  const cookie = cookies();
+export default async function Home(props: any) {
+  const searchParams = await props.searchParams;
+  const cookie = await cookies();
   const gridView = cookie.get("gridView")?.value ?? "true";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
   const paid = useCoderAndCompareDates(cookie.get("paid")?.value);

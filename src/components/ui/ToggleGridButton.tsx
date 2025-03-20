@@ -1,6 +1,6 @@
 import { cn } from "@/utils/cn";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { CalendarViewMontsIcon, ListIcon } from "../icons";
 
 function ToggleGridButton({

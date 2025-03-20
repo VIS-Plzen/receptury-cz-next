@@ -3,11 +3,11 @@ import Checkbox from "@/components/forms/Checkbox";
 import MyCombobox from "@/components/forms/Combobox";
 import Radio from "@/components/forms/Radio";
 import {
-  CancelIcon,
-  CheckSmallIcon,
-  CloseIcon,
-  ExpandMoreIcon,
-  TuneIcon,
+    CancelIcon,
+    CheckSmallIcon,
+    CloseIcon,
+    ExpandMoreIcon,
+    TuneIcon,
 } from "@/components/icons";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
@@ -22,7 +22,7 @@ import { returnExpirationTime } from "@/utils/shorties";
 import { nazvy, suroviny } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import Cookies from "universal-cookie";

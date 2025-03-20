@@ -1,8 +1,8 @@
 // Not using Headless UI Disclosure component,
-// because it can't be properly animated even with framer-motion.
+// because it can't be properly animated even with motion/react.
 import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
-import { useId, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useId, useState, type JSX } from "react";
 
 import { CloseIcon } from "../icons";
 
