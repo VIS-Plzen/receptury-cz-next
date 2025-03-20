@@ -981,7 +981,7 @@ function SideBar({
     <div
       className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-0`}
     >
-      <Container className="overflow-x-visible lg:!px-0">
+      <Container className="overflow-x-visible lg:px-0!">
         <div className=" flex flex-row items-center justify-between lg:hidden">
           <Heading size="sm">Co hledáte?</Heading>
           <div className="flex space-x-8">

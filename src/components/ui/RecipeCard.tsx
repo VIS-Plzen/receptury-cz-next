@@ -138,7 +138,7 @@ function GridCardLayout({
       {/* LAYOUT SHIFT TADY - ZAKOMENTOVAT LABEL A BADGE RENDERER */}
       <div
         className={cn(
-          "flex h-44 flex-grow flex-col justify-between bg-white p-[16px]"
+          "flex h-44 grow flex-col justify-between bg-white p-[16px]"
         )}
       >
         <div className="line-clamp-3 text-sm font-bold">

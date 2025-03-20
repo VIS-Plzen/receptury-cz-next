@@ -549,7 +549,7 @@ export function Hero({
                 width={100}
               />
             ) : (
-              <span className="flex min-w-min items-center rounded-sm bg-primary-300/30 px-2 font-bold text-black">
+              <span className="flex min-w-min items-center rounded-xs bg-primary-300/30 px-2 font-bold text-black">
                 {currParner.title}
               </span>
             )}
@@ -583,7 +583,7 @@ export function Hero({
                 className={`
                       w-min flex-col items-center gap-1 justify-self-center text-center
                       ${icon.name === "favorite" ? "flex" : "hidden md:flex"}
-                      ${icon.name === "archive" && "!hidden"}
+                      ${icon.name === "archive" && "hidden!"}
                     `}
               >
                 <ButtonIcon
@@ -764,13 +764,13 @@ function Title({
 }) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:justify-between">
-      <Heading className="max-w-3xl print:!text-3xl">{title}</Heading>
+      <Heading className="max-w-3xl print:text-3xl!">{title}</Heading>
       <div className="right-5 top-5 grid max-w-xs grid-cols-3 gap-y-3 print:hidden md:max-w-md md:gap-x-5">
         {icons.map((icon, index) => (
           <div
             key={"kfii" + index}
             className={`flex flex-col items-center gap-1 text-center ${
-              icon.name === "archive" && "!hidden"
+              icon.name === "archive" && "hidden!"
             }`}
           >
             <ButtonIcon
@@ -982,10 +982,10 @@ export function Partner({
   return (
     <Container className="print:hidden">
       <div
-        className={`relative flex aspect-[9/10] max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 ${outterDivClasses[color]} md:aspect-[3/1] md:max-h-full md:flex-row md:items-center`}
+        className={`relative flex aspect-9/10 max-h-[450px] w-full flex-col overflow-hidden rounded-3xl border-2 ${outterDivClasses[color]} md:aspect-3/1 md:max-h-full md:flex-row md:items-center`}
       >
         <div
-          className={`absolute inset-0 bg-gradient-to-b ${innerDivClasses[color]} from-45% via-80% to-transparent sm:from-60% md:bg-gradient-to-r md:via-70% lg:from-55%`}
+          className={`absolute inset-0 bg-linear-to-b ${innerDivClasses[color]} from-45% via-80% to-transparent sm:from-60% md:bg-linear-to-r md:via-70% lg:from-55%`}
         />
         <div className="z-fixed-below mt-5 flex flex-col gap-y-1 pl-5 md:my-auto md:pl-10 lg:gap-y-5">
           {logo ? (
@@ -997,7 +997,7 @@ export function Partner({
               width={100}
             />
           ) : (
-            <span className="flex w-min items-center rounded-sm bg-white px-2 font-bold text-black">
+            <span className="flex w-min items-center rounded-xs bg-white px-2 font-bold text-black">
               {jmeno}
             </span>
           )}

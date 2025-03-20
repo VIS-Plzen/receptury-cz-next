@@ -55,9 +55,9 @@ export default function MyCombobox({
             <Combobox.Label className="sr-only">{label}</Combobox.Label>
             <Combobox.Input
               className={clsx(
-                "flex h-full w-full items-start justify-start rounded-xl border-2 border-primary-300 bg-primary-50 outline-none ring-0",
+                "flex h-full w-full items-start justify-start rounded-xl border-2 border-primary-300 bg-primary-50 outline-hidden ring-0",
                 "py-2.5 pl-9 pr-5",
-                "focus:outline-none focus:ring-0",
+                "focus:outline-hidden focus:ring-0",
                 "transition-colors duration-200",
                 isDisabled && "cursor-not-allowed",
                 error && "ring-1 ring-error focus:ring-2"
@@ -115,7 +115,7 @@ export default function MyCombobox({
               onChange(query);
             }}
           >
-            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-x-hidden rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-x-hidden rounded-xl border-2 border-primary-300 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:text-sm">
               {filteredPages > 0 && offset > 0 && (
                 <button
                   className="w-full border-b border-gray-400 text-center"

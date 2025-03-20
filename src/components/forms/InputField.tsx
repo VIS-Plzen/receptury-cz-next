@@ -74,7 +74,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
           type={type}
           name={name}
           className={cn(
-            "mb-4 block w-full appearance-none px-3 py-2.5 focus:outline-none",
+            "mb-4 block w-full appearance-none px-3 py-2.5 focus:outline-hidden",
             "rounded-lg border-2 border-primary-200",
             variantClasses[variant],
             "text-base text-gray-900",

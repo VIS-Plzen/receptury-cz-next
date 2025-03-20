@@ -107,7 +107,7 @@ export default function Home({ searchParams }: any) {
               <a href="">Zobrazit více</a>
             </Button>
           </div>
-          <div className="mx-auto flex h-[200px] flex-shrink-0 rounded-2xl md:mx-0 md:mb-auto md:h-[275px] md:w-2/6 lg:h-[350px] lg:w-3/6">
+          <div className="mx-auto flex h-[200px] shrink-0 rounded-2xl md:mx-0 md:mb-auto md:h-[275px] md:w-2/6 lg:h-[350px] lg:w-3/6">
             <Image
               src={img}
               alt=""

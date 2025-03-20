@@ -82,7 +82,7 @@ const PasswordField = forwardRef<HTMLInputElement, Props>(
               "rounded-lg",
               "text-base text-gray-900",
               variantClasses[variant],
-              "focus:outline-none",
+              "focus:outline-hidden",
               "placeholder:text-gray-700/60",
               "transition duration-150",
               props.disabled && "pointer-events-none"

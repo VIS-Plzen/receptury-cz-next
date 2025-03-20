@@ -65,7 +65,7 @@ function Katalog() {
         <Carousel
           hasArrows
           options={{ align: "start" }}
-          className="flex w-[calc(100%-64px)] justify-center !overflow-visible"
+          className="flex w-[calc(100%-64px)] justify-center overflow-visible!"
           slidesWidth="flex-slides1 min-[500px]:flex-slides2 min-[768px]:flex-slides3 min-[1024px]:flex-slides4"
           slides={produkty.map((produkt, index) => (
             <a

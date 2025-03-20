@@ -58,7 +58,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             }}
             tabIndex={isDisabled ? -1 : undefined}
             className={clsx(
-              "form-checkbox h-[1.375rem] w-[1.375rem] rounded-md border-0 border-none outline-none",
+              "form-checkbox h-[1.375rem] w-[1.375rem] rounded-md border-0 border-none outline-hidden",
               "bg-gray-75 dark:bg-gray-975",
               "checked:bg-primary checked:text-primary dark:checked:bg-primary dark:checked:text-primary/50",
               isDisabled

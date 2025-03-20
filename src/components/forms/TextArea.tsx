@@ -52,7 +52,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           id={generatedId}
           name={name}
           className={cn(
-            "block min-h-[80px] w-full resize-y appearance-none px-3 py-2.5 focus:outline-none",
+            "block min-h-[80px] w-full resize-y appearance-none px-3 py-2.5 focus:outline-hidden",
             "rounded-lg border-2 border-primary-200",
             "bg-white text-base text-gray-900",
             "placeholder:text-gray-700/60",

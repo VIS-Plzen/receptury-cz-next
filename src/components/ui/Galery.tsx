@@ -216,7 +216,7 @@ export default function Galerie({
         {/* {imageOpen !== false && (
           <div
             className={`fixed inset-0 z-fixed flex gap-y-16 bg-black/90 text-white md:flex-col ${
-              fullImageMode && "!p-0"
+              fullImageMode && "p-0!"
             }`}
           >
             <MainImage image={images[imageOpen]} />
