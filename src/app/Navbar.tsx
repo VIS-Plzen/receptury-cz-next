@@ -629,3 +629,13 @@ export default function Navbar({
     </div>
   );
 }
+
+export function LogoutComponent() {
+  const router = useRouter();
+  useEffect(() => {
+    logOut();
+    router.push("/prihlaseni");
+    router.refresh();
+  }, []);
+  return null;
+}

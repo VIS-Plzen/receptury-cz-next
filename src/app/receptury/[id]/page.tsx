@@ -4,7 +4,7 @@ import { LogMe, Page } from "./Client";
 import { ErrorPage } from "./Error";
 
 async function readSome(id: string, token: string | undefined, paid: boolean) {
-  if (id === "receptury.adelis.cz") return null;
+  if (id === process.env.NEXT_PUBLIC_URL_BLOCK) return null;
   const vlastnosti = paid
     ? []
     : [

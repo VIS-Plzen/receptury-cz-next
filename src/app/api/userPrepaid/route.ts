@@ -23,12 +23,13 @@ export async function POST(request: Request) {
         }),
       }
     );
+
     const data = await res.json();
 
     if (!data.email)
       return NextResponse.json({
         Status: false,
-        Chyba: { Kod: 1000, message: "Chybně odchyceno v API" },
+        Chyba: { Kod: data.data.status, message: data.message },
         paidTo: cFalse,
       });
 
