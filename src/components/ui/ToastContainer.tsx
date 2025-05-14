@@ -43,7 +43,7 @@ export function ToastContainer() {
         }
         return (
           <Toast key={id} {...props} intent={intent}>
-            <div className="col-span-1">
+            <div className="col-span-1 print:hidden">
               {!icon ? (
                 intent === "error" ? (
                   <div className="text-error-400">
