@@ -101,7 +101,7 @@ export default function Home() {
         </Heading>
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex flex-col gap-y-5">
-            <Column title="Tým Knihovna Receptur.cz">
+            <Column title="Receptury.cz">
               <div className="flex flex-col">
                 <span className="font-semibold">Sekretariát</span>
                 <StyledLink
@@ -155,44 +155,39 @@ export default function Home() {
           </div>
           <Column title="Vydavatel">
             <div className="font-bold">
-              <p>VIS Plzeň, s.r.o</p>
+              <p>Jídelny.cz, s.r.o</p>
               <p>Farského 638/14, 326 00 Plzeň</p>
             </div>
             <div>
               <p>IČO:</p>
-              <p className="font-bold">45330344</p>
+              <p className="font-bold">26348179</p>
             </div>
             <div>
               <p>DIČ:</p>
-              <p className="font-bold">CZ45330344</p>
+              <p className="font-bold">CZ26348179</p>
             </div>
             <div>
               <p>Obchodní resjstřík:</p>
-              <p className="font-bold">C 1561/KSPL Krajský soud v Plzni</p>
+              <p className="font-bold">C 14497/KSPL Krajský soud v Plzni</p>
             </div>
             <div>
               <p>Číslo účtu:</p>
-              <p className="font-bold">2700627073/2010 (Fio banka, a.s.)</p>
+              <p className="font-bold">2700327409/2010 (Fio banka, a.s.)</p>
             </div>
             <div>
               <p>IBAN účtu:</p>
-              <p className="font-bold">CZ90 2010 0000 0027 0062 7073</p>
+              <p className="font-bold">CZ54 2010 0000 0027 0032 7409</p>
             </div>
             <div>
               <p>BIC kód:</p>
               <p className="font-bold">FIOBCZPPXXX</p>
             </div>
           </Column>
-          <Column title="Produkce" className="hidden md:block">
-            <Person
-              name="Lukáš Doubek"
-              job="projektový manažer"
-              email="doubek@visplzen.cz"
-            />
+          <Column title="Náš tým" className="hidden md:block">
             <Person
               name="Tereza Ottová"
               job="administrace přihlášek, fakturace"
-              email="ottova@visplzen.cz"
+              email="ottova@jidelny.cz"
               tel="+420 720 962 105"
             />
           </Column>
