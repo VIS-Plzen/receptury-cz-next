@@ -550,6 +550,8 @@ export default function Navbar({
             <span className="hidden text-2xl md:block">/</span>
             <a
               href="https://www.jidelny.cz"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden rounded-lg md:block"
             >
               <LogoJidelny className="h-8 w-auto bg-transparent" />
