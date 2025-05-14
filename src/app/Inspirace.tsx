@@ -149,7 +149,7 @@ export default function Inspirace({
   return (
     <div className={cn(className)}>
       <Container>
-        <div className="flex flex-row items-center justify-between">
+        <div className="mb-2 flex flex-row items-center justify-between">
           <Heading as="h1" size="lg">
             Inspirace na vaření
           </Heading>

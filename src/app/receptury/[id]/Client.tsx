@@ -204,6 +204,7 @@ export function Page({
             }}
             terapeut={{
               text: card.VyjadreniNT,
+              jmeno: card.ZodpovednyNTUzivatel,
               badges: [
                 card.Dieta1 === "Ano" && "Bezlepková",
                 card.Dieta2 === "Ano" && "Bezmléčná",
@@ -694,7 +695,7 @@ export function Informations({
   };
   hmotnost: { porce: string; masa: string; omacky: string };
   alergeny: { alergeny: string[]; text: string };
-  terapeut: { text: string; badges: any };
+  terapeut: { text: string; badges: any; jmeno: string };
   skladba: { polevka: string; priloha: string; doplnek: string };
   veta: number;
   stitky: string[];
@@ -880,7 +881,7 @@ function Alergeny({
   alergeny: { text: string; alergeny: string[] };
 }) {
   return (
-    <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+    <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Alergeny</Heading>
       <div className="flex flex-row gap-x-3">
         {alergeny.alergeny.map((alergen, index) => (
@@ -899,7 +900,7 @@ function Alergeny({
 function Skladba({ skladba }: { skladba: any }) {
   if (!skladba.polevka && !skladba.priloha && !skladba.doplnek) return null;
   return (
-    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Doporučení ke skladbě</Heading>
       <p>
         <span className="font-bold text-black">Doporučená polévka: </span>
@@ -919,7 +920,7 @@ function Skladba({ skladba }: { skladba: any }) {
 function Terapeut({
   terapeut,
 }: {
-  terapeut: { text: string; badges: string[] };
+  terapeut: { text: string; badges: string[]; jmeno: string };
 }) {
   let badgeCounter = 0;
   if (!terapeut.text && terapeut.badges.length === 0) return null;
@@ -942,6 +943,11 @@ function Terapeut({
           );
         })}
       </div>
+      {terapeut.jmeno && (
+        <p>
+          Jméno nutričního terapeuta: <strong>{terapeut.jmeno}</strong>
+        </p>
+      )}
     </div>
   );
 }

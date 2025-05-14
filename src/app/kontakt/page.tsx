@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <Kontakt />
-      <FAQ />
+      {/* <FAQ /> */}
     </div>
   );
   function Kontakt() {
