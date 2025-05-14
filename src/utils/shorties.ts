@@ -134,6 +134,9 @@ export function coder(
   const secretKey = process.env.CDR_KEY;
   if (!secretKey) return { Status: false, error: "No secret key in ENV" };
 
+  // Ensure the key is the right length for AES-256-CBC (32 bytes)
+  const fixedKey = crypto.createHash('sha256').update(String(secretKey)).digest().slice(0, 32);
+
   let currTime =
     length === "short"
       ? new Date().getTime()
@@ -141,8 +144,12 @@ export function coder(
   currTime = Math.floor(currTime / 1000);
   if (key) {
     try {
-      const decipher = crypto.createDecipher("aes-256-cbc", secretKey);
-      let decryptedData = decipher.update(key, "hex", "utf8");
+      // Extract IV from the beginning of the encrypted data
+      const iv = Buffer.from(key.substring(0, 32), 'hex');
+      const encryptedText = key.substring(32);
+      
+      const decipher = crypto.createDecipheriv("aes-256-cbc", fixedKey, iv);
+      let decryptedData = decipher.update(encryptedText, "hex", "utf8");
       decryptedData += decipher.final("utf8");
       const splitted = decryptedData.split("&");
       const incTime = parseInt(splitted[splitted.length - 1]);
@@ -155,7 +162,7 @@ export function coder(
         );
         return { Status: true, data: decryptedData };
       }
-    } catch {
+    } catch (error) {
       return { Status: false, error: "Wrong key format." };
     }
   } else {
@@ -164,10 +171,16 @@ export function coder(
     }
 
     dataString += "&" + currTime;
-    const cipher = crypto.createCipher("aes-256-cbc", secretKey);
+    
+    // Generate a random IV
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv("aes-256-cbc", fixedKey, iv);
     let encryptedData = cipher.update(dataString, "utf8", "hex");
     encryptedData += cipher.final("hex");
-    return { Status: true, data: encryptedData };
+    
+    // Prepend the IV to the encrypted data
+    const result = iv.toString('hex') + encryptedData;
+    return { Status: true, data: result };
   }
 }
 
