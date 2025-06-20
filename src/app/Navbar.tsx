@@ -437,7 +437,7 @@ function TouchMenu({
                   </li>
                 </ul>
               )}
-              <div className="z-offcanvas-above mt-20 flex items-center gap-x-3 gap-x-6 md:hidden">
+              <div className="z-offcanvas-above mt-20 flex items-center gap-x-3 md:hidden">
                 <Link href="/" className="relative rounded-lg">
                   <Logo className="h-8 w-auto" />
                 </Link>
@@ -473,7 +473,7 @@ export default function Navbar({
 
   // Navigation bar state
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  // const [isVisible, setIsVisible] = useState(true);
 
   const [tokenIn, setTokenIn] = useState(token);
   const [paidIn, setPaidIn] = useState(paid);
@@ -494,24 +494,24 @@ export default function Navbar({
   // Use useScroll hook from framer-motion
   const { scrollY } = useScroll();
 
-  useEffect(() => {
-    return scrollY.on("change", (y) => {
-      const current = y;
-      const prev = scrollY.getPrevious();
+  // useEffect(() => {
+  //   return scrollY.on("change", (y) => {
+  //     const current = y;
+  //     const prev = scrollY.getPrevious();
 
-      if (current > thresholdScrolledPx) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+  //     if (current > thresholdScrolledPx) {
+  //       setIsScrolled(true);
+  //     } else {
+  //       setIsScrolled(false);
+  //     }
 
-      if (current > thresholHideVisiblePx && current > prev) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-    });
-  }, [scrollY, setIsVisible]);
+  //     if (current > thresholHideVisiblePx && current > prev) {
+  //       setIsVisible(false);
+  //     } else {
+  //       setIsVisible(true);
+  //     }
+  //   });
+  // }, [scrollY, setIsVisible]);
 
   async function addToCard() {
     setCartState("loading");
@@ -550,6 +550,8 @@ export default function Navbar({
             <span className="hidden text-2xl md:block">/</span>
             <a
               href="https://www.jidelny.cz"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden rounded-lg md:block"
             >
               <LogoJidelny className="h-8 w-auto bg-transparent" />
@@ -636,6 +638,7 @@ export function LogoutComponent() {
     logOut();
     router.push("/prihlaseni");
     router.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return null;
 }

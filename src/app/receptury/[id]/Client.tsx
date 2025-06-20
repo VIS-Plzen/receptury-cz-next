@@ -1,4 +1,5 @@
 "use client";
+
 import { ArrowLeftAltIcon } from "@/components/icons";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
@@ -11,7 +12,9 @@ import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
 import Image from "next/image";
 import Link from "next/link";
+import { useQRCode } from "next-qrcode";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 const icons: {
   name:
@@ -715,7 +718,7 @@ export function Informations({
   }, [refresh]);
 
   return (
-    <Container className="flex flex-col gap-5 sm:gap-7">
+    <Container className="flex flex-col justify-start gap-5 print:h-[99%] print:min-h-[96vh] sm:gap-7">
       <Title
         stitky={stitky}
         title={title}
@@ -741,6 +744,9 @@ export function Informations({
           </div>
           <Terapeut terapeut={terapeut} />
         </div>
+      </div>
+      <div className="mt-auto hidden justify-self-end print:block">
+        <CurrentUrlQRCode />
       </div>
     </Container>
   );
@@ -1048,4 +1054,42 @@ export function Partner({
 export function LogMe({ msg }: { msg: any }) {
   console.log(msg);
   return null;
+}
+
+export function CurrentUrlQRCode(props: React.ComponentPropsWithRef<"div">) {
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const { SVG } = useQRCode();
+
+  useEffect(() => {
+    setMounted(true);
+    setCurrentUrl(window.location.href);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <div
+      {...props}
+      className={clsx(
+        "flex flex-col items-center justify-start gap-1",
+        props.className
+      )}
+    >
+      <SVG
+        text={currentUrl}
+        options={{
+          errorCorrectionLevel: "M",
+          margin: 3,
+          scale: 4,
+          width: 100,
+          color: {
+            dark: "#000",
+            light: "#FFF",
+          },
+        }}
+      />
+      <p className="text-center text-xs">{currentUrl}</p>
+    </div>
+  );
 }
