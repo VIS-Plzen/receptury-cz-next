@@ -923,7 +923,8 @@ function Terapeut({
   terapeut: { text: string; badges: string[]; jmeno: string };
 }) {
   let badgeCounter = 0;
-  if (!terapeut.text && terapeut.badges.length === 0) return null;
+  if (!terapeut.text && terapeut.badges.length === 0 && !terapeut.jmeno)
+    return null;
 
   return (
     <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
