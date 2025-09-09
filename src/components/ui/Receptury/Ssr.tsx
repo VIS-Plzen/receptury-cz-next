@@ -502,13 +502,13 @@ export default async function Ssr({
           {
             title: "Bidfood",
             name: "bidfood",
-            backend: "1",
+            backend: "20",
             checked: false,
           },
           {
             title: "Bonduelle",
             name: "bonduelle",
-            backend: "2",
+            backend: "21",
             checked: false,
           },
         ],

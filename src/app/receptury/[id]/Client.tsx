@@ -10,11 +10,11 @@ import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
+import clsx from "clsx";
+import { useQRCode } from "next-qrcode";
 import Image from "next/image";
 import Link from "next/link";
-import { useQRCode } from "next-qrcode";
 import { useEffect, useState } from "react";
-import clsx from "clsx";
 
 const icons: {
   name:
@@ -157,11 +157,12 @@ export function Page({
   }
 
   const currParner =
-    card.Receptar === "1"
+    card.Receptar === "20"
       ? partners[0]
-      : card.Receptar === "2"
+      : card.Receptar === "21"
         ? partners[1]
         : "";
+
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 print:py-5 md:pb-36 md:pt-10">
       <Hero
