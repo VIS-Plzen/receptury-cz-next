@@ -13,7 +13,7 @@ import { toast } from "@/hooks/useToast";
 import clsx from "clsx";
 import { useQRCode } from "next-qrcode";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const icons: {
@@ -490,6 +490,8 @@ export function Hero({
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   const [, setRefreshIn] = useState(refresh);
+  const router = useRouter();
+
   let badgeCounter = 0;
 
   useEffect(() => {
@@ -514,6 +516,13 @@ export function Hero({
     checkImage();
   }, [image]);
 
+  function goBack() {
+    const referrer = document.referrer;
+    const fromHome = referrer.includes(window.location.origin + "/");
+    if (fromHome) router.back();
+    else router.push("/");
+  }
+
   return (
     <Container className="print:hidden">
       <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
@@ -535,10 +544,10 @@ export function Hero({
             asChild
             hoverEffect="none"
           >
-            <Link href="/">
+            <button onClick={goBack}>
               <ArrowLeftAltIcon />
               Zpět na hlavní stránku
-            </Link>
+            </button>
           </StyledLink>
           <div
             className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
