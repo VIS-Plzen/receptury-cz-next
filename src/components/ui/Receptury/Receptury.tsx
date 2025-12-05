@@ -115,131 +115,131 @@ export default function Receptury({
         backend?: string;
       }[];
     }[] = [
-      {
-        title: "Obecné",
-        name: "obecne",
-        backend: "Obecne",
-        options: [
-          {
-            title: "Vše",
-            name: "vse",
-            backend: "",
-            checked: false,
-          },
-          {
-            title: "Moje oblíbené",
-            name: "moje",
-            backend: "Oblíbené",
-            checked: false,
-          },
-          {
-            title: "Nutričně ověřeno",
-            name: "nutricni",
-            backend: "SchvalenoNT",
-            checked: false,
-          },
-          {
-            title: "Stáhnout do skladu",
-            name: "sklad",
-            backend: "MSklad",
-            checked: false,
-          },
-          {
-            title: "Videoreceptury",
-            name: "videoreceptury",
-            backend: "Video",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Speciální strava",
-        name: "special",
-        backend: "Dieta",
-        options: [
-          {
-            title: "Bezlepková",
-            name: "bezlepkova",
-            backend: "Dieta1",
-            checked: false,
-          },
-          {
-            title: "Bezmléčná",
-            name: "bezmlecna",
-            backend: "Dieta2",
-            checked: false,
-          },
-          {
-            title: "Šetřící",
-            name: "setrici",
-            backend: "Dieta3",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Způsob přípravy",
-        name: "priprava",
-        backend: "TepelnaUprava",
-        options: [
-          {
-            title: "Vařené",
-            name: "varene",
-            backend: "Vařené",
-            checked: false,
-          },
-          {
-            title: "Dušené",
-            name: "dusene",
-            backend: "Dušené",
-            checked: false,
-          },
-          {
-            title: "Pečené",
-            name: "pecene",
-            backend: "Pečené",
-            checked: false,
-          },
-          {
-            title: "Zapečené",
-            name: "zapecene",
-            backend: "Zapečené",
-            checked: false,
-          },
-          {
-            title: "Smažené",
-            name: "smazene",
-            backend: "Smažené",
-            checked: false,
-          },
-          {
-            title: "Ostatní",
-            name: "ostatni",
-            backend: "Ostatní",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Partner",
-        name: "partner",
-        backend: "Receptar",
-        options: [
-          {
-            title: "Bidfood",
-            name: "bidfood",
-            backend: "20",
-            checked: false,
-          },
-          {
-            title: "Bonduelle",
-            name: "bonduelle",
-            backend: "21",
-            checked: false,
-          },
-        ],
-      },
-    ];
+        {
+          title: "Obecné",
+          name: "obecne",
+          backend: "Obecne",
+          options: [
+            {
+              title: "Vše",
+              name: "vse",
+              backend: "",
+              checked: false,
+            },
+            {
+              title: "Moje oblíbené",
+              name: "moje",
+              backend: "Oblíbené",
+              checked: false,
+            },
+            {
+              title: "Nutričně ověřeno",
+              name: "nutricni",
+              backend: "SchvalenoNT",
+              checked: false,
+            },
+            {
+              title: "Stáhnout do skladu",
+              name: "sklad",
+              backend: "MSklad",
+              checked: false,
+            },
+            {
+              title: "Videoreceptury",
+              name: "videoreceptury",
+              backend: "Video",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Speciální strava",
+          name: "special",
+          backend: "Dieta",
+          options: [
+            {
+              title: "Bezlepková",
+              name: "bezlepkova",
+              backend: "Dieta1",
+              checked: false,
+            },
+            {
+              title: "Bezmléčná",
+              name: "bezmlecna",
+              backend: "Dieta2",
+              checked: false,
+            },
+            {
+              title: "Šetřící",
+              name: "setrici",
+              backend: "Dieta3",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Způsob přípravy",
+          name: "priprava",
+          backend: "TepelnaUprava",
+          options: [
+            {
+              title: "Vařené",
+              name: "varene",
+              backend: "Vařené",
+              checked: false,
+            },
+            {
+              title: "Dušené",
+              name: "dusene",
+              backend: "Dušené",
+              checked: false,
+            },
+            {
+              title: "Pečené",
+              name: "pecene",
+              backend: "Pečené",
+              checked: false,
+            },
+            {
+              title: "Zapečené",
+              name: "zapecene",
+              backend: "Zapečené",
+              checked: false,
+            },
+            {
+              title: "Smažené",
+              name: "smazene",
+              backend: "Smažené",
+              checked: false,
+            },
+            {
+              title: "Ostatní",
+              name: "ostatni",
+              backend: "Ostatní",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Partner",
+          name: "partner",
+          backend: "Receptar",
+          options: [
+            {
+              title: "Bidfood",
+              name: "bidfood",
+              backend: "20",
+              checked: false,
+            },
+            {
+              title: "Bonduelle",
+              name: "bonduelle",
+              backend: "21",
+              checked: false,
+            },
+          ],
+        },
+      ];
     // Načte hodnoty z URL
     urlParamsSplitted.forEach((param) => {
       const [key, values] = splitUrlParams(param);
@@ -359,7 +359,7 @@ export default function Receptury({
     setCancelDisabled(true);
     setSaveDisabled(false);
     setRefresh(!refresh);
-    getDataAndSetQuery(pageState);
+    getDataAndSetQuery();
   }
 
   function updateCombobox(index: number, value: string) {
@@ -373,9 +373,9 @@ export default function Receptury({
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
-  async function getDataAndSetQuery(newPage: number | undefined) {
+  async function getDataAndSetQuery(newPage?: number) {
     setLoading(true);
-    const page = newPage ? newPage : pageState;
+    const page = newPage ? newPage : 1;
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -431,6 +431,7 @@ export default function Receptury({
 
     setSaveDisabled(true);
     setLoading(false);
+    setPageState(page);
     return setRefresh(!refresh);
   }
 
@@ -544,11 +545,10 @@ export default function Receptury({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
-            ? "mít aktivní předplacené členství."
-            : "být přihlášen a mít předplacené členství."
-        }`,
+        title: `Pro použití této funkce je potřeba ${logged
+          ? "mít aktivní předplacené členství."
+          : "být přihlášen a mít předplacené členství."
+          }`,
       });
     }
     const result = await (
@@ -634,7 +634,7 @@ export default function Receptury({
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={() => {
             setSideBarOpen(false);
-            getDataAndSetQuery(pageState);
+            getDataAndSetQuery();
           }}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
@@ -734,6 +734,7 @@ function Comboboxes({
           options={combo.options}
           selectedOption={combo.value}
           onChange={(value: string) => {
+            value = value.trim();
             updateCombobox(index, value);
             getData();
           }}

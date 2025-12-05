@@ -1,5 +1,5 @@
 import { returnBetterDate } from "@/utils/dateWorker";
-import { coder, infiniteDate, useCoderAndCompareDates } from "@/utils/shorties";
+import { codeAndCompareDates, coder, infiniteDate } from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
@@ -7,7 +7,7 @@ export default function Home({ searchParams }: any) {
   const cookie = cookies();
   const token = cookie.get("token")?.value;
   const paidCookie = cookie.get("paid")?.value;
-  const paid = useCoderAndCompareDates(paidCookie);
+  const paid = codeAndCompareDates(paidCookie);
   const paidCoder = coder(paidCookie);
   const paidToDate = paidCoder.Status
     ? paidCoder.data === infiniteDate

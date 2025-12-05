@@ -38,13 +38,12 @@ export default async function RootLayout({ children }: any) {
     ).json();
     return [res.Status, res.paidTo];
   }
-
   return (
     <html lang="cs">
       <body
         className={`overflow-x-hidden bg-primary-50 font-sans text-gray-700 selection:bg-primary/80 selection:text-primary-50 ${nunito.variable}`}
       >
-        {!logged && token ? (
+        {(!logged && token) ? (
           <LogoutComponent />
         ) : (
           <Providers>

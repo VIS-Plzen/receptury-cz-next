@@ -16,14 +16,14 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 function Page() {
   const [hasNotice, setHasNotice] = useState<null | {
     variant:
-      | "info"
-      | "success"
-      | "warning"
-      | "error"
-      | "info-solid"
-      | "success-solid"
-      | "warning-solid"
-      | "error-solid";
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "info-solid"
+    | "success-solid"
+    | "warning-solid"
+    | "error-solid";
     message: string;
   }>(null);
 
@@ -89,9 +89,9 @@ function Page() {
       setHasNotice(
         res.success == true
           ? {
-              variant: "success-solid",
-              message: "Úspěšně registrováno, potvrzovací email byl odeslán.",
-            }
+            variant: "success-solid",
+            message: "Úspěšně registrováno, potvrzovací email byl odeslán.",
+          }
           : { variant: "error-solid", message: res.message }
       );
       actions.setSubmitting(false);

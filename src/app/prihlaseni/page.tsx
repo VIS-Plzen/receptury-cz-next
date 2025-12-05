@@ -53,14 +53,14 @@ export default function Page() {
   }
   const [hasNotice, setHasNotice] = useState<null | {
     variant:
-      | "info"
-      | "success"
-      | "warning"
-      | "error"
-      | "info-solid"
-      | "success-solid"
-      | "warning-solid"
-      | "error-solid";
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "info-solid"
+    | "success-solid"
+    | "warning-solid"
+    | "error-solid";
     message: string;
   }>(returnInitNotice);
 
@@ -163,7 +163,9 @@ export default function Page() {
           ></PasswordField>
           <div className="flex flex-col-reverse items-end border-b border-primary-200 md:flex-row md:items-center md:justify-between">
             {/* redirect to jidelny.cz for password reset*/}
-            <StyledLink href="https://jidelny.cz/profil/zapomenute-heslo/?redirectAfter=https://receptury.cz/password-reset-complete">
+            <StyledLink
+              href={`${process.env.NEXT_PUBLIC_JIDELNY_URL}/profil/zapomenute-heslo?redirectAfter=${process.env.NEXT_PUBLIC_BASE_URL}`}
+            >
               Zapomenuté heslo?
             </StyledLink>
             <Button

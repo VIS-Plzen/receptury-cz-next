@@ -31,6 +31,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         className={cn(
           "relative my-3 flex w-full flex-col items-start justify-start gap-1",
           props.disabled && "cursor-not-allowed opacity-70",
+          (props.disabled || props.readOnly) && "pointer-events-none",
           className
         )}
       >
@@ -59,8 +60,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
             "focus:border-primary focus:ring-primary/50",
             "transition duration-150",
             errorText &&
-              "border-error-500/70 focus:border-error-600 focus:ring-error-600/50",
-            props.disabled && "pointer-events-none"
+            "border-error-500/70 focus:border-error-600 focus:ring-error-600/50",
+            (props.disabled || props.readOnly) && "pointer-events-none"
           )}
           {...props}
         />

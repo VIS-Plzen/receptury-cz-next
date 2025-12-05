@@ -10,6 +10,7 @@ import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
+import { getProxiedImageUrl } from '@/utils/shorties';
 import clsx from "clsx";
 import { useQRCode } from "next-qrcode";
 import Image from "next/image";
@@ -18,33 +19,33 @@ import { useEffect, useState } from "react";
 
 const icons: {
   name:
-    | "archive"
-    | "calendar-view-months"
-    | "downloading"
-    | "favorite-fill"
-    | "favorite"
-    | "list"
-    | "print"
-    | "share";
+  | "archive"
+  | "calendar-view-months"
+  | "downloading"
+  | "favorite-fill"
+  | "favorite"
+  | "list"
+  | "print"
+  | "share";
   label: string;
 }[] = [
-  {
-    name: "favorite",
-    label: "oblíbené",
-  },
-  {
-    name: "print",
-    label: "tisk",
-  },
-  {
-    name: "archive",
-    label: "MSklad",
-  },
-  {
-    name: "share",
-    label: "Sdílet",
-  },
-];
+    {
+      name: "favorite",
+      label: "oblíbené",
+    },
+    {
+      name: "print",
+      label: "tisk",
+    },
+    {
+      name: "archive",
+      label: "MSklad",
+    },
+    {
+      name: "share",
+      label: "Sdílet",
+    },
+  ];
 
 export function Page({
   card,
@@ -64,7 +65,6 @@ export function Page({
   shared?: number | false;
 }) {
   const [refresh, setRefresh] = useState(false);
-
   useEffect(() => {
     // přepíše text v liště na počet kolikrát jde ještě sdílená zobrazit
     if (!shared && shared !== 0) return;
@@ -83,11 +83,10 @@ export function Page({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
-            ? "mít aktivní předplacené členství."
-            : "být přihlášen a mít předplacené členství."
-        }`,
+        title: `Pro použití této funkce je potřeba ${logged
+          ? "mít aktivní předplacené členství."
+          : "být přihlášen a mít předplacené členství."
+          }`,
       });
     }
     const result = await (
@@ -126,11 +125,10 @@ export function Page({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
-            ? "mít předplacené členství."
-            : "být přihlášen a mít předplacené členství."
-        }`,
+        title: `Pro použití této funkce je potřeba ${logged
+          ? "mít předplacené členství."
+          : "být přihlášen a mít předplacené členství."
+          }`,
       });
     }
     const res = await (
@@ -240,9 +238,9 @@ export function Page({
               img={currParner.img}
               color={
                 currParner.title.toLocaleLowerCase() as
-                  | "default"
-                  | "bidfood"
-                  | "bonduelle"
+                | "default"
+                | "bidfood"
+                | "bonduelle"
               }
               logo={currParner.logo}
               hasButton
@@ -290,7 +288,7 @@ export function Kalkulacka({
     porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
-      NazevSuroviny: string;
+      Upresneni: string;
       MernaJednotka: string;
     }[];
   };
@@ -402,7 +400,7 @@ export function Kalkulacka({
                 <td className="whitespace-nowrap py-3 font-bold print:py-0.5">
                   {calcResult} {row.MernaJednotka}
                 </td>
-                <td className="py-3 print:py-0.5">{row.NazevSuroviny}</td>
+                <td className="py-3 print:py-0.5">{row.Upresneni}</td>
               </tr>
             );
           })}
@@ -502,12 +500,20 @@ export function Hero({
     if (!image) return;
     const checkImage = async () => {
       try {
-        const response = await fetch(image);
+        const proxiedUrl = getProxiedImageUrl(image);
+        if (!proxiedUrl) {
+          setIsValidImage(false);
+          return;
+        }
+        const response = await fetch(proxiedUrl);
         const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.startsWith("image")) {
+        if (response.ok && contentType && contentType.startsWith("image")) {
+          setIsValidImage(true);
+        } else {
           setIsValidImage(false);
         }
       } catch (error) {
+        console.log(image);
         setIsValidImage(false);
         console.error("Error checking image:", error);
       }
@@ -529,10 +535,11 @@ export function Hero({
         <div className="relative flex items-center justify-center bg-primary-300/30 md:order-2">
           {isValidImage && image ? (
             <Image
-              src={image}
+              src={getProxiedImageUrl(image) || ""}
               alt=""
               className="w-full bg-gray-300 object-cover"
               fill
+              priority
             />
           ) : (
             <MealSymbol size={48} className="scale-150" />
@@ -550,9 +557,8 @@ export function Hero({
             </button>
           </StyledLink>
           <div
-            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
-              !currParner && "opacity-0"
-            }`}
+            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${!currParner && "opacity-0"
+              }`}
           >
             {currParner.logoBlack ? (
               <Image
@@ -619,11 +625,10 @@ export function Hero({
                         if (!logged || !paid) {
                           return toast({
                             intent: "warning",
-                            title: `Pro použití této funkce je potřeba ${
-                              logged
-                                ? "mít předplacené členství."
-                                : "být přihlášen a mít předplacené členství."
-                            }`,
+                            title: `Pro použití této funkce je potřeba ${logged
+                              ? "mít předplacené členství."
+                              : "být přihlášen a mít předplacené členství."
+                              }`,
                           });
                         }
                         return window.print();
@@ -659,16 +664,14 @@ export function Hero({
                     }
                     return iconName;
                   })()}
-                  className={`bg-white ${
-                    icon.name === "archive" &&
+                  className={`bg-white ${icon.name === "archive" &&
                     stitky.includes("MSklad") &&
                     " text-primary-500"
-                  }
-                  ${
-                    icon.name === "favorite" &&
+                    }
+                  ${icon.name === "favorite" &&
                     stitky.includes("Oblíbené") &&
                     "text-primary-500"
-                  }`}
+                    }`}
                 />
                 <span className="hidden text-sm md:block">{icon.label}</span>
               </div>
@@ -702,7 +705,7 @@ export function Informations({
     porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
-      NazevSuroviny: string;
+      Upresneni: string;
       MernaJednotka: string;
     }[];
   };
@@ -744,10 +747,9 @@ export function Informations({
         <div className="flex flex-col gap-5 sm:gap-7">
           <Postup postup={postup} />
           <div
-            className={`grid gap-5 sm:gap-7 ${
-              (skladba.polevka || skladba.priloha || skladba.doplnek) &&
+            className={`grid gap-5 sm:gap-7 ${(skladba.polevka || skladba.priloha || skladba.doplnek) &&
               "xl:grid-cols-2"
-            }`}
+              }`}
           >
             <Alergeny alergeny={alergeny} />
             <Skladba skladba={skladba} />
@@ -786,9 +788,8 @@ function Title({
         {icons.map((icon, index) => (
           <div
             key={"kfii" + index}
-            className={`flex flex-col items-center gap-1 text-center ${
-              icon.name === "archive" && "!hidden"
-            }`}
+            className={`flex flex-col items-center gap-1 text-center ${icon.name === "archive" && "!hidden"
+              }`}
           >
             <ButtonIcon
               onClick={() => {
@@ -837,16 +838,14 @@ function Title({
                 }
                 return iconName;
               })()}
-              className={`bg-white ${
-                icon.name === "archive" &&
+              className={`bg-white ${icon.name === "archive" &&
                 stitky.includes("MSklad") &&
                 " text-primary-500"
-              }
-              ${
-                icon.name === "favorite" &&
+                }
+              ${icon.name === "favorite" &&
                 stitky.includes("Oblíbené") &&
                 "text-primary-500"
-              }`}
+                }`}
             ></ButtonIcon>
             <span className="text-sm">{icon.label}</span>
           </div>
@@ -1030,13 +1029,12 @@ export function Partner({
           <p className="font-semibold text-white">{heslo}</p>
           {hasButton && (
             <Button
-              className={`w-min ${
-                color === "bidfood"
-                  ? "bg-bidfood-900 hover:bg-bidfood-950"
-                  : color === "bonduelle"
-                    ? "bg-bonduelle-900 hover:bg-bonduelle-950"
-                    : ""
-              }`}
+              className={`w-min ${color === "bidfood"
+                ? "bg-bidfood-900 hover:bg-bidfood-950"
+                : color === "bonduelle"
+                  ? "bg-bonduelle-900 hover:bg-bonduelle-950"
+                  : ""
+                }`}
             >
               Více o nás
             </Button>

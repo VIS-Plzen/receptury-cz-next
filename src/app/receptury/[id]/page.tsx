@@ -1,4 +1,4 @@
-import { useCoderAndCompareDates } from "@/utils/shorties";
+import { codeAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
 import { ErrorPage } from "./Error";
@@ -8,17 +8,17 @@ async function readSome(id: string, token: string | undefined, paid: boolean) {
   const vlastnosti = paid
     ? []
     : [
-        "Nazev",
-        "Identita",
-        "Obrazek",
-        "DruhSkupina",
-        "DruhPodskupina",
-        "Dieta1",
-        "Dieta2",
-        "Dieta3",
-        "TepelnaUprava",
-        "Receptar",
-      ];
+      "Nazev",
+      "Identita",
+      "Obrazek",
+      "DruhSkupina",
+      "DruhPodskupina",
+      "Dieta1",
+      "Dieta2",
+      "Dieta3",
+      "TepelnaUprava",
+      "Receptar",
+    ];
 
   const result = await (
     await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
@@ -100,7 +100,7 @@ export default async function Home({
 
   const cookie = cookies();
   const token = cookie.get("token")?.value;
-  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+  const paid = codeAndCompareDates(cookie.get("paid")?.value);
 
   const shared = params.id === "sdilena";
 

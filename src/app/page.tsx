@@ -1,5 +1,5 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
-import { useCoderAndCompareDates } from "@/utils/shorties";
+import { codeAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
@@ -14,16 +14,16 @@ export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const gridView = cookie.get("gridView")?.value ?? "true";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
-  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+  const paid = codeAndCompareDates(cookie.get("paid")?.value);
   const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "nove";
   const memberModal = await returnMemberModal();
 
   const [nove, oblibene] =
     inspiraceVisible !== "false"
       ? await Promise.all([
-          inspiraceVisible === "nove" ? readNew() : "hidden",
-          inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
-        ])
+        inspiraceVisible === "nove" ? readNew() : "hidden",
+        inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
+      ])
       : ["hidden", "hidden"];
 
   async function readNew() {

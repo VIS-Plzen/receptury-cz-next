@@ -14,7 +14,7 @@ export async function POST(request: Request) {
           lastName: lastName,
           email: email,
           password: password,
-          redirectAfter: "https://receptury.cz/prihlaseni",
+          redirectAfter: `${process.env.NEXT_PUBLIC_BASE_URL}/prihlaseni`,
         }),
       }
     );

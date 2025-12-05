@@ -6,7 +6,6 @@ import {
   default as TextInput,
 } from "@/components/forms/InputField";
 import TextArea from "@/components/forms/TextArea";
-import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Receptury from "@/components/ui/Receptury/Receptury";
@@ -349,7 +348,7 @@ function Form() {
                 formik.touched.firstName &&
                 formik.errors.firstName
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.firstName}
@@ -363,7 +362,7 @@ function Form() {
                 formik.touched.lastName &&
                 formik.errors.lastName
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lastName}
@@ -376,7 +375,7 @@ function Form() {
               errorText={
                 formWasTouched && formik.touched.email && formik.errors.email
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
@@ -388,6 +387,7 @@ function Form() {
               errorText={
                 formWasTouched && formik.touched.phone && formik.errors.phone
               }
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phone}
@@ -407,6 +407,7 @@ function Form() {
                 formik.setFieldValue("invoiceIsCompany", value)
               }
               value={formik.values.invoiceIsCompany}
+              readOnly
             />
             {formik.values.invoiceIsCompany && (
               <>
@@ -462,7 +463,7 @@ function Form() {
                 formik.touched.invoiceStreet &&
                 formik.errors.invoiceStreet
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceStreet}
@@ -476,7 +477,7 @@ function Form() {
                 formik.touched.invoiceCity &&
                 formik.errors.invoiceCity
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceCity}
@@ -490,7 +491,7 @@ function Form() {
                 formik.touched.invoiceZip &&
                 formik.errors.invoiceZip
               }
-              required
+              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceZip}
@@ -510,6 +511,7 @@ function Form() {
                 formik.setFieldValue("deliveryIsDifferent", value)
               }
               value={formik.values.deliveryIsDifferent}
+              readOnly
             />
             {formik.values.deliveryIsDifferent && (
               <>
@@ -521,7 +523,7 @@ function Form() {
                     formik.touched.deliveryStreet &&
                     formik.errors.deliveryStreet
                   }
-                  required
+                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryStreet}
@@ -535,7 +537,7 @@ function Form() {
                     formik.touched.deliveryCity &&
                     formik.errors.deliveryCity
                   }
-                  required
+                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryCity}
@@ -549,7 +551,7 @@ function Form() {
                     formik.touched.deliveryZip &&
                     formik.errors.deliveryZip
                   }
-                  required
+                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryZip}
@@ -568,15 +570,25 @@ function Form() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.poznamka}
+              readOnly
             />
           </div>
-          <Button
+          {/* <Button
             type="submit"
             isLoading={formik.isSubmitting}
             className="relative"
           >
             Uložit změny
-          </Button>
+          </Button> */}
+          <div className="p-4 bg-primary-100 rounded-md border-[2px] border-primary-200">
+            <Heading size="sm">Propojené účty</Heading>
+            <p>Aplikace <span className="font-bold">Receptury.cz</span> a <span className="font-bold">Jídelny.cz</span> jsou propojeny jedním účtem.</p>
+            <hr className="my-2 border-primary-200" />
+            <p>
+              Zobrazaná pole ve formuláři slouží pouze pro informační účely. Pro úpravu údajů prosím přejděte na <a className="text-primary-600 font-bold underline text-md cursor-pointer" href={process.env.NEXT_PUBLIC_JIDELNY_URL} target="_blank" rel="noopener noreferrer">Jídelny.cz</a>
+              .
+            </p>
+          </div>
         </form>
         <svg
           className="mt-40 hidden md:block"
