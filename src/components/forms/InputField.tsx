@@ -50,6 +50,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
         className={cn(
           "relative flex w-full flex-col items-start justify-start gap-1 py-1",
           props.disabled && "cursor-not-allowed opacity-70",
+          (props.disabled || props.readOnly) && "pointer-events-none",
           className
         )}
       >
@@ -57,9 +58,8 @@ const InputField = forwardRef<HTMLInputElement, Props>(
         {label && (
           <Label
             htmlFor={generatedId}
-            className={`font-semibold ${
-              props.disabled && "pointer-events-none"
-            }`}
+            className={`font-semibold ${props.disabled && "pointer-events-none"
+              }`}
           >
             {label}{" "}
             {props.required && <span className="text-error-500">*</span>}
@@ -82,8 +82,8 @@ const InputField = forwardRef<HTMLInputElement, Props>(
             "focus:border-primary focus:ring-primary/50",
             "transition duration-150",
             errorText &&
-              "border-error-500/70 focus:border-error-600 focus:ring-error-600/50",
-            props.disabled && "pointer-events-none"
+            "border-error-500/70 focus:border-error-600 focus:ring-error-600/50",
+            (props.disabled || props.readOnly) && "pointer-events-none"
           )}
           {...props}
         />

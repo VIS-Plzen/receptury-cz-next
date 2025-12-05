@@ -9,10 +9,10 @@ import Container from "@/components/ui/Container";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
-import { cFalse, logOut } from "@/utils/shorties";
+import { codeAndCompareDates, logOut } from "@/utils/shorties";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { AnimatePresence, motion, useScroll } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -121,7 +121,7 @@ function SubscriptionBanner({
   token?: string;
   paid?: string;
 }) {
-  const state = !token ? "login" : paid === cFalse ? "pay" : "ok";
+  const state = !token ? "login" : !codeAndCompareDates(paid) ? "pay" : "ok";
 
   const cookies = new Cookies();
   const router = useRouter();
@@ -395,9 +395,8 @@ function TouchMenu({
                       </button>
                     </li>
                     <li
-                      className={`-mx-4 w-[calc(100%+48px)] px-4 py-1 font-medium text-white sm:-mx-6 sm:px-6 ${
-                        prepaid ? "bg-success-600" : "bg-error-600"
-                      }`}
+                      className={`-mx-4 w-[calc(100%+48px)] px-4 py-1 font-medium text-white sm:-mx-6 sm:px-6 ${prepaid ? "bg-success-600" : "bg-error-600"
+                        }`}
                     >
                       {prepaid ? (
                         <span className="w-full text-left">
@@ -443,7 +442,7 @@ function TouchMenu({
                 </Link>
                 <span className="text-2xl">/</span>
 
-                <a href="https://www.jidelny.cz" className="rounded-lg">
+                <a href={process.env.NEXT_PUBLIC_JIDELNY_URL} className="rounded-lg">
                   <LogoJidelny className="h-6 w-auto bg-transparent" />
                 </a>
               </div>
@@ -471,10 +470,6 @@ export default function Navbar({
   // Menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Navigation bar state
-  const [isScrolled, setIsScrolled] = useState(false);
-  // const [isVisible, setIsVisible] = useState(true);
-
   const [tokenIn, setTokenIn] = useState(token);
   const [paidIn, setPaidIn] = useState(paid);
   const [nameIn, setNameIn] = useState(name);
@@ -487,31 +482,6 @@ export default function Navbar({
     setNameIn(name);
   }, [paid, token, name]);
 
-  // Thresholds
-  const thresholdScrolledPx = 64;
-  const thresholHideVisiblePx = 540;
-
-  // Use useScroll hook from framer-motion
-  const { scrollY } = useScroll();
-
-  // useEffect(() => {
-  //   return scrollY.on("change", (y) => {
-  //     const current = y;
-  //     const prev = scrollY.getPrevious();
-
-  //     if (current > thresholdScrolledPx) {
-  //       setIsScrolled(true);
-  //     } else {
-  //       setIsScrolled(false);
-  //     }
-
-  //     if (current > thresholHideVisiblePx && current > prev) {
-  //       setIsVisible(false);
-  //     } else {
-  //       setIsVisible(true);
-  //     }
-  //   });
-  // }, [scrollY, setIsVisible]);
 
   async function addToCard() {
     setCartState("loading");
@@ -531,7 +501,8 @@ export default function Navbar({
     }
   }
 
-  const paidBoolean = !!paidIn && paidIn !== cFalse;
+  const paidBoolean = codeAndCompareDates(paidIn);
+  console.log(paid);
 
   return (
     <div className="relative">
@@ -539,7 +510,7 @@ export default function Navbar({
         className={cn(
           "w-full transition duration-500 print:hidden",
           "border-b-2 border-primary-200",
-          isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white"
+          "bg-white"
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
@@ -549,7 +520,7 @@ export default function Navbar({
             </Link>
             <span className="hidden text-2xl md:block">/</span>
             <a
-              href="https://www.jidelny.cz"
+              href={process.env.NEXT_PUBLIC_JIDELNY_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden rounded-lg md:block"

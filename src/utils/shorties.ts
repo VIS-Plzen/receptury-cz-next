@@ -131,11 +131,15 @@ export function coder(
   dataString?: string,
   length?: "short" | "long"
 ) {
-  const secretKey = process.env.CDR_KEY;
+  const secretKey = process.env.NEXT_PUBLIC_CDR_KEY;
   if (!secretKey) return { Status: false, error: "No secret key in ENV" };
 
   // Ensure the key is the right length for AES-256-CBC (32 bytes)
-  const fixedKey = crypto.createHash('sha256').update(String(secretKey)).digest().slice(0, 32);
+  const keyHash = crypto
+    .createHash("sha256")
+    .update(String(secretKey))
+    .digest();
+  const fixedKey = keyHash.subarray(0, 32);
 
   let currTime =
     length === "short"
@@ -145,10 +149,14 @@ export function coder(
   if (key) {
     try {
       // Extract IV from the beginning of the encrypted data
-      const iv = Buffer.from(key.substring(0, 32), 'hex');
+      const iv = Buffer.from(key.substring(0, 32), "hex");
       const encryptedText = key.substring(32);
-      
-      const decipher = crypto.createDecipheriv("aes-256-cbc", fixedKey, iv);
+
+      const decipher = crypto.createDecipheriv(
+        "aes-256-cbc",
+        fixedKey as any,
+        iv as any
+      );
       let decryptedData = decipher.update(encryptedText, "hex", "utf8");
       decryptedData += decipher.final("utf8");
       const splitted = decryptedData.split("&");
@@ -171,20 +179,24 @@ export function coder(
     }
 
     dataString += "&" + currTime;
-    
+
     // Generate a random IV
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv("aes-256-cbc", fixedKey, iv);
+    const cipher = crypto.createCipheriv(
+      "aes-256-cbc",
+      fixedKey as any,
+      iv as any
+    );
     let encryptedData = cipher.update(dataString, "utf8", "hex");
     encryptedData += cipher.final("hex");
-    
+
     // Prepend the IV to the encrypted data
-    const result = iv.toString('hex') + encryptedData;
+    const result = iv.toString("hex") + encryptedData;
     return { Status: true, data: result };
   }
 }
 
-export function useCoderAndCompareDates(paid: string | undefined) {
+export function codeAndCompareDates(paid: string | undefined) {
   if (!paid) return false;
   const coded: any = coder(paid);
   if (!coded.Status) return false;
@@ -202,3 +214,13 @@ export const cFalse =
   "9079d9e16c4eddcc223508bfd3253d7c4cb3d6db59bbba2a5d5fd5abc75eda5e";
 
 export const infiniteDate = "2099-01-01T01:01:01+01:00";
+
+export function getProxiedImageUrl(imageUrl: string | undefined) {
+  if (
+    !imageUrl ||
+    imageUrl.replaceAll("/", "") === process.env.NEXT_PUBLIC_URL_BLOCK
+  )
+    return null;
+  const encodedUrl = encodeURIComponent(imageUrl);
+  return `/api/image?url=${encodedUrl}`;
+}

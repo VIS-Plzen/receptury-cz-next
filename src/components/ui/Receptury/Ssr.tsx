@@ -389,131 +389,131 @@ export default async function Ssr({
         backend?: string;
       }[];
     }[] = [
-      {
-        title: "Obecné",
-        name: "obecne",
-        backend: "Obecne",
-        options: [
-          {
-            title: "Vše",
-            name: "vse",
-            backend: "",
-            checked: false,
-          },
-          {
-            title: "Moje oblíbené",
-            name: "moje",
-            backend: "Oblíbené",
-            checked: false,
-          },
-          {
-            title: "Nutričně ověřeno",
-            name: "nutricni",
-            backend: "SchvalenoNT",
-            checked: false,
-          },
-          {
-            title: "Stáhnout do skladu",
-            name: "sklad",
-            backend: "MSklad",
-            checked: false,
-          },
-          {
-            title: "Videoreceptury",
-            name: "videoreceptury",
-            backend: "Video",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Speciální strava",
-        name: "special",
-        backend: "Dieta",
-        options: [
-          {
-            title: "Bezlepková",
-            name: "bezlepkova",
-            backend: "Dieta1",
-            checked: false,
-          },
-          {
-            title: "Bezmléčná",
-            name: "bezmlecna",
-            backend: "Dieta2",
-            checked: false,
-          },
-          {
-            title: "Šetřící",
-            name: "setrici",
-            backend: "Dieta3",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Způsob přípravy",
-        name: "priprava",
-        backend: "TepelnaUprava",
-        options: [
-          {
-            title: "Vařené",
-            name: "varene",
-            backend: "Vařené",
-            checked: false,
-          },
-          {
-            title: "Dušené",
-            name: "dusene",
-            backend: "Dušené",
-            checked: false,
-          },
-          {
-            title: "Pečené",
-            name: "pecene",
-            backend: "Pečené",
-            checked: false,
-          },
-          {
-            title: "Zapečené",
-            name: "zapecene",
-            backend: "Zapečené",
-            checked: false,
-          },
-          {
-            title: "Smažené",
-            name: "smazene",
-            backend: "Smažené",
-            checked: false,
-          },
-          {
-            title: "Ostatní",
-            name: "ostatni",
-            backend: "Ostatní",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Partner",
-        name: "partner",
-        backend: "Receptar",
-        options: [
-          {
-            title: "Bidfood",
-            name: "bidfood",
-            backend: "20",
-            checked: false,
-          },
-          {
-            title: "Bonduelle",
-            name: "bonduelle",
-            backend: "21",
-            checked: false,
-          },
-        ],
-      },
-    ];
+        {
+          title: "Obecné",
+          name: "obecne",
+          backend: "Obecne",
+          options: [
+            {
+              title: "Vše",
+              name: "vse",
+              backend: "",
+              checked: false,
+            },
+            {
+              title: "Moje oblíbené",
+              name: "moje",
+              backend: "Oblíbené",
+              checked: false,
+            },
+            {
+              title: "Nutričně ověřeno",
+              name: "nutricni",
+              backend: "SchvalenoNT",
+              checked: false,
+            },
+            {
+              title: "Stáhnout do skladu",
+              name: "sklad",
+              backend: "MSklad",
+              checked: false,
+            },
+            {
+              title: "Videoreceptury",
+              name: "videoreceptury",
+              backend: "Video",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Speciální strava",
+          name: "special",
+          backend: "Dieta",
+          options: [
+            {
+              title: "Bezlepková",
+              name: "bezlepkova",
+              backend: "Dieta1",
+              checked: false,
+            },
+            {
+              title: "Bezmléčná",
+              name: "bezmlecna",
+              backend: "Dieta2",
+              checked: false,
+            },
+            {
+              title: "Šetřící",
+              name: "setrici",
+              backend: "Dieta3",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Způsob přípravy",
+          name: "priprava",
+          backend: "TepelnaUprava",
+          options: [
+            {
+              title: "Vařené",
+              name: "varene",
+              backend: "Vařené",
+              checked: false,
+            },
+            {
+              title: "Dušené",
+              name: "dusene",
+              backend: "Dušené",
+              checked: false,
+            },
+            {
+              title: "Pečené",
+              name: "pecene",
+              backend: "Pečené",
+              checked: false,
+            },
+            {
+              title: "Zapečené",
+              name: "zapecene",
+              backend: "Zapečené",
+              checked: false,
+            },
+            {
+              title: "Smažené",
+              name: "smazene",
+              backend: "Smažené",
+              checked: false,
+            },
+            {
+              title: "Ostatní",
+              name: "ostatni",
+              backend: "Ostatní",
+              checked: false,
+            },
+          ],
+        },
+        {
+          title: "Partner",
+          name: "partner",
+          backend: "Receptar",
+          options: [
+            {
+              title: "Bidfood",
+              name: "bidfood",
+              backend: "20",
+              checked: false,
+            },
+            {
+              title: "Bonduelle",
+              name: "bonduelle",
+              backend: "21",
+              checked: false,
+            },
+          ],
+        },
+      ];
     searchParams &&
       Object.keys(searchParams).forEach((key) => {
         const values = searchParams[key].split(",");
