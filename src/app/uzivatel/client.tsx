@@ -585,7 +585,7 @@ function Form() {
             <p>Aplikace <span className="font-bold">Receptury.cz</span> a <span className="font-bold">Jídelny.cz</span> jsou propojeny jedním účtem.</p>
             <hr className="my-2 border-primary-200" />
             <p>
-              Zobrazaná pole ve formuláři slouží pouze pro informační účely. Pro úpravu údajů prosím přejděte na <a className="text-primary-600 font-bold underline text-md cursor-pointer" href={process.env.NEXT_PUBLIC_JIDELNY_URL} target="_blank" rel="noopener noreferrer">Jídelny.cz</a>
+              Zobrazená pole ve formuláři slouží pouze pro informační účely. Pro úpravu údajů nebo změnu hesla prosím přejděte na <a className="text-primary-600 font-bold underline text-md cursor-pointer" href={process.env.NEXT_PUBLIC_JIDELNY_URL} target="_blank" rel="noopener noreferrer">Jídelny.cz</a>
               .
             </p>
           </div>
