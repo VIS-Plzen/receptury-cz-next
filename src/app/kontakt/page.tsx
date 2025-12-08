@@ -65,11 +65,13 @@ export default function Home() {
       job,
       email,
       tel,
+      hours,
     }: {
       name: string;
       job: string;
       email: string;
       tel?: string;
+      hours?: string;
     }) {
       return (
         <div>
@@ -82,7 +84,7 @@ export default function Home() {
             >
               {email}
             </StyledLink>
-            {tel && (
+            <span>{tel && (
               <StyledLink
                 href={`tel:${tel}`}
                 className="font-bold text-primary"
@@ -90,6 +92,8 @@ export default function Home() {
                 {tel}
               </StyledLink>
             )}
+              {hours && <span>{hours}</span>}
+            </span>
           </div>
         </div>
       );
@@ -99,7 +103,7 @@ export default function Home() {
         <Heading as="h1" className="mb-12" size="lg">
           Kontakty a firemní údaje
         </Heading>
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
           <div className="flex flex-col gap-y-5">
             <Column title="Receptury.cz">
               <div className="flex flex-col">
@@ -124,32 +128,18 @@ export default function Home() {
                 </StyledLink>
               </div>
             </Column>
-            <Column title="Produkce" className="block md:hidden">
+            <Column title="Náš tým" className="block md:hidden">
               <Person
                 name="Lukáš Doubek"
-                job="projektový manažer"
-                email="doubek@visplzen.cz"
+                job="ředitel"
+                email="doubek@jidelny.cz"
               />
               <Person
                 name="Tereza Ottová"
-                job="administrace přihlášek, fakturace"
-                email="ottova@visplzen.cz"
+                job="administrace přihlášek, fakturace, marketing"
+                email="ottova@jidelny.cz"
                 tel="+420 720 962 105"
-              />
-            </Column>
-            <Column
-              title="Portál Knihovna Receptur.cz"
-              className="block md:hidden"
-            >
-              <Person
-                name="Pavel Ludvík"
-                job="redakce, odborný garant"
-                email="redakce@jidelny.cz"
-              />
-              <Person
-                name="Michaela Divišová"
-                job="redakce"
-                email="michaela.divisova@jidelny.cz"
+                hours="(9:00 - 15:00)"
               />
             </Column>
           </div>
@@ -185,25 +175,16 @@ export default function Home() {
           </Column>
           <Column title="Náš tým" className="hidden md:block">
             <Person
+              name="Lukáš Doubek"
+              job="ředitel"
+              email="doubek@jidelny.cz"
+            />
+            <Person
               name="Tereza Ottová"
-              job="administrace přihlášek, fakturace"
+              job="administrace přihlášek, fakturace, marketing"
               email="ottova@jidelny.cz"
               tel="+420 720 962 105"
-            />
-          </Column>
-          <Column
-            title="Portál Knihovna Receptur.cz"
-            className="hidden md:block"
-          >
-            <Person
-              name="Pavel Ludvík"
-              job="redakce, odborný garant"
-              email="redakce@jidelny.cz"
-            />
-            <Person
-              name="Michaela Divišová"
-              job="redakce"
-              email="michaela.divisova@jidelny.cz"
+              hours="(9:00 - 15:00)"
             />
           </Column>
         </div>
