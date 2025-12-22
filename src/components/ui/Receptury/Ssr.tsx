@@ -1,5 +1,6 @@
-import { nazvy, suroviny } from "@/utils/static";
+import { fetchCachedData } from '@/utils/fetchCachedData';
 import Receptury from "./Receptury";
+
 
 export const recipesPerPage = 15;
 
@@ -361,8 +362,7 @@ export default async function Ssr({
   paid?: boolean | string;
   isGridView?: boolean;
 }) {
-  let [selectedGroup, selectedSubgroup] = returnGroups();
-
+  const [selectedGroup, selectedSubgroup] = returnGroups();
   function returnGroups() {
     if (!searchParams.skupina) return [undefined, undefined];
     let skup = groupsData.find((group) => group.value === searchParams.skupina);
@@ -545,6 +545,8 @@ export default async function Ssr({
     return holder;
   }
 
+  const { suroviny, nazvy } = await fetchCachedData();
+
   const comboBoxValues = returnComboBoxValues();
   function returnComboBoxValues() {
     const holder = [
@@ -599,6 +601,8 @@ export default async function Ssr({
       isGridView={isGridView}
       logged={token}
       paid={paid}
+      comboBoxes={comboBoxValues}
+      sideBars={sideBarValues}
     />
   );
 }

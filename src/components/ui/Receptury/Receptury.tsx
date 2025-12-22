@@ -19,7 +19,6 @@ import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { useCard } from "@/context/FavoriteCards";
 import { toast } from "@/hooks/useToast";
 import { returnExpirationTime } from "@/utils/shorties";
-import { nazvy, suroviny } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -38,6 +37,8 @@ export default function Receptury({
   isGridView,
   logged,
   paid,
+  comboBoxes,
+  sideBars,
 }: {
   title?: string;
   initialData?: any;
@@ -52,6 +53,18 @@ export default function Receptury({
   isGridView?: boolean;
   logged?: string | boolean;
   paid?: string | boolean;
+  comboBoxes: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  sideBars: {
+    title: string;
+    name: string;
+    backend: string;
+    options: any[];
+  }[];
 }) {
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -60,10 +73,6 @@ export default function Receptury({
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
   const paramsHook = useSearchParams();
-  const urlParams = decodeURIComponent(
-    paramsHook.toString().replaceAll("+", " ")
-  );
-  const urlParamsSplitted = urlParams.split("&");
   const paramsObjects = Object.fromEntries(paramsHook);
   const { addCard, removeCard } = useCard();
 
@@ -102,174 +111,7 @@ export default function Receptury({
   // loading tlačítek a karet
   const [loading, setLoading] = useState<boolean>(initialData ? false : true);
 
-  const [sideBarValues, setSideBarValues] = useState(() => {
-    let holder: {
-      title: string;
-      name: string;
-      backend: string;
-      options: {
-        title: string;
-        name: string;
-        checked: boolean;
-        disabled?: boolean;
-        backend?: string;
-      }[];
-    }[] = [
-        {
-          title: "Obecné",
-          name: "obecne",
-          backend: "Obecne",
-          options: [
-            {
-              title: "Vše",
-              name: "vse",
-              backend: "",
-              checked: false,
-            },
-            {
-              title: "Moje oblíbené",
-              name: "moje",
-              backend: "Oblíbené",
-              checked: false,
-            },
-            {
-              title: "Nutričně ověřeno",
-              name: "nutricni",
-              backend: "SchvalenoNT",
-              checked: false,
-            },
-            {
-              title: "Stáhnout do skladu",
-              name: "sklad",
-              backend: "MSklad",
-              checked: false,
-            },
-            {
-              title: "Videoreceptury",
-              name: "videoreceptury",
-              backend: "Video",
-              checked: false,
-            },
-          ],
-        },
-        {
-          title: "Speciální strava",
-          name: "special",
-          backend: "Dieta",
-          options: [
-            {
-              title: "Bezlepková",
-              name: "bezlepkova",
-              backend: "Dieta1",
-              checked: false,
-            },
-            {
-              title: "Bezmléčná",
-              name: "bezmlecna",
-              backend: "Dieta2",
-              checked: false,
-            },
-            {
-              title: "Šetřící",
-              name: "setrici",
-              backend: "Dieta3",
-              checked: false,
-            },
-          ],
-        },
-        {
-          title: "Způsob přípravy",
-          name: "priprava",
-          backend: "TepelnaUprava",
-          options: [
-            {
-              title: "Vařené",
-              name: "varene",
-              backend: "Vařené",
-              checked: false,
-            },
-            {
-              title: "Dušené",
-              name: "dusene",
-              backend: "Dušené",
-              checked: false,
-            },
-            {
-              title: "Pečené",
-              name: "pecene",
-              backend: "Pečené",
-              checked: false,
-            },
-            {
-              title: "Zapečené",
-              name: "zapecene",
-              backend: "Zapečené",
-              checked: false,
-            },
-            {
-              title: "Smažené",
-              name: "smazene",
-              backend: "Smažené",
-              checked: false,
-            },
-            {
-              title: "Ostatní",
-              name: "ostatni",
-              backend: "Ostatní",
-              checked: false,
-            },
-          ],
-        },
-        {
-          title: "Partner",
-          name: "partner",
-          backend: "Receptar",
-          options: [
-            {
-              title: "Bidfood",
-              name: "bidfood",
-              backend: "20",
-              checked: false,
-            },
-            {
-              title: "Bonduelle",
-              name: "bonduelle",
-              backend: "21",
-              checked: false,
-            },
-          ],
-        },
-      ];
-    // Načte hodnoty z URL
-    urlParamsSplitted.forEach((param) => {
-      const [key, values] = splitUrlParams(param);
-      const box = holder.find((b) => b.name === key);
-      if (box && Array.isArray(values)) {
-        if (box.name === "obecne") {
-          const option = box.options.find((o) => o.name === values[0]);
-          if (option) option.checked = true;
-        } else {
-          values.forEach((v) => {
-            const option = box.options.find((o) => o.name === v);
-            if (option) option.checked = true;
-          });
-        }
-      }
-    });
-
-    if (boxSettings) {
-      holder.forEach((box) =>
-        box.options.forEach((boxValue) => {
-          const valueName = boxValue.name;
-          if (boxSettings.initialTrue?.includes(valueName))
-            boxValue.checked = true;
-          if (boxSettings.disabledValues?.includes(valueName))
-            boxValue.disabled = true;
-        })
-      );
-    }
-    return holder;
-  });
+  const [sideBarValues, setSideBarValues] = useState(sideBars);
   const [pageState, setPageState] = useState<number>(
     (() => {
       const urlParam = paramsHook.get("stranka");
@@ -311,31 +153,7 @@ export default function Receptury({
     return [key, values, prevalues];
   }
 
-  const [comboBoxValues, setComboBoxValues] = useState(() => {
-    const holder = [
-      {
-        title: "Dle receptury",
-        name: "receptura",
-        value: "",
-        options: nazvy,
-      },
-      {
-        title: "Dle suroviny",
-        name: "surovina",
-        value: "",
-        options: suroviny,
-      },
-    ];
-    // Načte hodnoty z URL
-    urlParamsSplitted.forEach((param) => {
-      const [key, values] = splitUrlParams(param);
-      const comboBox = holder.find((b) => b.name === key);
-      if (comboBox) {
-        comboBox.value = values[0];
-      }
-    });
-    return holder;
-  });
+  const [comboBoxValues, setComboBoxValues] = useState(comboBoxes);
 
   function resetFilters() {
     sideBarValues.forEach((box) => {

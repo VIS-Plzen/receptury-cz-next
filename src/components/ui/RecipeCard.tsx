@@ -184,7 +184,7 @@ function RowCardLayout({
         className
       )}
     >
-      {proxiedImg ? (
+      {!isLoading && proxiedImg ? (
         <div className={cn("relative h-full w-[70px]")}>
           <Image alt="" src={proxiedImg} fill className="object-cover" />
         </div>
