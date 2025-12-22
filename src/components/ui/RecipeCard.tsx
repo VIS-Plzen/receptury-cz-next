@@ -116,6 +116,8 @@ function GridCardLayout({
               src={proxiedImg}
               className="h-full w-full object-cover"
               fill
+              sizes="25vw"
+              priority
             />
           </div>
         ) : (
@@ -185,8 +187,8 @@ function RowCardLayout({
       )}
     >
       {!isLoading && proxiedImg ? (
-        <div className={cn("relative h-full w-[70px]")}>
-          <Image alt="" src={proxiedImg} fill className="object-cover" />
+        <div className={cn("relative h-full w-[70px] flex-shrink-0")}>
+          <Image alt="" src={proxiedImg} fill className="object-cover" sizes="70px" />
         </div>
       ) : (
         <div

@@ -482,14 +482,14 @@ export default function Receptury({
           hideBoxes={boxSettings?.hiddenBoxes}
         />
 
-        {!initialData && loading ? (
+        {loading ? (
           <RecipeCardsGrid
             className="col-span-4 pt-0 xl:col-span-5"
             gridView={gridView}
             isLoading={true}
-            data={(() => ({ Status: true, Vety: Array.from({ length: 6 }) }))()}
+            data={(() => ({ Status: true, Vety: Array.from({ length: 15 }) }))()}
           />
-        ) : !data || !data.Vety || data.Vety.length === 0 ? (
+        ) : (!loading && (!data || !data.Vety || data.Vety.length === 0)) ? (
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"

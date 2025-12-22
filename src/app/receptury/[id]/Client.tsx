@@ -539,6 +539,7 @@ export function Hero({
               alt=""
               className="w-full bg-gray-300 object-cover"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
           ) : (
