@@ -26,6 +26,7 @@ export default function ContentSelector({
   isGridView,
   paid,
   token,
+  cachedData,
 }: any) {
   const [content, setContent] = useState<string>(
     searchParams?.obsah ?? "informace"
@@ -112,6 +113,8 @@ export default function ContentSelector({
           isGridView={isGridView}
           logged={token}
           paid={paid}
+          comboBoxes={cachedData.comboBoxes}
+          sideBars={cachedData.sideBars}
         />
       )}
     </div>
