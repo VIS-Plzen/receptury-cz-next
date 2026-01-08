@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import Cookies from "universal-cookie";
 import { compareDates } from "./dateWorker";
+import { filtrMenu, groupsData } from "./static";
 
 export function shortenFoodNames(foodNames: string[]) {
   const baseNamesMap = new Map();
@@ -131,8 +132,15 @@ export function coder(
   dataString?: string,
   length?: "short" | "long"
 ) {
-  const secretKey = process.env.CDR_KEY;
+  const secretKey = process.env.NEXT_PUBLIC_CDR_KEY;
   if (!secretKey) return { Status: false, error: "No secret key in ENV" };
+
+  // Ensure the key is the right length for AES-256-CBC (32 bytes)
+  const keyHash = crypto
+    .createHash("sha256")
+    .update(String(secretKey))
+    .digest();
+  const fixedKey = keyHash.subarray(0, 32);
 
   let currTime =
     length === "short"
@@ -141,8 +149,16 @@ export function coder(
   currTime = Math.floor(currTime / 1000);
   if (key) {
     try {
-      const decipher = crypto.createDecipher("aes-256-cbc", secretKey);
-      let decryptedData = decipher.update(key, "hex", "utf8");
+      // Extract IV from the beginning of the encrypted data
+      const iv = Buffer.from(key.substring(0, 32), "hex");
+      const encryptedText = key.substring(32);
+
+      const decipher = crypto.createDecipheriv(
+        "aes-256-cbc",
+        fixedKey as any,
+        iv as any
+      );
+      let decryptedData = decipher.update(encryptedText, "hex", "utf8");
       decryptedData += decipher.final("utf8");
       const splitted = decryptedData.split("&");
       const incTime = parseInt(splitted[splitted.length - 1]);
@@ -155,7 +171,7 @@ export function coder(
         );
         return { Status: true, data: decryptedData };
       }
-    } catch {
+    } catch (error) {
       return { Status: false, error: "Wrong key format." };
     }
   } else {
@@ -164,14 +180,24 @@ export function coder(
     }
 
     dataString += "&" + currTime;
-    const cipher = crypto.createCipher("aes-256-cbc", secretKey);
+
+    // Generate a random IV
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv(
+      "aes-256-cbc",
+      fixedKey as any,
+      iv as any
+    );
     let encryptedData = cipher.update(dataString, "utf8", "hex");
     encryptedData += cipher.final("hex");
-    return { Status: true, data: encryptedData };
+
+    // Prepend the IV to the encrypted data
+    const result = iv.toString("hex") + encryptedData;
+    return { Status: true, data: result };
   }
 }
 
-export function useCoderAndCompareDates(paid: string | undefined) {
+export function codeAndCompareDates(paid: string | undefined) {
   if (!paid) return false;
   const coded: any = coder(paid);
   if (!coded.Status) return false;
@@ -180,10 +206,130 @@ export function useCoderAndCompareDates(paid: string | undefined) {
 
 export function returnPaidTo(data: { paid: boolean; paidTo: string | null }) {
   if (!data.paid) return "false";
-  const paidTo = data.paidTo;
-  if (paidTo) return paidTo;
-  return "2055-01-07T11:29:42+01:00";
+  if (!data.paidTo) return infiniteDate;
+  if (!compareDates(data.paidTo)) return "false";
+  return data.paidTo;
 }
 
 export const cFalse =
   "9079d9e16c4eddcc223508bfd3253d7c4cb3d6db59bbba2a5d5fd5abc75eda5e";
+
+export const infiniteDate = "2099-01-01T01:01:01+01:00";
+
+export function getProxiedImageUrl(imageUrl: string | undefined) {
+  if (
+    !imageUrl ||
+    imageUrl.replaceAll("/", "") === process.env.NEXT_PUBLIC_URL_BLOCK
+  )
+    return null;
+  const encodedUrl = encodeURIComponent(imageUrl);
+  return `/api/image?url=${encodedUrl}`;
+}
+
+export function returnGroups(searchParams: any) {
+  if (!searchParams.skupina) return [undefined, undefined];
+  let skup = groupsData.find((group) => group.value === searchParams.skupina);
+  if (!skup) return [undefined, undefined];
+
+  if (!searchParams.podskupina) return [skup.title, undefined];
+  let podskup = skup.options.find(
+    (subgroup) => subgroup.value === searchParams.podskupina
+  );
+  if (!podskup) return [skup.title, undefined];
+  return [skup.title, podskup.title];
+}
+
+export function returnSideBarValues(searchParams: any, boxSettings: any) {
+  let holder: {
+    title: string;
+    name: string;
+    backend: string;
+    options: {
+      title: string;
+      name: string;
+      checked: boolean;
+      disabled?: boolean;
+      backend?: string;
+    }[];
+  }[] = Object.assign(filtrMenu);
+
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      const values = searchParams[key].split(",");
+      const box = holder.find((b) => b.name === key);
+      if (box && Array.isArray(values)) {
+        if (box.name === "obecne") {
+          const option = box.options.find((o) => o.name === values[0]);
+          if (option) option.checked = true;
+        } else {
+          values.forEach((v) => {
+            const option = box.options.find((o) => o.name === v);
+            if (option) option.checked = true;
+          });
+        }
+      }
+    });
+  }
+  if (boxSettings) {
+    holder.forEach((box) =>
+      box.options.forEach((boxValue) => {
+        const valueName = boxValue.name;
+        if (boxSettings.initialTrue?.includes(valueName))
+          boxValue.checked = true;
+        if (boxSettings.disabledValues?.includes(valueName))
+          boxValue.disabled = true;
+      })
+    );
+  }
+  return holder;
+}
+
+export function returnComboBoxValues(
+  searchParams: any,
+  suroviny: any,
+  nazvy: any
+) {
+  const holder = [
+    {
+      title: "Dle receptury",
+      name: "receptura",
+      value: "",
+      options: nazvy,
+    },
+    {
+      title: "Dle suroviny",
+      name: "surovina",
+      value: "",
+      options: suroviny,
+    },
+  ];
+  // Načte hodnoty z URL
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      const comboBox = holder.find((b) => b.name === key);
+      const values = searchParams[key].split(",");
+      if (comboBox) {
+        comboBox.value = values[0];
+      }
+    });
+  }
+  return holder;
+}
+
+export function returnFilterBase(
+  searchParams: any,
+  boxSettings: any,
+  suroviny: any,
+  nazvy: any
+) {
+  const [selectedGroup, selectedSubgroup] = returnGroups(searchParams);
+  const sideBarValues = returnSideBarValues(searchParams, boxSettings);
+  const comboBoxValues = returnComboBoxValues(searchParams, suroviny, nazvy);
+
+  return {
+    selectedGroup,
+    selectedSubgroup,
+    sideBarValues,
+    comboBoxValues,
+  };
+}

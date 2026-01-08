@@ -1,5 +1,5 @@
 import Ssr from "@/components/ui/Receptury/Ssr";
-import { useCoderAndCompareDates } from "@/utils/shorties";
+import { codeAndCompareDates } from "@/utils/shorties";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Inspirace from "./Inspirace";
@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 
 export default async function Home({ searchParams }: any) {
   const cookie = cookies();
-  const gridView = cookie.get("gridView")?.value ?? "false";
+  const gridView = cookie.get("gridView")?.value ?? "true";
   const sid = cookie.has("token") ? cookie.get("token")?.value : "12345VIS";
-  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
-  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "false";
+  const paid = codeAndCompareDates(cookie.get("paid")?.value);
+  const inspiraceVisible = cookie.get("inspiraceVisible")?.value ?? "nove";
   const memberModal = await returnMemberModal();
 
   const [nove, oblibene] =
@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: any) {
 
   async function readNew() {
     const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: any) {
               Tabulka: "Receptury",
               Operace: "Read",
               Limit: 10,
-              OrderBy: "DatumAktualizace",
+              OrderBy: "Ulozeno DESC",
               Vlastnosti: [
                 "Nazev",
                 "Identita",
@@ -69,7 +69,7 @@ export default async function Home({ searchParams }: any) {
 
   async function readFavorite() {
     const result = await (
-      await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+      await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -83,7 +83,7 @@ export default async function Home({ searchParams }: any) {
               Operace: "Read",
               Stitek: "Oblíbené",
               Limit: 10,
-              OrderBy: "",
+              OrderBy: "Ulozeno DESC",
               Vlastnosti: [
                 "Nazev",
                 "Identita",
@@ -111,12 +111,14 @@ export default async function Home({ searchParams }: any) {
   }
 
   async function returnMemberModal() {
-    if (searchParams.activated && sid !== "12345VIS" && paid) return "paid";
-    else if (cookie.has("memModal")) return "unpaid";
+    if (searchParams.activated && sid !== "12345VIS") {
+      if (searchParams.order_result === "success" && paid) return "paid";
+      else if (searchParams.order_result === "pending") return "pending";
+    } else if (cookie.has("memModal")) return "unpaid";
   }
 
   return (
-    <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
+    <div className="flex flex-col items-stretch justify-start pb-20 pt-8 md:pt-10">
       {memberModal && <MembershipModal type={memberModal} />}
       <Inspirace
         inspiraceVisible={inspiraceVisible}

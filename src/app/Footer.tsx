@@ -1,4 +1,5 @@
 "use client";
+
 import Container from "@/components/ui/Container";
 import { useDebugMode } from "@/hooks/useDebugMode";
 import DebugModal from "@/utils/DebugModal";
@@ -13,9 +14,9 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="w-full items-center border-t-2 border-primary-200 bg-white">
+      <footer className="w-full items-center border-t-2 border-primary-200 bg-white print:hidden">
         <Container className="flex items-center justify-center py-16 print:hidden">
-          <div className="flex flex-col justify-center justify-center gap-5 text-base">
+          <div className="flex flex-col justify-center gap-5 text-base">
             <p>
               <button
                 onClick={updateDebugModeClickCount}

@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "@/components/brand/Logo";
+import LogoJidelny from "@/components/brand/LogoJidelny";
 import { ExpandMoreIcon } from "@/components/icons";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
@@ -8,10 +9,10 @@ import Container from "@/components/ui/Container";
 import Modal from "@/components/ui/Modal";
 import StyledLink from "@/components/ui/StyledLink";
 import { cn } from "@/utils/cn";
-import { cFalse, logOut } from "@/utils/shorties";
+import { codeAndCompareDates, logOut } from "@/utils/shorties";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { AnimatePresence, motion, useScroll } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -120,7 +121,7 @@ function SubscriptionBanner({
   token?: string;
   paid?: string;
 }) {
-  const state = !token ? "login" : paid === cFalse ? "pay" : "ok";
+  const state = !token ? "login" : !codeAndCompareDates(paid) ? "pay" : "ok";
 
   const cookies = new Cookies();
   const router = useRouter();
@@ -394,9 +395,8 @@ function TouchMenu({
                       </button>
                     </li>
                     <li
-                      className={`-mx-4 w-[calc(100%+48px)] px-4 py-1 font-medium text-white sm:-mx-6 sm:px-6 ${
-                        prepaid ? "bg-success-600" : "bg-error-600"
-                      }`}
+                      className={`-mx-4 w-[calc(100%+48px)] px-4 py-1 font-medium text-white sm:-mx-6 sm:px-6 ${prepaid ? "bg-success-600" : "bg-error-600"
+                        }`}
                     >
                       {prepaid ? (
                         <span className="w-full text-left">
@@ -436,6 +436,16 @@ function TouchMenu({
                   </li>
                 </ul>
               )}
+              <div className="z-offcanvas-above mt-20 flex items-center gap-x-3 md:hidden">
+                <Link href="/" className="relative rounded-lg">
+                  <Logo className="h-8 w-auto" />
+                </Link>
+                <span className="text-2xl">/</span>
+
+                <a href={process.env.NEXT_PUBLIC_JIDELNY_URL} className="rounded-lg">
+                  <LogoJidelny className="h-6 w-auto bg-transparent" />
+                </a>
+              </div>
             </Container>
           </motion.div>
         </>
@@ -460,10 +470,6 @@ export default function Navbar({
   // Menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Navigation bar state
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-
   const [tokenIn, setTokenIn] = useState(token);
   const [paidIn, setPaidIn] = useState(paid);
   const [nameIn, setNameIn] = useState(name);
@@ -476,31 +482,6 @@ export default function Navbar({
     setNameIn(name);
   }, [paid, token, name]);
 
-  // Thresholds
-  const thresholdScrolledPx = 64;
-  const thresholHideVisiblePx = 540;
-
-  // Use useScroll hook from framer-motion
-  const { scrollY } = useScroll();
-
-  useEffect(() => {
-    return scrollY.on("change", (y) => {
-      const current = y;
-      const prev = scrollY.getPrevious();
-
-      if (current > thresholdScrolledPx) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-
-      if (current > thresholHideVisiblePx && current > prev) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-    });
-  }, [scrollY, setIsVisible]);
 
   async function addToCard() {
     setCartState("loading");
@@ -514,13 +495,14 @@ export default function Navbar({
     ).json();
     if (res.orderToken) {
       setCartState("success");
-      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=http://receptury.jidelny.cz/?activated=true`;
+      window.location.href = `https://jidelny.cz/wp-json/receptury/v1/cart/redirect?orderToken=${res.orderToken}&redirectAfter=${process.env.NEXT_PUBLIC_BASE_URL}/?activated=true`;
     } else {
       setCartState("error");
     }
   }
 
-  const paidBoolean = !!paidIn && paidIn !== cFalse;
+  const paidBoolean = codeAndCompareDates(paidIn);
+  console.log(paid);
 
   return (
     <div className="relative">
@@ -528,13 +510,24 @@ export default function Navbar({
         className={cn(
           "w-full transition duration-500 print:hidden",
           "border-b-2 border-primary-200",
-          isScrolled ? "bg-white/80 backdrop-blur-md" : "bg-white"
+          "bg-white"
         )}
       >
         <Container className="relative flex items-center justify-between py-3 lg:py-5">
-          <Link href="/" className="relative z-offcanvas-above rounded-lg">
-            <Logo />
-          </Link>
+          <div className="z-offcanvas-above flex items-center gap-x-5">
+            <Link href="/" className="relative rounded-lg">
+              <Logo />
+            </Link>
+            <span className="hidden text-2xl md:block">/</span>
+            <a
+              href={process.env.NEXT_PUBLIC_JIDELNY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden rounded-lg md:block"
+            >
+              <LogoJidelny className="h-8 w-auto bg-transparent" />
+            </a>
+          </div>
           <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-4 lg:flex 2xl:gap-6">
             {menuRoutes.map((route) => (
               <li key={route.href}>
@@ -608,4 +601,15 @@ export default function Navbar({
       />
     </div>
   );
+}
+
+export function LogoutComponent() {
+  const router = useRouter();
+  useEffect(() => {
+    logOut();
+    router.push("/prihlaseni");
+    router.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
 }

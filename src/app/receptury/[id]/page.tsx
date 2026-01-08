@@ -1,27 +1,27 @@
-import Heading from "@/components/ui/Heading";
-import { useCoderAndCompareDates } from "@/utils/shorties";
+import { codeAndCompareDates } from "@/utils/shorties";
 import { cookies, headers } from "next/headers";
 import { LogMe, Page } from "./Client";
+import { ErrorPage } from "./Error";
 
 async function readSome(id: string, token: string | undefined, paid: boolean) {
-  if (id === "test.receptury.adelis.cz") return null;
+  if (id === process.env.NEXT_PUBLIC_URL_BLOCK) return null;
   const vlastnosti = paid
     ? []
     : [
-        "Nazev",
-        "Identita",
-        "Obrazek",
-        "DruhSkupina",
-        "DruhPodskupina",
-        "Dieta1",
-        "Dieta2",
-        "Dieta3",
-        "TepelnaUprava",
-        "Receptar",
-      ];
+      "Nazev",
+      "Identita",
+      "Obrazek",
+      "DruhSkupina",
+      "DruhPodskupina",
+      "Dieta1",
+      "Dieta2",
+      "Dieta3",
+      "TepelnaUprava",
+      "Receptar",
+    ];
 
   const result = await (
-    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+    await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -55,7 +55,7 @@ async function readSome(id: string, token: string | undefined, paid: boolean) {
 
 async function readSomeByCode(code: string) {
   const result = await (
-    await fetch("https://test.receptury.adelis.cz/APIFrontend.aspx", {
+    await fetch(process.env.NEXT_PUBLIC_RECEPTURY_URL ?? "", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -100,19 +100,16 @@ export default async function Home({
 
   const cookie = cookies();
   const token = cookie.get("token")?.value;
-  const paid = useCoderAndCompareDates(cookie.get("paid")?.value);
+  const paid = codeAndCompareDates(cookie.get("paid")?.value);
 
-  const data: any =
-    params.id === "sdilena"
-      ? await readSomeByCode(Object.keys(searchParams)[0])
-      : await readSome(params.id, token, paid);
+  const shared = params.id === "sdilena";
+
+  const data: any = shared
+    ? await readSomeByCode(Object.keys(searchParams)[0])
+    : await readSome(params.id, token, paid);
 
   if (!data || !data.Status) {
-    return (
-      <div className="flex h-[calc(100vh-200px)] justify-center pt-48">
-        <Heading size="sm">Nepodařilo se načíst data.</Heading>
-      </div>
-    );
+    return <ErrorPage shared={shared} />;
   }
 
   if (!data.Vety[0]) {
@@ -129,7 +126,7 @@ export default async function Home({
       token={token}
       paid={paid}
       path={path}
-      shared={params.id === "sdilena" ? curr.ZbyvaSdileni : false}
+      shared={shared ? curr.ZbyvaSdileni : false}
     />
   );
 }

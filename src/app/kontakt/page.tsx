@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 md:pb-36 md:pt-10">
       <Kontakt />
-      <FAQ />
+      {/* <FAQ /> */}
     </div>
   );
   function Kontakt() {
@@ -65,11 +65,13 @@ export default function Home() {
       job,
       email,
       tel,
+      hours,
     }: {
       name: string;
       job: string;
       email: string;
       tel?: string;
+      hours?: string;
     }) {
       return (
         <div>
@@ -82,14 +84,17 @@ export default function Home() {
             >
               {email}
             </StyledLink>
-            {tel && (
-              <StyledLink
-                href={`tel:${tel}`}
-                className="font-bold text-primary"
-              >
-                {tel}
-              </StyledLink>
-            )}
+            <span>
+              {tel && (
+                <StyledLink
+                  href={`tel:${tel}`}
+                  className="font-bold text-primary"
+                >
+                  {tel}
+                </StyledLink>
+              )}
+              {hours && <span>{hours}</span>}
+            </span>
           </div>
         </div>
       );
@@ -99,9 +104,9 @@ export default function Home() {
         <Heading as="h1" className="mb-12" size="lg">
           Kontakty a firemní údaje
         </Heading>
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
           <div className="flex flex-col gap-y-5">
-            <Column title="Tým Knihovna Receptur.cz">
+            <Column title="Receptury.cz">
               <div className="flex flex-col">
                 <span className="font-semibold">Sekretariát</span>
                 <StyledLink
@@ -124,91 +129,63 @@ export default function Home() {
                 </StyledLink>
               </div>
             </Column>
-            <Column title="Produkce" className="block md:hidden">
+            <Column title="Náš tým" className="block md:hidden">
               <Person
                 name="Lukáš Doubek"
-                job="projektový manažer"
-                email="doubek@visplzen.cz"
+                job="ředitel"
+                email="doubek@jidelny.cz"
               />
               <Person
                 name="Tereza Ottová"
-                job="administrace přihlášek, fakturace"
-                email="ottova@visplzen.cz"
+                job="administrace přihlášek, fakturace, marketing"
+                email="ottova@jidelny.cz"
                 tel="+420 720 962 105"
-              />
-            </Column>
-            <Column
-              title="Portál Knihovna Receptur.cz"
-              className="block md:hidden"
-            >
-              <Person
-                name="Pavel Ludvík"
-                job="redakce, odborný garant"
-                email="redakce@jidelny.cz"
-              />
-              <Person
-                name="Michaela Divišová"
-                job="redakce"
-                email="michaela.divisova@jidelny.cz"
+                hours="(Po - Pá, 9:00 - 15:00)"
               />
             </Column>
           </div>
           <Column title="Vydavatel">
             <div className="font-bold">
-              <p>VIS Plzeň, s.r.o</p>
+              <p>Jídelny.cz, s.r.o</p>
               <p>Farského 638/14, 326 00 Plzeň</p>
             </div>
             <div>
               <p>IČO:</p>
-              <p className="font-bold">45330344</p>
+              <p className="font-bold">26348179</p>
             </div>
             <div>
               <p>DIČ:</p>
-              <p className="font-bold">CZ45330344</p>
+              <p className="font-bold">CZ26348179</p>
             </div>
             <div>
               <p>Obchodní resjstřík:</p>
-              <p className="font-bold">C 1561/KSPL Krajský soud v Plzni</p>
+              <p className="font-bold">C 14497/KSPL Krajský soud v Plzni</p>
             </div>
             <div>
               <p>Číslo účtu:</p>
-              <p className="font-bold">2700627073/2010 (Fio banka, a.s.)</p>
+              <p className="font-bold">2700327409/2010 (Fio banka, a.s.)</p>
             </div>
             <div>
               <p>IBAN účtu:</p>
-              <p className="font-bold">CZ90 2010 0000 0027 0062 7073</p>
+              <p className="font-bold">CZ54 2010 0000 0027 0032 7409</p>
             </div>
             <div>
               <p>BIC kód:</p>
               <p className="font-bold">FIOBCZPPXXX</p>
             </div>
           </Column>
-          <Column title="Produkce" className="hidden md:block">
+          <Column title="Náš tým" className="hidden md:block">
             <Person
               name="Lukáš Doubek"
-              job="projektový manažer"
-              email="doubek@visplzen.cz"
+              job="ředitel"
+              email="doubek@jidelny.cz"
             />
             <Person
               name="Tereza Ottová"
-              job="administrace přihlášek, fakturace"
-              email="ottova@visplzen.cz"
+              job="administrace přihlášek, fakturace, marketing"
+              email="ottova@jidelny.cz"
               tel="+420 720 962 105"
-            />
-          </Column>
-          <Column
-            title="Portál Knihovna Receptur.cz"
-            className="hidden md:block"
-          >
-            <Person
-              name="Pavel Ludvík"
-              job="redakce, odborný garant"
-              email="redakce@jidelny.cz"
-            />
-            <Person
-              name="Michaela Divišová"
-              job="redakce"
-              email="michaela.divisova@jidelny.cz"
+              hours="(Po - Pá, 9:00 - 15:00)"
             />
           </Column>
         </div>

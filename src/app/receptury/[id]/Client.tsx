@@ -1,4 +1,5 @@
 "use client";
+
 import { ArrowLeftAltIcon } from "@/components/icons";
 import MealSymbol from "@/components/symbols/MealSymbol";
 import Badge from "@/components/ui/Badge";
@@ -9,8 +10,11 @@ import Heading from "@/components/ui/Heading";
 import StyledLink from "@/components/ui/StyledLink";
 import { partners } from "@/configs/partners";
 import { toast } from "@/hooks/useToast";
+import { getProxiedImageUrl } from "@/utils/shorties";
+import clsx from "clsx";
+import { useQRCode } from "next-qrcode";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const icons: {
@@ -60,16 +64,16 @@ export function Page({
   path?: string;
   shared?: number | false;
 }) {
+  console.log(curr);
   const [refresh, setRefresh] = useState(false);
-
   useEffect(() => {
     // přepíše text v liště na počet kolikrát jde ještě sdílená zobrazit
-    if (!shared) return;
+    if (!shared && shared !== 0) return;
     setTimeout(() => {
       const el = document.getElementById("slt1");
       if (!el) return;
       el.textContent = el.innerText.replace("%", shared.toString());
-    }, 200);
+    }, 50);
   }, [shared]);
 
   async function zmenStitek(
@@ -102,6 +106,13 @@ export function Page({
         }),
       })
     ).json();
+    if (!result.Status) {
+      return toast({
+        intent: "error",
+        title: `Recepturu se nepodařilo přidat.`,
+      });
+    }
+
     if (hodnota) curr.Stitky.push(stitek);
     else {
       var index = curr.Stitky.indexOf(stitek);
@@ -147,11 +158,12 @@ export function Page({
   }
 
   const currParner =
-    card.Receptar === "1"
+    card.Receptar === "20"
       ? partners[0]
-      : card.Receptar === "2"
+      : card.Receptar === "21"
         ? partners[1]
         : "";
+
   return (
     <div className="flex flex-col items-stretch justify-start gap-12 pb-32 pt-8 print:py-5 md:pb-36 md:pt-10">
       <Hero
@@ -196,13 +208,13 @@ export function Page({
               text: "Alergeny uvedené u receptu se mohou lišit v závislosti na použitých surovinách. Čísla alergenů jsou uvedena podle přílohy II nařízení EU 1169/2011.",
             }}
             terapeut={{
-              text:
-                card.VyjadreniNT === "" ? "Není vyplněno" : card.VyjadreniNT,
+              text: card.VyjadreniNT,
+              jmeno: card.ZodpovednyNTUzivatel,
               badges: [
                 card.Dieta1 === "Ano" && "Bezlepková",
                 card.Dieta2 === "Ano" && "Bezmléčná",
                 card.Dieta3 === "Ano" && "Šetřící",
-              ],
+              ].filter(Boolean),
             }}
             skladba={{
               polevka: card.DoporucenaPolevka,
@@ -213,6 +225,7 @@ export function Page({
             stitky={curr.Stitky}
             zmenStitek={zmenStitek}
             refresh={refresh}
+            getShareLink={getShareLink}
           />
           {/* <Galerie images={[card.Obrazek1, card.Obrazek2, card.Obrazek3]} /> */}
           {/* <VolitelnyObsah
@@ -278,7 +291,7 @@ export function Kalkulacka({
     porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
-      NazevSuroviny: string;
+      Upresneni: string;
       MernaJednotka: string;
     }[];
   };
@@ -387,10 +400,10 @@ export function Kalkulacka({
                 key={"kfdr" + index}
                 className="border-t border-primary-300/60"
               >
-                <td className="py-3 font-bold print:py-0.5">
-                  {calcResult} {row.MernaJednotka}
+                <td className="whitespace-nowrap py-3 font-bold print:py-0.5">
+                  {calcResult} {parseFloat(calcResult) > 0 && row.MernaJednotka}
                 </td>
-                <td className="py-3 print:py-0.5">{row.NazevSuroviny}</td>
+                <td className="py-3 print:py-0.5">{row.Upresneni}</td>
               </tr>
             );
           })}
@@ -478,6 +491,8 @@ export function Hero({
 }) {
   const [isValidImage, setIsValidImage] = useState(false);
   const [, setRefreshIn] = useState(refresh);
+  const router = useRouter();
+
   let badgeCounter = 0;
 
   useEffect(() => {
@@ -488,12 +503,20 @@ export function Hero({
     if (!image) return;
     const checkImage = async () => {
       try {
-        const response = await fetch(image);
+        const proxiedUrl = getProxiedImageUrl(image);
+        if (!proxiedUrl) {
+          setIsValidImage(false);
+          return;
+        }
+        const response = await fetch(proxiedUrl);
         const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.startsWith("image")) {
+        if (response.ok && contentType && contentType.startsWith("image")) {
+          setIsValidImage(true);
+        } else {
           setIsValidImage(false);
         }
       } catch (error) {
+        console.log(image);
         setIsValidImage(false);
         console.error("Error checking image:", error);
       }
@@ -502,16 +525,25 @@ export function Hero({
     checkImage();
   }, [image]);
 
+  function goBack() {
+    const referrer = document.referrer;
+    const fromHome = referrer.includes(window.location.origin + "/");
+    if (fromHome) router.back();
+    else router.push("/");
+  }
+
   return (
     <Container className="print:hidden">
       <div className="relative grid grid-rows-2 overflow-hidden rounded-3xl border-2 border-primary-300/60 bg-white md:grid-cols-2 md:grid-rows-1 md:flex-row-reverse md:justify-between md:pr-0">
         <div className="relative flex items-center justify-center bg-primary-300/30 md:order-2">
           {isValidImage && image ? (
             <Image
-              src={image}
+              src={getProxiedImageUrl(image) || ""}
               alt=""
               className="w-full bg-gray-300 object-cover"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
             />
           ) : (
             <MealSymbol size={48} className="scale-150" />
@@ -523,10 +555,10 @@ export function Hero({
             asChild
             hoverEffect="none"
           >
-            <Link href="/">
+            <button onClick={goBack}>
               <ArrowLeftAltIcon />
               Zpět na hlavní stránku
-            </Link>
+            </button>
           </StyledLink>
           <div
             className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
@@ -671,6 +703,7 @@ export function Informations({
   stitky,
   zmenStitek,
   refresh,
+  getShareLink,
 }: {
   title: string;
   postup: string;
@@ -680,13 +713,13 @@ export function Informations({
     porciBackend: number;
     data: {
       MnozstviHrubeDospeli: string;
-      NazevSuroviny: string;
+      Upresneni: string;
       MernaJednotka: string;
     }[];
   };
   hmotnost: { porce: string; masa: string; omacky: string };
   alergeny: { alergeny: string[]; text: string };
-  terapeut: { text: string; badges: any };
+  terapeut: { text: string; badges: any; jmeno: string };
   skladba: { polevka: string; priloha: string; doplnek: string };
   veta: number;
   stitky: string[];
@@ -697,6 +730,7 @@ export function Informations({
     changeHodnota?: () => void
   ) => void;
   refresh: boolean;
+  getShareLink: () => void;
 }) {
   const [, setRefreshIn] = useState(refresh);
 
@@ -705,12 +739,13 @@ export function Informations({
   }, [refresh]);
 
   return (
-    <Container className="flex flex-col gap-5 sm:gap-7">
+    <Container className="flex flex-col justify-start gap-5 print:h-[99%] print:min-h-[96vh] sm:gap-7">
       <Title
         stitky={stitky}
         title={title}
         veta={veta}
         zmenStitek={zmenStitek}
+        getShareLink={getShareLink}
       />
       <div className="flex flex-col gap-5 print:flex-row sm:gap-7 md:flex-row">
         <div className="flex flex-col gap-5 sm:gap-7">
@@ -719,12 +754,20 @@ export function Informations({
         </div>
         <div className="flex flex-col gap-5 sm:gap-7">
           <Postup postup={postup} />
-          <div className="grid gap-5 sm:gap-7 xl:grid-cols-2">
+          <div
+            className={`grid gap-5 sm:gap-7 ${
+              (skladba.polevka || skladba.priloha || skladba.doplnek) &&
+              "xl:grid-cols-2"
+            }`}
+          >
             <Alergeny alergeny={alergeny} />
             <Skladba skladba={skladba} />
           </div>
           <Terapeut terapeut={terapeut} />
         </div>
+      </div>
+      <div className="mt-auto hidden justify-self-end print:block">
+        <CurrentUrlQRCode />
       </div>
     </Container>
   );
@@ -735,6 +778,7 @@ function Title({
   zmenStitek,
   veta,
   stitky,
+  getShareLink,
 }: {
   title: string;
   zmenStitek: (
@@ -744,6 +788,7 @@ function Title({
   ) => void;
   veta: number;
   stitky: string[];
+  getShareLink: () => void;
 }) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:justify-between">
@@ -773,6 +818,8 @@ function Title({
                     );
                   case "print":
                     return window.print();
+                  case "share":
+                    return getShareLink();
                 }
               }}
               icon={(() => {
@@ -861,7 +908,7 @@ function Alergeny({
   alergeny: { text: string; alergeny: string[] };
 }) {
   return (
-    <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+    <div className="flex flex-col gap-y-5 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Alergeny</Heading>
       <div className="flex flex-row gap-x-3">
         {alergeny.alergeny.map((alergen, index) => (
@@ -878,8 +925,9 @@ function Alergeny({
   );
 }
 function Skladba({ skladba }: { skladba: any }) {
+  if (!skladba.polevka && !skladba.priloha && !skladba.doplnek) return null;
   return (
-    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4">
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Doporučení ke skladbě</Heading>
       <p>
         <span className="font-bold text-black">Doporučená polévka: </span>
@@ -899,9 +947,12 @@ function Skladba({ skladba }: { skladba: any }) {
 function Terapeut({
   terapeut,
 }: {
-  terapeut: { text: string; badges: string[] };
+  terapeut: { text: string; badges: string[]; jmeno: string };
 }) {
   let badgeCounter = 0;
+  if (!terapeut.text && terapeut.badges.length === 0 && !terapeut.jmeno)
+    return null;
+
   return (
     <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
       <Heading size="sm">Nutriční terapeut</Heading>
@@ -920,6 +971,11 @@ function Terapeut({
           );
         })}
       </div>
+      {terapeut.jmeno && (
+        <p>
+          Jméno nutričního terapeuta: <strong>{terapeut.jmeno}</strong>
+        </p>
+      )}
     </div>
   );
 }
@@ -1019,4 +1075,42 @@ export function Partner({
 export function LogMe({ msg }: { msg: any }) {
   console.log(msg);
   return null;
+}
+
+export function CurrentUrlQRCode(props: React.ComponentPropsWithRef<"div">) {
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const { SVG } = useQRCode();
+
+  useEffect(() => {
+    setMounted(true);
+    setCurrentUrl(window.location.href);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <div
+      {...props}
+      className={clsx(
+        "flex flex-col items-center justify-start gap-1",
+        props.className
+      )}
+    >
+      <SVG
+        text={currentUrl}
+        options={{
+          errorCorrectionLevel: "M",
+          margin: 3,
+          scale: 4,
+          width: 100,
+          color: {
+            dark: "#000",
+            light: "#FFF",
+          },
+        }}
+      />
+      <p className="text-center text-xs">{currentUrl}</p>
+    </div>
+  );
 }

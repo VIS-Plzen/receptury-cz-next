@@ -12,12 +12,16 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
   const generatedId = useId();
 
   return (
-    <div className={cn("flex cursor-pointer items-start gap-x-1", className)}>
+    <div
+      className={cn("flex cursor-pointer items-start gap-x-1",
+        (props.disabled || props.readOnly) && "pointer-events-none", className)
+      }
+    >
       <input
         id={generatedId}
         type="checkbox"
         onChange={(e) =>
-          !props.disabled && onChange && onChange(e.target.checked)
+          !props.disabled && !props.readOnly && onChange && onChange(e.target.checked)
         }
         {...props}
         className={cn(
@@ -26,7 +30,8 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
           "transition duration-150 ease-in-out",
           "focus:ring-gray-200",
           "checked:border-primary-500 checked:bg-primary-500 checked:focus:ring-primary-500/30",
-          "relative"
+          "relative",
+          (props.disabled || props.readOnly) && "pointer-events-none"
         )}
         style={{ height: "20px", width: "20px" }}
       />
@@ -42,7 +47,7 @@ function Checkbox({ className, label, onChange, ...props }: CheckboxProps) {
       />
 
       {label && (
-        <label htmlFor={generatedId} className="cursor-pointer leading-tight">
+        <label htmlFor={generatedId} className={cn("cursor-pointer leading-tight", (props.disabled || props.readOnly) && "pointer-events-none")}>
           {label}
         </label>
       )}

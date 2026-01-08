@@ -28,7 +28,7 @@ export default function Paginator({
       changePage(1);
     }
     if (currentPage > totalPages) {
-      changePage(totalPages);
+      changePage(1);
     }
   }, [currentPage, changePage, totalPages]);
 

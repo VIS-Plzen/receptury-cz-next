@@ -53,14 +53,14 @@ export default function Page() {
   }
   const [hasNotice, setHasNotice] = useState<null | {
     variant:
-      | "info"
-      | "success"
-      | "warning"
-      | "error"
-      | "info-solid"
-      | "success-solid"
-      | "warning-solid"
-      | "error-solid";
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "info-solid"
+    | "success-solid"
+    | "warning-solid"
+    | "error-solid";
     message: string;
   }>(returnInitNotice);
 
@@ -103,7 +103,8 @@ export default function Page() {
       ).json();
 
       if (res.token) {
-        const expires = returnExpirationTime(2);
+        setHasNotice(null);
+        const expires = returnExpirationTime(24 * 30);
         cookies.set("token", res.token, { expires: expires, path: "/" });
         cookies.set("name", res.firstName + " " + res.lastName, {
           expires: expires,
@@ -160,13 +161,15 @@ export default function Page() {
             }
             onBlur={formik.handleBlur}
           ></PasswordField>
-          <div className="flex items-start justify-between border-b border-primary-200">
+          <div className="flex flex-col-reverse items-end border-b border-primary-200 md:flex-row md:items-center md:justify-between">
             {/* redirect to jidelny.cz for password reset*/}
-            <StyledLink href="https://jidelny.cz/profil/zapomenute-heslo/?redirectAfter=https://receptury.cz/password-reset-complete">
+            <StyledLink
+              href={`${process.env.NEXT_PUBLIC_JIDELNY_URL}/profil/zapomenute-heslo?redirectAfter=${process.env.NEXT_PUBLIC_BASE_URL}`}
+            >
               Zapomenuté heslo?
             </StyledLink>
             <Button
-              className="relative my-4 items-end "
+              className="relative my-4 w-full items-end md:w-auto"
               type="submit"
               isLoading={formik.isSubmitting}
             >

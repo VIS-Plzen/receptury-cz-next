@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { getProxiedImageUrl } from '@/utils/shorties';
 import Image from "next/image";
 import MealSymbol from "../symbols/MealSymbol";
 import Badge from "./Badge";
@@ -92,6 +93,7 @@ function GridCardLayout({
   stitky,
   veta,
 }: RecipeCardProps) {
+  const proxiedImg = getProxiedImageUrl(img) || "";
   return (
     <div
       className={cn(
@@ -107,13 +109,15 @@ function GridCardLayout({
           isLoading && "bg-gray-200"
         )}
       >
-        {img ? (
+        {proxiedImg ? (
           <div className={cn(isLoading && "hidden", "h-full")}>
             <Image
               alt=""
-              src={img}
+              src={proxiedImg}
               className="h-full w-full object-cover"
               fill
+              sizes="25vw"
+              priority
             />
           </div>
         ) : (
@@ -135,6 +139,7 @@ function GridCardLayout({
           />
         </div>
       </div>
+      {/* LAYOUT SHIFT TADY - ZAKOMENTOVAT LABEL A BADGE RENDERER */}
       <div
         className={cn(
           "flex h-44 flex-grow flex-col justify-between bg-white p-[16px]"
@@ -142,7 +147,6 @@ function GridCardLayout({
       >
         <div className="line-clamp-3 text-sm font-bold">
           <p className={cn(isLoading && "hidden")}>{label}</p>
-          {/* loading text placeholder */}
           <div className={cn("hidden", isLoading && "block")}>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
             <div className="inline-block h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
@@ -152,7 +156,6 @@ function GridCardLayout({
         <div className={cn(isLoading && "hidden")}>
           <BadgeRenderer badges={badges} />
         </div>
-        {/* loading badges placeholder */}
         <div className={cn("hidden", isLoading && "flex flex-col gap-1")}>
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
           <div className="inline-block h-4 w-16 animate-pulse rounded-full bg-gray-200"></div>
@@ -173,6 +176,7 @@ function RowCardLayout({
   veta,
   stitky,
 }: RecipeCardProps) {
+  const proxiedImg = getProxiedImageUrl(img) || "";
   return (
     <div
       className={cn(
@@ -182,9 +186,9 @@ function RowCardLayout({
         className
       )}
     >
-      {img ? (
-        <div className={cn("relative h-full w-[70px]")}>
-          <Image alt="" src={img} fill className="object-cover" />
+      {!isLoading && proxiedImg ? (
+        <div className={cn("relative h-full w-[70px] flex-shrink-0")}>
+          <Image alt="" src={proxiedImg} fill className="object-cover" sizes="70px" />
         </div>
       ) : (
         <div
@@ -255,6 +259,7 @@ function RecipeCard({
   stitky,
   veta,
   width,
+  img,
 }: RecipeCardProps) {
   return (
     <ReturnedLayout
@@ -266,6 +271,7 @@ function RecipeCard({
         zmenStitek: zmenStitek,
         stitky: stitky,
         veta: veta,
+        img: img,
       }}
       loading={isLoading}
       isGridView={isGridView}
@@ -273,7 +279,7 @@ function RecipeCard({
       forceRow={forceRow}
       zmenStitek={zmenStitek}
       stitky={stitky}
-      veta={veta}
+      veta={id}
       width={width}
     />
   );
@@ -313,15 +319,14 @@ function ReturnedLayout({
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={`${
-          forceGrid
-            ? "block"
-            : forceRow
-              ? "hidden"
-              : isGridView
-                ? "hidden md:block"
-                : "hidden"
-        } ${card.className}`}
+        className={`${forceGrid
+          ? "block"
+          : forceRow
+            ? "hidden"
+            : isGridView
+              ? "hidden md:block"
+              : "hidden"
+          } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}
@@ -331,15 +336,14 @@ function ReturnedLayout({
         badges={card.badges}
         img={card.img}
         isLoading={loading}
-        className={`${
-          forceRow
-            ? "flex"
-            : forceGrid
-              ? "hidden"
-              : isGridView
-                ? "flex md:hidden"
-                : "flex"
-        } ${card.className}`}
+        className={`${forceRow
+          ? "flex"
+          : forceGrid
+            ? "hidden"
+            : isGridView
+              ? "flex md:hidden"
+              : "flex"
+          } ${card.className}`}
         zmenStitek={zmenStitek}
         stitky={stitky}
         veta={veta}

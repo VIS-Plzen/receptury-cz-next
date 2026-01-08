@@ -16,9 +16,10 @@ import Paginator from "@/components/ui/Paginator";
 import RecipeCardsGrid from "@/components/ui/RecipeCardsGrid";
 import Selector from "@/components/ui/Selector";
 import ToggleGridButton from "@/components/ui/ToggleGridButton";
+import { useCard } from "@/context/FavoriteCards";
 import { toast } from "@/hooks/useToast";
 import { returnExpirationTime } from "@/utils/shorties";
-import { nazvy, suroviny } from "@/utils/static";
+import { groupsData } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,10 +34,11 @@ export default function Receptury({
   urlPreQuery = "",
   boxSettings,
   initialData,
-  groupsData,
   isGridView,
   logged,
   paid,
+  comboBoxes,
+  sideBars,
 }: {
   title?: string;
   initialData?: any;
@@ -47,10 +49,21 @@ export default function Receptury({
     disabledValues?: string[];
     initialTrue?: string[];
   };
-  groupsData: any;
   isGridView?: boolean;
   logged?: string | boolean;
   paid?: string | boolean;
+  comboBoxes: {
+    title: string;
+    name: string;
+    options: any[];
+    value: string;
+  }[];
+  sideBars: {
+    title: string;
+    name: string;
+    backend: string;
+    options: any[];
+  }[];
 }) {
   const [data, setData] = useState<any>(initialData);
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -59,11 +72,8 @@ export default function Receptury({
   const [refresh, setRefresh] = useState(false);
   const router = useRouter();
   const paramsHook = useSearchParams();
-  const urlParams = decodeURIComponent(
-    paramsHook.toString().replaceAll("+", " ")
-  );
-  const urlParamsSplitted = urlParams.split("&");
   const paramsObjects = Object.fromEntries(paramsHook);
+  const { addCard, removeCard } = useCard();
 
   const cookie = new Cookies();
 
@@ -100,174 +110,7 @@ export default function Receptury({
   // loading tlačítek a karet
   const [loading, setLoading] = useState<boolean>(initialData ? false : true);
 
-  const [sideBarValues, setSideBarValues] = useState(() => {
-    let holder: {
-      title: string;
-      name: string;
-      backend: string;
-      options: {
-        title: string;
-        name: string;
-        checked: boolean;
-        disabled?: boolean;
-        backend?: string;
-      }[];
-    }[] = [
-      {
-        title: "Obecné",
-        name: "obecne",
-        backend: "Obecne",
-        options: [
-          {
-            title: "Vše",
-            name: "vse",
-            backend: "",
-            checked: false,
-          },
-          {
-            title: "Moje oblíbené",
-            name: "moje",
-            backend: "Oblíbené",
-            checked: false,
-          },
-          {
-            title: "Nutričně ověřeno",
-            name: "nutricni",
-            backend: "SchvalenoNT",
-            checked: false,
-          },
-          {
-            title: "Stáhnout do skladu",
-            name: "sklad",
-            backend: "MSklad",
-            checked: false,
-          },
-          {
-            title: "Videoreceptury",
-            name: "videoreceptury",
-            backend: "Video",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Speciální strava",
-        name: "special",
-        backend: "Dieta",
-        options: [
-          {
-            title: "Bezlepková",
-            name: "bezlepkova",
-            backend: "Dieta1",
-            checked: false,
-          },
-          {
-            title: "Bezmléčná",
-            name: "bezmlecna",
-            backend: "Dieta2",
-            checked: false,
-          },
-          {
-            title: "Šetřící",
-            name: "setrici",
-            backend: "Dieta3",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Způsob přípravy",
-        name: "priprava",
-        backend: "TepelnaUprava",
-        options: [
-          {
-            title: "Vařené",
-            name: "varene",
-            backend: "Vařené",
-            checked: false,
-          },
-          {
-            title: "Dušené",
-            name: "dusene",
-            backend: "Dušené",
-            checked: false,
-          },
-          {
-            title: "Pečené",
-            name: "pecene",
-            backend: "Pečené",
-            checked: false,
-          },
-          {
-            title: "Zapečené",
-            name: "zapecene",
-            backend: "Zapečené",
-            checked: false,
-          },
-          {
-            title: "Smažené",
-            name: "smazene",
-            backend: "Smažené",
-            checked: false,
-          },
-          {
-            title: "Ostatní",
-            name: "ostatni",
-            backend: "Ostatní",
-            checked: false,
-          },
-        ],
-      },
-      {
-        title: "Partner",
-        name: "partner",
-        backend: "Receptar",
-        options: [
-          {
-            title: "Bidfood",
-            name: "bidfood",
-            backend: "1",
-            checked: false,
-          },
-          {
-            title: "Bonduelle",
-            name: "bonduelle",
-            backend: "2",
-            checked: false,
-          },
-        ],
-      },
-    ];
-    // Načte hodnoty z URL
-    urlParamsSplitted.forEach((param) => {
-      const [key, values] = splitUrlParams(param);
-      const box = holder.find((b) => b.name === key);
-      if (box && Array.isArray(values)) {
-        if (box.name === "obecne") {
-          const option = box.options.find((o) => o.name === values[0]);
-          if (option) option.checked = true;
-        } else {
-          values.forEach((v) => {
-            const option = box.options.find((o) => o.name === v);
-            if (option) option.checked = true;
-          });
-        }
-      }
-    });
-
-    if (boxSettings) {
-      holder.forEach((box) =>
-        box.options.forEach((boxValue) => {
-          const valueName = boxValue.name;
-          if (boxSettings.initialTrue?.includes(valueName))
-            boxValue.checked = true;
-          if (boxSettings.disabledValues?.includes(valueName))
-            boxValue.disabled = true;
-        })
-      );
-    }
-    return holder;
-  });
+  const [sideBarValues, setSideBarValues] = useState(sideBars);
   const [pageState, setPageState] = useState<number>(
     (() => {
       const urlParam = paramsHook.get("stranka");
@@ -309,31 +152,7 @@ export default function Receptury({
     return [key, values, prevalues];
   }
 
-  const [comboBoxValues, setComboBoxValues] = useState(() => {
-    const holder = [
-      {
-        title: "Dle receptury",
-        name: "receptura",
-        value: "",
-        options: nazvy,
-      },
-      {
-        title: "Dle suroviny",
-        name: "surovina",
-        value: "",
-        options: suroviny,
-      },
-    ];
-    // Načte hodnoty z URL
-    urlParamsSplitted.forEach((param) => {
-      const [key, values] = splitUrlParams(param);
-      const comboBox = holder.find((b) => b.name === key);
-      if (comboBox) {
-        comboBox.value = values[0];
-      }
-    });
-    return holder;
-  });
+  const [comboBoxValues, setComboBoxValues] = useState(comboBoxes);
 
   function resetFilters() {
     sideBarValues.forEach((box) => {
@@ -357,6 +176,7 @@ export default function Receptury({
     setCancelDisabled(true);
     setSaveDisabled(false);
     setRefresh(!refresh);
+    getDataAndSetQuery();
   }
 
   function updateCombobox(index: number, value: string) {
@@ -370,9 +190,9 @@ export default function Receptury({
   }
 
   // vytvoří url parametry podle comboBoxů, pak podle checkboxů, pak přidá stránku a nahraje do routeru, pak refreshne vše
-  async function getDataAndSetQuery(newPage: number | undefined) {
+  async function getDataAndSetQuery(newPage?: number) {
     setLoading(true);
-    const page = newPage ? newPage : pageState;
+    const page = newPage ? newPage : 1;
     let query = urlPreQuery;
 
     comboBoxValues.forEach((combo) => {
@@ -428,6 +248,7 @@ export default function Receptury({
 
     setSaveDisabled(true);
     setLoading(false);
+    setPageState(page);
     return setRefresh(!refresh);
   }
 
@@ -503,6 +324,7 @@ export default function Receptury({
             Podminka: podminka,
             Limit: recipesPerPage,
             Offset: (page - 1) * recipesPerPage,
+            OrderBy: "Ulozeno DESC",
             Vlastnosti: [
               "Veta",
               "Nazev",
@@ -563,31 +385,42 @@ export default function Receptury({
         }),
       })
     ).json();
-    if (result.Status) {
-      let vetaStringed = veta.toString();
-      setData((prev: any) => {
-        let objHolder = prev;
-        const curr = objHolder.Vety.find(
-          (veta: any) => veta.Vlastnosti.Veta === vetaStringed
-        );
-
-        if (hodnota) curr.Stitky.push(stitek);
-        else {
-          var index = curr.Stitky.indexOf(stitek);
-          if (index !== -1) {
-            curr.Stitky.splice(index, 1);
-          }
-        }
-
-        return objHolder;
+    if (!result.Status) {
+      return toast({
+        intent: "error",
+        title: `Recepturu se nepodařilo přidat.`,
       });
-
-      setRefresh(!refresh);
     }
+    let vetaStringed = veta.toString();
+
+    const curr = data.Vety.find(
+      (veta: any) => veta.Vlastnosti.Identita === vetaStringed
+    );
+    setData((prev: any) => {
+      let objHolder = prev;
+
+      if (hodnota) curr.Stitky.push(stitek);
+      else {
+        var index = curr.Stitky.indexOf(stitek);
+        if (index !== -1) {
+          curr.Stitky.splice(index, 1);
+        }
+      }
+
+      return objHolder;
+    });
+    setRefresh(!refresh);
+    setTimeout(() => {
+      if (hodnota) {
+        addCard(curr);
+      } else {
+        removeCard(vetaStringed);
+      }
+    }, 50);
   }
 
   return (
-    <Container className={`py-6 ${className}`}>
+    <Container className={`${className}`}>
       <TopRow
         comboBoxValues={comboBoxValues}
         pocet={data && data.CelkovyPocet}
@@ -620,7 +453,7 @@ export default function Receptury({
           updateSideBarValue={updateSideBarValue}
           getDataAndSetQuery={() => {
             setSideBarOpen(false);
-            getDataAndSetQuery(pageState);
+            getDataAndSetQuery();
           }}
           groupsData={groupsData}
           selectedGroup={selectedGroup}
@@ -650,14 +483,17 @@ export default function Receptury({
           hideBoxes={boxSettings?.hiddenBoxes}
         />
 
-        {!initialData && loading ? (
+        {loading ? (
           <RecipeCardsGrid
             className="col-span-4 pt-0 xl:col-span-5"
             gridView={gridView}
             isLoading={true}
-            data={(() => ({ Status: true, Vety: Array.from({ length: 6 }) }))()}
+            data={(() => ({
+              Status: true,
+              Vety: Array.from({ length: 15 }),
+            }))()}
           />
-        ) : !data || !data.Vety || data.Vety.length === 0 ? (
+        ) : !loading && (!data || !data.Vety || data.Vety.length === 0) ? (
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"
@@ -719,7 +555,11 @@ function Comboboxes({
           name={combo.name}
           options={combo.options}
           selectedOption={combo.value}
-          onChange={(value: string) => updateCombobox(index, value)}
+          onChange={(value: string) => {
+            value = value.trim();
+            updateCombobox(index, value);
+            getData();
+          }}
           aria-label={"Vyhledat " + combo.title}
           z={100 - index}
           onEnter={getData}
@@ -860,13 +700,7 @@ function MobileFilters({
         <AnimatePresence initial={false}>
           <Dialog.Portal>
             {sideBarOpen && (
-              <motion.div
-                key="modal"
-                className="lg:hidden"
-                /* initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }} */
-              >
+              <motion.div key="modal" className="lg:hidden">
                 <Dialog.Overlay className="DialogOverlay" />
                 <Dialog.Content className="DialogContent">
                   <SideBar
@@ -968,7 +802,7 @@ function SideBar({
 }) {
   return (
     <div
-      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-3`}
+      className={`fixed inset-0 z-fixed flex flex-col rounded-xl bg-white py-5 max-lg:overflow-y-auto lg:static lg:z-fixed-below lg:mr-5 lg:block lg:bg-transparent lg:py-0`}
     >
       <Container className="overflow-x-visible lg:!px-0">
         <div className=" flex flex-row items-center justify-between lg:hidden">
@@ -986,7 +820,7 @@ function SideBar({
           refresh={refresh}
           getData={getDataAndSetQuery}
         />
-        <div className="flex flex-col-reverse overflow-x-visible lg:flex-col">
+        <div className="flex flex-col-reverse overflow-x-visible">
           <div className="flex w-full flex-col-reverse items-center justify-center gap-2 max-lg:border-t max-lg:border-t-primary-200 max-lg:pt-4 sm:flex-row-reverse lg:flex-col">
             <Button
               className="relative mb-2 w-full"
@@ -1010,7 +844,7 @@ function SideBar({
             </Button>
           </div>
           <div className="overflow-x-visible">
-            <div className="space-y-2 border-t border-primary-200 pb-4 pt-2">
+            <div className="space-y-2 border-primary-200 pb-4 max-lg:border-t max-lg:pt-2">
               <p className="font-bold">Skupina</p>
               <Selector
                 data={groupsData}

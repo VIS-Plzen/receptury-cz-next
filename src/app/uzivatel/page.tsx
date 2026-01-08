@@ -1,18 +1,33 @@
 import { returnBetterDate } from "@/utils/dateWorker";
-import { coder, useCoderAndCompareDates } from "@/utils/shorties";
+import { fetchCachedData } from "@/utils/fetchCachedData";
+import {
+  codeAndCompareDates,
+  coder,
+  infiniteDate,
+  returnComboBoxValues,
+  returnSideBarValues,
+} from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
-export default function Home({ searchParams }: any) {
+export default async function Home({ searchParams }: any) {
   const cookie = cookies();
   const token = cookie.get("token")?.value;
   const paidCookie = cookie.get("paid")?.value;
-  const paid = useCoderAndCompareDates(paidCookie);
+  const paid = codeAndCompareDates(paidCookie);
   const paidCoder = coder(paidCookie);
   const paidToDate = paidCoder.Status
-    ? returnBetterDate(paidCoder.data, ".", "DMY")
+    ? paidCoder.data === infiniteDate
+      ? "Nekonečné"
+      : returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
-  const gridView = cookie.get("gridView")?.value ?? "false";
+  const gridView = cookie.get("gridView")?.value ?? "true";
+  const boxSettings = { initialTrue: ["moje"], hiddenBoxes: ["obecne"] };
+  const { suroviny, nazvy } = await fetchCachedData();
+  const [sideBarValues, comboBoxValues] = [
+    returnSideBarValues(searchParams, boxSettings),
+    returnComboBoxValues(searchParams, suroviny, nazvy),
+  ];
 
   return (
     <>
@@ -27,6 +42,11 @@ export default function Home({ searchParams }: any) {
           isGridView={gridView === "true"}
           token={token}
           paid={paid}
+          filter={{
+            sideBarValues,
+            comboBoxValues,
+            boxSettings,
+          }}
         />
       </div>
     </>

@@ -17,7 +17,7 @@ type Props = {
         Dieta2: "Ano" | "Ne";
         Dieta3: "Ano" | "Ne";
         badges: string[];
-        img?: string;
+        Obrazek?: string;
       };
       Stitky: string[];
     }[];
@@ -46,8 +46,8 @@ function RecipeCardsGrid({
       className={cn(
         "flex flex-col justify-start gap-4 py-6 md:overflow-visible",
         gridView &&
-          !cardsInGrid &&
-          "md:grid md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5",
+        !cardsInGrid &&
+        "md:grid md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5",
         className
       )}
     >
@@ -68,7 +68,7 @@ function RecipeCardsGrid({
               card?.Vlastnosti.DruhSkupina,
               card?.Vlastnosti.DruhPodskupina,
             ]}
-            img="/images/food.jpeg"
+            img={card?.Vlastnosti.Obrazek}
             zmenStitek={zmenStitek}
             veta={card?.Vlastnosti.Veta}
             stitky={logged ? card?.Stitky : []}
