@@ -19,6 +19,7 @@ import ToggleGridButton from "@/components/ui/ToggleGridButton";
 import { useCard } from "@/context/FavoriteCards";
 import { toast } from "@/hooks/useToast";
 import { returnExpirationTime } from "@/utils/shorties";
+import { groupsData } from "@/utils/static";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,7 +34,6 @@ export default function Receptury({
   urlPreQuery = "",
   boxSettings,
   initialData,
-  groupsData,
   isGridView,
   logged,
   paid,
@@ -49,7 +49,6 @@ export default function Receptury({
     disabledValues?: string[];
     initialTrue?: string[];
   };
-  groupsData: any;
   isGridView?: boolean;
   logged?: string | boolean;
   paid?: string | boolean;
@@ -325,6 +324,7 @@ export default function Receptury({
             Podminka: podminka,
             Limit: recipesPerPage,
             Offset: (page - 1) * recipesPerPage,
+            OrderBy: "Ulozeno DESC",
             Vlastnosti: [
               "Veta",
               "Nazev",
@@ -363,10 +363,11 @@ export default function Receptury({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${logged
-          ? "mít aktivní předplacené členství."
-          : "být přihlášen a mít předplacené členství."
-          }`,
+        title: `Pro použití této funkce je potřeba ${
+          logged
+            ? "mít aktivní předplacené členství."
+            : "být přihlášen a mít předplacené členství."
+        }`,
       });
     }
     const result = await (
@@ -487,9 +488,12 @@ export default function Receptury({
             className="col-span-4 pt-0 xl:col-span-5"
             gridView={gridView}
             isLoading={true}
-            data={(() => ({ Status: true, Vety: Array.from({ length: 15 }) }))()}
+            data={(() => ({
+              Status: true,
+              Vety: Array.from({ length: 15 }),
+            }))()}
           />
-        ) : (!loading && (!data || !data.Vety || data.Vety.length === 0)) ? (
+        ) : !loading && (!data || !data.Vety || data.Vety.length === 0) ? (
           <p className="col-span-4 mx-auto mt-16">
             {!data
               ? "Nepodařilo se připojit na backend receptur"

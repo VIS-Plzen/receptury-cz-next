@@ -84,14 +84,15 @@ export default function Home() {
             >
               {email}
             </StyledLink>
-            <span>{tel && (
-              <StyledLink
-                href={`tel:${tel}`}
-                className="font-bold text-primary"
-              >
-                {tel}
-              </StyledLink>
-            )}
+            <span>
+              {tel && (
+                <StyledLink
+                  href={`tel:${tel}`}
+                  className="font-bold text-primary"
+                >
+                  {tel}
+                </StyledLink>
+              )}
               {hours && <span>{hours}</span>}
             </span>
           </div>
@@ -139,7 +140,7 @@ export default function Home() {
                 job="administrace přihlášek, fakturace, marketing"
                 email="ottova@jidelny.cz"
                 tel="+420 720 962 105"
-                hours="(9:00 - 15:00)"
+                hours="(Po - Pá, 9:00 - 15:00)"
               />
             </Column>
           </div>
@@ -184,7 +185,7 @@ export default function Home() {
               job="administrace přihlášek, fakturace, marketing"
               email="ottova@jidelny.cz"
               tel="+420 720 962 105"
-              hours="(9:00 - 15:00)"
+              hours="(Po - Pá, 9:00 - 15:00)"
             />
           </Column>
         </div>

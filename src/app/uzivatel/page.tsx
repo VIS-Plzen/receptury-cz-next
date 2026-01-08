@@ -1,6 +1,12 @@
 import { returnBetterDate } from "@/utils/dateWorker";
-import { fetchCachedData } from '@/utils/fetchCachedData';
-import { codeAndCompareDates, coder, infiniteDate } from "@/utils/shorties";
+import { fetchCachedData } from "@/utils/fetchCachedData";
+import {
+  codeAndCompareDates,
+  coder,
+  infiniteDate,
+  returnComboBoxValues,
+  returnSideBarValues,
+} from "@/utils/shorties";
 import { cookies } from "next/headers";
 import ContentSelector from "./client";
 
@@ -16,7 +22,12 @@ export default async function Home({ searchParams }: any) {
       : returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
   const gridView = cookie.get("gridView")?.value ?? "true";
-  const cachedData = await fetchCachedData();
+  const boxSettings = { initialTrue: ["moje"], hiddenBoxes: ["obecne"] };
+  const { suroviny, nazvy } = await fetchCachedData();
+  const [sideBarValues, comboBoxValues] = [
+    returnSideBarValues(searchParams, boxSettings),
+    returnComboBoxValues(searchParams, suroviny, nazvy),
+  ];
 
   return (
     <>
@@ -31,7 +42,11 @@ export default async function Home({ searchParams }: any) {
           isGridView={gridView === "true"}
           token={token}
           paid={paid}
-          cachedData={cachedData}
+          filter={{
+            sideBarValues,
+            comboBoxValues,
+            boxSettings,
+          }}
         />
       </div>
     </>

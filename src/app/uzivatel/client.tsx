@@ -9,7 +9,6 @@ import TextArea from "@/components/forms/TextArea";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import Receptury from "@/components/ui/Receptury/Receptury";
-import { groupsData } from "@/components/ui/Receptury/Ssr";
 import Selector from "@/components/ui/Selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -26,7 +25,7 @@ export default function ContentSelector({
   isGridView,
   paid,
   token,
-  cachedData,
+  filter,
 }: any) {
   const [content, setContent] = useState<string>(
     searchParams?.obsah ?? "informace"
@@ -108,13 +107,12 @@ export default function ContentSelector({
         <Receptury
           title="Oblíbené"
           urlPreQuery={`obsah=${content}`}
-          boxSettings={{ initialTrue: ["moje"], hiddenBoxes: ["obecne"] }}
-          groupsData={groupsData}
+          boxSettings={filter.boxSettings}
           isGridView={isGridView}
           logged={token}
           paid={paid}
-          comboBoxes={cachedData.comboBoxes}
-          sideBars={cachedData.sideBars}
+          comboBoxes={filter.comboBoxValues}
+          sideBars={filter.sideBarValues}
         />
       )}
     </div>
@@ -583,12 +581,25 @@ function Form() {
           >
             Uložit změny
           </Button> */}
-          <div className="p-4 bg-primary-100 rounded-md border-[2px] border-primary-200">
+          <div className="rounded-md border-[2px] border-primary-200 bg-primary-100 p-4">
             <Heading size="sm">Propojené účty</Heading>
-            <p>Aplikace <span className="font-bold">Receptury.cz</span> a <span className="font-bold">Jídelny.cz</span> jsou propojeny jedním účtem.</p>
+            <p>
+              Aplikace <span className="font-bold">Receptury.cz</span> a{" "}
+              <span className="font-bold">Jídelny.cz</span> jsou propojeny
+              jedním účtem.
+            </p>
             <hr className="my-2 border-primary-200" />
             <p>
-              Zobrazená pole ve formuláři slouží pouze pro informační účely. Pro úpravu údajů nebo změnu hesla prosím přejděte na <a className="text-primary-600 font-bold underline text-md cursor-pointer" href={process.env.NEXT_PUBLIC_JIDELNY_URL} target="_blank" rel="noopener noreferrer">Jídelny.cz</a>
+              Zobrazená pole ve formuláři slouží pouze pro informační účely. Pro
+              úpravu údajů nebo změnu hesla prosím přejděte na{" "}
+              <a
+                className="text-md cursor-pointer font-bold text-primary-600 underline"
+                href={process.env.NEXT_PUBLIC_JIDELNY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Jídelny.cz
+              </a>
               .
             </p>
           </div>

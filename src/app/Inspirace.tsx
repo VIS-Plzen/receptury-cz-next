@@ -78,7 +78,7 @@ export default function Inspirace({
             Tabulka: "Receptury",
             Operace: "Read",
             Limit: 10,
-            OrderBy: newSelected === "nove" ? "DatumAktualizace" : undefined,
+            OrderBy: newSelected === "nove" ? "Ulozeno DESC" : undefined,
             Vlastnosti: [
               "Nazev",
               "Identita",
