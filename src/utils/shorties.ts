@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import Cookies from "universal-cookie";
 import { compareDates } from "./dateWorker";
+import { filtrMenu, groupsData } from "./static";
 
 export function shortenFoodNames(foodNames: string[]) {
   const baseNamesMap = new Map();
@@ -223,4 +224,112 @@ export function getProxiedImageUrl(imageUrl: string | undefined) {
     return null;
   const encodedUrl = encodeURIComponent(imageUrl);
   return `/api/image?url=${encodedUrl}`;
+}
+
+export function returnGroups(searchParams: any) {
+  if (!searchParams.skupina) return [undefined, undefined];
+  let skup = groupsData.find((group) => group.value === searchParams.skupina);
+  if (!skup) return [undefined, undefined];
+
+  if (!searchParams.podskupina) return [skup.title, undefined];
+  let podskup = skup.options.find(
+    (subgroup) => subgroup.value === searchParams.podskupina
+  );
+  if (!podskup) return [skup.title, undefined];
+  return [skup.title, podskup.title];
+}
+
+export function returnSideBarValues(searchParams: any, boxSettings: any) {
+  let holder: {
+    title: string;
+    name: string;
+    backend: string;
+    options: {
+      title: string;
+      name: string;
+      checked: boolean;
+      disabled?: boolean;
+      backend?: string;
+    }[];
+  }[] = Object.assign(filtrMenu);
+
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      const values = searchParams[key].split(",");
+      const box = holder.find((b) => b.name === key);
+      if (box && Array.isArray(values)) {
+        if (box.name === "obecne") {
+          const option = box.options.find((o) => o.name === values[0]);
+          if (option) option.checked = true;
+        } else {
+          values.forEach((v) => {
+            const option = box.options.find((o) => o.name === v);
+            if (option) option.checked = true;
+          });
+        }
+      }
+    });
+  }
+  if (boxSettings) {
+    holder.forEach((box) =>
+      box.options.forEach((boxValue) => {
+        const valueName = boxValue.name;
+        if (boxSettings.initialTrue?.includes(valueName))
+          boxValue.checked = true;
+        if (boxSettings.disabledValues?.includes(valueName))
+          boxValue.disabled = true;
+      })
+    );
+  }
+  return holder;
+}
+
+export function returnComboBoxValues(
+  searchParams: any,
+  suroviny: any,
+  nazvy: any
+) {
+  const holder = [
+    {
+      title: "Dle receptury",
+      name: "receptura",
+      value: "",
+      options: nazvy,
+    },
+    {
+      title: "Dle suroviny",
+      name: "surovina",
+      value: "",
+      options: suroviny,
+    },
+  ];
+  // Načte hodnoty z URL
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      const comboBox = holder.find((b) => b.name === key);
+      const values = searchParams[key].split(",");
+      if (comboBox) {
+        comboBox.value = values[0];
+      }
+    });
+  }
+  return holder;
+}
+
+export function returnFilterBase(
+  searchParams: any,
+  boxSettings: any,
+  suroviny: any,
+  nazvy: any
+) {
+  const [selectedGroup, selectedSubgroup] = returnGroups(searchParams);
+  const sideBarValues = returnSideBarValues(searchParams, boxSettings);
+  const comboBoxValues = returnComboBoxValues(searchParams, suroviny, nazvy);
+
+  return {
+    selectedGroup,
+    selectedSubgroup,
+    sideBarValues,
+    comboBoxValues,
+  };
 }
