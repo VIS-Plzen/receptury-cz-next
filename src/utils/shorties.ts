@@ -251,7 +251,7 @@ export function returnSideBarValues(searchParams: any, boxSettings: any) {
       disabled?: boolean;
       backend?: string;
     }[];
-  }[] = Object.assign(filtrMenu);
+  }[] = structuredClone(filtrMenu);
 
   if (searchParams) {
     Object.keys(searchParams).forEach((key) => {
@@ -280,6 +280,14 @@ export function returnSideBarValues(searchParams: any, boxSettings: any) {
           boxValue.disabled = true;
       })
     );
+  }
+  const obecne = holder.find((setting) => setting.name === "obecne");
+  if (obecne) {
+    const obecneSelected = obecne.options.some((box) => box.checked);
+    if (!obecneSelected) {
+      const obecneVse = obecne.options.find((box) => box.name === "vse");
+      if (obecneVse) obecneVse.checked = true;
+    }
   }
   return holder;
 }
