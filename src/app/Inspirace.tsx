@@ -78,7 +78,7 @@ export default function Inspirace({
             Tabulka: "Receptury",
             Operace: "Read",
             Limit: 10,
-            OrderBy: newSelected === "nove" ? "Ulozeno DESC" : undefined,
+            OrderBy: newSelected === "nove" ? "Veta DESC" : undefined,
             Vlastnosti: [
               "Nazev",
               "Identita",
@@ -186,33 +186,33 @@ export default function Inspirace({
             className="block md:hidden"
           />
           {data?.[selected] &&
-          data[selected]?.length !== 0 &&
-          data[selected].Status !== false ? (
+            data[selected]?.length !== 0 &&
+            data[selected].Status !== false ? (
             <Carousel
               options={{ align: "start", loop: true }}
               hasArrows
               slides={
                 data?.[selected] === "hidden"
                   ? Array.from({ length: 6 }, (_, index) => (
-                      <RecipeCard key={index} isLoading={true} forceGrid />
-                    ))
+                    <RecipeCard key={index} isLoading={true} forceGrid />
+                  ))
                   : data?.[selected]?.map((card: any, index: number) => (
-                      <RecipeCard
-                        key={index}
-                        isLoading={loading}
-                        id={card.Vlastnosti.Identita}
-                        label={card.Vlastnosti.Nazev}
-                        badges={[
-                          card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
-                          card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
-                          card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
-                          card.Vlastnosti.TepelnaUprava,
-                          card.Vlastnosti.DruhSkupina,
-                          card.Vlastnosti.DruhPodskupina,
-                        ]}
-                        forceGrid
-                      />
-                    ))
+                    <RecipeCard
+                      key={index}
+                      isLoading={loading}
+                      id={card.Vlastnosti.Identita}
+                      label={card.Vlastnosti.Nazev}
+                      badges={[
+                        card.Vlastnosti.Dieta1 === "Ano" && "Bezlepková",
+                        card.Vlastnosti.Dieta2 === "Ano" && "Bezmléčná",
+                        card.Vlastnosti.Dieta3 === "Ano" && "Šetřící",
+                        card.Vlastnosti.TepelnaUprava,
+                        card.Vlastnosti.DruhSkupina,
+                        card.Vlastnosti.DruhPodskupina,
+                      ]}
+                      forceGrid
+                    />
+                  ))
               }
             />
           ) : (

@@ -21,9 +21,9 @@ export default async function Home({ searchParams }: any) {
   const [nove, oblibene] =
     inspiraceVisible !== "false"
       ? await Promise.all([
-          inspiraceVisible === "nove" ? readNew() : "hidden",
-          inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
-        ])
+        inspiraceVisible === "nove" ? readNew() : "hidden",
+        inspiraceVisible === "oblibene" ? readFavorite() : "hidden",
+      ])
       : ["hidden", "hidden"];
 
   async function readNew() {
@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: any) {
               Tabulka: "Receptury",
               Operace: "Read",
               Limit: 10,
-              OrderBy: "Ulozeno DESC",
+              OrderBy: "Veta DESC",
               Vlastnosti: [
                 "Nazev",
                 "Identita",
@@ -83,7 +83,7 @@ export default async function Home({ searchParams }: any) {
               Operace: "Read",
               Stitek: "Oblíbené",
               Limit: 10,
-              OrderBy: "Ulozeno DESC",
+              OrderBy: "Veta DESC",
               Vlastnosti: [
                 "Nazev",
                 "Identita",
