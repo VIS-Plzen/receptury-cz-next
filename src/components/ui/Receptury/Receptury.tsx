@@ -324,7 +324,7 @@ export default function Receptury({
             Podminka: podminka,
             Limit: recipesPerPage,
             Offset: (page - 1) * recipesPerPage,
-            OrderBy: "Ulozeno DESC",
+            OrderBy: "Veta DESC",
             Vlastnosti: [
               "Veta",
               "Nazev",
@@ -363,11 +363,10 @@ export default function Receptury({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
+        title: `Pro použití této funkce je potřeba ${logged
             ? "mít aktivní předplacené členství."
             : "být přihlášen a mít předplacené členství."
-        }`,
+          }`,
       });
     }
     const result = await (

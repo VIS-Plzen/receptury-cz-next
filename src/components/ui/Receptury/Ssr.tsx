@@ -83,7 +83,7 @@ async function readSome(
               Podminka: podminka,
               Limit: recipesPerPage,
               Offset: (page - 1) * recipesPerPage,
-              OrderBy: "Ulozeno DESC",
+              OrderBy: "Veta DESC",
               Vlastnosti: [
                 "Veta",
                 "Nazev",
