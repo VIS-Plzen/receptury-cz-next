@@ -502,7 +502,6 @@ export default function Navbar({
   }
 
   const paidBoolean = codeAndCompareDates(paidIn);
-  console.log(paid);
 
   return (
     <div className="relative">
