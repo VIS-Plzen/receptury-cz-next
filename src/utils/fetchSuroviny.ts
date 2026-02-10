@@ -13,11 +13,9 @@ export async function getSuroviny() {
         Uzivatel: process.env.BE_USER,
         Heslo: process.env.BE_PASSWORD,
         SID: "12345VIS",
-        Funkce: "ObecnyDotaz",
+        Funkce: "PouziteSuroviny",
         Parametry: [
           {
-            Tabulka: "Suroviny",
-            Operace: "Read",
             Vlastnosti: ["NazevSuroviny"],
           },
         ],
