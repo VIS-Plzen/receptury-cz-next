@@ -183,6 +183,16 @@ export default function Page() {
             Zaregistrujte se
           </StyledLink>
         </div>
+
+        <div className="rounded-md border-[2px] border-primary-200 bg-primary-100 p-4 mb-5">
+          <Heading size="sm">Propojené účty</Heading>
+          <p>
+            Aplikace <span className="font-bold">Receptury.cz</span> a{" "}
+            <span className="font-bold">Jídelny.cz</span> jsou propojeny
+            jedním účtem. Zadejte údaje co používáte na <span className="font-bold">Jídelny.cz</span>.
+          </p>
+        </div>
+
       </div>
 
       <Notice

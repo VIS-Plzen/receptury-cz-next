@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Heading from "@/components/ui/Heading";
 import { Notice } from "@/components/ui/Notice";
+import StyledLink from '@/components/ui/StyledLink';
 import { logOut } from "@/utils/shorties";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -151,21 +152,23 @@ function Page() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></InputField>
-          <PasswordField
-            name="password"
-            variant="gray"
-            placeholder="Heslo"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            autoComplete="off"
-            errorText={
-              formWasTouched &&
-              formik.touched.password &&
-              formik.errors.password
-            }
-            onBlur={formik.handleBlur}
-          ></PasswordField>
-
+          <div>
+            <PasswordField
+              name="password"
+              variant="gray"
+              placeholder="Heslo"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              autoComplete="off"
+              errorText={
+                formWasTouched &&
+                formik.touched.password &&
+                formik.errors.password
+              }
+              onBlur={formik.handleBlur}
+            ></PasswordField>
+            <p className="text-sm text-gray-700">Heslo musí obsahovat alespoň 8 znaků, jedno velké písmeno a jedno malé písmeno.<span className="text-error-500">*</span></p>
+          </div>
           <div className="flex items-center justify-end">
             <Button
               className="relative my-4 items-end"
@@ -178,6 +181,15 @@ function Page() {
               Registrovat se
             </Button>
           </div>
+          <div className="rounded-md border-[2px] border-primary-200 bg-primary-100 p-4 mb-5">
+            <Heading size="sm">Propojené účty</Heading>
+            <p>
+              Aplikace <span className="font-bold">Receptury.cz</span> a{" "}
+              <span className="font-bold">Jídelny.cz</span> jsou propojeny
+              jedním účtem. Pokud už máte účet na <span className="font-bold">Jídelny.cz</span>, pokračujte na stránce pro <StyledLink hoverEffect="color" href="prihlaseni" className="font-bold p-0">přihlášení</StyledLink>.
+            </p>
+          </div>
+
         </form>
       </div>
       <Notice
