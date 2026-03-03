@@ -584,7 +584,7 @@ export default function Navbar({
           )}
           {cartState === "success" && (
             <p>
-              Úspěšně přidáno do košíku, prosím zkontrolujte ostatní okna
+              Úspěšně přidáno do košíku, prosím chvíli počkejte nebo zkontrolujte ostatní okna
               prohlížeče.
             </p>
           )}

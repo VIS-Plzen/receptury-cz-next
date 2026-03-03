@@ -14,7 +14,7 @@ type PropType = {
 
 const Carousel: React.FC<PropType> = (props) => {
   const { slides, options, hasDots, hasArrows, className, slidesWidth } = props;
-  const [emblaRef, emblaApi] = useEmblaCarousel(options);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ containScroll: "trimSnaps", ...options });
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emblaApi);
@@ -24,7 +24,7 @@ const Carousel: React.FC<PropType> = (props) => {
     nextBtnDisabled,
     onPrevButtonClick,
     onNextButtonClick,
-  } = usePrevNextButtons(emblaApi);
+  } = usePrevNextButtons(emblaApi, selectedIndex, scrollSnaps);
 
   return (
     <div className="py-10 md:px-5">
@@ -34,10 +34,9 @@ const Carousel: React.FC<PropType> = (props) => {
             {slides.map((slide, index) => (
               <div
                 className={`flex-0 mr-4 min-w-0 
-                ${
-                  slidesWidth ??
+                ${slidesWidth ??
                   "flex-slides1 min-[500px]:flex-slides2 min-[640px]:flex-slides3 min-[768px]:flex-slides4 min-[1024px]:flex-slides5 min-[1280px]:flex-slides6"
-                }`}
+                  }`}
                 key={index}
               >
                 {slide}
@@ -101,7 +100,7 @@ const useDotButton = (
   emblaApi: EmblaCarouselType | undefined
 ): UseDotButtonType => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [rawScrollSnaps, setRawScrollSnaps] = useState<number[]>([]);
 
   const onDotButtonClick = useCallback(
     (index: number) => {
@@ -112,7 +111,7 @@ const useDotButton = (
   );
 
   const onInit = useCallback((emblaApi: EmblaCarouselType) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
+    setRawScrollSnaps(emblaApi.scrollSnapList());
   }, []);
 
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
@@ -127,8 +126,22 @@ const useDotButton = (
     emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect);
   }, [emblaApi, onInit, onSelect]);
 
+  const scrollSnaps =
+    rawScrollSnaps.length >= 2 ? rawScrollSnaps.slice(0, -1) : rawScrollSnaps;
+  const effectiveIndex = Math.min(selectedIndex, scrollSnaps.length - 1);
+
+  useEffect(() => {
+    if (
+      !emblaApi ||
+      rawScrollSnaps.length < 2 ||
+      selectedIndex !== rawScrollSnaps.length - 1
+    )
+      return;
+    emblaApi.scrollTo(rawScrollSnaps.length - 2);
+  }, [emblaApi, rawScrollSnaps.length, selectedIndex]);
+
   return {
-    selectedIndex,
+    selectedIndex: effectiveIndex,
     scrollSnaps,
     onDotButtonClick,
   };
@@ -142,32 +155,23 @@ type UsePrevNextButtonsType = {
 };
 
 const usePrevNextButtons = (
-  emblaApi: EmblaCarouselType | undefined
+  emblaApi: EmblaCarouselType | undefined,
+  selectedIndex: number,
+  scrollSnaps: number[]
 ): UsePrevNextButtonsType => {
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+  const prevBtnDisabled = scrollSnaps.length <= 0 || selectedIndex <= 0;
+  const nextBtnDisabled =
+    scrollSnaps.length <= 0 || selectedIndex >= scrollSnaps.length - 1;
 
   const onPrevButtonClick = useCallback(() => {
-    if (!emblaApi) return;
-    emblaApi.scrollPrev();
-  }, [emblaApi]);
+    if (!emblaApi || prevBtnDisabled) return;
+    emblaApi.scrollTo(selectedIndex - 1);
+  }, [emblaApi, selectedIndex, prevBtnDisabled]);
 
   const onNextButtonClick = useCallback(() => {
-    if (!emblaApi) return;
-    emblaApi.scrollNext();
-  }, [emblaApi]);
-
-  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
-    setPrevBtnDisabled(!emblaApi.canScrollPrev());
-    setNextBtnDisabled(!emblaApi.canScrollNext());
-  }, []);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    onSelect(emblaApi);
-    emblaApi.on("reInit", onSelect).on("select", onSelect);
-  }, [emblaApi, onSelect]);
+    if (!emblaApi || nextBtnDisabled) return;
+    emblaApi.scrollTo(selectedIndex + 1);
+  }, [emblaApi, selectedIndex, nextBtnDisabled]);
 
   return {
     prevBtnDisabled,

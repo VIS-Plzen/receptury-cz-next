@@ -121,7 +121,6 @@ export default function ContentSelector({
 
 function Form() {
   const cookies = new Cookies();
-  const router = useRouter();
   let [info]: any = useLocalStorage("userInfo");
   const [hasData, setHasData] = useState(false);
 
@@ -152,7 +151,6 @@ function Form() {
           formik.getFieldProps("key") && formik.setFieldValue(key, data[key])
       );
     } else {
-      console.log("Tady doopravit");
       toast({
         intent: "error",
         title: "Data se nepodařilo načíst",
@@ -341,6 +339,30 @@ function Form() {
             <Heading as="h1" hasMarginBottom>
               Osobní údaje
             </Heading>
+
+            <div className="rounded-md border-[2px] border-primary-200 bg-primary-100 p-4 mb-5">
+              <Heading size="sm">Propojené účty</Heading>
+              <p>
+                Aplikace <span className="font-bold">Receptury.cz</span> a{" "}
+                <span className="font-bold">Jídelny.cz</span> jsou propojeny
+                jedním účtem.
+              </p>
+              <hr className="my-2 border-primary-200" />
+              <p>
+                Zobrazená pole ve formuláři slouží pouze pro informační účely. Pro
+                úpravu údajů nebo změnu hesla prosím přejděte na{" "}
+                <a
+                  className="text-md cursor-pointer font-bold text-primary-600 underline"
+                  href={process.env.NEXT_PUBLIC_JIDELNY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Jídelny.cz
+                </a>
+                .
+              </p>
+            </div>
+
             <InputField
               name="firstName"
               label="Jméno"
@@ -349,11 +371,11 @@ function Form() {
                 formik.touched.firstName &&
                 formik.errors.firstName
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.firstName}
               isLoading={!hasData}
+              disabled
             />
             <InputField
               name="lastName"
@@ -363,11 +385,11 @@ function Form() {
                 formik.touched.lastName &&
                 formik.errors.lastName
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lastName}
               isLoading={!hasData}
+              disabled
             />
             <InputField
               type="email"
@@ -376,11 +398,11 @@ function Form() {
               errorText={
                 formWasTouched && formik.touched.email && formik.errors.email
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
               isLoading={!hasData}
+              disabled
             />
             <InputField
               name="phone"
@@ -388,11 +410,11 @@ function Form() {
               errorText={
                 formWasTouched && formik.touched.phone && formik.errors.phone
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phone}
               isLoading={!hasData}
+              disabled
             />
           </div>
           <div>
@@ -408,7 +430,7 @@ function Form() {
                 formik.setFieldValue("invoiceIsCompany", value)
               }
               value={formik.values.invoiceIsCompany}
-              readOnly
+              disabled
             />
             {formik.values.invoiceIsCompany && (
               <>
@@ -425,6 +447,7 @@ function Form() {
                   value={formik.values.invoiceCompanyId}
                   isLoading={!hasData}
                   required
+                  disabled
                 />
                 <InputField
                   name="invoiceCompanyVatId"
@@ -439,6 +462,7 @@ function Form() {
                   value={formik.values.invoiceCompanyVatId}
                   isLoading={!hasData}
                   required
+                  disabled
                 />
                 <InputField
                   name="invoiceCompanyName"
@@ -453,6 +477,7 @@ function Form() {
                   onBlur={formik.handleBlur}
                   value={formik.values.invoiceCompanyName}
                   isLoading={!hasData}
+                  disabled
                 />
               </>
             )}
@@ -464,11 +489,11 @@ function Form() {
                 formik.touched.invoiceStreet &&
                 formik.errors.invoiceStreet
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceStreet}
               isLoading={!hasData}
+              disabled
             />
             <InputField
               name="invoiceCity"
@@ -478,11 +503,11 @@ function Form() {
                 formik.touched.invoiceCity &&
                 formik.errors.invoiceCity
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceCity}
               isLoading={!hasData}
+              disabled
             />
             <InputField
               name="invoiceZip"
@@ -492,11 +517,11 @@ function Form() {
                 formik.touched.invoiceZip &&
                 formik.errors.invoiceZip
               }
-              readOnly
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.invoiceZip}
               isLoading={!hasData}
+              disabled
             />
           </div>
           <div>
@@ -512,7 +537,7 @@ function Form() {
                 formik.setFieldValue("deliveryIsDifferent", value)
               }
               value={formik.values.deliveryIsDifferent}
-              readOnly
+              disabled
             />
             {formik.values.deliveryIsDifferent && (
               <>
@@ -524,11 +549,11 @@ function Form() {
                     formik.touched.deliveryStreet &&
                     formik.errors.deliveryStreet
                   }
-                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryStreet}
                   isLoading={!hasData}
+                  disabled
                 />
                 <InputField
                   name="deliveryCity"
@@ -538,11 +563,11 @@ function Form() {
                     formik.touched.deliveryCity &&
                     formik.errors.deliveryCity
                   }
-                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryCity}
                   isLoading={!hasData}
+                  disabled
                 />
                 <InputField
                   name="deliveryZip"
@@ -552,11 +577,11 @@ function Form() {
                     formik.touched.deliveryZip &&
                     formik.errors.deliveryZip
                   }
-                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.deliveryZip}
                   isLoading={!hasData}
+                  disabled
                 />
               </>
             )}
@@ -571,7 +596,7 @@ function Form() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.poznamka}
-              readOnly
+              disabled
             />
           </div>
           {/* <Button
@@ -581,28 +606,6 @@ function Form() {
           >
             Uložit změny
           </Button> */}
-          <div className="rounded-md border-[2px] border-primary-200 bg-primary-100 p-4">
-            <Heading size="sm">Propojené účty</Heading>
-            <p>
-              Aplikace <span className="font-bold">Receptury.cz</span> a{" "}
-              <span className="font-bold">Jídelny.cz</span> jsou propojeny
-              jedním účtem.
-            </p>
-            <hr className="my-2 border-primary-200" />
-            <p>
-              Zobrazená pole ve formuláři slouží pouze pro informační účely. Pro
-              úpravu údajů nebo změnu hesla prosím přejděte na{" "}
-              <a
-                className="text-md cursor-pointer font-bold text-primary-600 underline"
-                href={process.env.NEXT_PUBLIC_JIDELNY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Jídelny.cz
-              </a>
-              .
-            </p>
-          </div>
         </form>
         <svg
           className="mt-40 hidden md:block"

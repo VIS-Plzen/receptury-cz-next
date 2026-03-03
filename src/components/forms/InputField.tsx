@@ -49,8 +49,6 @@ const InputField = forwardRef<HTMLInputElement, Props>(
       <div
         className={cn(
           "relative flex w-full flex-col items-start justify-start gap-1 py-1",
-          props.disabled && "cursor-not-allowed opacity-70",
-          (props.disabled || props.readOnly) && "pointer-events-none",
           className
         )}
       >
@@ -83,7 +81,7 @@ const InputField = forwardRef<HTMLInputElement, Props>(
             "transition duration-150",
             errorText &&
             "border-error-500/70 focus:border-error-600 focus:ring-error-600/50",
-            (props.disabled || props.readOnly) && "pointer-events-none"
+            (props.disabled || props.readOnly) && "cursor-not-allowed opacity-70"
           )}
           {...props}
         />

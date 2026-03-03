@@ -22,7 +22,7 @@ export default async function Home({ searchParams }: any) {
       : returnBetterDate(paidCoder.data, ".", "DMY")
     : "";
   const gridView = cookie.get("gridView")?.value ?? "true";
-  const boxSettings = { initialTrue: ["moje"], hiddenBoxes: ["obecne"] };
+  const boxSettings = { initialTrue: ["moje"], hiddenBoxes: ["obecne", "partner"] };
   const { suroviny, nazvy } = await fetchCachedData();
   const [sideBarValues, comboBoxValues] = [
     returnSideBarValues(searchParams, boxSettings),
