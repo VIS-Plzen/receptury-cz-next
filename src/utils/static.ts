@@ -2070,7 +2070,7 @@ export const filtrMenu = [
         backend: "SchvalenoNT",
         checked: false,
       },
-      {
+      /* {
         title: "Stáhnout do skladu",
         name: "sklad",
         backend: "MSklad",
@@ -2081,7 +2081,7 @@ export const filtrMenu = [
         name: "videoreceptury",
         backend: "Video",
         checked: false,
-      },
+      }, */
     ],
   },
   {
@@ -2226,10 +2226,10 @@ export const groupsData = [
         value: "salaty_ovocne",
         title: "Saláty ovocné",
       },
-      {
+      /* {
         value: "kompoty",
         title: "Kompoty",
-      },
+      }, */
       {
         value: "moucniky",
         title: "Moučníky",
@@ -2238,7 +2238,7 @@ export const groupsData = [
         value: "mlecne_dezerty",
         title: "Mléčné dezerty",
       },
-      {
+      /* {
         value: "zelenina_cerstva",
         title: "Zelenina čerstvá",
       },
@@ -2249,7 +2249,7 @@ export const groupsData = [
       {
         value: "ostatni",
         title: "Ostatní",
-      },
+      }, */
     ],
   },
   {
@@ -2273,11 +2273,11 @@ export const groupsData = [
       },
     ],
   },
-  {
+  /* {
     value: "napoje",
     title: "Nápoje",
     options: [{ value: "vse", title: "Vše" }],
-  },
+  }, */
   {
     value: "polevky",
     title: "Polévky",
@@ -2358,10 +2358,10 @@ export const groupsData = [
         value: "kase",
         title: "Kaše",
       },
-      {
+      /* {
         value: "pecivo",
         title: "Pečivo",
-      },
+      }, */
       {
         value: "moucniky",
         title: "Moučníky",
@@ -2384,9 +2384,9 @@ export const groupsData = [
       },
     ],
   },
-  {
+  /* {
     value: "zavarky",
     title: "Zavářky",
     options: [{ value: "vse", title: "Vše" }],
-  },
+  }, */
 ];
