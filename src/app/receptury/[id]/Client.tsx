@@ -19,33 +19,33 @@ import { useEffect, useState } from "react";
 
 const icons: {
   name:
-    | "archive"
-    | "calendar-view-months"
-    | "downloading"
-    | "favorite-fill"
-    | "favorite"
-    | "list"
-    | "print"
-    | "share";
+  | "archive"
+  | "calendar-view-months"
+  | "downloading"
+  | "favorite-fill"
+  | "favorite"
+  | "list"
+  | "print"
+  | "share";
   label: string;
 }[] = [
-  {
-    name: "favorite",
-    label: "oblíbené",
-  },
-  {
-    name: "print",
-    label: "tisk",
-  },
-  {
-    name: "archive",
-    label: "MSklad",
-  },
-  {
-    name: "share",
-    label: "Sdílet",
-  },
-];
+    {
+      name: "favorite",
+      label: "oblíbené",
+    },
+    {
+      name: "print",
+      label: "tisk",
+    },
+    {
+      name: "archive",
+      label: "MSklad",
+    },
+    {
+      name: "share",
+      label: "Sdílet",
+    },
+  ];
 
 export function Page({
   card,
@@ -84,11 +84,10 @@ export function Page({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
-            ? "mít aktivní předplacené členství."
-            : "být přihlášen a mít předplacené členství."
-        }`,
+        title: `Pro použití této funkce je potřeba ${logged
+          ? "mít aktivní předplacené členství."
+          : "být přihlášen a mít předplacené členství."
+          }`,
       });
     }
     const result = await (
@@ -127,11 +126,10 @@ export function Page({
     if (!logged || !paid) {
       return toast({
         intent: "warning",
-        title: `Pro použití této funkce je potřeba ${
-          logged
-            ? "mít předplacené členství."
-            : "být přihlášen a mít předplacené členství."
-        }`,
+        title: `Pro použití této funkce je potřeba ${logged
+          ? "mít předplacené členství."
+          : "být přihlášen a mít předplacené členství."
+          }`,
       });
     }
     const res = await (
@@ -221,6 +219,7 @@ export function Page({
               priloha: card.DoporucenaPriloha,
               doplnek: card.DoporucenyDoplnek,
             }}
+            video={card.Video}
             veta={card.Identita}
             stitky={curr.Stitky}
             zmenStitek={zmenStitek}
@@ -241,9 +240,9 @@ export function Page({
               img={currParner.img}
               color={
                 currParner.title.toLocaleLowerCase() as
-                  | "default"
-                  | "bidfood"
-                  | "bonduelle"
+                | "default"
+                | "bidfood"
+                | "bonduelle"
               }
               logo={currParner.logo}
               hasButton
@@ -561,9 +560,8 @@ export function Hero({
             </button>
           </StyledLink>
           <div
-            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${
-              !currParner && "opacity-0"
-            }`}
+            className={`mb-3 flex gap-x-2 md:mt-auto md:px-10 ${!currParner && "opacity-0"
+              }`}
           >
             {currParner.logoBlack ? (
               <Image
@@ -630,11 +628,10 @@ export function Hero({
                         if (!logged || !paid) {
                           return toast({
                             intent: "warning",
-                            title: `Pro použití této funkce je potřeba ${
-                              logged
-                                ? "mít předplacené členství."
-                                : "být přihlášen a mít předplacené členství."
-                            }`,
+                            title: `Pro použití této funkce je potřeba ${logged
+                              ? "mít předplacené členství."
+                              : "být přihlášen a mít předplacené členství."
+                              }`,
                           });
                         }
                         return window.print();
@@ -670,16 +667,14 @@ export function Hero({
                     }
                     return iconName;
                   })()}
-                  className={`bg-white ${
-                    icon.name === "archive" &&
+                  className={`bg-white ${icon.name === "archive" &&
                     stitky.includes("MSklad") &&
                     " text-primary-500"
-                  }
-                  ${
-                    icon.name === "favorite" &&
+                    }
+                  ${icon.name === "favorite" &&
                     stitky.includes("Oblíbené") &&
                     "text-primary-500"
-                  }`}
+                    }`}
                 />
                 <span className="hidden text-sm md:block">{icon.label}</span>
               </div>
@@ -699,6 +694,7 @@ export function Informations({
   alergeny,
   terapeut,
   skladba,
+  video,
   veta,
   stitky,
   zmenStitek,
@@ -721,6 +717,7 @@ export function Informations({
   alergeny: { alergeny: string[]; text: string };
   terapeut: { text: string; badges: any; jmeno: string };
   skladba: { polevka: string; priloha: string; doplnek: string };
+  video: string;
   veta: number;
   stitky: string[];
   zmenStitek: (
@@ -755,15 +752,15 @@ export function Informations({
         <div className="flex flex-col gap-5 sm:gap-7">
           <Postup postup={postup} />
           <div
-            className={`grid gap-5 sm:gap-7 ${
-              (skladba.polevka || skladba.priloha || skladba.doplnek) &&
+            className={`grid gap-5 sm:gap-7 ${(skladba.polevka || skladba.priloha || skladba.doplnek) &&
               "xl:grid-cols-2"
-            }`}
+              }`}
           >
             <Alergeny alergeny={alergeny} />
             <Skladba skladba={skladba} />
           </div>
           <Terapeut terapeut={terapeut} />
+          <Video video={video} />
         </div>
       </div>
       <div className="mt-auto hidden justify-self-end print:block">
@@ -797,9 +794,8 @@ function Title({
         {icons.map((icon, index) => (
           <div
             key={"kfii" + index}
-            className={`flex flex-col items-center gap-1 text-center ${
-              icon.name === "archive" && "!hidden"
-            }`}
+            className={`flex flex-col items-center gap-1 text-center ${icon.name === "archive" && "!hidden"
+              }`}
           >
             <ButtonIcon
               onClick={() => {
@@ -848,16 +844,14 @@ function Title({
                 }
                 return iconName;
               })()}
-              className={`bg-white ${
-                icon.name === "archive" &&
+              className={`bg-white ${icon.name === "archive" &&
                 stitky.includes("MSklad") &&
                 " text-primary-500"
-              }
-              ${
-                icon.name === "favorite" &&
+                }
+              ${icon.name === "favorite" &&
                 stitky.includes("Oblíbené") &&
                 "text-primary-500"
-              }`}
+                }`}
             ></ButtonIcon>
             <span className="text-sm">{icon.label}</span>
           </div>
@@ -1041,13 +1035,12 @@ export function Partner({
           <p className="font-semibold text-white">{heslo}</p>
           {hasButton && (
             <Button
-              className={`w-min ${
-                color === "bidfood"
-                  ? "bg-bidfood-900 hover:bg-bidfood-950"
-                  : color === "bonduelle"
-                    ? "bg-bonduelle-900 hover:bg-bonduelle-950"
-                    : ""
-              }`}
+              className={`w-min ${color === "bidfood"
+                ? "bg-bidfood-900 hover:bg-bidfood-950"
+                : color === "bonduelle"
+                  ? "bg-bonduelle-900 hover:bg-bonduelle-950"
+                  : ""
+                }`}
             >
               Více o nás
             </Button>
@@ -1114,3 +1107,41 @@ export function CurrentUrlQRCode(props: React.ComponentPropsWithRef<"div">) {
     </div>
   );
 }
+
+function getYouTubeEmbedUrl(url: string): string {
+  try {
+    const trimmed = url.trim();
+    // Already embed URL
+    if (/youtube\.com\/embed\//i.test(trimmed)) return trimmed;
+    // youtube.com/watch?v=ID or youtube.com/v/ID
+    const watchMatch = trimmed.match(/(?:youtube\.com\/watch\?v=|youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/i);
+    if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+    // youtu.be/ID
+    const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/i);
+    if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+    // youtube.com/shorts/ID
+    const shortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/i);
+    if (shortsMatch) return `https://www.youtube.com/embed/${shortsMatch[1]}`;
+    return trimmed;
+  } catch {
+    return url;
+  }
+}
+
+function Video({ video }: { video?: string }) {
+  if (!video) return null;
+  const embedSrc = getYouTubeEmbedUrl(video);
+  return (
+    <div className="flex flex-col gap-y-3 rounded-3xl border-2 border-primary-300/60 bg-white p-4 print:hidden">
+      <Heading size="sm">Videonávod</Heading>
+      <iframe
+        src={embedSrc}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        className="aspect-video w-full rounded-2xl"
+      />
+    </div>
+  );
+}     

@@ -189,7 +189,7 @@ export default function Inspirace({
             data[selected]?.length !== 0 &&
             data[selected].Status !== false ? (
             <Carousel
-              options={{ align: "start", loop: true }}
+              options={{ align: "start" }}
               hasArrows
               slides={
                 data?.[selected] === "hidden"
